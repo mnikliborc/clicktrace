@@ -1,6 +1,5 @@
 package com.niklim;
 
-import java.awt.AWTException;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -8,14 +7,17 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
 
 //A. SCREEN CAPTURE
 //1. take screenshot
@@ -34,72 +36,39 @@ import javax.imageio.ImageIO;
 //1. search by: text, time, tags
 //2. tag, edit (paint like), manipulate (putting in directory structure), compress, publish
 
-public class Capture {
-	public static void main(String[] args) {
-		 ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		 scheduler.scheduleAtFixedRate(new Runnable() {
+public class Capture implements Runnable {
+	private static final Logger log = LoggerFactory.getLogger(PixelVoter.class);
 
-			@Override
-			public void run() {
-				ChangeDetector detector = new ChangeDetector();
-				BufferedImage image;
-				try {
-					Robot robot = new Robot();
-					image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-					if (detector.detect(image)){
-						Date date = new Date();
-						String id = date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
-						ImageIO.write(image, "png", new File("screenshot"+id+".png"));
-					}
-				} catch (HeadlessException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (AWTException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			 
-		 }, 0, 1, TimeUnit.SECONDS);
+	@Inject
+	Robot robot;
+
+	@Inject
+	ChangeDetector detector;
+
+	public void start() {
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+		scheduler.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
 	}
-}
 
-interface ChangeVoter {
-	Vote vote(BufferedImage prev, BufferedImage current);
-}
-
-enum Vote {
-	SAVE, DISCARD, INDIFFERENT; 
-}
-
-class BlindVoter implements ChangeVoter {
 	@Override
-	public Vote vote(BufferedImage prev, BufferedImage current) {
-		return Vote.SAVE;
-	}
-}
+	public void run() {
+		try {
+			BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 
-class ChangeDetector {
-	List<ChangeVoter> voters = new ArrayList<ChangeVoter>();
-	private BufferedImage prevImage;
-	
-	public boolean detect(BufferedImage currentImage) {
-		BufferedImage tempPrevImage = prevImage;
-		prevImage = currentImage;
-		
-		if (tempPrevImage == null) {
-			return true;
-		}
-		
-		for (ChangeVoter voter : voters) {
-			switch (voter.vote(tempPrevImage, currentImage)) {
-				case SAVE: return true;
-				case DISCARD: return false;
-				default: continue;
+			if (detector.detect(image)) {
+				saveScreenShot(image);
 			}
+		} catch (HeadlessException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
-		return false;
+	}
+
+	public void saveScreenShot(BufferedImage image) throws IOException {
+		log.info("Saving screenshot");
+		Date date = new Date();
+		String id = date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
+		ImageIO.write(image, "png", new File("screenshot" + id + ".png"));
 	}
 }
