@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 class ChangeDetector {
-	private static final Logger log = LoggerFactory.getLogger(PixelVoter.class);
+	private static final Logger log = LoggerFactory.getLogger(ChangeDetector.class);
 
 	@Inject
 	List<ChangeVoter> voters;

@@ -37,7 +37,7 @@ import com.google.inject.Inject;
 //2. tag, edit (paint like), manipulate (putting in directory structure), compress, publish
 
 public class Capture implements Runnable {
-	private static final Logger log = LoggerFactory.getLogger(PixelVoter.class);
+	private static final Logger log = LoggerFactory.getLogger(Capture.class);
 
 	@Inject
 	Robot robot;
