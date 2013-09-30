@@ -30,7 +30,7 @@ class PixelVoter implements ChangeVoter {
 				}
 			}
 		}
-
+		System.out.println("should log");
 		log.info("INDIFFERENT Vote");
 		return Vote.INDIFFERENT;
 	}
