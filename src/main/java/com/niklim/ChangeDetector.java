@@ -17,24 +17,24 @@ class ChangeDetector {
 	private BufferedImage prevImage;
 
 	public boolean detect(BufferedImage currentImage) {
-		BufferedImage tempPrevImage = prevImage;
-		prevImage = currentImage;
-
-		if (tempPrevImage == null) {
+		if (prevImage == null) {
 			return true;
 		}
 
+		boolean shouldSave = false;
 		for (ChangeVoter voter : voters) {
-			switch (voter.vote(tempPrevImage, currentImage)) {
-			case SAVE:
-				return true;
-			case DISCARD:
-				return false;
-			default:
-				continue;
+			Vote vote = voter.vote(prevImage, currentImage);
+			if (vote == Vote.SAVE) {
+				shouldSave = true;
+				break;
+			} else if (vote == Vote.DISCARD) {
+				shouldSave = false;
+				break;
 			}
 		}
 
-		return false;
+		log.info("save decision = " + shouldSave);
+		prevImage = currentImage;
+		return shouldSave;
 	}
 }
