@@ -16,8 +16,9 @@ class ChangeDetector {
 
 	private BufferedImage prevImage;
 
-	public boolean detect(BufferedImage currentImage) {
+	public synchronized boolean detect(BufferedImage currentImage) {
 		if (prevImage == null) {
+			prevImage = currentImage;
 			return true;
 		}
 
@@ -33,7 +34,7 @@ class ChangeDetector {
 			}
 		}
 
-		log.info("save decision = " + shouldSave);
+		// log.info("save decision = " + shouldSave);
 		prevImage = currentImage;
 		return shouldSave;
 	}

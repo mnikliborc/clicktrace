@@ -8,9 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -36,7 +35,7 @@ import com.google.inject.Inject;
 //1. search by: text, time, tags
 //2. tag, edit (paint like), manipulate (putting in directory structure), compress, publish
 
-public class Capture implements Runnable {
+public class Capture extends TimerTask {
 	private static final Logger log = LoggerFactory.getLogger(Capture.class);
 
 	@Inject
@@ -46,8 +45,11 @@ public class Capture implements Runnable {
 	ChangeDetector detector;
 
 	public void start() {
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+		Timer time = new Timer();
+		time.schedule(this, 0, 1000);
+		// ScheduledExecutorService scheduler =
+		// Executors.newScheduledThreadPool(1);
+		// scheduler.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class Capture implements Runnable {
 	}
 
 	public void saveScreenShot(BufferedImage image) throws IOException {
-		log.info("Saving screenshot");
+		// log.info("Saving screenshot");
 		Date date = new Date();
 		String id = date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
 		ImageIO.write(image, "png", new File("screenshot" + id + ".png"));
