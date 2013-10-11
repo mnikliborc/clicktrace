@@ -1,4 +1,4 @@
-package com.niklim;
+package com.niklim.clicktrace.capture;
 
 import java.awt.Color;
 import java.awt.Point;

@@ -1,4 +1,4 @@
-package com.niklim;
+package com.niklim.clicktrace.capture;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -22,6 +22,13 @@ class ChangeDetector {
 			return true;
 		}
 
+		boolean shouldSave = performVoting(currentImage);
+
+		prevImage = currentImage;
+		return shouldSave;
+	}
+
+	public boolean performVoting(BufferedImage currentImage) {
 		boolean shouldSave = false;
 		for (ChangeVoter voter : voters) {
 			Vote vote = voter.vote(prevImage, currentImage);
@@ -33,9 +40,10 @@ class ChangeDetector {
 				break;
 			}
 		}
-
-		// log.info("save decision = " + shouldSave);
-		prevImage = currentImage;
 		return shouldSave;
+	}
+
+	public void reset() {
+		prevImage = null;
 	}
 }

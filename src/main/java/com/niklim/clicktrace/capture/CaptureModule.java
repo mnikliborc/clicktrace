@@ -1,4 +1,4 @@
-package com.niklim;
+package com.niklim.clicktrace.capture;
 
 import java.awt.AWTException;
 import java.awt.Robot;
@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
-class CaptureModule extends AbstractModule {
+public class CaptureModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
