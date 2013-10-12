@@ -5,27 +5,26 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-public class Capture extends TimerTask {
+public class Capture {
 	private static final Logger log = LoggerFactory.getLogger(Capture.class);
 
 	@Inject
-	Robot robot;
+	private Robot robot;
 
 	@Inject
-	ChangeDetector detector;
+	private ChangeDetector detector;
+
+	@Inject
+	private ImgManager imgManager;
 
 	private Timer time;
 
@@ -33,7 +32,7 @@ public class Capture extends TimerTask {
 
 	public void start() {
 		time = new Timer();
-		time.schedule(this, 0, 1000);
+		time.schedule(new CaptureTask(), 0, 1000);
 	}
 
 	public void stop() {
@@ -42,39 +41,21 @@ public class Capture extends TimerTask {
 		detector.reset();
 	}
 
-	@Override
-	public void run() {
-		try {
-			BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+	private class CaptureTask extends TimerTask {
+		@Override
+		public void run() {
+			try {
+				BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit()
+						.getScreenSize()));
 
-			if (detector.detect(image)) {
-				saveScreenShot(image);
+				if (detector.detect(image)) {
+					imgManager.saveScreenShot(image, sessionName);
+				}
+			} catch (HeadlessException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (HeadlessException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	protected void saveScreenShot(BufferedImage image) throws IOException {
-		Date date = new Date();
-		String filePath = date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
-
-		if (sessionName == null || sessionName.trim().equals("")) {
-			filePath = "default/" + filePath;
-			createIfDirNotExist("default");
-		} else {
-			filePath = sessionName + "/" + filePath;
-			createIfDirNotExist(sessionName);
-		}
-		ImageIO.write(image, "png", new File(filePath + ".png"));
-	}
-
-	private void createIfDirNotExist(String dirName) {
-		File dir = new File(dirName);
-		if (!dir.exists()) {
-			dir.mkdir();
 		}
 	}
 

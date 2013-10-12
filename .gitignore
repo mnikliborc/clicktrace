@@ -1,6 +1,6 @@
 /target
 /bin
-screenshot*
+/sessions
 .classpath
 /.settings
 .project

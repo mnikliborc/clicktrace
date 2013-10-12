@@ -61,12 +61,15 @@ public class Tray {
 		MenuItem nameItem = new MenuItem("Set session name");
 		MenuItem startItem = new MenuItem("Start session");
 		MenuItem stopItem = new MenuItem("Stop session");
+		MenuItem editorItem = new MenuItem("Open editor");
 		MenuItem exitItem = new MenuItem("Exit");
 
 		// Add components to popup menu
 		popup.add(nameItem);
 		popup.add(startItem);
 		popup.add(stopItem);
+		popup.addSeparator();
+		popup.add(editorItem);
 		popup.addSeparator();
 		popup.add(exitItem);
 
@@ -78,12 +81,6 @@ public class Tray {
 			System.out.println("TrayIcon could not be added.");
 			return;
 		}
-
-		trayIcon.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "This dialog box is run from System Tray");
-			}
-		});
 
 		nameItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -103,6 +100,12 @@ public class Tray {
 		stopItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.stopSession();
+			}
+		});
+
+		editorItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.openEditor();
 			}
 		});
 

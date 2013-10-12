@@ -8,4 +8,6 @@ public interface TrayController {
 	String getSessionName();
 
 	void setSessionName(String name);
+
+	void openEditor();
 }
