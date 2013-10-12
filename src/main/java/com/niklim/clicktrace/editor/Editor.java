@@ -31,9 +31,6 @@ public class Editor implements TreeExpansionListener {
 	@Inject
 	private SessionView sessionView;
 
-	@Inject
-	private ImageTree imageTree;
-
 	public Editor() {
 		frame = new JFrame("Frame");
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -60,8 +57,8 @@ public class Editor implements TreeExpansionListener {
 	}
 
 	public void open(String sessionName) {
+		ImageTree.buildImgTree(tree);
 		frame.setVisible(true);
-		imageTree.buildImgTree(tree);
 	}
 
 	@Override

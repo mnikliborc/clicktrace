@@ -1,9 +1,9 @@
 package com.niklim.clicktrace.editor;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -58,20 +58,28 @@ public class SessionView {
 		};
 
 		public ThumbPanel(BufferedImage image, String name) {
-			super(new GridLayout(0, 1));
-
 			nameLabel = new JLabel(name);
 
 			JPanel control = new JPanel();
 			control.setBackground(new Color(200, 100, 0));
-			control.setMaximumSize(new Dimension(THUMB_SIZE, 30));
+
 			control.setBorder(new BevelBorder(BevelBorder.LOWERED));
-			control.add(checkbox);
+			control.add(nameLabel);
+
+			JPanel gap = new JPanel();
+			gap.setPreferredSize(new Dimension(120, 20));
+			control.add(gap);
+
 			control.add(deleteLabel);
 			control.add(editLabel);
-			control.add(nameLabel);
-			add(control);
-			add(thumb);
+			control.add(checkbox);
+
+			setMaximumSize(new Dimension(THUMB_SIZE, 230));
+			setMinimumSize(new Dimension(THUMB_SIZE, 230));
+			setPreferredSize(new Dimension(THUMB_SIZE, 230));
+
+			add(control, BorderLayout.NORTH);
+			add(thumb, BorderLayout.CENTER);
 
 			this.image = image;
 		}

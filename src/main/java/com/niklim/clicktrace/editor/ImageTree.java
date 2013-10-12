@@ -10,7 +10,7 @@ import com.niklim.clicktrace.capture.ImgManager;
 import com.niklim.clicktrace.editor.Editor.TrashFilter;
 
 public class ImageTree {
-	public void buildImgTree(JTree tree) {
+	public static void buildImgTree(JTree tree) {
 		DefaultMutableTreeNode top = (DefaultMutableTreeNode) tree.getModel().getRoot();
 		top.removeAllChildren();
 
