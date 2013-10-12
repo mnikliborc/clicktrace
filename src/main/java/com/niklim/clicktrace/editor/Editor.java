@@ -9,12 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.ImgManager;
 
 public class Editor implements TreeExpansionListener {
 	public static class TrashFilter implements FilenameFilter {
@@ -25,13 +25,16 @@ public class Editor implements TreeExpansionListener {
 	}
 
 	private JFrame frame;
-	private JTree tree;
 	private JPanel rightPanel;
 
 	@Inject
 	private SessionView sessionView;
 
-	public Editor() {
+	@Inject
+	private ImageTree imageTree;
+
+	@Inject
+	public void init() {
 		frame = new JFrame("Frame");
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -39,25 +42,24 @@ public class Editor implements TreeExpansionListener {
 		rightPanel = new JPanel(new GridLayout(0, 3));
 		rightPanel.setBackground(new Color(10));
 
-		tree = new JTree(new DefaultMutableTreeNode("sessions"));
-
-		tree.addTreeExpansionListener(this);
-
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setTopComponent(new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		splitPane.setLeftComponent(new JScrollPane(imageTree.getTree(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
-		splitPane.setBottomComponent(new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		splitPane.setRightComponent(new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
 		splitPane.setDividerLocation(200);
 		splitPane.setBackground(new Color(200));
 
 		frame.add(splitPane);
+
+		imageTree.getTree().addTreeExpansionListener(this);
+
 		open(null);
 	}
 
 	public void open(String sessionName) {
-		ImageTree.buildImgTree(tree);
+		imageTree.buildImgTree();
 		frame.setVisible(true);
 	}
 
@@ -88,5 +90,18 @@ public class Editor implements TreeExpansionListener {
 
 		frame.getContentPane().revalidate();
 		frame.getContentPane().repaint();
+	}
+
+	public void edit(String imageName) {
+	}
+
+	public void delete(String sessionName, String imageName) {
+		ImgManager.deleteImage(sessionName, imageName);
+		imageTree.deleteImage(sessionName, imageName);
+
+		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
+
+		imageTree.openSession(sessionName);
 	}
 }

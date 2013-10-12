@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.ImgManager;
 
 public class Capture {
 	private static final Logger log = LoggerFactory.getLogger(Capture.class);
@@ -22,9 +23,6 @@ public class Capture {
 
 	@Inject
 	private ChangeDetector detector;
-
-	@Inject
-	private ImgManager imgManager;
 
 	private Timer time;
 
@@ -49,7 +47,7 @@ public class Capture {
 						.getScreenSize()));
 
 				if (detector.detect(image)) {
-					imgManager.saveScreenShot(image, sessionName);
+					ImgManager.saveImage(image, sessionName);
 				}
 			} catch (HeadlessException e) {
 				e.printStackTrace();
