@@ -3,6 +3,8 @@ package com.niklim.clicktrace;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -11,13 +13,14 @@ public class ImgManager {
 	public static final String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 
+	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
+
 	static {
 		createIfDirNotExists(SESSIONS_DIR);
 	}
 
 	public static void saveImage(BufferedImage image, String sessionName) throws IOException {
-		Date date = new Date();
-		String filename = date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds() + ".png";
+		String filename = format.format(new Date()) + ".png";
 		String filePath = createFilePath(sessionName, filename);
 
 		ImageIO.write(image, "png", new File(filePath));
