@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
+import org.imgscalr.Scalr;
+
 public class ImgManager {
 	public static final String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
@@ -17,6 +19,13 @@ public class ImgManager {
 
 	protected void saveScreenShot(BufferedImage image, String sessionName) throws IOException {
 		Date date = new Date();
+		String filePath = createFilePath(sessionName, date);
+
+		ImageIO.write(image, "png", new File(filePath + ".png"));
+		ImageIO.write(Scalr.resize(image, 200), "png", new File(filePath + "-thumb.png"));
+	}
+
+	public String createFilePath(String sessionName, Date date) {
 		String filePath = date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds();
 
 		if (sessionName == null || sessionName.trim().equals("")) {
@@ -26,7 +35,7 @@ public class ImgManager {
 			filePath = SESSIONS_DIR + sessionName + "/" + filePath;
 			createIfDirNotExists(SESSIONS_DIR + sessionName);
 		}
-		ImageIO.write(image, "png", new File(filePath + ".png"));
+		return filePath;
 	}
 
 	private void createIfDirNotExists(String dirName) {

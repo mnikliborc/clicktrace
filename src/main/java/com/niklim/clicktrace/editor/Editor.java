@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.editor;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -9,13 +10,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
-import com.niklim.clicktrace.capture.ImgManager;
+import com.google.inject.Inject;
 
-public class Editor {
-	private final class TrashFilter implements FilenameFilter {
+public class Editor implements TreeExpansionListener {
+	public static class TrashFilter implements FilenameFilter {
 		@Override
 		public boolean accept(File dir, String name) {
 			return !".".equals(name) && !"..".equals(name);
@@ -23,54 +25,71 @@ public class Editor {
 	}
 
 	private JFrame frame;
-	private JScrollPane treeView;
 	private JTree tree;
-	private JPanel mainPanel;
 	private JPanel rightPanel;
+
+	@Inject
+	private SessionView sessionView;
+
+	@Inject
+	private ImageTree imageTree;
 
 	public Editor() {
 		frame = new JFrame("Frame");
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		mainPanel = new JPanel(new GridLayout(0, 2));
-		rightPanel = new JPanel();
+		rightPanel = new JPanel(new GridLayout(0, 3));
+		rightPanel.setBackground(new Color(10));
 
 		tree = new JTree(new DefaultMutableTreeNode("sessions"));
-		treeView = new JScrollPane(tree);
+
+		tree.addTreeExpansionListener(this);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setTopComponent(treeView);
-		splitPane.setBottomComponent(rightPanel);
+		splitPane.setTopComponent(new JScrollPane(tree, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+		splitPane.setBottomComponent(new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
-		splitPane.setDividerLocation(100);
-		mainPanel.add(splitPane);
-		frame.add(mainPanel);
-	}
+		splitPane.setDividerLocation(200);
+		splitPane.setBackground(new Color(200));
 
-	private void buildImgTree() {
-		DefaultMutableTreeNode top = (DefaultMutableTreeNode) tree.getModel().getRoot();
-		top.removeAllChildren();
-
-		File rootDir = new File(ImgManager.SESSIONS_DIR);
-
-		File[] sessionDirs = rootDir.listFiles(new TrashFilter());
-
-		for (File sessionDir : sessionDirs) {
-			DefaultMutableTreeNode dirNode = new DefaultMutableTreeNode(sessionDir.getName());
-			File[] imgs = sessionDir.listFiles(new TrashFilter());
-			for (File img : imgs) {
-				dirNode.add(new DefaultMutableTreeNode(img.getName()));
-			}
-			top.add(dirNode);
-		}
-
-		DefaultTreeModel defaultTreeModel = (DefaultTreeModel) tree.getModel();
-		defaultTreeModel.reload();
+		frame.add(splitPane);
+		open(null);
 	}
 
 	public void open(String sessionName) {
 		frame.setVisible(true);
-		buildImgTree();
+		imageTree.buildImgTree(tree);
+	}
+
+	@Override
+	public void treeExpanded(TreeExpansionEvent event) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
+
+		if (node == null)
+			return;
+
+		Object nodeInfo = node.getUserObject();
+		String filename = (String) nodeInfo;
+		if (node.isLeaf()) {
+			// do nothing right now
+		} else {
+			showSession(filename);
+		}
+	}
+
+	@Override
+	public void treeCollapsed(TreeExpansionEvent event) {
+	}
+
+	private void showSession(String filename) {
+		rightPanel.removeAll();
+
+		sessionView.showSession(filename, rightPanel);
+
+		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
 	}
 }
