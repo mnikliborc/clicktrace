@@ -38,6 +38,16 @@
 		<artifactId>imgscalr-lib</artifactId>
 		<version>4.2</version>
 	</dependency>
+	<dependency>
+		<groupId>com.miglayout</groupId>
+		<artifactId>miglayout</artifactId>
+		<version>3.7.4</version>
+	</dependency>
+	<dependency>
+		<groupId>org.swinglabs</groupId>
+		<artifactId>swingx</artifactId>
+		<version>1.6.1</version>
+	</dependency>
   </dependencies>
   
   <build>

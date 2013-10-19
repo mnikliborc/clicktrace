@@ -5,11 +5,15 @@ import java.io.File;
 import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
-public class ImgManager {
+import com.niklim.clicktrace.editor.Editor.TrashFilter;
+
+public class SessionsManager {
 	public static final String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 
@@ -48,4 +52,25 @@ public class ImgManager {
 		File file = new File(filePath);
 		file.delete();
 	}
+
+	public static List<String> loadSessions() {
+		return loadFiles(SESSIONS_DIR);
+	}
+
+	public static List<String> loadSession(String sessionName) {
+		return loadFiles(SESSIONS_DIR + sessionName);
+	}
+
+	private static List<String> loadFiles(String dirName) {
+		List<String> fileNames = new ArrayList<String>();
+
+		File[] files = new File(dirName).listFiles(new TrashFilter());
+
+		for (File sessionDir : files) {
+			fileNames.add(sessionDir.getName());
+		}
+
+		return fileNames;
+	}
+
 }

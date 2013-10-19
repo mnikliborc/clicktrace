@@ -17,25 +17,31 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.imgscalr.Scalr;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.ImgManager;
+import com.niklim.clicktrace.SessionsManager;
 
 public class SessionView {
-	private static final int THUMB_SIZE = 300;
 
 	@Inject
 	private Editor editor;
 
+	private double widthHeightRatio;
+	private int rightPanelWidth;
+
 	public void showSession(String sessionName, JPanel rightPanel) {
-		File sessionDir = new File(ImgManager.SESSIONS_DIR + sessionName);
-		File[] imgs = sessionDir.listFiles(new Editor.TrashFilter());
-		for (File file : imgs) {
+		widthHeightRatio = (double) rightPanel.getHeight() / rightPanel.getWidth();
+		rightPanelWidth = (int) rightPanel.getWidth();
+
+		for (String imgName : SessionsManager.loadSession(sessionName)) {
 			try {
-				BufferedImage image = ImageIO.read(file);
-				rightPanel
-						.add(new ThumbPanel(Scalr.resize(image, THUMB_SIZE), rightPanel, sessionName, file.getName()));
+				BufferedImage image = ImageIO
+						.read(new File(SessionsManager.SESSIONS_DIR + sessionName + "/" + imgName));
+				rightPanel.add(new ThumbPanel(Scalr.resize(image, rightPanelWidth - 30), rightPanel, sessionName,
+						imgName), "wrap");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -51,11 +57,11 @@ public class SessionView {
 
 		private BufferedImage image;
 
-		private JPanel thumb = new InnerThumbPanel();
+		private JPanel thumb;
 
 		private class InnerThumbPanel extends JPanel {
-			InnerThumbPanel() {
-				setPreferredSize(new Dimension(THUMB_SIZE, THUMB_SIZE));
+			InnerThumbPanel(int width) {
+				setPreferredSize(new Dimension(width, (int) (width * widthHeightRatio)));
 				setBackground(new Color(50, 100, 200));
 			}
 
@@ -67,6 +73,9 @@ public class SessionView {
 		};
 
 		public ThumbPanel(BufferedImage image, final JPanel rightPanel, final String sessionName, final String imageName) {
+			super(new MigLayout());
+
+			thumb = new InnerThumbPanel((int) rightPanel.getSize().getWidth());
 			this.image = image;
 			nameLabel = new JLabel(imageName);
 
@@ -78,38 +87,37 @@ public class SessionView {
 				}
 			});
 
-			final ThumbPanel panel = this;
 			deleteLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			deleteLabel.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent event) {
 					editor.delete(sessionName, imageName);
 
-					rightPanel.remove(panel);
+					rightPanel.remove(ThumbPanel.this);
 				}
 			});
 
 			layComopnents();
 		}
 
-		public void layComopnents() {
-			JPanel control = new JPanel();
+		private void layComopnents() {
+			JPanel control = new JPanel(new MigLayout());
 			control.setBackground(new Color(200, 100, 0));
 
 			control.setBorder(new BevelBorder(BevelBorder.LOWERED));
 			control.add(nameLabel);
 
-			JPanel gap = new JPanel();
-			gap.setPreferredSize(new Dimension(120, 20));
-			control.add(gap);
-
-			control.add(deleteLabel);
+			int gap = rightPanelWidth - 300;
+			control.add(deleteLabel, "gapleft " + gap);
 			control.add(editLabel);
-			control.add(checkbox);
+			control.add(checkbox, "wrap");
 
-			setPreferredSize(new Dimension(THUMB_SIZE, THUMB_SIZE));
+			control.setPreferredSize(new Dimension(rightPanelWidth, 50));
 
-			add(control, BorderLayout.NORTH);
+			int height = (int) (rightPanelWidth * widthHeightRatio) + 50;
+			setPreferredSize(new Dimension(rightPanelWidth, height));
+
+			add(control, "wrap");
 			add(thumb, BorderLayout.CENTER);
 		}
 	}

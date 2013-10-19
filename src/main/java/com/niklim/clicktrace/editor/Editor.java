@@ -1,7 +1,8 @@
 package com.niklim.clicktrace.editor;
 
 import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -9,14 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
+
+import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.ImgManager;
+import com.niklim.clicktrace.SessionsManager;
 
-public class Editor implements TreeExpansionListener {
+public class Editor {
 	public static class TrashFilter implements FilenameFilter {
 		@Override
 		public boolean accept(File dir, String name) {
@@ -31,7 +31,7 @@ public class Editor implements TreeExpansionListener {
 	private SessionView sessionView;
 
 	@Inject
-	private ImageTree imageTree;
+	private ControlPanel controlPanel;
 
 	@Inject
 	public void init() {
@@ -39,69 +39,51 @@ public class Editor implements TreeExpansionListener {
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		rightPanel = new JPanel(new GridLayout(0, 3));
+		rightPanel = new JPanel(new MigLayout());
 		rightPanel.setBackground(new Color(10));
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setLeftComponent(new JScrollPane(imageTree.getTree(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
-		splitPane.setRightComponent(new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setEnabled(false);
+		splitPane.setTopComponent(controlPanel.getPanel());
+		splitPane.setBottomComponent(new JScrollPane(rightPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
-		splitPane.setDividerLocation(200);
 		splitPane.setBackground(new Color(200));
 
 		frame.add(splitPane);
-
-		imageTree.getTree().addTreeExpansionListener(this);
 
 		open(null);
 	}
 
 	public void open(String sessionName) {
-		imageTree.buildImgTree();
 		frame.setVisible(true);
+		controlPanel.setSessions(SessionsManager.loadSessions(), sessionName);
 	}
 
-	@Override
-	public void treeExpanded(TreeExpansionEvent event) {
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) event.getPath().getLastPathComponent();
+	void showSession(String sessionName) {
+		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-		if (node == null)
-			return;
-
-		Object nodeInfo = node.getUserObject();
-		String filename = (String) nodeInfo;
-		if (node.isLeaf()) {
-			// do nothing right now
-		} else {
-			showSession(filename);
-		}
-	}
-
-	@Override
-	public void treeCollapsed(TreeExpansionEvent event) {
-	}
-
-	private void showSession(String filename) {
 		rightPanel.removeAll();
 
-		sessionView.showSession(filename, rightPanel);
+		sessionView.showSession(sessionName, rightPanel);
 
 		frame.getContentPane().revalidate();
 		frame.getContentPane().repaint();
+
+		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void edit(String imageName) {
 	}
 
 	public void delete(String sessionName, String imageName) {
-		ImgManager.deleteImage(sessionName, imageName);
-		imageTree.deleteImage(sessionName, imageName);
+		SessionsManager.deleteImage(sessionName, imageName);
 
 		frame.getContentPane().revalidate();
 		frame.getContentPane().repaint();
+	}
 
-		imageTree.openSession(sessionName);
+	public Dimension getEditorDimension() {
+		return frame.getSize();
 	}
 }

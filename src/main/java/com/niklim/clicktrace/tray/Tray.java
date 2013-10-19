@@ -25,7 +25,8 @@ public class Tray {
 	public Tray() {
 		/* Use an appropriate Look and Feel */
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		} catch (UnsupportedLookAndFeelException ex) {
