@@ -17,16 +17,17 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.niklim.clicktrace.SessionsManager;
+import com.niklim.clicktrace.session.ScreenShot;
+import com.niklim.clicktrace.session.Session;
 
 public class ControlView {
 	@Inject
 	private Editor editor;
 
 	private JPanel panel = new JPanel(new MigLayout());
-	private JComboBox<String> sessionsComboBox = new JComboBox<String>();
+	private JComboBox<Session> sessionsComboBox = new JComboBox<Session>();
 	private JPanel imagesPanel = new JPanel();
-	private JComboBox<String> imagesComboBox = new JComboBox<String>();
+	private JComboBox<ScreenShot> imagesComboBox = new JComboBox<ScreenShot>();
 
 	public ControlView() {
 		sessionsComboBox.setEditable(false);
@@ -47,10 +48,10 @@ public class ControlView {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					String sessionName = (String) sessionsComboBox.getModel().getSelectedItem();
-					if (!Strings.isNullOrEmpty(sessionName)) {
-						editor.showSession(sessionName);
-						showImagesCombobox(sessionName);
+					Session session = (Session) sessionsComboBox.getModel().getSelectedItem();
+					if (!Strings.isNullOrEmpty(session.getName())) {
+						editor.showSession(session);
+						showImagesCombobox(session);
 					}
 				}
 			}
@@ -60,10 +61,10 @@ public class ControlView {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					String imageName = (String) imagesComboBox.getModel().getSelectedItem();
-					if (!Strings.isNullOrEmpty(imageName)) {
+					ScreenShot shot = (ScreenShot) imagesComboBox.getModel().getSelectedItem();
+					if (!Strings.isNullOrEmpty(shot.getName())) {
 						for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
-							if (imageName.equals(imagesComboBox.getModel().getElementAt(i))) {
+							if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
 								editor.showImage(i);
 								break;
 							}
@@ -74,22 +75,26 @@ public class ControlView {
 		});
 	}
 
-	private void showImagesCombobox(String sessionName) {
+	private void showImagesCombobox(Session session) {
 		imagesPanel.setVisible(true);
-		List<String> imageNames = SessionsManager.loadSession(sessionName);
+		List<ScreenShot> imageNames = session.getShots();
 		imageNames = Lists.reverse(imageNames);
-		imageNames.add("");
+		ScreenShot emptyScreenShot = new ScreenShot();
+		emptyScreenShot.setName("");
+		imageNames.add(emptyScreenShot);
 		imageNames = Lists.reverse(imageNames);
 
-		imagesComboBox.setModel(new DefaultComboBoxModel<String>(imageNames.toArray(new String[0])));
+		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(imageNames.toArray(new ScreenShot[0])));
 	}
 
-	public void setSessions(List<String> sessionNames, String sessionName) {
-		sessionNames = Lists.reverse(sessionNames);
-		sessionNames.add("");
-		sessionNames = Lists.reverse(sessionNames);
+	public void setSessions(List<Session> list, String sessionName) {
+		list = Lists.reverse(list);
+		Session emptySession = new Session();
+		emptySession.setName("");
+		list.add(emptySession);
+		list = Lists.reverse(list);
 
-		sessionsComboBox.setModel(new DefaultComboBoxModel<String>(sessionNames.toArray(new String[0])));
+		sessionsComboBox.setModel(new DefaultComboBoxModel<Session>(list.toArray(new Session[0])));
 		sessionsComboBox.getModel().setSelectedItem(sessionName);
 	}
 

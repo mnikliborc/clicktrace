@@ -10,7 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.SessionsManager;
+import com.niklim.clicktrace.session.ScreenShot;
+import com.niklim.clicktrace.session.Session;
+import com.niklim.clicktrace.session.SessionManager;
 
 public class Editor {
 	public static class TrashFilter implements FilenameFilter {
@@ -27,6 +29,9 @@ public class Editor {
 
 	@Inject
 	private ControlView controlView;
+
+	@Inject
+	private SessionManager sessionManager;
 
 	@Inject
 	public void init() {
@@ -46,13 +51,13 @@ public class Editor {
 
 	public void open(String sessionName) {
 		frame.setVisible(true);
-		controlView.setSessions(SessionsManager.loadSessions(), sessionName);
+		controlView.setSessions(sessionManager.load(), sessionName);
 	}
 
-	void showSession(String sessionName) {
+	void showSession(Session session) {
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-		sessionView.showSession(sessionName);
+		sessionView.showSession(session);
 
 		frame.getContentPane().revalidate();
 		frame.getContentPane().repaint();
@@ -64,10 +69,10 @@ public class Editor {
 		sessionView.showImage(i);
 	}
 
-	public void edit(String sessionName, String imageName) {
+	public void edit(ScreenShot shot) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + sessionName
-					+ "\\" + imageName);
+			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
+					+ shot.getSession().getName() + "\\" + shot.getName());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -77,4 +82,5 @@ public class Editor {
 	public Dimension getEditorDimension() {
 		return frame.getSize();
 	}
+
 }

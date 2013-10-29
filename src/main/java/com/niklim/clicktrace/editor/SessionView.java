@@ -8,12 +8,10 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -28,7 +26,8 @@ import net.miginfocom.swing.MigLayout;
 import org.imgscalr.Scalr;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.SessionsManager;
+import com.niklim.clicktrace.session.ScreenShot;
+import com.niklim.clicktrace.session.Session;
 
 public class SessionView {
 
@@ -49,16 +48,15 @@ public class SessionView {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	}
 
-	public void showSession(String sessionName) {
+	public void showSession(Session session) {
 		widthHeightRatio = (double) sessionPanel.getHeight() / sessionPanel.getWidth();
 		sessionPanelWidth = (int) sessionPanel.getWidth();
 
 		sessionPanel.removeAll();
 		thumbs.clear();
-		for (String imgName : SessionsManager.loadSession(sessionName)) {
+		for (ScreenShot shot : session.getShots()) {
 			try {
-				BufferedImage scaledImage = loadScaledImage(sessionName, imgName);
-				ThumbPanel thumb = new ThumbPanel(scaledImage, sessionPanel, sessionName, imgName);
+				ThumbPanel thumb = new ThumbPanel(sessionPanel, shot);
 				thumbs.add(thumb);
 				sessionPanel.add(thumb, "wrap");
 			} catch (IOException e) {
@@ -68,8 +66,8 @@ public class SessionView {
 
 	}
 
-	public BufferedImage loadScaledImage(String sessionName, String imgName) throws IOException {
-		BufferedImage image = ImageIO.read(new File(SessionsManager.SESSIONS_DIR + sessionName + "/" + imgName));
+	public BufferedImage loadScaledImage(ScreenShot shot) throws IOException {
+		BufferedImage image = shot.getImage();
 		BufferedImage scaledImage = Scalr.resize(image, sessionPanelWidth - 40);
 		return scaledImage;
 	}
@@ -98,20 +96,19 @@ public class SessionView {
 			}
 		};
 
-		public ThumbPanel(BufferedImage image, final JPanel sessionPanel, final String sessionName,
-				final String imageName) {
+		public ThumbPanel(final JPanel sessionPanel, final ScreenShot shot) throws IOException {
 			super(new MigLayout());
 
+			image = loadScaledImage(shot);
 			thumb = new InnerThumbPanel((int) sessionPanel.getSize().getWidth());
-			this.image = image;
-			nameLabel = new JLabel(imageName);
+			nameLabel = new JLabel(shot.getName());
 
 			refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			refreshButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent event) {
 					try {
-						ThumbPanel.this.image = loadScaledImage(sessionName, imageName);
+						ThumbPanel.this.image = loadScaledImage(shot);
 						revalidate();
 						repaint();
 					} catch (IOException e) {
@@ -124,7 +121,7 @@ public class SessionView {
 			editButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent event) {
-					editor.edit(sessionName, imageName);
+					editor.edit(shot);
 				}
 			});
 
@@ -132,7 +129,7 @@ public class SessionView {
 			deleteButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent event) {
-					SessionsManager.deleteImage(sessionName, imageName);
+					shot.delete();
 
 					sessionPanel.remove(ThumbPanel.this);
 					sessionPanel.revalidate();

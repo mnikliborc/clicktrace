@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 
 import com.niklim.clicktrace.editor.Editor.TrashFilter;
 
-public class SessionsManager {
+public class ImageFileManager {
 	public static final String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 
@@ -53,15 +53,7 @@ public class SessionsManager {
 		file.delete();
 	}
 
-	public static List<String> loadSessions() {
-		return loadFiles(SESSIONS_DIR);
-	}
-
-	public static List<String> loadSession(String sessionName) {
-		return loadFiles(SESSIONS_DIR + sessionName);
-	}
-
-	private static List<String> loadFiles(String dirName) {
+	public static List<String> loadFileNames(String dirName) {
 		List<String> fileNames = new ArrayList<String>();
 
 		File[] files = new File(dirName).listFiles(new TrashFilter());
@@ -72,5 +64,4 @@ public class SessionsManager {
 
 		return fileNames;
 	}
-
 }
