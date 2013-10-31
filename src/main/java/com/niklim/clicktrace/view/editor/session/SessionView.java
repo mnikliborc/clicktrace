@@ -31,7 +31,7 @@ import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.view.editor.Editor;
 
 public class SessionView {
-
+	// TODO refactor me!
 	@Inject
 	private Editor editor;
 
@@ -169,10 +169,6 @@ public class SessionView {
 
 	public void showImage(int i) {
 		JScrollBar scroll = sessionScrollPanel.getVerticalScrollBar();
-		if (thumbs.size() == i) {
-			scroll.setValue(scroll.getMaximum());
-		} else {
-			scroll.setValue(scroll.getMinimum() + thumbs.get(i).getHeight() * (i - 1));
-		}
+		scroll.setValue((int) (thumbs.get(i - 1).getBounds().getY()));
 	}
 }

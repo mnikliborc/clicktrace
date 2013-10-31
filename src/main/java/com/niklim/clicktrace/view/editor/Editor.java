@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
+import com.niklim.clicktrace.view.editor.control.ControlView;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
 public class Editor {
@@ -55,7 +56,7 @@ public class Editor {
 		controlView.setSessions(sessionManager.loadAll(), sessionName);
 	}
 
-	void showSession(Session session) {
+	public void showSession(Session session) {
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		sessionView.showSession(session);
@@ -66,7 +67,7 @@ public class Editor {
 		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	void showImage(int i) {
+	public void showImage(int i) {
 		sessionView.showImage(i);
 	}
 

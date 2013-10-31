@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace.view.editor.control;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.view.editor.Editor;
 
 public class ControlView {
 	@Inject
