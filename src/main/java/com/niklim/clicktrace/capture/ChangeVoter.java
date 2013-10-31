@@ -79,9 +79,9 @@ class PixelVoter implements ChangeVoter {
 	}
 }
 
-class BlindVoter implements ChangeVoter {
+class NoVoter implements ChangeVoter {
 	@Override
 	public Vote vote(BufferedImage prev, BufferedImage current) {
-		return Vote.SAVE;
+		return Vote.DISCARD;
 	}
 }

@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 class ChangeDetector {
 	private static final Logger log = LoggerFactory.getLogger(ChangeDetector.class);
 

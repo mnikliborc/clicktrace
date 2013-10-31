@@ -7,7 +7,7 @@ import com.niklim.clicktrace.ImageFileManager;
 
 public class SessionManager {
 
-	public List<Session> load() {
+	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
 		for (String sessionName : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR)) {

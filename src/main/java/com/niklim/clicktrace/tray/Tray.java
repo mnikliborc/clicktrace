@@ -86,7 +86,7 @@ public class Tray {
 
 		nameItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String name = JOptionPane.showInputDialog("Set session name", controller.getSessionName());
+				String name = JOptionPane.showInputDialog("Set session name", controller.getActiveSessionName());
 				if (name != null) {
 					controller.setSessionName(name);
 				}

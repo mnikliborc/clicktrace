@@ -5,7 +5,7 @@ public interface TrayController {
 
 	void stopSession();
 
-	String getSessionName();
+	String getActiveSessionName();
 
 	void setSessionName(String name);
 

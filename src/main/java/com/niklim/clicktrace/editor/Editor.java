@@ -51,7 +51,7 @@ public class Editor {
 
 	public void open(String sessionName) {
 		frame.setVisible(true);
-		controlView.setSessions(sessionManager.load(), sessionName);
+		controlView.setSessions(sessionManager.loadAll(), sessionName);
 	}
 
 	void showSession(Session session) {

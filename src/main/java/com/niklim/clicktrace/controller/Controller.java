@@ -1,14 +1,15 @@
 package com.niklim.clicktrace.controller;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.capture.Capture;
+import com.niklim.clicktrace.capture.ActiveSession;
+import com.niklim.clicktrace.capture.ChangeCapture;
 import com.niklim.clicktrace.editor.Editor;
 import com.niklim.clicktrace.tray.Tray;
 import com.niklim.clicktrace.tray.TrayController;
 
 public class Controller implements TrayController {
 	@Inject
-	private Capture capture;
+	private ChangeCapture changeCapture;
 
 	@Inject
 	private Tray tray;
@@ -16,29 +17,34 @@ public class Controller implements TrayController {
 	@Inject
 	private Editor editor;
 
+	@Inject
+	private ActiveSession activeSession;
+
 	@Override
 	public void startSession() {
-		capture.start();
+		changeCapture.start();
+		activeSession.setActive(true);
 	}
 
 	@Override
 	public void stopSession() {
-		capture.stop();
+		changeCapture.stop();
+		activeSession.setActive(false);
 	}
 
 	@Override
-	public String getSessionName() {
-		return capture.getSessionName();
+	public String getActiveSessionName() {
+		return activeSession.getSessionName();
 	}
 
 	@Override
-	public void setSessionName(String name) {
-		capture.setSessionName(name);
+	public void setSessionName(String sessionName) {
+		activeSession.setSessionName(sessionName);
 	}
 
 	@Override
 	public void openEditor() {
-		editor.open(capture.getSessionName());
+		editor.open(activeSession.getSessionName());
 	}
 
 }

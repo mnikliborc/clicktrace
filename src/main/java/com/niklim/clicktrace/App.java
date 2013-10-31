@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.niklim.clicktrace.capture.CaptureModule;
+import com.niklim.clicktrace.capture.MouseCapture;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.controller.ControllerModule;
 import com.niklim.clicktrace.session.helper.SessionHelperFactory;
@@ -36,7 +37,8 @@ public class App {
 
 	public static void main(String[] args) {
 		Injector injector = Guice.createInjector(new ControllerModule(), new CaptureModule());
-		SessionHelperFactory sessionHelper = injector.getInstance(SessionHelperFactory.class);
+		injector.getInstance(SessionHelperFactory.class);
+		injector.getInstance(MouseCapture.class);
 		injector.getInstance(Controller.class);
 
 		log.info("app start");

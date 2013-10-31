@@ -1,6 +1,5 @@
 package com.niklim.clicktrace.capture;
 
-import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -13,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.ImageFileManager;
 
-public class Capture {
-	private static final Logger log = LoggerFactory.getLogger(Capture.class);
+@Singleton
+public class ChangeCapture {
+	private static final Logger log = LoggerFactory.getLogger(ChangeCapture.class);
 
 	@Inject
 	private Robot robot;
@@ -24,9 +25,10 @@ public class Capture {
 	@Inject
 	private ChangeDetector detector;
 
-	private Timer time;
+	@Inject
+	private ActiveSession activeSession;
 
-	private String sessionName;
+	private Timer time;
 
 	public void start() {
 		time = new Timer();
@@ -34,7 +36,9 @@ public class Capture {
 	}
 
 	public void stop() {
-		time.cancel();
+		if (time != null) {
+			time.cancel();
+		}
 		time = null;
 		detector.reset();
 	}
@@ -42,26 +46,20 @@ public class Capture {
 	private class CaptureTask extends TimerTask {
 		@Override
 		public void run() {
-			try {
-				BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit()
-						.getScreenSize()));
+			capture();
+		}
+	}
 
-				if (detector.detect(image)) {
-					ImageFileManager.saveImage(image, sessionName);
-				}
-			} catch (HeadlessException e) {
-				e.printStackTrace();
+	public synchronized void capture() {
+		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+
+		if (detector.detect(image)) {
+			try {
+				ImageFileManager.saveImage(image, activeSession.getSessionName());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public String getSessionName() {
-		return sessionName;
-	}
-
-	public void setSessionName(String sessionName) {
-		this.sessionName = sessionName;
-	}
 }
