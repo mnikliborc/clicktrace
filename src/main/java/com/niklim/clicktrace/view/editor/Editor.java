@@ -14,6 +14,7 @@ import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.control.ControlView;
+import com.niklim.clicktrace.view.editor.menu.EditorMenu;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
 public class Editor {
@@ -36,8 +37,11 @@ public class Editor {
 	private SessionManager sessionManager;
 
 	@Inject
+	private EditorMenu editorMenu;
+
+	@Inject
 	public void init() {
-		frame = new JFrame("Frame");
+		frame = new JFrame("Clicktrace");
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -47,6 +51,7 @@ public class Editor {
 		splitPane.setBottomComponent(sessionView.getComponent());
 
 		frame.add(splitPane);
+		frame.setJMenuBar(editorMenu.getMenu());
 
 		open(null);
 	}
