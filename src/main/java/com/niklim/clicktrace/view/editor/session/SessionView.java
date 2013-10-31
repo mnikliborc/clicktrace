@@ -168,6 +168,6 @@ public class SessionView {
 
 	public void showScreenShot(int i) {
 		JScrollBar scroll = sessionScrollPanel.getVerticalScrollBar();
-		scroll.setValue((int) (thumbs.get(i - 1).getBounds().getY()));
+		scroll.setValue((int) (thumbs.get(i).getBounds().getY()));
 	}
 }
