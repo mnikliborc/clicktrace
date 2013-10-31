@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.tray;
+package com.niklim.clicktrace.view.tray;
 
 public interface TrayController {
 	void startSession();

@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.editor;
+package com.niklim.clicktrace.view.editor;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -10,9 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.session.ScreenShot;
-import com.niklim.clicktrace.session.Session;
-import com.niklim.clicktrace.session.SessionManager;
+import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.model.session.SessionManager;
+import com.niklim.clicktrace.view.editor.session.SessionView;
 
 public class Editor {
 	public static class TrashFilter implements FilenameFilter {

@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.session;
+package com.niklim.clicktrace.model.session;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.niklim.clicktrace.session.helper.ScreenShotLoader;
-import com.niklim.clicktrace.session.helper.SessionHelperFactory;
-import com.niklim.clicktrace.session.helper.SessionSaver;
+import com.niklim.clicktrace.model.session.helper.ScreenShotLoader;
+import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
+import com.niklim.clicktrace.model.session.helper.SessionSaver;
 
 public class Session {
 	private String name;

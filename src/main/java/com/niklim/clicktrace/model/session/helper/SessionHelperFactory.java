@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.session.helper;
+package com.niklim.clicktrace.model.session.helper;
 
 import com.google.inject.Inject;
 

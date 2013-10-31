@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.session;
+package com.niklim.clicktrace.model.session;
 
 import java.util.LinkedList;
 import java.util.List;

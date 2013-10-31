@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.session;
+package com.niklim.clicktrace.model.session;
 
 import java.awt.image.BufferedImage;
 
@@ -7,8 +7,8 @@ import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
-import com.niklim.clicktrace.session.helper.ImageLoader;
-import com.niklim.clicktrace.session.helper.SessionHelperFactory;
+import com.niklim.clicktrace.model.session.helper.ImageLoader;
+import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 
 public class ScreenShot {
 	private String name;

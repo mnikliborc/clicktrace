@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.session.helper;
+package com.niklim.clicktrace.model.session.helper;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.niklim.clicktrace.ImageFileManager;
-import com.niklim.clicktrace.session.ScreenShot;
+import com.niklim.clicktrace.model.session.ScreenShot;
 
 public class ImageLoader {
 	public BufferedImage load(ScreenShot shot) {

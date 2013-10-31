@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.editor;
+package com.niklim.clicktrace.view.editor.session;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,8 +26,9 @@ import net.miginfocom.swing.MigLayout;
 import org.imgscalr.Scalr;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.session.ScreenShot;
-import com.niklim.clicktrace.session.Session;
+import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.view.editor.Editor;
 
 public class SessionView {
 
@@ -168,6 +169,10 @@ public class SessionView {
 
 	public void showImage(int i) {
 		JScrollBar scroll = sessionScrollPanel.getVerticalScrollBar();
-		scroll.setValue(scroll.getMinimum() + thumbs.get(i).getHeight() * (i - 1));
+		if (thumbs.size() == i) {
+			scroll.setValue(scroll.getMaximum());
+		} else {
+			scroll.setValue(scroll.getMinimum() + thumbs.get(i).getHeight() * (i - 1));
+		}
 	}
 }

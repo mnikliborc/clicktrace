@@ -1,7 +1,7 @@
 package com.niklim.clicktrace.controller;
 
 import com.google.inject.AbstractModule;
-import com.niklim.clicktrace.tray.TrayController;
+import com.niklim.clicktrace.view.tray.TrayController;
 
 public class ControllerModule extends AbstractModule {
 

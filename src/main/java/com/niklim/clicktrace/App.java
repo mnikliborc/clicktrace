@@ -9,7 +9,7 @@ import com.niklim.clicktrace.capture.CaptureModule;
 import com.niklim.clicktrace.capture.MouseCapture;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.controller.ControllerModule;
-import com.niklim.clicktrace.session.helper.SessionHelperFactory;
+import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 
 //A. SCREEN CAPTURE
 //1. take screenshot

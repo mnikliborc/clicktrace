@@ -3,9 +3,9 @@ package com.niklim.clicktrace.controller;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.capture.ActiveSession;
 import com.niklim.clicktrace.capture.ChangeCapture;
-import com.niklim.clicktrace.editor.Editor;
-import com.niklim.clicktrace.tray.Tray;
-import com.niklim.clicktrace.tray.TrayController;
+import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.tray.Tray;
+import com.niklim.clicktrace.view.tray.TrayController;
 
 public class Controller implements TrayController {
 	@Inject

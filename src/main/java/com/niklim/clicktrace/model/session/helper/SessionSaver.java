@@ -1,6 +1,6 @@
-package com.niklim.clicktrace.session.helper;
+package com.niklim.clicktrace.model.session.helper;
 
-import com.niklim.clicktrace.session.Session;
+import com.niklim.clicktrace.model.session.Session;
 
 public class SessionSaver {
 	public synchronized void save(Session sesssion) {

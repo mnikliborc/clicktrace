@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import com.niklim.clicktrace.editor.Editor.TrashFilter;
+import com.niklim.clicktrace.view.editor.Editor.TrashFilter;
 
 public class ImageFileManager {
 	public static final String SESSIONS_DIR = "sessions/";

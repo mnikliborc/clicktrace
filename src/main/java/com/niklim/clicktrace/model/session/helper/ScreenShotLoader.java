@@ -1,11 +1,11 @@
-package com.niklim.clicktrace.session.helper;
+package com.niklim.clicktrace.model.session.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.niklim.clicktrace.ImageFileManager;
-import com.niklim.clicktrace.session.ScreenShot;
-import com.niklim.clicktrace.session.Session;
+import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.model.session.Session;
 
 public class ScreenShotLoader {
 	public List<ScreenShot> load(Session session) {
