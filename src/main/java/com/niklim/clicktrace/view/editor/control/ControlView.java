@@ -66,7 +66,7 @@ public class ControlView {
 					if (!Strings.isNullOrEmpty(shot.getName())) {
 						for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
 							if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
-								editor.showImage(i);
+								editor.showScreenShot(i - 1);
 								break;
 							}
 						}
@@ -78,14 +78,14 @@ public class ControlView {
 
 	private void showImagesCombobox(Session session) {
 		imagesPanel.setVisible(true);
-		List<ScreenShot> imageNames = session.getShots();
-		imageNames = Lists.reverse(imageNames);
+		List<ScreenShot> shots = session.getShots();
+		shots = Lists.reverse(shots);
 		ScreenShot emptyScreenShot = new ScreenShot();
 		emptyScreenShot.setName("");
-		imageNames.add(emptyScreenShot);
-		imageNames = Lists.reverse(imageNames);
+		shots.add(emptyScreenShot);
+		shots = Lists.reverse(shots);
 
-		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(imageNames.toArray(new ScreenShot[0])));
+		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(shots.toArray(new ScreenShot[0])));
 	}
 
 	public void setSessions(List<Session> list, String sessionName) {

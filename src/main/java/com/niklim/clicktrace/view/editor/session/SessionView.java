@@ -67,8 +67,7 @@ public class SessionView {
 
 	}
 
-	public BufferedImage loadScaledImage(ScreenShot shot) throws IOException {
-		BufferedImage image = shot.getImage();
+	public BufferedImage scaleImage(BufferedImage image) throws IOException {
 		BufferedImage scaledImage = Scalr.resize(image, sessionPanelWidth - 40);
 		return scaledImage;
 	}
@@ -100,7 +99,7 @@ public class SessionView {
 		public ThumbPanel(final JPanel sessionPanel, final ScreenShot shot) throws IOException {
 			super(new MigLayout());
 
-			image = loadScaledImage(shot);
+			image = scaleImage(shot.getImage());
 			thumb = new InnerThumbPanel((int) sessionPanel.getSize().getWidth());
 			nameLabel = new JLabel(shot.getName());
 
@@ -109,7 +108,7 @@ public class SessionView {
 				@Override
 				public void mouseClicked(MouseEvent event) {
 					try {
-						ThumbPanel.this.image = loadScaledImage(shot);
+						ThumbPanel.this.image = scaleImage(shot.loadImage());
 						revalidate();
 						repaint();
 					} catch (IOException e) {
@@ -167,7 +166,7 @@ public class SessionView {
 		return sessionScrollPanel;
 	}
 
-	public void showImage(int i) {
+	public void showScreenShot(int i) {
 		JScrollBar scroll = sessionScrollPanel.getVerticalScrollBar();
 		scroll.setValue((int) (thumbs.get(i - 1).getBounds().getY()));
 	}

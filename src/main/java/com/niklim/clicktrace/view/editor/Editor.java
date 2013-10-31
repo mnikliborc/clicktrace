@@ -67,8 +67,8 @@ public class Editor {
 		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	public void showImage(int i) {
-		sessionView.showImage(i);
+	public void showScreenShot(int i) {
+		sessionView.showScreenShot(i);
 	}
 
 	public void edit(ScreenShot shot) {
