@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -39,6 +41,15 @@ public class OpenSessionDialog extends JDialog {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					OpenSessionDialog.this.setVisible(false);
+					controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+				}
+			}
+		});
+
 		JButton openButton = new JButton("Open");
 		JButton cancelButton = new JButton("Cancel");
 
@@ -49,8 +60,8 @@ public class OpenSessionDialog extends JDialog {
 		openButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
 				OpenSessionDialog.this.setVisible(false);
+				controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
 			}
 		});
 
