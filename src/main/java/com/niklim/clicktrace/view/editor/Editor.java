@@ -14,7 +14,7 @@ import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.control.ControlView;
-import com.niklim.clicktrace.view.editor.menu.EditorMenu;
+import com.niklim.clicktrace.view.editor.menu.Menu;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
 public class Editor {
@@ -37,7 +37,7 @@ public class Editor {
 	private SessionManager sessionManager;
 
 	@Inject
-	private EditorMenu editorMenu;
+	private Menu editorMenu;
 
 	@Inject
 	public void init() {
@@ -65,6 +65,7 @@ public class Editor {
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		sessionView.showSession(session);
+		controlView.showImagesCombobox(session);
 
 		frame.getContentPane().revalidate();
 		frame.getContentPane().repaint();

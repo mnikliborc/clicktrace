@@ -26,37 +26,19 @@ public class ControlView {
 	private Editor editor;
 
 	private JPanel panel = new JPanel(new MigLayout());
-	private JComboBox<Session> sessionsComboBox = new JComboBox<Session>();
 	private JPanel imagesPanel = new JPanel();
 	private JComboBox<ScreenShot> imagesComboBox = new JComboBox<ScreenShot>();
 
 	public ControlView() {
-		sessionsComboBox.setEditable(false);
 		imagesComboBox.setEditable(false);
-		AutoCompleteDecorator.decorate(sessionsComboBox);
 		AutoCompleteDecorator.decorate(imagesComboBox);
 
 		imagesPanel.setVisible(false);
 
-		panel.add(new JLabel("Sessions"));
-		panel.add(sessionsComboBox);
 		panel.add(imagesPanel);
 
 		imagesPanel.add(new JLabel("go to"));
 		imagesPanel.add(imagesComboBox);
-
-		sessionsComboBox.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					Session session = (Session) sessionsComboBox.getModel().getSelectedItem();
-					if (!Strings.isNullOrEmpty(session.getName())) {
-						editor.showSession(session);
-						showImagesCombobox(session);
-					}
-				}
-			}
-		});
 
 		imagesComboBox.addItemListener(new ItemListener() {
 			@Override
@@ -76,7 +58,7 @@ public class ControlView {
 		});
 	}
 
-	private void showImagesCombobox(Session session) {
+	public void showImagesCombobox(Session session) {
 		imagesPanel.setVisible(true);
 		List<ScreenShot> shots = session.getShots();
 		shots = Lists.reverse(shots);
@@ -94,9 +76,6 @@ public class ControlView {
 		emptySession.setName("");
 		list.add(emptySession);
 		list = Lists.reverse(list);
-
-		sessionsComboBox.setModel(new DefaultComboBoxModel<Session>(list.toArray(new Session[0])));
-		sessionsComboBox.getModel().setSelectedItem(sessionName);
 	}
 
 	public Component getComponent() {

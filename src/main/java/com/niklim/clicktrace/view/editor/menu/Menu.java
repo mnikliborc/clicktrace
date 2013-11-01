@@ -3,17 +3,27 @@ package com.niklim.clicktrace.view.editor.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.Icons;
 
 @Singleton
-public class EditorMenu {
+public class Menu {
 	JMenuBar menubar;
 
-	public EditorMenu() {
+	@Inject
+	private MenuController controller;
+
+	@Inject
+	private OpenSessionDialog openSessionDialog;
+
+	public Menu() {
 		menubar = new JMenuBar();
 
 		JMenu file = createFile();
@@ -32,12 +42,14 @@ public class EditorMenu {
 		JMenuItem sessionStop = createSessionStop();
 		JMenuItem sessionSelectAll = createSessionSelectAll();
 		JMenuItem sessionDeleteSelected = createSessionDeleteSelected();
+		JMenuItem sessionDeleteActiveSession = createSessionDeleteActiveSession();
 
 		session.add(sessionStart);
 		session.add(sessionStop);
 		session.add(sessionSelectAll);
-		session.addSeparator();
 		session.add(sessionDeleteSelected);
+		session.addSeparator();
+		session.add(sessionDeleteActiveSession);
 		return session;
 	}
 
@@ -58,7 +70,7 @@ public class EditorMenu {
 	}
 
 	private JMenuItem createSessionSelectAll() {
-		return createMenuItem("Select all", new ActionListener() {
+		return createMenuItem("Select all screenshots", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				// TODO implement
 			}
@@ -66,7 +78,15 @@ public class EditorMenu {
 	}
 
 	private JMenuItem createSessionDeleteSelected() {
-		return createMenuItem("Delete selected", new ActionListener() {
+		return createMenuItem("Delete selected screenshots", new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				// TODO implement
+			}
+		});
+	}
+
+	private JMenuItem createSessionDeleteActiveSession() {
+		return createMenuItem("Delete current session", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				// TODO implement
 			}
@@ -94,21 +114,22 @@ public class EditorMenu {
 
 		JMenuItem fileNewSession = createFileNewSession();
 		JMenuItem fileOpenSession = createFileOpenSession();
-		JMenuItem fileDeleteActiveSession = createFileDeleteActiveSession();
 		JMenuItem fileExit = createFileExit();
 
 		file.add(fileNewSession);
 		file.add(fileOpenSession);
-		file.add(fileDeleteActiveSession);
 		file.addSeparator();
 		file.add(fileExit);
 		return file;
 	}
 
 	private JMenuItem createFileNewSession() {
-		return createMenuItem("New session", new ActionListener() {
+		return createMenuItem("New session", Icons.NEW_SESSION, new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
+				String name = JOptionPane.showInputDialog("Set session name");
+				if (name != null) {
+					controller.newSession(name);
+				}
 			}
 		});
 	}
@@ -116,15 +137,7 @@ public class EditorMenu {
 	private JMenuItem createFileOpenSession() {
 		return createMenuItem("Open session", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
-			}
-		});
-	}
-
-	private JMenuItem createFileDeleteActiveSession() {
-		return createMenuItem("Delete current session", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				// TODO implement
+				openSessionDialog.open();
 			}
 		});
 	}
@@ -139,6 +152,12 @@ public class EditorMenu {
 
 	private JMenuItem createMenuItem(String label, ActionListener listener) {
 		JMenuItem item = new JMenuItem(label);
+		item.addActionListener(listener);
+		return item;
+	}
+
+	private JMenuItem createMenuItem(String label, String iconName, ActionListener listener) {
+		JMenuItem item = new JMenuItem(label, new ImageIcon(Icons.createIconImage(iconName, label)));
 		item.addActionListener(listener);
 		return item;
 	}

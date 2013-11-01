@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.capture;
+package com.niklim.clicktrace.controller;
 
 import com.google.inject.Singleton;
 

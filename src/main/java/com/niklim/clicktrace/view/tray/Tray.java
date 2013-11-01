@@ -1,22 +1,20 @@
 package com.niklim.clicktrace.view.tray;
 
 import java.awt.AWTException;
-import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.Icons;
 
 public class Tray {
 	@Inject
@@ -56,7 +54,7 @@ public class Tray {
 			return;
 		}
 		final PopupMenu popup = new PopupMenu();
-		final TrayIcon trayIcon = new TrayIcon(createImage("icon.png", "tray icon"));
+		final TrayIcon trayIcon = new TrayIcon(Icons.createIconImage("icons/icon.png", "tray icon"));
 		final SystemTray tray = SystemTray.getSystemTray();
 
 		// Create a popup menu components
@@ -117,17 +115,5 @@ public class Tray {
 				System.exit(0);
 			}
 		});
-	}
-
-	// Obtain the image URL
-	protected Image createImage(String path, String description) {
-		URL imageURL = Thread.currentThread().getContextClassLoader().getResource(path);
-
-		if (imageURL == null) {
-			System.err.println("Resource not found: " + path);
-			return null;
-		} else {
-			return (new ImageIcon(imageURL, description)).getImage();
-		}
 	}
 }

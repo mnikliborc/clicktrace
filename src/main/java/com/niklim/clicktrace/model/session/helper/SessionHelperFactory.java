@@ -1,15 +1,12 @@
 package com.niklim.clicktrace.model.session.helper;
 
-import com.google.inject.Inject;
 
 public class SessionHelperFactory {
 
-	@Inject
 	private static ImageLoader imageLoader = new ImageLoader();
-	@Inject
 	private static ScreenShotLoader screenShotLoader = new ScreenShotLoader();
-	@Inject
 	private static SessionSaver sessionSaver = new SessionSaver();
+	private static SessionMetadataHelper sessionMetadataHelper = new SessionMetadataHelper();
 
 	public static ImageLoader getImageLoader() {
 		return imageLoader;
@@ -21,5 +18,9 @@ public class SessionHelperFactory {
 
 	public static SessionSaver getSessionSaver() {
 		return sessionSaver;
+	}
+
+	public static SessionMetadataHelper getSessionMetadataHelper() {
+		return sessionMetadataHelper;
 	}
 }
