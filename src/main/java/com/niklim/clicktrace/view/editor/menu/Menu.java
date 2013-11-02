@@ -17,6 +17,8 @@ import com.niklim.clicktrace.Icons;
 public class Menu {
 	JMenuBar menubar;
 
+	JMenuItem sessionDeleteActiveSession;
+
 	@Inject
 	private MenuController controller;
 
@@ -42,7 +44,8 @@ public class Menu {
 		JMenuItem sessionStop = createSessionStop();
 		JMenuItem sessionSelectAll = createSessionSelectAll();
 		JMenuItem sessionDeleteSelected = createSessionDeleteSelected();
-		JMenuItem sessionDeleteActiveSession = createSessionDeleteActiveSession();
+		sessionDeleteActiveSession = createSessionDeleteActiveSession();
+		sessionDeleteActiveSession.setEnabled(false);
 
 		session.add(sessionStart);
 		session.add(sessionStop);
@@ -88,7 +91,6 @@ public class Menu {
 	private JMenuItem createSessionDeleteActiveSession() {
 		return createMenuItem("Delete current session", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
 			}
 		});
 	}
@@ -164,5 +166,9 @@ public class Menu {
 
 	public JMenuBar getMenu() {
 		return menubar;
+	}
+
+	public void sessionActivated() {
+		sessionDeleteActiveSession.setEnabled(true);
 	}
 }

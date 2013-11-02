@@ -4,15 +4,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,6 +26,7 @@ import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.model.session.SessionMetadata;
 
+@SuppressWarnings("serial")
 public class OpenSessionDialog extends JDialog {
 	@Inject
 	private MenuController controller;
@@ -53,6 +57,13 @@ public class OpenSessionDialog extends JDialog {
 		JButton openButton = new JButton("Open");
 		JButton cancelButton = new JButton("Cancel");
 
+		getRootPane().registerKeyboardAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				close(false);
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.add(openButton);
 		buttonPanel.add(cancelButton);
@@ -60,15 +71,14 @@ public class OpenSessionDialog extends JDialog {
 		openButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OpenSessionDialog.this.setVisible(false);
-				controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+				close(true);
 			}
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				OpenSessionDialog.this.setVisible(false);
+				close(false);
 			}
 		});
 
@@ -81,6 +91,14 @@ public class OpenSessionDialog extends JDialog {
 		this.setVisible(true);
 	}
 
+	private void close(boolean openSession) {
+		OpenSessionDialog.this.setVisible(false);
+		if (openSession) {
+			controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+		}
+	}
+
+	@SuppressWarnings("serial")
 	private void loadSessions() {
 		List<Session> sessions = sessionManager.loadAll();
 		DefaultTableModel dataModel = new DefaultTableModel(
