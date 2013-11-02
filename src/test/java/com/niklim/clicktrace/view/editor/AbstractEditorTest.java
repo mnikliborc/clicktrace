@@ -56,6 +56,9 @@ public abstract class AbstractEditorTest {
 		File sessionDir = new File(ImageFileManager.SESSIONS_DIR);
 
 		for (File file : sessionDir.listFiles()) {
+			for (File sub : file.listFiles()) {
+				sub.delete();
+			}
 			file.delete();
 		}
 
