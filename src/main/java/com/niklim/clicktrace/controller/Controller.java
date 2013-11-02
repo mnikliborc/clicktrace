@@ -3,22 +3,18 @@ package com.niklim.clicktrace.controller;
 import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.ChangeCapture;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
-import com.niklim.clicktrace.view.editor.menu.Menu;
-import com.niklim.clicktrace.view.editor.menu.MenuController;
-import com.niklim.clicktrace.view.tray.Tray;
-import com.niklim.clicktrace.view.tray.TrayController;
+import com.niklim.clicktrace.view.editor.control.Menu;
 
-public class Controller implements TrayController, MenuController {
+@Singleton
+public class Controller {
 	@Inject
 	private ChangeCapture changeCapture;
-
-	@Inject
-	private Tray tray;
 
 	@Inject
 	private Editor editor;
@@ -32,24 +28,20 @@ public class Controller implements TrayController, MenuController {
 	@Inject
 	private SessionManager sessionManager;
 
-	@Override
 	public void startSession() {
 		changeCapture.start();
 		activeSession.setActive(true);
 	}
 
-	@Override
 	public void stopSession() {
 		changeCapture.stop();
 		activeSession.setActive(false);
 	}
 
-	@Override
 	public void openEditor() {
 		editor.open(activeSession.getSession());
 	}
 
-	@Override
 	public void newSession(String sessionName) {
 		menu.sessionActive(true);
 
@@ -64,7 +56,6 @@ public class Controller implements TrayController, MenuController {
 		}
 	}
 
-	@Override
 	public void openSession(Session session) {
 		menu.sessionActive(true);
 		activeSession.setSession(session);
@@ -72,7 +63,6 @@ public class Controller implements TrayController, MenuController {
 		editor.showSession(session);
 	}
 
-	@Override
 	public void deleteActiveSession() {
 		Session session = activeSession.getSession();
 		session.delete();
@@ -82,18 +72,15 @@ public class Controller implements TrayController, MenuController {
 		editor.hideSession();
 	}
 
-	@Override
 	public void setSelectedAllScreenshots(boolean selected) {
 		editor.setSelectedAllScreenShots(selected);
 	}
 
-	@Override
 	public void deleteSelectedScreenshots() {
 		editor.deleteSelectedScreenShots();
 
 	}
 
-	@Override
 	public void refreshSession() {
 		Session session = activeSession.getSession();
 		session.loadScreenShots();

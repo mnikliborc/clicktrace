@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor.menu;
+package com.niklim.clicktrace.view.editor.control;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,11 +7,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.view.editor.action.DeleteCurrentSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.DeleteSelectedScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.DeselectAllScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.NewSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.OpenSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.RefreshSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.SelectAllScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.StartSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.StopSessionActionListener;
 
 @Singleton
 public class Menu {
@@ -26,12 +34,38 @@ public class Menu {
 	JMenuItem sessionRefresh;
 
 	@Inject
-	private MenuController controller;
+	private NewSessionActionListener newSessionActionListener;
 
 	@Inject
-	private OpenSessionDialog openSessionDialog;
+	private DeleteCurrentSessionActionListener deleteCurrentSessionActionListener;
+
+	@Inject
+	private StartSessionActionListener startSessionActionListener;
+
+	@Inject
+	private StopSessionActionListener stopSessionActionListener;
+
+	@Inject
+	private RefreshSessionActionListener refreshSessionActionListener;
+
+	@Inject
+	private DeleteSelectedScreenShotsActionListener deleteSelectedScreenShotsActionListener;
+
+	@Inject
+	private SelectAllScreenShotsActionListener selectAllScreenShotsActionListener;
+
+	@Inject
+	private DeselectAllScreenShotsActionListener deselectAllScreenShotsActionListener;
+
+	@Inject
+	private OpenSessionActionListener openSessionActionListener;
 
 	public Menu() {
+
+	}
+
+	@Inject
+	public void init() {
 		menubar = new JMenuBar();
 
 		JMenu file = createFile();
@@ -67,79 +101,44 @@ public class Menu {
 	}
 
 	private JMenuItem createSessionStart() {
-		JMenuItem menuItem = createMenuItem("Start recording", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				controller.startSession();
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Start recording", startSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionStop() {
-		JMenuItem menuItem = createMenuItem("Stop recording", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				controller.stopSession();
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Stop recording", stopSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionRefresh() {
-		JMenuItem menuItem = createMenuItem("Refresh session", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				controller.refreshSession();
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Refresh session", Icons.REFRESH, refreshSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionSelectAll() {
-		JMenuItem menuItem = createMenuItem("Select all screenshots", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				controller.setSelectedAllScreenshots(true);
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Select all screenshots", selectAllScreenShotsActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeselectAll() {
-		JMenuItem menuItem = createMenuItem("Deselect all screenshots", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				controller.setSelectedAllScreenshots(false);
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Deselect all screenshots", deselectAllScreenShotsActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteSelected() {
-		JMenuItem menuItem = createMenuItem("Delete selected screenshots", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				int answer = JOptionPane.showConfirmDialog(menubar.getParent(), "Are you sure?", "",
-						JOptionPane.OK_CANCEL_OPTION);
-				if (answer == JOptionPane.OK_OPTION) {
-					controller.deleteSelectedScreenshots();
-				}
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Delete selected screenshots", deleteSelectedScreenShotsActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteActiveSession() {
-		JMenuItem menuItem = createMenuItem("Delete current session", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				int answer = JOptionPane.showConfirmDialog(menubar.getParent(), "Are you sure?", "",
-						JOptionPane.OK_CANCEL_OPTION);
-				if (answer == JOptionPane.OK_OPTION) {
-					controller.deleteActiveSession();
-				}
-			}
-		});
+		JMenuItem menuItem = createMenuItem("Delete current session", Icons.DELETE_SESSION,
+				deleteCurrentSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
@@ -175,22 +174,11 @@ public class Menu {
 	}
 
 	private JMenuItem createFileNewSession() {
-		return createMenuItem("New session", Icons.NEW_SESSION, new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				String name = JOptionPane.showInputDialog("Set session name");
-				if (name != null) {
-					controller.newSession(name);
-				}
-			}
-		});
+		return createMenuItem("New session", Icons.NEW_SESSION, newSessionActionListener);
 	}
 
 	private JMenuItem createFileOpenSession() {
-		return createMenuItem("Open session", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				openSessionDialog.open();
-			}
-		});
+		return createMenuItem("Open session", Icons.OPEN_SESSION, openSessionActionListener);
 	}
 
 	private JMenuItem createFileExit() {

@@ -26,6 +26,9 @@ public class ControlView {
 	@Inject
 	private Editor editor;
 
+	@Inject
+	private Toolbar toolbar;
+
 	private JPanel panel = new JPanel(new MigLayout());
 	private JPanel imagesPanel = new JPanel();
 	private JComboBox<ScreenShot> imagesComboBox = new JComboBox<ScreenShot>();
@@ -35,8 +38,6 @@ public class ControlView {
 		AutoCompleteDecorator.decorate(imagesComboBox);
 
 		imagesPanel.setVisible(false);
-
-		panel.add(imagesPanel);
 
 		imagesPanel.add(new JLabel("go to"));
 		imagesPanel.add(imagesComboBox);
@@ -57,6 +58,12 @@ public class ControlView {
 				}
 			}
 		});
+	}
+
+	@Inject
+	public void init() {
+		panel.add(toolbar.getToolbar(), "wrap");
+		panel.add(imagesPanel);
 	}
 
 	public void showImagesCombobox(Session session) {

@@ -9,6 +9,9 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -17,7 +20,7 @@ import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.control.ControlView;
-import com.niklim.clicktrace.view.editor.menu.Menu;
+import com.niklim.clicktrace.view.editor.control.Menu;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
 @Singleton
@@ -46,10 +49,33 @@ public class Editor {
 	@Inject
 	private ActiveSession activeSession;
 
+	public Editor() {
+		/* Use an appropriate Look and Feel */
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+		} catch (UnsupportedLookAndFeelException ex) {
+			ex.printStackTrace();
+		} catch (IllegalAccessException ex) {
+			ex.printStackTrace();
+		} catch (InstantiationException ex) {
+			ex.printStackTrace();
+		} catch (ClassNotFoundException ex) {
+			ex.printStackTrace();
+		}
+		/* Turn off metal's use of bold fonts */
+		UIManager.put("swing.boldMetal", Boolean.FALSE);
+		// Schedule a job for the event-dispatching thread:
+		// adding TrayIcon.
+
+	}
+
 	@Inject
 	public void init() {
 		frame = new JFrame("Clicktrace");
-		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -60,7 +86,12 @@ public class Editor {
 		frame.add(splitPane);
 		frame.setJMenuBar(editorMenu.getMenu());
 
-		open(null);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				open(null);
+			}
+		});
+
 	}
 
 	public void open(Session session) {

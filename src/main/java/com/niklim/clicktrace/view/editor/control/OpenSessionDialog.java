@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor.menu;
+package com.niklim.clicktrace.view.editor.control;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.model.session.SessionMetadata;
@@ -29,7 +30,7 @@ import com.niklim.clicktrace.model.session.SessionMetadata;
 @SuppressWarnings("serial")
 public class OpenSessionDialog extends JDialog {
 	@Inject
-	private MenuController controller;
+	private Controller controller;
 
 	@Inject
 	private SessionManager sessionManager;
