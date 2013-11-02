@@ -2,7 +2,6 @@ package com.niklim.clicktrace.view.editor;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.data.TableCell;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.junit.Test;
@@ -18,9 +17,11 @@ public class OpenSessionTest extends AbstractEditorTest {
 
 	@Test
 	public void shouldOpenOnDoubleClick() throws InterruptedException {
+		// when
 		editorFixture.menuItemWithPath("File", "Open session").click();
 		editorFixture.dialog().table().cell(TableCell.row(0).column(0)).doubleClick();
 
+		// then
 		try {
 			assertThat(editorFixture.dialog()).isNull();
 		} catch (WaitTimedOutError ex) {
@@ -31,10 +32,10 @@ public class OpenSessionTest extends AbstractEditorTest {
 
 	@Test
 	public void shouldOpenOnOkClick() throws InterruptedException {
-		editorFixture.menuItemWithPath("File", "Open session").click();
-		editorFixture.dialog().table().cell(TableCell.row(1).column(0)).click();
-		editorFixture.dialog().button(JButtonMatcher.withText("Open")).click();
+		// when
+		EditorTestUtil.openSession(editorFixture, 1);
 
+		// then
 		try {
 			assertThat(editorFixture.dialog()).isNull();
 		} catch (WaitTimedOutError ex) {
