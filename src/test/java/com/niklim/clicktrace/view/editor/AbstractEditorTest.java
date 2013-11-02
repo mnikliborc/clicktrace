@@ -1,7 +1,9 @@
 package com.niklim.clicktrace.view.editor;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.After;
 import org.junit.Before;
@@ -9,9 +11,11 @@ import org.junit.Before;
 import com.google.inject.Injector;
 import com.niklim.clicktrace.ImageFileManager;
 
-public class AbstractEditorTest {
+public abstract class AbstractEditorTest {
 	protected FrameFixture editorFixture;
 	protected Injector injector;
+
+	abstract protected TestSessionsData getSessionsData();
 
 	@Before
 	public void setUp() {
@@ -31,6 +35,19 @@ public class AbstractEditorTest {
 			sessionDir.mkdir();
 		} else {
 			cleanup();
+		}
+
+		copySessions();
+	}
+
+	private void copySessions() {
+		try {
+			File testSessionDir = new File("src/test/resources/" + getSessionsData().getPath());
+			for (File session : testSessionDir.listFiles()) {
+				FileUtils.copyDirectory(session, new File(ImageFileManager.SESSIONS_DIR + session.getName()));
+			}
+		} catch (IOException e) {
+			new RuntimeException(e);
 		}
 	}
 

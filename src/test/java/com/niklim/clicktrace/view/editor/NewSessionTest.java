@@ -64,4 +64,9 @@ public class NewSessionTest extends AbstractEditorTest {
 		boolean sessionDirExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();
 	}
+
+	@Override
+	protected TestSessionsData getSessionsData() {
+		return TestSessionsData.EMPTY;
+	}
 }
