@@ -23,6 +23,7 @@ public class Menu {
 	JMenuItem sessionDeselectAll;
 	JMenuItem sessionStart;
 	JMenuItem sessionStop;
+	JMenuItem sessionRefresh;
 
 	@Inject
 	private MenuController controller;
@@ -47,6 +48,7 @@ public class Menu {
 
 		sessionStart = createSessionStart();
 		sessionStop = createSessionStop();
+		sessionRefresh = createSessionRefresh();
 		sessionSelectAll = createSessionSelectAll();
 		sessionDeselectAll = createSessionDeselectAll();
 		sessionDeleteSelected = createSessionDeleteSelected();
@@ -54,10 +56,12 @@ public class Menu {
 
 		session.add(sessionStart);
 		session.add(sessionStop);
+		session.add(sessionRefresh);
+		session.addSeparator();
 		session.add(sessionSelectAll);
 		session.add(sessionDeselectAll);
-		session.addSeparator();
 		session.add(sessionDeleteSelected);
+		session.addSeparator();
 		session.add(sessionDeleteActiveSession);
 		return session;
 	}
@@ -65,7 +69,7 @@ public class Menu {
 	private JMenuItem createSessionStart() {
 		JMenuItem menuItem = createMenuItem("Start recording", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
+				controller.startSession();
 			}
 		});
 		menuItem.setEnabled(false);
@@ -75,7 +79,17 @@ public class Menu {
 	private JMenuItem createSessionStop() {
 		JMenuItem menuItem = createMenuItem("Stop recording", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
+				controller.stopSession();
+			}
+		});
+		menuItem.setEnabled(false);
+		return menuItem;
+	}
+
+	private JMenuItem createSessionRefresh() {
+		JMenuItem menuItem = createMenuItem("Refresh session", new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				controller.refreshSession();
 			}
 		});
 		menuItem.setEnabled(false);
@@ -211,5 +225,6 @@ public class Menu {
 		sessionDeselectAll.setEnabled(active);
 		sessionStart.setEnabled(active);
 		sessionStop.setEnabled(active);
+		sessionRefresh.setEnabled(active);
 	}
 }

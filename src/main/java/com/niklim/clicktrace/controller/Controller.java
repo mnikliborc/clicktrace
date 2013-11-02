@@ -93,4 +93,11 @@ public class Controller implements TrayController, MenuController {
 
 	}
 
+	@Override
+	public void refreshSession() {
+		Session session = activeSession.getSession();
+		session.loadScreenShots();
+		editor.showSession(session);
+	}
+
 }

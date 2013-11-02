@@ -14,4 +14,10 @@ public interface MenuController {
 
 	void deleteSelectedScreenshots();
 
+	void startSession();
+
+	void stopSession();
+
+	void refreshSession();
+
 }
