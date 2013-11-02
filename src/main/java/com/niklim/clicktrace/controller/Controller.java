@@ -10,6 +10,7 @@ import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
 import com.niklim.clicktrace.view.editor.control.Menu;
+import com.niklim.clicktrace.view.editor.control.Toolbar;
 
 @Singleton
 public class Controller {
@@ -27,6 +28,9 @@ public class Controller {
 
 	@Inject
 	private SessionManager sessionManager;
+
+	@Inject
+	private Toolbar toolbar;
 
 	public void startSession() {
 		changeCapture.start();
@@ -51,6 +55,8 @@ public class Controller {
 			activeSession.setSession(session);
 			activeSession.setActive(true);
 			editor.showSession(session);
+			toolbar.setSessionActive(true);
+			menu.sessionActive(true);
 		} catch (SessionAlreadyExistsException ex) {
 			JOptionPane.showMessageDialog(editor.getFrame(), "Could not create session. Already exists.");
 		}
@@ -61,6 +67,7 @@ public class Controller {
 		activeSession.setSession(session);
 		activeSession.setActive(true);
 		editor.showSession(session);
+		toolbar.setSessionActive(true);
 	}
 
 	public void deleteActiveSession() {
@@ -69,6 +76,7 @@ public class Controller {
 
 		activeSession.setSession(null);
 		menu.sessionActive(false);
+		toolbar.setSessionActive(false);
 		editor.hideSession();
 	}
 

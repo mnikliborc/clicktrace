@@ -52,6 +52,10 @@ public class Toolbar {
 	@Inject
 	private OpenSessionActionListener openSessionActionListener;
 
+	private JButton deleteSession;
+
+	private JButton refreshSession;
+
 	public Toolbar() {
 
 	}
@@ -67,9 +71,15 @@ public class Toolbar {
 		toolbar.addSeparator();
 		toolbar.add(createIcon("Open session", Icons.OPEN_SESSION, openSessionActionListener));
 		toolbar.addSeparator();
-		toolbar.add(createIcon("Delete session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener));
+
+		deleteSession = createIcon("Delete session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener);
+		deleteSession.setEnabled(false);
+		toolbar.add(deleteSession);
+
 		toolbar.addSeparator();
-		toolbar.add(createIcon("Refresh session", Icons.REFRESH, refreshSessionActionListener));
+		refreshSession = createIcon("Refresh session", Icons.REFRESH, refreshSessionActionListener);
+		refreshSession.setEnabled(false);
+		toolbar.add(refreshSession);
 	}
 
 	public JButton createIcon(String tooltip, String icon, final ActionListener listener) {
@@ -81,6 +91,11 @@ public class Toolbar {
 
 	public JToolBar getToolbar() {
 		return toolbar;
+	}
+
+	public void setSessionActive(boolean active) {
+		deleteSession.setEnabled(active);
+		refreshSession.setEnabled(active);
 	}
 
 }
