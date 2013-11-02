@@ -10,4 +10,8 @@ public interface MenuController {
 
 	void deleteActiveSession();
 
+	void setSelectedAllScreenshots(boolean selected);
+
+	void deleteSelectedScreenshots();
+
 }

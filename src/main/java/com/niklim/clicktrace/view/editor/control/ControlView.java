@@ -3,6 +3,7 @@ package com.niklim.clicktrace.view.editor.control;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -60,7 +61,7 @@ public class ControlView {
 
 	public void showImagesCombobox(Session session) {
 		imagesPanel.setVisible(true);
-		List<ScreenShot> shots = session.getShots();
+		List<ScreenShot> shots = new ArrayList<ScreenShot>(session.getShots());
 		shots = Lists.reverse(shots);
 		ScreenShot emptyScreenShot = new ScreenShot();
 		emptyScreenShot.setName("");

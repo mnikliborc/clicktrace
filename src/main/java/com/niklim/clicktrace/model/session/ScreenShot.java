@@ -8,6 +8,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.niklim.clicktrace.model.session.helper.ImageLoader;
+import com.niklim.clicktrace.model.session.helper.ScreenShotDeleter;
 import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 
 public class ScreenShot {
@@ -18,6 +19,7 @@ public class ScreenShot {
 	private Session session;
 
 	private ImageLoader imageLoader = SessionHelperFactory.getImageLoader();
+	private ScreenShotDeleter deleter = new ScreenShotDeleter();
 
 	public String getName() {
 		return name;
@@ -94,8 +96,7 @@ public class ScreenShot {
 	}
 
 	public void delete() {
-		// TODO Auto-generated method stub
-
+		deleter.delete(this);
 	}
 
 }

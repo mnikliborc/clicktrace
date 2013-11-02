@@ -18,6 +18,11 @@ public class Menu {
 	JMenuBar menubar;
 
 	JMenuItem sessionDeleteActiveSession;
+	JMenuItem sessionDeleteSelected;
+	JMenuItem sessionSelectAll;
+	JMenuItem sessionDeselectAll;
+	JMenuItem sessionStart;
+	JMenuItem sessionStop;
 
 	@Inject
 	private MenuController controller;
@@ -40,18 +45,20 @@ public class Menu {
 	private JMenu createSession() {
 		JMenu session = new JMenu("Session");
 
-		JMenuItem sessionStart = createSessionStart();
-		JMenuItem sessionStop = createSessionStop();
-		JMenuItem sessionSelectAll = createSessionSelectAll();
-		JMenuItem sessionDeleteSelected = createSessionDeleteSelected();
+		sessionStart = createSessionStart();
+		sessionStop = createSessionStop();
+		sessionSelectAll = createSessionSelectAll();
+		sessionDeselectAll = createSessionDeselectAll();
+		sessionDeleteSelected = createSessionDeleteSelected();
 		sessionDeleteActiveSession = createSessionDeleteActiveSession();
 		sessionDeleteActiveSession.setEnabled(false);
 
 		session.add(sessionStart);
 		session.add(sessionStop);
 		session.add(sessionSelectAll);
-		session.add(sessionDeleteSelected);
+		session.add(sessionDeselectAll);
 		session.addSeparator();
+		session.add(sessionDeleteSelected);
 		session.add(sessionDeleteActiveSession);
 		return session;
 	}
@@ -75,7 +82,15 @@ public class Menu {
 	private JMenuItem createSessionSelectAll() {
 		return createMenuItem("Select all screenshots", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
+				controller.setSelectedAllScreenshots(true);
+			}
+		});
+	}
+
+	private JMenuItem createSessionDeselectAll() {
+		return createMenuItem("Deselect all screenshots", new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				controller.setSelectedAllScreenshots(false);
 			}
 		});
 	}
@@ -83,7 +98,11 @@ public class Menu {
 	private JMenuItem createSessionDeleteSelected() {
 		return createMenuItem("Delete selected screenshots", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				// TODO implement
+				int answer = JOptionPane.showConfirmDialog(menubar.getParent(), "Are you sure?", "",
+						JOptionPane.OK_CANCEL_OPTION);
+				if (answer == JOptionPane.OK_OPTION) {
+					controller.deleteSelectedScreenshots();
+				}
 			}
 		});
 	}
@@ -175,5 +194,10 @@ public class Menu {
 
 	public void sessionActive(boolean active) {
 		sessionDeleteActiveSession.setEnabled(active);
+		sessionDeleteActiveSession.setEnabled(active);
+		sessionDeleteSelected.setEnabled(active);
+		sessionSelectAll.setEnabled(active);
+		sessionDeselectAll.setEnabled(active);
+		sessionStart.setEnabled(active);
 	}
 }

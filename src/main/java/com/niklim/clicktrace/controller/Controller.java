@@ -70,4 +70,15 @@ public class Controller implements TrayController, MenuController {
 		editor.hideSession();
 	}
 
+	@Override
+	public void setSelectedAllScreenshots(boolean selected) {
+		editor.setSelectedAllScreenShots(selected);
+	}
+
+	@Override
+	public void deleteSelectedScreenshots() {
+		editor.deleteSelectedScreenShots();
+
+	}
+
 }

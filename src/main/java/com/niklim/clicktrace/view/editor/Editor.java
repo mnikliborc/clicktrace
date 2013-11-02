@@ -5,11 +5,13 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
@@ -38,6 +40,9 @@ public class Editor {
 
 	@Inject
 	private Menu editorMenu;
+
+	@Inject
+	private ActiveSession activeSession;
 
 	@Inject
 	public void init() {
@@ -69,10 +74,14 @@ public class Editor {
 		sessionView.showSession(session);
 		controlView.showImagesCombobox(session);
 
-		frame.getContentPane().revalidate();
-		frame.getContentPane().repaint();
+		refresh();
 
 		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	public void refresh() {
+		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
 	}
 
 	public void showScreenShot(int i) {
@@ -96,8 +105,26 @@ public class Editor {
 	public void hideSession() {
 		controlView.hideSession();
 		sessionView.hideSession();
-		frame.getContentPane().revalidate();
-		frame.getContentPane().repaint();
+		refresh();
+	}
+
+	public void setSelectedAllScreenShots(boolean selected) {
+		sessionView.setSelectedAllScreenShots(selected);
+	}
+
+	public void deleteSelectedScreenShots() {
+		List<ScreenShot> shotsToRemove = sessionView.deleteSelectedScreenshots();
+		Session session = activeSession.getSession();
+		session.getShots().removeAll(shotsToRemove);
+		controlView.showImagesCombobox(session);
+		refresh();
+	}
+
+	public void deleteScreenShot(ScreenShot shot) {
+		Session session = activeSession.getSession();
+		session.getShots().remove(shot);
+		controlView.showImagesCombobox(session);
+		refresh();
 	}
 
 }

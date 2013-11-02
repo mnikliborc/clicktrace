@@ -82,11 +82,12 @@ public class SessionView {
 		private BufferedImage image;
 
 		private JPanel thumb;
+		private ScreenShot shot;
 
 		private class InnerThumbPanel extends JPanel {
 			InnerThumbPanel(int width) {
 				setPreferredSize(new Dimension(width, (int) (width * widthHeightRatio)));
-				setBorder(BorderFactory.createLineBorder(Color.black, 2));
+				setBorder(BorderFactory.createLineBorder(new Color(95, 158, 160), 2));
 			}
 
 			@Override
@@ -98,6 +99,8 @@ public class SessionView {
 
 		public ThumbPanel(final JPanel sessionPanel, final ScreenShot shot) throws IOException {
 			super(new MigLayout());
+
+			this.shot = shot;
 
 			image = scaleImage(shot.getImage());
 			thumb = new InnerThumbPanel((int) sessionPanel.getSize().getWidth());
@@ -132,8 +135,7 @@ public class SessionView {
 					shot.delete();
 
 					sessionPanel.remove(ThumbPanel.this);
-					sessionPanel.revalidate();
-					sessionPanel.repaint();
+					editor.deleteScreenShot(shot);
 				}
 			});
 
@@ -173,5 +175,26 @@ public class SessionView {
 
 	public void hideSession() {
 		sessionPanel.removeAll();
+	}
+
+	public void setSelectedAllScreenShots(boolean selected) {
+		for (ThumbPanel thumb : thumbs) {
+			thumb.checkbox.setSelected(selected);
+		}
+	}
+
+	public List<ScreenShot> deleteSelectedScreenshots() {
+		List<ThumbPanel> thumbsToRemove = new ArrayList<ThumbPanel>();
+		List<ScreenShot> shotsToRemove = new ArrayList<ScreenShot>();
+		for (ThumbPanel thumb : thumbs) {
+			if (thumb.checkbox.isSelected()) {
+				thumb.shot.delete();
+				thumbsToRemove.add(thumb);
+				shotsToRemove.add(thumb.shot);
+				sessionPanel.remove(thumb);
+			}
+		}
+		thumbs.removeAll(thumbsToRemove);
+		return shotsToRemove;
 	}
 }
