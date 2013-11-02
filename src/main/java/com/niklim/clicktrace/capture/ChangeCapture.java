@@ -56,7 +56,7 @@ public class ChangeCapture {
 
 		if (detector.detect(image)) {
 			try {
-				ImageFileManager.saveImage(image, activeSession.getSessionName());
+				ImageFileManager.saveImage(image, activeSession.getSession().getName());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

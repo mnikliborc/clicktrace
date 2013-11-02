@@ -8,4 +8,6 @@ public interface MenuController {
 
 	void openSession(Session session);
 
+	void deleteActiveSession();
+
 }

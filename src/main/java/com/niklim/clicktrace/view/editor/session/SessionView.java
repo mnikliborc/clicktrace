@@ -170,4 +170,8 @@ public class SessionView {
 		JScrollBar scroll = sessionScrollPanel.getVerticalScrollBar();
 		scroll.setValue((int) (thumbs.get(i).getBounds().getY()));
 	}
+
+	public void hideSession() {
+		sessionPanel.removeAll();
+	}
 }

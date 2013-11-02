@@ -70,16 +70,12 @@ public class ControlView {
 		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(shots.toArray(new ScreenShot[0])));
 	}
 
-	public void setSessions(List<Session> list, String sessionName) {
-		list = Lists.reverse(list);
-		Session emptySession = new Session();
-		emptySession.setName("");
-		list.add(emptySession);
-		list = Lists.reverse(list);
-	}
-
 	public Component getComponent() {
 		return panel;
+	}
+
+	public void hideSession() {
+		imagesPanel.setVisible(false);
 	}
 
 }

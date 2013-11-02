@@ -38,31 +38,36 @@ public class Controller implements TrayController, MenuController {
 	}
 
 	@Override
-	public String getActiveSessionName() {
-		return activeSession.getSessionName();
-	}
-
-	@Override
-	public void setSessionName(String sessionName) {
-		activeSession.setSessionName(sessionName);
-	}
-
-	@Override
 	public void openEditor() {
-		editor.open(activeSession.getSessionName());
+		editor.open(activeSession.getSession());
 	}
 
 	@Override
 	public void newSession(String sessionName) {
-		menu.sessionActivated();
-		activeSession.setSessionName(sessionName);
-		editor.open(sessionName);
+		menu.sessionActive(true);
+
+		Session session = new Session();
+		session.setName(sessionName);
+
+		activeSession.setSession(session);
+		editor.open(session);
 	}
 
 	@Override
 	public void openSession(Session session) {
-		menu.sessionActivated();
+		menu.sessionActive(true);
+		activeSession.setSession(session);
 		editor.showSession(session);
+	}
+
+	@Override
+	public void deleteActiveSession() {
+		Session session = activeSession.getSession();
+		session.delete();
+
+		activeSession.setSession(null);
+		menu.sessionActive(false);
+		editor.hideSession();
 	}
 
 }

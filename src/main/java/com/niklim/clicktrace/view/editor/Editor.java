@@ -56,9 +56,11 @@ public class Editor {
 		open(null);
 	}
 
-	public void open(String sessionName) {
+	public void open(Session session) {
 		frame.setVisible(true);
-		controlView.setSessions(sessionManager.loadAll(), sessionName);
+		if (session != null) {
+			showSession(session);
+		}
 	}
 
 	public void showSession(Session session) {
@@ -89,6 +91,13 @@ public class Editor {
 
 	public Dimension getEditorDimension() {
 		return frame.getSize();
+	}
+
+	public void hideSession() {
+		controlView.hideSession();
+		sessionView.hideSession();
+		frame.getContentPane().revalidate();
+		frame.getContentPane().repaint();
 	}
 
 }

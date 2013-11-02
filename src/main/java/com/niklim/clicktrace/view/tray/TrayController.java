@@ -5,9 +5,5 @@ public interface TrayController {
 
 	void stopSession();
 
-	String getActiveSessionName();
-
-	void setSessionName(String name);
-
 	void openEditor();
 }

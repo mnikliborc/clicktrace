@@ -91,6 +91,11 @@ public class Menu {
 	private JMenuItem createSessionDeleteActiveSession() {
 		return createMenuItem("Delete current session", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				int answer = JOptionPane.showConfirmDialog(menubar.getParent(), "Are you sure?", "",
+						JOptionPane.OK_CANCEL_OPTION);
+				if (answer == JOptionPane.OK_OPTION) {
+					controller.deleteActiveSession();
+				}
 			}
 		});
 	}
@@ -168,7 +173,7 @@ public class Menu {
 		return menubar;
 	}
 
-	public void sessionActivated() {
-		sessionDeleteActiveSession.setEnabled(true);
+	public void sessionActive(boolean active) {
+		sessionDeleteActiveSession.setEnabled(active);
 	}
 }

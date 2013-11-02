@@ -8,6 +8,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.niklim.clicktrace.model.session.helper.ScreenShotLoader;
+import com.niklim.clicktrace.model.session.helper.SessionDeleter;
 import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 import com.niklim.clicktrace.model.session.helper.SessionMetadataHelper;
 import com.niklim.clicktrace.model.session.helper.SessionSaver;
@@ -18,6 +19,7 @@ public class Session {
 	private SessionMetadata metadata;
 
 	private SessionSaver saver = SessionHelperFactory.getSessionSaver();
+	private SessionDeleter deleter = SessionHelperFactory.getSessionDeleter();
 	private ScreenShotLoader screenShotsLoader = SessionHelperFactory.getScreenShotLoader();
 	private SessionMetadataHelper sessionMetadataHelper = SessionHelperFactory.getSessionMetadataHelper();
 
@@ -54,6 +56,10 @@ public class Session {
 		saver.save(this);
 	}
 
+	public void delete() {
+		deleter.delete(this);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Session)) {
@@ -79,4 +85,5 @@ public class Session {
 	public String toString() {
 		return name;
 	}
+
 }

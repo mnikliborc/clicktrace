@@ -45,6 +45,20 @@ public class OpenSessionDialog extends JDialog {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		JButton openButton = new JButton("Open");
+		JButton cancelButton = new JButton("Cancel");
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(openButton);
+		buttonPanel.add(cancelButton);
+
+		add(new JScrollPane(table), "wrap");
+		add(buttonPanel, "align r");
+
+		createListeners(openButton, cancelButton);
+	}
+
+	public void createListeners(JButton openButton, JButton cancelButton) {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
@@ -53,20 +67,6 @@ public class OpenSessionDialog extends JDialog {
 				}
 			}
 		});
-
-		JButton openButton = new JButton("Open");
-		JButton cancelButton = new JButton("Cancel");
-
-		getRootPane().registerKeyboardAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close(false);
-			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(openButton);
-		buttonPanel.add(cancelButton);
 
 		openButton.addActionListener(new ActionListener() {
 			@Override
@@ -82,8 +82,12 @@ public class OpenSessionDialog extends JDialog {
 			}
 		});
 
-		add(new JScrollPane(table), "wrap");
-		add(buttonPanel, "align r");
+		getRootPane().registerKeyboardAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				close(false);
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	public void open() {

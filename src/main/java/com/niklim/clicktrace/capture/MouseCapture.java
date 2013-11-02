@@ -49,7 +49,7 @@ public class MouseCapture implements NativeMouseInputListener {
 
 		drawClick(image, e.getX(), e.getY(), e.getButton());
 		try {
-			ImageFileManager.saveImage(image, activeSession.getSessionName());
+			ImageFileManager.saveImage(image, activeSession.getSession().getName());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
