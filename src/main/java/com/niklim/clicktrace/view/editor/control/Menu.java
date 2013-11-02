@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.view.editor.action.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.DeleteSelectedScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.DeselectAllScreenShotsActionListener;
@@ -32,6 +33,9 @@ public class Menu {
 	JMenuItem sessionStart;
 	JMenuItem sessionStop;
 	JMenuItem sessionRefresh;
+
+	@Inject
+	private ActiveSession activeSession;
 
 	@Inject
 	private NewSessionActionListener newSessionActionListener;
@@ -101,13 +105,13 @@ public class Menu {
 	}
 
 	private JMenuItem createSessionStart() {
-		JMenuItem menuItem = createMenuItem("Start recording", startSessionActionListener);
+		JMenuItem menuItem = createMenuItem("Start recording", Icons.START_SESSION, startSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionStop() {
-		JMenuItem menuItem = createMenuItem("Stop recording", stopSessionActionListener);
+		JMenuItem menuItem = createMenuItem("Stop recording", Icons.STOP_SESSION, stopSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
@@ -205,14 +209,14 @@ public class Menu {
 		return menubar;
 	}
 
-	public void sessionActive(boolean active) {
-		sessionDeleteActiveSession.setEnabled(active);
-		sessionDeleteActiveSession.setEnabled(active);
-		sessionDeleteSelected.setEnabled(active);
-		sessionSelectAll.setEnabled(active);
-		sessionDeselectAll.setEnabled(active);
-		sessionStart.setEnabled(active);
-		sessionStop.setEnabled(active);
-		sessionRefresh.setEnabled(active);
+	public void sessionStateChanged() {
+		sessionDeleteActiveSession.setEnabled(activeSession.getActive());
+		sessionDeleteActiveSession.setEnabled(activeSession.getActive());
+		sessionDeleteSelected.setEnabled(activeSession.getActive());
+		sessionSelectAll.setEnabled(activeSession.getActive());
+		sessionDeselectAll.setEnabled(activeSession.getActive());
+		sessionStart.setEnabled(activeSession.getActive() && !activeSession.getRecording());
+		sessionStop.setEnabled(activeSession.getActive() && activeSession.getRecording());
+		sessionRefresh.setEnabled(activeSession.getActive());
 	}
 }

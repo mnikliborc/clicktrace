@@ -21,6 +21,7 @@ import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.control.ControlView;
 import com.niklim.clicktrace.view.editor.control.Menu;
+import com.niklim.clicktrace.view.editor.control.Toolbar;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
 @Singleton
@@ -44,7 +45,10 @@ public class Editor {
 	private SessionManager sessionManager;
 
 	@Inject
-	private Menu editorMenu;
+	private Menu menu;
+
+	@Inject
+	private Toolbar toolbar;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -84,7 +88,7 @@ public class Editor {
 		splitPane.setBottomComponent(sessionView.getComponent());
 
 		frame.add(splitPane);
-		frame.setJMenuBar(editorMenu.getMenu());
+		frame.setJMenuBar(menu.getMenu());
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -162,6 +166,11 @@ public class Editor {
 
 	public JFrame getFrame() {
 		return frame;
+	}
+
+	public void sessionStateChanged() {
+		menu.sessionStateChanged();
+		toolbar.sessionStateChanged();
 	}
 
 }

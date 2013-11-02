@@ -11,6 +11,7 @@ import javax.swing.border.BevelBorder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.view.editor.action.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.DeleteSelectedScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.DeselectAllScreenShotsActionListener;
@@ -24,6 +25,9 @@ import com.niklim.clicktrace.view.editor.action.StopSessionActionListener;
 @Singleton
 public class Toolbar {
 	private JToolBar toolbar;
+
+	@Inject
+	private ActiveSession activeSession;
 
 	@Inject
 	private NewSessionActionListener newSessionActionListener;
@@ -56,6 +60,10 @@ public class Toolbar {
 
 	private JButton refreshSession;
 
+	private JButton startSession;
+
+	private JButton stopSession;
+
 	public Toolbar() {
 
 	}
@@ -80,6 +88,17 @@ public class Toolbar {
 		refreshSession = createIcon("Refresh session", Icons.REFRESH, refreshSessionActionListener);
 		refreshSession.setEnabled(false);
 		toolbar.add(refreshSession);
+
+		toolbar.addSeparator();
+		startSession = createIcon("Record", Icons.START_SESSION, startSessionActionListener);
+		startSession.setEnabled(false);
+		toolbar.add(startSession);
+
+		toolbar.addSeparator();
+		stopSession = createIcon("Pause", Icons.STOP_SESSION, stopSessionActionListener);
+		stopSession.setEnabled(false);
+		toolbar.add(stopSession);
+
 	}
 
 	public JButton createIcon(String tooltip, String icon, final ActionListener listener) {
@@ -93,9 +112,11 @@ public class Toolbar {
 		return toolbar;
 	}
 
-	public void setSessionActive(boolean active) {
-		deleteSession.setEnabled(active);
-		refreshSession.setEnabled(active);
+	public void sessionStateChanged() {
+		deleteSession.setEnabled(activeSession.getActive());
+		refreshSession.setEnabled(activeSession.getActive());
+		startSession.setEnabled(activeSession.getActive() && !activeSession.getRecording());
+		stopSession.setEnabled(activeSession.getActive() && activeSession.getRecording());
 	}
 
 }

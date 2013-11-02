@@ -7,6 +7,7 @@ import com.niklim.clicktrace.model.session.Session;
 public class ActiveSession {
 	private Session session;
 	private boolean active = false;
+	private boolean recording = false;
 
 	public Session getSession() {
 		return session;
@@ -22,5 +23,13 @@ public class ActiveSession {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean getRecording() {
+		return recording;
+	}
+
+	public void setRecording(boolean recording) {
+		this.recording = recording;
 	}
 }
