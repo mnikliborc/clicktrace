@@ -20,4 +20,14 @@ public class SessionManager {
 		return sessions;
 	}
 
+	public Session createSession(String sessionName) throws SessionAlreadyExistsException {
+		Session session = new Session();
+		session.setName(sessionName);
+		if (ImageFileManager.createSessionDir(sessionName)) {
+			return session;
+		} else {
+			throw new SessionAlreadyExistsException();
+		}
+	}
+
 }

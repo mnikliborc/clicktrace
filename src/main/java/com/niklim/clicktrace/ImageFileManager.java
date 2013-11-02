@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import com.niklim.clicktrace.view.editor.Editor.TrashFilter;
 
 public class ImageFileManager {
-	public static final String SESSIONS_DIR = "sessions/";
+	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
@@ -40,10 +40,13 @@ public class ImageFileManager {
 		}
 	}
 
-	private static void createIfDirNotExists(String dirName) {
+	private static boolean createIfDirNotExists(String dirName) {
 		File dir = new File(dirName);
 		if (!dir.exists()) {
 			dir.mkdir();
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -63,5 +66,9 @@ public class ImageFileManager {
 		}
 
 		return fileNames;
+	}
+
+	public static boolean createSessionDir(String sessionName) {
+		return createIfDirNotExists(SESSIONS_DIR + sessionName);
 	}
 }

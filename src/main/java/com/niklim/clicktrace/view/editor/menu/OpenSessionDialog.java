@@ -38,7 +38,7 @@ public class OpenSessionDialog extends JDialog {
 
 	public OpenSessionDialog() {
 		this.getContentPane().setLayout(new MigLayout());
-
+		this.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
 

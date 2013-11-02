@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
@@ -19,6 +20,7 @@ import com.niklim.clicktrace.view.editor.control.ControlView;
 import com.niklim.clicktrace.view.editor.menu.Menu;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
+@Singleton
 public class Editor {
 	public static class TrashFilter implements FilenameFilter {
 		@Override
@@ -125,6 +127,10 @@ public class Editor {
 		session.getShots().remove(shot);
 		controlView.showImagesCombobox(session);
 		refresh();
+	}
+
+	public JFrame getFrame() {
+		return frame;
 	}
 
 }

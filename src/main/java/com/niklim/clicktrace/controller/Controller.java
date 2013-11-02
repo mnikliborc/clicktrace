@@ -1,8 +1,12 @@
 package com.niklim.clicktrace.controller;
 
+import javax.swing.JOptionPane;
+
 import com.google.inject.Inject;
 import com.niklim.clicktrace.capture.ChangeCapture;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
+import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
 import com.niklim.clicktrace.view.editor.menu.Menu;
 import com.niklim.clicktrace.view.editor.menu.MenuController;
@@ -25,6 +29,9 @@ public class Controller implements TrayController, MenuController {
 	@Inject
 	private ActiveSession activeSession;
 
+	@Inject
+	private SessionManager sessionManager;
+
 	@Override
 	public void startSession() {
 		changeCapture.start();
@@ -46,17 +53,22 @@ public class Controller implements TrayController, MenuController {
 	public void newSession(String sessionName) {
 		menu.sessionActive(true);
 
-		Session session = new Session();
-		session.setName(sessionName);
+		try {
+			Session session = sessionManager.createSession(sessionName);
 
-		activeSession.setSession(session);
-		editor.open(session);
+			activeSession.setSession(session);
+			activeSession.setActive(true);
+			editor.showSession(session);
+		} catch (SessionAlreadyExistsException ex) {
+			JOptionPane.showMessageDialog(editor.getFrame(), "Could not create session. Already exists.");
+		}
 	}
 
 	@Override
 	public void openSession(Session session) {
 		menu.sessionActive(true);
 		activeSession.setSession(session);
+		activeSession.setActive(true);
 		editor.showSession(session);
 	}
 
