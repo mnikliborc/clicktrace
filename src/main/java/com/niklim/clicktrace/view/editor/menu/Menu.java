@@ -51,7 +51,6 @@ public class Menu {
 		sessionDeselectAll = createSessionDeselectAll();
 		sessionDeleteSelected = createSessionDeleteSelected();
 		sessionDeleteActiveSession = createSessionDeleteActiveSession();
-		sessionDeleteActiveSession.setEnabled(false);
 
 		session.add(sessionStart);
 		session.add(sessionStop);
@@ -64,39 +63,47 @@ public class Menu {
 	}
 
 	private JMenuItem createSessionStart() {
-		return createMenuItem("Start recording", new ActionListener() {
+		JMenuItem menuItem = createMenuItem("Start recording", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				// TODO implement
 			}
 		});
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenuItem createSessionStop() {
-		return createMenuItem("Stop recording", new ActionListener() {
+		JMenuItem menuItem = createMenuItem("Stop recording", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				// TODO implement
 			}
 		});
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenuItem createSessionSelectAll() {
-		return createMenuItem("Select all screenshots", new ActionListener() {
+		JMenuItem menuItem = createMenuItem("Select all screenshots", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.setSelectedAllScreenshots(true);
 			}
 		});
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenuItem createSessionDeselectAll() {
-		return createMenuItem("Deselect all screenshots", new ActionListener() {
+		JMenuItem menuItem = createMenuItem("Deselect all screenshots", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				controller.setSelectedAllScreenshots(false);
 			}
 		});
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteSelected() {
-		return createMenuItem("Delete selected screenshots", new ActionListener() {
+		JMenuItem menuItem = createMenuItem("Delete selected screenshots", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				int answer = JOptionPane.showConfirmDialog(menubar.getParent(), "Are you sure?", "",
 						JOptionPane.OK_CANCEL_OPTION);
@@ -105,10 +112,12 @@ public class Menu {
 				}
 			}
 		});
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteActiveSession() {
-		return createMenuItem("Delete current session", new ActionListener() {
+		JMenuItem menuItem = createMenuItem("Delete current session", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				int answer = JOptionPane.showConfirmDialog(menubar.getParent(), "Are you sure?", "",
 						JOptionPane.OK_CANCEL_OPTION);
@@ -117,6 +126,8 @@ public class Menu {
 				}
 			}
 		});
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenu createTools() {
@@ -199,5 +210,6 @@ public class Menu {
 		sessionSelectAll.setEnabled(active);
 		sessionDeselectAll.setEnabled(active);
 		sessionStart.setEnabled(active);
+		sessionStop.setEnabled(active);
 	}
 }
