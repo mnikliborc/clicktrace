@@ -9,5 +9,6 @@ public class EditorTestSteps {
 		editorFixture.menuItemWithPath("File", "Open session").click();
 		editorFixture.dialog().table().cell(TableCell.row(sessionRow).column(0)).click();
 		editorFixture.dialog().button(JButtonMatcher.withText("Open")).click();
+		editorFixture.maximize();
 	}
 }

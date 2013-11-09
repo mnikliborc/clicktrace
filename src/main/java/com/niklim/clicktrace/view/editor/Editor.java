@@ -131,7 +131,8 @@ public class Editor {
 	public void showScreenShot(ScreenShot screenShot, boolean selected) {
 		if (screenShot != null) {
 			screenShotView.show(screenShot);
-			controlView.setSelectedActiveScreenShot(selected);
+			controlView.setActiveScreenShotSelected(selected);
+			controlView.setActiveScreenShot(screenShot);
 		} else {
 			screenShotView.clear();
 		}
@@ -158,7 +159,7 @@ public class Editor {
 	}
 
 	public void setSelectedActiveScreenShot(boolean selected) {
-		controlView.setSelectedActiveScreenShot(selected);
+		controlView.setActiveScreenShotSelected(selected);
 	}
 
 	public JFrame getFrame() {

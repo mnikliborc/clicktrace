@@ -111,14 +111,14 @@ public class Controller {
 		}
 	}
 
-	public void deleteScreenShot() {
+	public void deleteActiveScreenShot() {
 		ScreenShot shot = activeSession.getActiveShot();
-
 		int indexOfNewActive = Math.max(0, activeSession.getSession().getShots().indexOf(shot) - 1);
-		ScreenShot newShot = activeSession.getShot(indexOfNewActive);
 
 		activeSession.removeShot(shot);
 		shot.delete();
+
+		ScreenShot newShot = activeSession.getShot(indexOfNewActive);
 
 		editor.resetControl(activeSession.getSession());
 		editor.showScreenShot(newShot, activeSession.isShotSelected(newShot));

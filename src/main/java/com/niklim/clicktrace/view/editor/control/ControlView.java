@@ -104,7 +104,7 @@ public class ControlView {
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				controller.deleteScreenShot();
+				controller.deleteActiveScreenShot();
 			}
 		});
 
@@ -136,8 +136,12 @@ public class ControlView {
 		controlPanel.setVisible(false);
 	}
 
-	public void setSelectedActiveScreenShot(boolean selected) {
+	public void setActiveScreenShotSelected(boolean selected) {
 		checkbox.setSelected(selected);
+	}
+
+	public void setActiveScreenShot(ScreenShot shot) {
+		imagesComboBox.getModel().setSelectedItem(shot);
 	}
 
 }
