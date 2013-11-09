@@ -116,7 +116,7 @@ public class Editor {
 		} else {
 			screenShotView.clear();
 		}
-		controlView.showImagesCombobox(session);
+		resetControl(session);
 
 		refresh();
 
@@ -166,8 +166,11 @@ public class Editor {
 		toolbar.sessionStateChanged();
 	}
 
-	public void refreshCombobox(Session session) {
+	public void resetControl(Session session) {
 		controlView.showImagesCombobox(session);
+		if (session.getShots().isEmpty()) {
+			controlView.hideSession();
+		}
 		refresh();
 	}
 

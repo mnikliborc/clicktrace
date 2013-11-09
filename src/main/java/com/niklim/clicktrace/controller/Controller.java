@@ -117,7 +117,7 @@ public class Controller {
 		shot.delete();
 
 		ScreenShot newShot = activeSession.getSession().getShots().get(indexOfNewActive);
-		editor.refreshCombobox(activeSession.getSession());
+		editor.resetControl(activeSession.getSession());
 		editor.showScreenShot(newShot, activeSession.isShotSelected(newShot));
 		editor.refresh();
 	}
