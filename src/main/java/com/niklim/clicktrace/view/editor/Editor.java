@@ -129,8 +129,12 @@ public class Editor {
 	}
 
 	public void showScreenShot(ScreenShot screenShot, boolean selected) {
-		screenShotView.show(screenShot);
-		controlView.setSelectedActiveScreenShot(selected);
+		if (screenShot != null) {
+			screenShotView.show(screenShot);
+			controlView.setSelectedActiveScreenShot(selected);
+		} else {
+			screenShotView.clear();
+		}
 	}
 
 	public void edit(ScreenShot shot) {
@@ -148,7 +152,7 @@ public class Editor {
 	}
 
 	public void hideSession() {
-		controlView.hideSession();
+		controlView.hide();
 		screenShotView.clear();
 		refresh();
 	}
@@ -169,7 +173,7 @@ public class Editor {
 	public void resetControl(Session session) {
 		controlView.showImagesCombobox(session);
 		if (session.getShots().isEmpty()) {
-			controlView.hideSession();
+			controlView.hide();
 		}
 		refresh();
 	}

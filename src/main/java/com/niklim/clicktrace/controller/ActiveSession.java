@@ -10,8 +10,7 @@ import com.niklim.clicktrace.model.session.Session;
 @Singleton
 public class ActiveSession {
 	private Session session;
-	private ScreenShot shot;
-	private boolean active = false;
+	private ScreenShot activeShot;
 	private boolean recording = false;
 	private Set<ScreenShot> selectedShots = new HashSet<ScreenShot>();
 
@@ -24,11 +23,7 @@ public class ActiveSession {
 	}
 
 	public boolean getActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
+		return session != null;
 	}
 
 	public boolean getRecording() {
@@ -39,12 +34,16 @@ public class ActiveSession {
 		this.recording = recording;
 	}
 
-	public ScreenShot getShot() {
-		return shot;
+	public ScreenShot getActiveShot() {
+		return activeShot;
 	}
 
-	public void setShot(ScreenShot shot) {
-		this.shot = shot;
+	public void setActiveShot(ScreenShot shot) {
+		this.activeShot = shot;
+	}
+
+	public ScreenShot getShot(int i) {
+		return session.getShots().get(i);
 	}
 
 	public boolean isShotSelected(ScreenShot shot) {
@@ -73,16 +72,16 @@ public class ActiveSession {
 	public void removeShot(ScreenShot remShot) {
 		getSession().getShots().remove(remShot);
 		deselectShot(remShot);
-		if (shot == remShot) {
-			shot = null;
+		if (activeShot == remShot) {
+			activeShot = null;
 		}
 	}
 
 	public void setFirstShotActive() {
 		if (!session.getShots().isEmpty()) {
-			shot = session.getShots().get(0);
+			activeShot = session.getShots().get(0);
 		} else {
-			shot = null;
+			activeShot = null;
 		}
 
 	}

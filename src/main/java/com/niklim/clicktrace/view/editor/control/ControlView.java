@@ -132,7 +132,7 @@ public class ControlView {
 		return panel;
 	}
 
-	public void hideSession() {
+	public void hide() {
 		controlPanel.setVisible(false);
 	}
 

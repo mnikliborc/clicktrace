@@ -2,6 +2,7 @@ package com.niklim.clicktrace.view.editor;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fest.swing.exception.ComponentLookupException;
 import org.junit.Test;
 
 public class DeleteScreenShotsTest extends AbstractEditorTest {
@@ -22,7 +23,10 @@ public class DeleteScreenShotsTest extends AbstractEditorTest {
 		editorFixture.optionPane().okButton().click();
 
 		// then
-		assertThat(editorFixture.comboBox().contents()).hasSize(0);
+		try {
+			assertThat(editorFixture.comboBox()).isNull();
+		} catch (ComponentLookupException ex) {
+		}
 		assertThat(activeSession.getSelectedShots()).hasSize(0);
 		assertThat(activeSession.getSession().getShots()).hasSize(0);
 	}

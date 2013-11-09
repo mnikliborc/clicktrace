@@ -30,9 +30,11 @@ public class Controller {
 
 	public void startSession() {
 		activeSession.setRecording(true);
+
 		editor.sessionStateChanged();
-		changeCapture.start();
 		editor.getFrame().setState(JFrame.ICONIFIED);
+
+		changeCapture.start();
 	}
 
 	public void stopSession() {
@@ -44,7 +46,6 @@ public class Controller {
 	public void newSession(String sessionName) {
 		try {
 			Session session = sessionManager.createSession(sessionName);
-
 			openSession(session);
 		} catch (SessionAlreadyExistsException ex) {
 			JOptionPane.showMessageDialog(editor.getFrame(), "Could not create session. Already exists.");
@@ -52,24 +53,24 @@ public class Controller {
 	}
 
 	public void openSession(Session session) {
-		activeSession.setSession(session);
-		activeSession.setActive(true);
-		activeSession.setRecording(false);
-		activeSession.setShot(session.getShots().iterator().hasNext() ? session.getShots().iterator().next() : null);
 		changeCapture.stop();
+
+		activeSession.setSession(session);
+		activeSession.setRecording(false);
+		activeSession.setFirstShotActive();
 
 		editor.showSession(session);
 		editor.sessionStateChanged();
 	}
 
 	public void deleteActiveSession() {
+		changeCapture.stop();
+
 		Session session = activeSession.getSession();
 		session.delete();
 
 		activeSession.setSession(null);
-		activeSession.setActive(false);
 		activeSession.setRecording(false);
-		changeCapture.stop();
 
 		editor.sessionStateChanged();
 		editor.hideSession();
@@ -83,18 +84,18 @@ public class Controller {
 	public void refreshSession() {
 		Session session = activeSession.getSession();
 		session.loadScreenShots();
-		editor.showSession(session);
+		openSession(session);
 	}
 
 	public void showScreenShot(int i) {
 		ScreenShot shot = activeSession.getSession().getShots().get(i);
-		activeSession.setShot(shot);
+		activeSession.setActiveShot(shot);
 		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
 		editor.refresh();
 	}
 
 	public void refreshScreenShot() {
-		ScreenShot shot = activeSession.getShot();
+		ScreenShot shot = activeSession.getActiveShot();
 		shot.loadImage();
 		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
 		editor.refresh();
@@ -103,7 +104,7 @@ public class Controller {
 	public void editScreenShot() {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
-					+ activeSession.getShot().getSession().getName() + "\\" + activeSession.getShot().getName());
+					+ activeSession.getActiveShot().getSession().getName() + "\\" + activeSession.getActiveShot().getName());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -111,19 +112,21 @@ public class Controller {
 	}
 
 	public void deleteScreenShot() {
-		ScreenShot shot = activeSession.getShot();
+		ScreenShot shot = activeSession.getActiveShot();
+
 		int indexOfNewActive = Math.max(0, activeSession.getSession().getShots().indexOf(shot) - 1);
+		ScreenShot newShot = activeSession.getShot(indexOfNewActive);
+
 		activeSession.removeShot(shot);
 		shot.delete();
 
-		ScreenShot newShot = activeSession.getSession().getShots().get(indexOfNewActive);
 		editor.resetControl(activeSession.getSession());
 		editor.showScreenShot(newShot, activeSession.isShotSelected(newShot));
 		editor.refresh();
 	}
 
 	public void deleteSelectedScreenshots() {
-		for (ScreenShot shot : activeSession.getSelectedShots()) {
+		for (ScreenShot shot : activeSession.getSelectedShots().toArray(new ScreenShot[0])) {
 			activeSession.removeShot(shot);
 			shot.delete();
 		}
@@ -131,8 +134,8 @@ public class Controller {
 		activeSession.setFirstShotActive();
 
 		editor.showSession(activeSession.getSession());
-		if (!activeSession.isShotSelected(activeSession.getShot())) {
-			editor.showScreenShot(activeSession.getShot(), false);
+		if (!activeSession.isShotSelected(activeSession.getActiveShot())) {
+			editor.showScreenShot(activeSession.getActiveShot(), false);
 		}
 		activeSession.setSelectedAllShots(false);
 		editor.sessionStateChanged();
@@ -140,9 +143,9 @@ public class Controller {
 
 	public void selectScreenShot(boolean selected) {
 		if (selected) {
-			activeSession.selectShot(activeSession.getShot());
+			activeSession.selectShot(activeSession.getActiveShot());
 		} else {
-			activeSession.deselectShot(activeSession.getShot());
+			activeSession.deselectShot(activeSession.getActiveShot());
 		}
 	}
 
