@@ -1,12 +1,12 @@
 package com.niklim.clicktrace.view.editor.control;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
-import javax.swing.border.BevelBorder;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -72,8 +72,7 @@ public class Toolbar {
 	public void init() {
 		toolbar = new JToolBar(JToolBar.HORIZONTAL);
 		toolbar.setFloatable(false);
-		toolbar.setBorderPainted(false);
-		toolbar.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		toolbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY));
 
 		toolbar.add(createIcon("New session", Icons.NEW_SESSION, newSessionActionListener));
 		toolbar.addSeparator();
@@ -85,7 +84,7 @@ public class Toolbar {
 		toolbar.add(deleteSession);
 
 		toolbar.addSeparator();
-		refreshSession = createIcon("Refresh session", Icons.REFRESH, refreshSessionActionListener);
+		refreshSession = createIcon("Refresh session", Icons.REFRESH_SESSION, refreshSessionActionListener);
 		refreshSession.setEnabled(false);
 		toolbar.add(refreshSession);
 

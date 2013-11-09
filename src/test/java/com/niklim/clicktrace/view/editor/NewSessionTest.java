@@ -10,7 +10,6 @@ import org.fest.swing.fixture.JOptionPaneFixture;
 import org.junit.Test;
 
 import com.niklim.clicktrace.ImageFileManager;
-import com.niklim.clicktrace.controller.ActiveSession;
 
 public class NewSessionTest extends AbstractEditorTest {
 
@@ -31,13 +30,18 @@ public class NewSessionTest extends AbstractEditorTest {
 		} catch (WaitTimedOutError ex) {
 		}
 
-		ActiveSession activeSession = injector.getInstance(ActiveSession.class);
 		assertThat(activeSession.getActive()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
 		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
 
 		boolean sessionDirExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();
+
+		for (String item : new String[] { "Start recording", "Refresh session", "Select all screenshots", "Deselect all screenshots",
+				"Delete selected screenshots", "Delete current session" }) {
+			editorFixture.menuItemWithPath("Session", item).requireEnabled();
+		}
+		editorFixture.menuItemWithPath("Session", "Stop recording").requireDisabled();
 	}
 
 	@Test

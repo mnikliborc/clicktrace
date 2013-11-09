@@ -33,7 +33,7 @@ public class OpenSessionTest extends AbstractEditorTest {
 	@Test
 	public void shouldOpenOnOkClick() throws InterruptedException {
 		// when
-		EditorTestUtil.openSession(editorFixture, 1);
+		EditorTestSteps.openSession(editorFixture, 1);
 
 		// then
 		try {
@@ -45,7 +45,7 @@ public class OpenSessionTest extends AbstractEditorTest {
 	}
 
 	private void assertOpen(String sessionName) {
-		assertThat(editorFixture.comboBox().contents()).hasSize(5);
+		assertThat(editorFixture.comboBox().contents()).hasSize(4);
 
 		ActiveSession activeSession = injector.getInstance(ActiveSession.class);
 		assertThat(activeSession.getActive()).isTrue();

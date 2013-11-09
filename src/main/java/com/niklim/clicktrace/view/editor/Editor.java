@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
@@ -22,6 +21,7 @@ import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.control.ControlView;
 import com.niklim.clicktrace.view.editor.control.Menu;
 import com.niklim.clicktrace.view.editor.control.Toolbar;
+import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
 @Singleton
@@ -37,6 +37,9 @@ public class Editor {
 
 	@Inject
 	private SessionView sessionView;
+
+	@Inject
+	private ScreenShotView screenShotView;
 
 	@Inject
 	private ControlView controlView;
@@ -85,7 +88,7 @@ public class Editor {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setEnabled(false);
 		splitPane.setTopComponent(controlView.getComponent());
-		splitPane.setBottomComponent(sessionView.getComponent());
+		splitPane.setBottomComponent(screenShotView.getPanel());
 
 		frame.add(splitPane);
 		frame.setJMenuBar(menu.getMenu());
@@ -108,7 +111,11 @@ public class Editor {
 	public void showSession(Session session) {
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-		sessionView.showSession(session);
+		if (session.getShots().size() > 0) {
+			screenShotView.show(session.getShots().get(0));
+		} else {
+			screenShotView.clear();
+		}
 		controlView.showImagesCombobox(session);
 
 		refresh();
@@ -121,14 +128,15 @@ public class Editor {
 		frame.getContentPane().repaint();
 	}
 
-	public void showScreenShot(int i) {
-		sessionView.showScreenShot(i);
+	public void showScreenShot(ScreenShot screenShot, boolean selected) {
+		screenShotView.show(screenShot);
+		controlView.setSelectedActiveScreenShot(selected);
 	}
 
 	public void edit(ScreenShot shot) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
-					+ shot.getSession().getName() + "\\" + shot.getName());
+			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + shot.getSession().getName() + "\\"
+					+ shot.getName());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -141,27 +149,12 @@ public class Editor {
 
 	public void hideSession() {
 		controlView.hideSession();
-		sessionView.hideSession();
+		screenShotView.clear();
 		refresh();
 	}
 
-	public void setSelectedAllScreenShots(boolean selected) {
-		sessionView.setSelectedAllScreenShots(selected);
-	}
-
-	public void deleteSelectedScreenShots() {
-		List<ScreenShot> shotsToRemove = sessionView.deleteSelectedScreenshots();
-		Session session = activeSession.getSession();
-		session.getShots().removeAll(shotsToRemove);
-		controlView.showImagesCombobox(session);
-		refresh();
-	}
-
-	public void deleteScreenShot(ScreenShot shot) {
-		Session session = activeSession.getSession();
-		session.getShots().remove(shot);
-		controlView.showImagesCombobox(session);
-		refresh();
+	public void setSelectedActiveScreenShot(boolean selected) {
+		controlView.setSelectedActiveScreenShot(selected);
 	}
 
 	public JFrame getFrame() {
@@ -171,6 +164,11 @@ public class Editor {
 	public void sessionStateChanged() {
 		menu.sessionStateChanged();
 		toolbar.sessionStateChanged();
+	}
+
+	public void refreshCombobox(Session session) {
+		controlView.showImagesCombobox(session);
+		refresh();
 	}
 
 }

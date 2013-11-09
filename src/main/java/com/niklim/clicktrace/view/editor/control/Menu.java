@@ -117,7 +117,7 @@ public class Menu {
 	}
 
 	private JMenuItem createSessionRefresh() {
-		JMenuItem menuItem = createMenuItem("Refresh session", Icons.REFRESH, refreshSessionActionListener);
+		JMenuItem menuItem = createMenuItem("Refresh session", Icons.REFRESH_SESSION, refreshSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

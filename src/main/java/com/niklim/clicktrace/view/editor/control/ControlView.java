@@ -1,46 +1,71 @@
 package com.niklim.clicktrace.view.editor.control;
 
 import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 
+@Singleton
 public class ControlView {
 	@Inject
-	private Editor editor;
+	private Controller controller;
+
+	@Inject
+	private ScreenShotView screenShotView;
 
 	@Inject
 	private Toolbar toolbar;
 
 	private JPanel panel = new JPanel(new MigLayout());
-	private JPanel imagesPanel = new JPanel();
+	private JPanel controlPanel = new JPanel();
 	private JComboBox<ScreenShot> imagesComboBox = new JComboBox<ScreenShot>();
+
+	private JButton deleteButton;
+	private JButton editButton;
+	private JButton refreshButton;
+	private JCheckBox checkbox;
 
 	public ControlView() {
 		imagesComboBox.setEditable(false);
-		AutoCompleteDecorator.decorate(imagesComboBox);
 
-		imagesPanel.setVisible(false);
+		controlPanel.setVisible(false);
 
-		imagesPanel.add(new JLabel("go to"));
-		imagesPanel.add(imagesComboBox);
+		deleteButton = new JButton("delete", new ImageIcon(Icons.createIconImage(Icons.DELETE_SCREENSHOT, "delete")));
+		editButton = new JButton("edit", new ImageIcon(Icons.createIconImage(Icons.EDIT_SCREENSHOT, "edit")));
+		refreshButton = new JButton("refresh", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
+		checkbox = new JCheckBox();
+
+		controlPanel.add(new JLabel("Screen shot"));
+		controlPanel.add(imagesComboBox);
+		controlPanel.add(refreshButton);
+		controlPanel.add(editButton);
+		controlPanel.add(deleteButton);
+		controlPanel.add(checkbox);
 
 		imagesComboBox.addItemListener(new ItemListener() {
 			@Override
@@ -50,7 +75,7 @@ public class ControlView {
 					if (!Strings.isNullOrEmpty(shot.getName())) {
 						for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
 							if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
-								editor.showScreenShot(i - 1);
+								controller.showScreenShot(i);
 								break;
 							}
 						}
@@ -58,23 +83,48 @@ public class ControlView {
 				}
 			}
 		});
+
+		refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		refreshButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				controller.refreshScreenShot();
+			}
+		});
+
+		editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		editButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				controller.editScreenShot();
+			}
+		});
+
+		deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		deleteButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				controller.deleteScreenShot();
+			}
+		});
+
+		checkbox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.selectScreenShot(checkbox.isSelected());
+			}
+		});
 	}
 
 	@Inject
 	public void init() {
 		panel.add(toolbar.getToolbar(), "wrap");
-		panel.add(imagesPanel);
+		panel.add(controlPanel);
 	}
 
 	public void showImagesCombobox(Session session) {
-		imagesPanel.setVisible(true);
+		controlPanel.setVisible(true);
 		List<ScreenShot> shots = new ArrayList<ScreenShot>(session.getShots());
-		shots = Lists.reverse(shots);
-		ScreenShot emptyScreenShot = new ScreenShot();
-		emptyScreenShot.setName("");
-		shots.add(emptyScreenShot);
-		shots = Lists.reverse(shots);
-
 		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(shots.toArray(new ScreenShot[0])));
 	}
 
@@ -83,7 +133,11 @@ public class ControlView {
 	}
 
 	public void hideSession() {
-		imagesPanel.setVisible(false);
+		controlPanel.setVisible(false);
+	}
+
+	public void setSelectedActiveScreenShot(boolean selected) {
+		checkbox.setSelected(selected);
 	}
 
 }

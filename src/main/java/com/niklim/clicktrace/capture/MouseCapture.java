@@ -64,7 +64,7 @@ public class MouseCapture implements NativeMouseInputListener {
 	}
 
 	public void nativeMouseReleased(NativeMouseEvent e) {
-		if (activeSession.getActive()) {
+		if (activeSession.getRecording()) {
 			log.debug("Mouse released (x = {}, y = {}, b = {}", e.getX(), e.getY(), e.getButton());
 			capture(e);
 		}

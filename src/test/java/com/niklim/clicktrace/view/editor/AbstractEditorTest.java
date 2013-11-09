@@ -10,9 +10,12 @@ import org.junit.Before;
 
 import com.google.inject.Injector;
 import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.controller.ActiveSession;
 
 public abstract class AbstractEditorTest {
 	protected FrameFixture editorFixture;
+	protected ActiveSession activeSession;
+
 	protected Injector injector;
 
 	abstract protected TestSessionsData getSessionsData();
@@ -25,6 +28,8 @@ public abstract class AbstractEditorTest {
 		Editor editor = injector.getInstance(Editor.class);
 		editorFixture = new FrameFixture(editor.getFrame());
 		editorFixture.show();
+
+		activeSession = injector.getInstance(ActiveSession.class);
 	}
 
 	private void prepareTestDir() {

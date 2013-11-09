@@ -17,7 +17,7 @@ public class DeleteSessionTest extends AbstractEditorTest {
 	@Test
 	public void shouldDeleteSession() {
 		// given
-		EditorTestUtil.openSession(editorFixture, 0);
+		EditorTestSteps.openSession(editorFixture, 0);
 
 		// when
 		editorFixture.menuItemWithPath("Session", "Delete current session").click();
@@ -32,6 +32,11 @@ public class DeleteSessionTest extends AbstractEditorTest {
 			assertThat(editorFixture.comboBox()).isNull();
 		} catch (WaitTimedOutError ex) {
 		} catch (ComponentLookupException ex) {
+		}
+
+		for (String item : new String[] { "Start recording", "Stop recording", "Refresh session", "Select all screenshots",
+				"Deselect all screenshots", "Delete selected screenshots", "Delete current session" }) {
+			editorFixture.menuItemWithPath("Session", item).requireDisabled();
 		}
 	}
 }

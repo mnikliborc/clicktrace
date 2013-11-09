@@ -22,12 +22,14 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.model.session.SessionMetadata;
 
 @SuppressWarnings("serial")
+@Singleton
 public class OpenSessionDialog extends JDialog {
 	@Inject
 	private Controller controller;
@@ -106,8 +108,7 @@ public class OpenSessionDialog extends JDialog {
 	@SuppressWarnings("serial")
 	private void loadSessions() {
 		List<Session> sessions = sessionManager.loadAll();
-		DefaultTableModel dataModel = new DefaultTableModel(
-				new String[] { "Name", "Screenshots", "Created", "Modified" }, sessions.size()) {
+		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots", "Created", "Modified" }, sessions.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells false

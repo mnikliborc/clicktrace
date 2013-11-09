@@ -14,7 +14,7 @@ public class DeleteScreenShotsTest extends AbstractEditorTest {
 	@Test
 	public void shouldDeleteAll() {
 		// given
-		EditorTestUtil.openSession(editorFixture, 0);
+		EditorTestSteps.openSession(editorFixture, 0);
 
 		// when
 		editorFixture.menuItemWithPath("Session", "Select all screenshots").click();
@@ -22,6 +22,8 @@ public class DeleteScreenShotsTest extends AbstractEditorTest {
 		editorFixture.optionPane().okButton().click();
 
 		// then
-		assertThat(editorFixture.comboBox().contents()).hasSize(1);
+		assertThat(editorFixture.comboBox().contents()).hasSize(0);
+		assertThat(activeSession.getSelectedShots()).hasSize(0);
+		assertThat(activeSession.getSession().getShots()).hasSize(0);
 	}
 }

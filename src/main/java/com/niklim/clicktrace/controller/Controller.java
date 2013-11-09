@@ -1,10 +1,14 @@
 package com.niklim.clicktrace.controller;
 
+import java.io.IOException;
+
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.ChangeCapture;
+import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
 import com.niklim.clicktrace.model.session.SessionManager;
@@ -25,9 +29,10 @@ public class Controller {
 	private SessionManager sessionManager;
 
 	public void startSession() {
-		changeCapture.start();
 		activeSession.setRecording(true);
 		editor.sessionStateChanged();
+		changeCapture.start();
+		editor.getFrame().setState(JFrame.ICONIFIED);
 	}
 
 	public void stopSession() {
@@ -50,6 +55,7 @@ public class Controller {
 		activeSession.setSession(session);
 		activeSession.setActive(true);
 		activeSession.setRecording(false);
+		activeSession.setShot(session.getShots().iterator().hasNext() ? session.getShots().iterator().next() : null);
 		changeCapture.stop();
 
 		editor.showSession(session);
@@ -70,17 +76,74 @@ public class Controller {
 	}
 
 	public void setSelectedAllScreenshots(boolean selected) {
-		editor.setSelectedAllScreenShots(selected);
-	}
-
-	public void deleteSelectedScreenshots() {
-		editor.deleteSelectedScreenShots();
+		editor.setSelectedActiveScreenShot(selected);
+		activeSession.setSelectedAllShots(selected);
 	}
 
 	public void refreshSession() {
 		Session session = activeSession.getSession();
 		session.loadScreenShots();
 		editor.showSession(session);
+	}
+
+	public void showScreenShot(int i) {
+		ScreenShot shot = activeSession.getSession().getShots().get(i);
+		activeSession.setShot(shot);
+		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
+		editor.refresh();
+	}
+
+	public void refreshScreenShot() {
+		ScreenShot shot = activeSession.getShot();
+		shot.loadImage();
+		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
+		editor.refresh();
+	}
+
+	public void editScreenShot() {
+		try {
+			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
+					+ activeSession.getShot().getSession().getName() + "\\" + activeSession.getShot().getName());
+			pb.start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteScreenShot() {
+		ScreenShot shot = activeSession.getShot();
+		int indexOfNewActive = Math.max(0, activeSession.getSession().getShots().indexOf(shot) - 1);
+		activeSession.removeShot(shot);
+		shot.delete();
+
+		ScreenShot newShot = activeSession.getSession().getShots().get(indexOfNewActive);
+		editor.refreshCombobox(activeSession.getSession());
+		editor.showScreenShot(newShot, activeSession.isShotSelected(newShot));
+		editor.refresh();
+	}
+
+	public void deleteSelectedScreenshots() {
+		for (ScreenShot shot : activeSession.getSelectedShots()) {
+			activeSession.removeShot(shot);
+			shot.delete();
+		}
+
+		activeSession.setFirstShotActive();
+
+		editor.showSession(activeSession.getSession());
+		if (!activeSession.isShotSelected(activeSession.getShot())) {
+			editor.showScreenShot(activeSession.getShot(), false);
+		}
+		activeSession.setSelectedAllShots(false);
+		editor.sessionStateChanged();
+	}
+
+	public void selectScreenShot(boolean selected) {
+		if (selected) {
+			activeSession.selectShot(activeSession.getShot());
+		} else {
+			activeSession.deselectShot(activeSession.getShot());
+		}
 	}
 
 }

@@ -13,19 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.border.EtchedBorder;
+import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.imgscalr.Scalr;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.view.editor.Editor;
@@ -35,7 +37,7 @@ public class SessionView {
 	@Inject
 	private Editor editor;
 
-	private double widthHeightRatio;
+	private double heightWidthRatio;
 	private int sessionPanelWidth;
 
 	private JScrollPane sessionScrollPanel;
@@ -45,12 +47,13 @@ public class SessionView {
 
 	public SessionView() {
 		sessionPanel = new JPanel(new MigLayout());
+		sessionPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		sessionScrollPanel = new JScrollPane(sessionPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	}
 
 	public void showSession(Session session) {
-		widthHeightRatio = (double) sessionPanel.getHeight() / sessionPanel.getWidth();
+		heightWidthRatio = (double) sessionPanel.getHeight() / sessionPanel.getWidth();
 		sessionPanelWidth = (int) sessionPanel.getWidth();
 
 		sessionPanel.removeAll();
@@ -67,26 +70,28 @@ public class SessionView {
 
 	}
 
-	public BufferedImage scaleImage(BufferedImage image) throws IOException {
-		BufferedImage scaledImage = Scalr.resize(image, sessionPanelWidth - 40);
+	public BufferedImage scaleImage(BufferedImage image, int thumbWidth) throws IOException {
+		BufferedImage scaledImage = Scalr.resize(image, thumbWidth);
 		return scaledImage;
 	}
 
 	private class ThumbPanel extends JPanel {
 		private JCheckBox checkbox = new JCheckBox();
 		private JLabel nameLabel;
-		private JButton deleteButton = new JButton("delete");
-		private JButton editButton = new JButton("edit");
-		private JButton refreshButton = new JButton("refresh");
+		private JButton deleteButton = new JButton("delete", new ImageIcon(Icons.createIconImage(Icons.DELETE_SCREENSHOT, "delete")));
+		private JButton editButton = new JButton("edit", new ImageIcon(Icons.createIconImage(Icons.EDIT_SCREENSHOT, "edit")));
+		private JButton refreshButton = new JButton("refresh", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
 
 		private BufferedImage image;
 
 		private JPanel thumb;
 		private ScreenShot shot;
 
+		private int thumbWidth;
+
 		private class InnerThumbPanel extends JPanel {
 			InnerThumbPanel(int width) {
-				setPreferredSize(new Dimension(width, (int) (width * widthHeightRatio)));
+				setPreferredSize(new Dimension(width, (int) (width * heightWidthRatio)));
 				setBorder(BorderFactory.createLineBorder(new Color(95, 158, 160), 2));
 			}
 
@@ -95,6 +100,10 @@ public class SessionView {
 				super.paintComponent(g);
 				g.drawImage(image, 0, 0, null);
 			}
+
+			public int getWidth() {
+				return (int) getSize().getWidth();
+			}
 		};
 
 		public ThumbPanel(final JPanel sessionPanel, final ScreenShot shot) throws IOException {
@@ -102,8 +111,9 @@ public class SessionView {
 
 			this.shot = shot;
 
-			image = scaleImage(shot.getImage());
-			thumb = new InnerThumbPanel((int) sessionPanel.getSize().getWidth());
+			thumbWidth = (int) sessionPanel.getSize().getWidth() - 20;
+			image = scaleImage(shot.getImage(), thumbWidth);
+			thumb = new InnerThumbPanel(thumbWidth);
 			nameLabel = new JLabel(shot.getName());
 
 			refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -111,7 +121,7 @@ public class SessionView {
 				@Override
 				public void mouseClicked(MouseEvent event) {
 					try {
-						ThumbPanel.this.image = scaleImage(shot.loadImage());
+						ThumbPanel.this.image = scaleImage(shot.loadImage(), thumb.getWidth());
 						revalidate();
 						repaint();
 					} catch (IOException e) {
@@ -132,10 +142,6 @@ public class SessionView {
 			deleteButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent event) {
-					shot.delete();
-
-					sessionPanel.remove(ThumbPanel.this);
-					editor.deleteScreenShot(shot);
 				}
 			});
 
@@ -143,12 +149,12 @@ public class SessionView {
 		}
 
 		private void layComopnents() {
-			setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			JPanel control = new JPanel(new MigLayout());
+			control.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.GRAY));
 
 			control.add(nameLabel);
 
-			int gap = sessionPanelWidth - 400;
+			int gap = sessionPanelWidth - 580;
 			control.add(refreshButton, "gapleft " + gap);
 			control.add(editButton);
 			control.add(deleteButton);
@@ -156,8 +162,8 @@ public class SessionView {
 
 			control.setPreferredSize(new Dimension(sessionPanelWidth - 40, 50));
 
-			int height = (int) (sessionPanelWidth * widthHeightRatio) + 50;
-			setPreferredSize(new Dimension(sessionPanelWidth - 20, height));
+			int height = (int) (thumbWidth * heightWidthRatio) + 50;
+			setPreferredSize(new Dimension((int) thumb.getWidth(), height));
 
 			add(control, "wrap");
 			add(thumb);
@@ -183,18 +189,4 @@ public class SessionView {
 		}
 	}
 
-	public List<ScreenShot> deleteSelectedScreenshots() {
-		List<ThumbPanel> thumbsToRemove = new ArrayList<ThumbPanel>();
-		List<ScreenShot> shotsToRemove = new ArrayList<ScreenShot>();
-		for (ThumbPanel thumb : thumbs) {
-			if (thumb.checkbox.isSelected()) {
-				thumb.shot.delete();
-				thumbsToRemove.add(thumb);
-				shotsToRemove.add(thumb.shot);
-				sessionPanel.remove(thumb);
-			}
-		}
-		thumbs.removeAll(thumbsToRemove);
-		return shotsToRemove;
-	}
 }

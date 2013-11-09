@@ -3,8 +3,10 @@ package com.niklim.clicktrace.model.session;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.ImageFileManager;
 
+@Singleton
 public class SessionManager {
 
 	public List<Session> loadAll() {
