@@ -104,7 +104,9 @@ public class Editor {
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
 		if (session.getShots().size() > 0) {
-			screenShotView.show(session.getShots().get(0));
+			ScreenShot shot = session.getShots().get(0);
+			screenShotView.show(shot);
+			controlView.setActiveScreenShot(shot);
 		} else {
 			screenShotView.clear();
 		}

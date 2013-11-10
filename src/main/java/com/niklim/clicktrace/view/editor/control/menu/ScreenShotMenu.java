@@ -7,11 +7,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.ChangeScreenShotNameActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.SetScreenShotDescritpionActionListener;
 
 @Singleton
 public class ScreenShotMenu {
@@ -26,7 +26,7 @@ public class ScreenShotMenu {
 	@Inject
 	private ChangeScreenShotNameActionListener changeScreenShotNameActionListener;
 	@Inject
-	private SetScreenShotDescritpionActionListener setScreenShotDescritpionActionListener;
+	private OpenScreenShotDescriptionActionListener changeScreenShotDescritpionActionListener;
 	@Inject
 	private DeleteScreenShotActionListener deleteScreenShotActionListener;
 	@Inject
@@ -42,7 +42,7 @@ public class ScreenShotMenu {
 		menu = new JMenu("Screenshot");
 
 		changeName = createChangeName();
-		setDescription = createSetDescription();
+		setDescription = createChangeDescription();
 		delete = createDelete();
 		edit = createEdit();
 		refresh = createRefresh();
@@ -62,26 +62,26 @@ public class ScreenShotMenu {
 		return menuItem;
 	}
 
-	private JMenuItem createSetDescription() {
-		JMenuItem menuItem = Menu.createMenuItem("Set description", setScreenShotDescritpionActionListener);
+	private JMenuItem createChangeDescription() {
+		JMenuItem menuItem = Menu.createMenuItem("Change description", changeScreenShotDescritpionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createDelete() {
-		JMenuItem menuItem = Menu.createMenuItem("Delete screen shot", Icons.DELETE_SCREENSHOT, deleteScreenShotActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Delete screenshot", Icons.DELETE_SCREENSHOT, deleteScreenShotActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createRefresh() {
-		JMenuItem menuItem = Menu.createMenuItem("Refresh screen shot", Icons.REFRESH_SCREENSHOT, refreshScreenShotActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Refresh screenshot", Icons.REFRESH_SCREENSHOT, refreshScreenShotActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createEdit() {
-		JMenuItem menuItem = Menu.createMenuItem("Edit screen shot", Icons.EDIT_SCREENSHOT, editScreenShotActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Edit screenshot", Icons.EDIT_SCREENSHOT, editScreenShotActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

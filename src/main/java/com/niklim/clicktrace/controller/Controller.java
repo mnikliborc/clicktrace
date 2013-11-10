@@ -152,8 +152,12 @@ public class Controller {
 	public void changeActiveScreenShotName(String label) {
 		ScreenShot activeShot = activeSession.getActiveShot();
 		activeShot.setLabel(label);
-		sessionManager.changeShotLabel(activeSession.getSession(), activeShot);
+		sessionManager.saveShotLabel(activeSession.getSession(), activeShot);
 
 		editor.refresh();
+	}
+
+	public void saveActiveScreenShotDescription() {
+		sessionManager.saveShotDescription(activeSession.getSession(), activeSession.getActiveShot());
 	}
 }

@@ -39,13 +39,21 @@ public class SessionManager {
 		return session;
 	}
 
-	public void changeShotLabel(Session session, ScreenShot shot) {
-		Properties prop = new Properties();
+	public void saveShotLabel(Session session, ScreenShot shot) {
+		saveSessionProperty(session, shot.getFilename() + ".label", shot.getLabel());
+	}
+
+	public void saveShotDescription(Session session, ScreenShot shot) {
+		saveSessionProperty(session, shot.getFilename() + ".description", shot.getDescription());
+	}
+
+	private void saveSessionProperty(Session session, String key, String value) {
+		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getName() + File.separator + ImageFileManager.PROP_FILENAME;
 		try {
-			String propFilePath = ImageFileManager.SESSIONS_DIR + session.getName() + File.separator + ImageFileManager.PROP_FILENAME;
+			Properties prop = new Properties();
 			prop.load(new FileInputStream(propFilePath));
 
-			prop.setProperty(shot.getFilename() + ".label", shot.getLabel());
+			prop.setProperty(key, value);
 
 			prop.store(new FileOutputStream(propFilePath), null);
 		} catch (FileNotFoundException e) {

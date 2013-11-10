@@ -30,6 +30,7 @@ import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
+import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 
@@ -50,6 +51,8 @@ public class ControlView {
 	private RefreshScreenShotActionListener refreshScreenShotActionListener;
 	@Inject
 	private DeleteScreenShotActionListener deleteScreenShotActionListener;
+	@Inject
+	private OpenScreenShotDescriptionActionListener changeScreenShotDescritpionActionListener;
 
 	private JPanel panel = new JPanel(new MigLayout());
 	private JPanel controlPanel = new JPanel();
@@ -59,6 +62,7 @@ public class ControlView {
 	private JButton editButton;
 	private JButton refreshButton;
 	private JCheckBox checkbox;
+	private JButton descriptionButton;
 
 	public ControlView() {
 		imagesComboBox.setEditable(false);
@@ -69,12 +73,14 @@ public class ControlView {
 		editButton = new JButton("edit", new ImageIcon(Icons.createIconImage(Icons.EDIT_SCREENSHOT, "edit")));
 		refreshButton = new JButton("refresh", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
 		checkbox = new JCheckBox();
+		descriptionButton = new JButton("description", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "description")));
 
 		controlPanel.add(new JLabel("Screen shot"));
 		controlPanel.add(imagesComboBox);
 		controlPanel.add(refreshButton);
 		controlPanel.add(editButton);
 		controlPanel.add(deleteButton);
+		controlPanel.add(descriptionButton);
 		controlPanel.add(checkbox);
 
 		imagesComboBox.addItemListener(new ItemListener() {
@@ -82,12 +88,10 @@ public class ControlView {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					ScreenShot shot = (ScreenShot) imagesComboBox.getModel().getSelectedItem();
-					if (!Strings.isNullOrEmpty(shot.getFilename())) {
-						for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
-							if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
-								controller.showScreenShot(i);
-								break;
-							}
+					for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
+						if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
+							controller.showScreenShot(i);
+							break;
 						}
 					}
 				}
@@ -124,6 +128,13 @@ public class ControlView {
 				controller.selectScreenShot(checkbox.isSelected());
 			}
 		});
+		descriptionButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		descriptionButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				changeScreenShotDescritpionActionListener.actionPerformed(null);
+			}
+		});
 	}
 
 	@Inject
@@ -152,6 +163,7 @@ public class ControlView {
 
 	public void setActiveScreenShot(ScreenShot shot) {
 		imagesComboBox.getModel().setSelectedItem(shot);
+		descriptionButton.setText(Strings.isNullOrEmpty(shot.getDescription()) ? "add description" : "show description");
 	}
 
 }
