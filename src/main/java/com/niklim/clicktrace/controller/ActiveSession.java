@@ -22,7 +22,7 @@ public class ActiveSession {
 		this.session = session;
 	}
 
-	public boolean getActive() {
+	public boolean isSessionOpen() {
 		return session != null;
 	}
 
@@ -40,6 +40,10 @@ public class ActiveSession {
 
 	public void setActiveShot(ScreenShot shot) {
 		this.activeShot = shot;
+	}
+
+	public boolean isActiveShotOpen() {
+		return activeShot != null;
 	}
 
 	public ScreenShot getShot(int i) {

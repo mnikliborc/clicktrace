@@ -12,15 +12,15 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.view.editor.action.DeleteCurrentSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.DeleteSelectedScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.DeselectAllScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.OpenSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.RefreshSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.SelectAllScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.StartSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.StopSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.session.DeselectAllScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.OpenSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.RefreshSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.SelectAllScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.session.StartSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.StopSessionActionListener;
 
 @Singleton
 public class Toolbar {
@@ -112,10 +112,10 @@ public class Toolbar {
 	}
 
 	public void sessionStateChanged() {
-		deleteSession.setEnabled(activeSession.getActive());
-		refreshSession.setEnabled(activeSession.getActive());
-		startSession.setEnabled(activeSession.getActive() && !activeSession.getRecording());
-		stopSession.setEnabled(activeSession.getActive() && activeSession.getRecording());
+		deleteSession.setEnabled(activeSession.isSessionOpen());
+		refreshSession.setEnabled(activeSession.isSessionOpen());
+		startSession.setEnabled(activeSession.isSessionOpen() && !activeSession.getRecording());
+		stopSession.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
 	}
 
 }

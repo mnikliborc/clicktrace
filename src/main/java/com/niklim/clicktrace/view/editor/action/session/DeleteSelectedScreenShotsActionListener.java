@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor.action;
+package com.niklim.clicktrace.view.editor.action.session;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

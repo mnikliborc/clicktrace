@@ -28,6 +28,9 @@ import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
+import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
+import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 
 @Singleton
@@ -40,6 +43,13 @@ public class ControlView {
 
 	@Inject
 	private Toolbar toolbar;
+
+	@Inject
+	private EditScreenShotActionListener editScreenShotActionListener;
+	@Inject
+	private RefreshScreenShotActionListener refreshScreenShotActionListener;
+	@Inject
+	private DeleteScreenShotActionListener deleteScreenShotActionListener;
 
 	private JPanel panel = new JPanel(new MigLayout());
 	private JPanel controlPanel = new JPanel();
@@ -87,24 +97,24 @@ public class ControlView {
 		refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		refreshButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
-				controller.refreshScreenShot();
+			public void mouseClicked(MouseEvent e) {
+				refreshScreenShotActionListener.actionPerformed(null);
 			}
 		});
 
 		editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		editButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
-				controller.editScreenShot();
+			public void mouseClicked(MouseEvent e) {
+				editScreenShotActionListener.actionPerformed(null);
 			}
 		});
 
 		deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		deleteButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
-				controller.deleteActiveScreenShot();
+			public void mouseClicked(MouseEvent e) {
+				deleteScreenShotActionListener.actionPerformed(null);
 			}
 		});
 

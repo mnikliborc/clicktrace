@@ -35,7 +35,7 @@ public class Menu {
 
 		menubar.add(fileMenu.getMenu());
 		menubar.add(sessionMenu.getMenu());
-		// menubar.add(screenShotMenu.getMenu());
+		menubar.add(screenShotMenu.getMenu());
 		menubar.add(createTools());
 	}
 
@@ -73,5 +73,6 @@ public class Menu {
 
 	public void sessionStateChanged() {
 		sessionMenu.sessionStateChanged();
+		screenShotMenu.sessionStateChanged();
 	}
 }

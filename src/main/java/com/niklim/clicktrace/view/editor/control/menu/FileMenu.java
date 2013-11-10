@@ -9,8 +9,8 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
-import com.niklim.clicktrace.view.editor.action.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.OpenSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.OpenSessionActionListener;
 
 @Singleton
 public class FileMenu {

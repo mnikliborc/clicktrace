@@ -22,6 +22,7 @@ public class DeleteScreenShotTest extends AbstractEditorTest {
 		editorFixture.comboBox().selectItem(2);
 		editorFixture.checkBox().requireNotSelected();
 		editorFixture.button(JButtonMatcher.withText("delete")).click();
+		editorFixture.optionPane().okButton().click();
 
 		// then
 		editorFixture.checkBox().requireSelected();

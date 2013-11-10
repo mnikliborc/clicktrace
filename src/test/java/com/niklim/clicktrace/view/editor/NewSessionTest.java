@@ -30,7 +30,7 @@ public class NewSessionTest extends AbstractEditorTest {
 		} catch (WaitTimedOutError ex) {
 		}
 
-		assertThat(activeSession.getActive()).isTrue();
+		assertThat(activeSession.isSessionOpen()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
 		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
 

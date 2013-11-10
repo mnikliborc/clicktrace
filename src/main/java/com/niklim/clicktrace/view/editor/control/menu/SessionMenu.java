@@ -6,13 +6,13 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.view.editor.action.DeleteCurrentSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.DeleteSelectedScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.DeselectAllScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.RefreshSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.SelectAllScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.StartSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.StopSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.session.DeselectAllScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.session.RefreshSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.SelectAllScreenShotsActionListener;
+import com.niklim.clicktrace.view.editor.action.session.StartSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.StopSessionActionListener;
 
 public class SessionMenu {
 	JMenu menu;
@@ -50,14 +50,14 @@ public class SessionMenu {
 	private DeselectAllScreenShotsActionListener deselectAllScreenShotsActionListener;
 
 	public void sessionStateChanged() {
-		sessionDeleteActiveSession.setEnabled(activeSession.getActive());
-		sessionDeleteActiveSession.setEnabled(activeSession.getActive());
-		sessionDeleteSelected.setEnabled(activeSession.getActive());
-		sessionSelectAll.setEnabled(activeSession.getActive());
-		sessionDeselectAll.setEnabled(activeSession.getActive());
-		sessionStart.setEnabled(activeSession.getActive() && !activeSession.getRecording());
-		sessionStop.setEnabled(activeSession.getActive() && activeSession.getRecording());
-		sessionRefresh.setEnabled(activeSession.getActive());
+		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
+		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
+		sessionDeleteSelected.setEnabled(activeSession.isSessionOpen());
+		sessionSelectAll.setEnabled(activeSession.isSessionOpen());
+		sessionDeselectAll.setEnabled(activeSession.isSessionOpen());
+		sessionStart.setEnabled(activeSession.isSessionOpen() && !activeSession.getRecording());
+		sessionStop.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
+		sessionRefresh.setEnabled(activeSession.isSessionOpen());
 	}
 
 	@Inject
