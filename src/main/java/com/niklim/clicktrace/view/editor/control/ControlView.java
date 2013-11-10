@@ -82,7 +82,7 @@ public class ControlView {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					ScreenShot shot = (ScreenShot) imagesComboBox.getModel().getSelectedItem();
-					if (!Strings.isNullOrEmpty(shot.getName())) {
+					if (!Strings.isNullOrEmpty(shot.getFilename())) {
 						for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
 							if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
 								controller.showScreenShot(i);

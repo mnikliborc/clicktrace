@@ -1,9 +1,13 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace.view.editor.screenshot;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fest.swing.core.matcher.JButtonMatcher;
 import org.junit.Test;
+
+import com.niklim.clicktrace.view.editor.AbstractEditorTest;
+import com.niklim.clicktrace.view.editor.EditorTestSteps;
+import com.niklim.clicktrace.view.editor.TestSessionsData;
 
 public class DeleteScreenShotTest extends AbstractEditorTest {
 	@Override
@@ -28,6 +32,6 @@ public class DeleteScreenShotTest extends AbstractEditorTest {
 		editorFixture.checkBox().requireSelected();
 		editorFixture.comboBox().requireSelection(1);
 		assertThat(activeSession.getSession().getShots()).hasSize(3);
-		assertThat(activeSession.getActiveShot().getName()).isEqualTo(editorFixture.comboBox().contents()[1]);
+		assertThat(activeSession.getActiveShot().getFilename()).isEqualTo(editorFixture.comboBox().contents()[1]);
 	}
 }

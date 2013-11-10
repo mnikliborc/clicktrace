@@ -114,7 +114,7 @@ public class SessionView {
 			thumbWidth = (int) sessionPanel.getSize().getWidth() - 20;
 			image = scaleImage(shot.getImage(), thumbWidth);
 			thumb = new InnerThumbPanel(thumbWidth);
-			nameLabel = new JLabel(shot.getName());
+			nameLabel = new JLabel(shot.getFilename());
 
 			refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			refreshButton.addMouseListener(new MouseAdapter() {

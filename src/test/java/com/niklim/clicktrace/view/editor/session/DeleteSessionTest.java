@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace.view.editor.session;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -6,6 +6,10 @@ import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.junit.Test;
+
+import com.niklim.clicktrace.view.editor.AbstractEditorTest;
+import com.niklim.clicktrace.view.editor.EditorTestSteps;
+import com.niklim.clicktrace.view.editor.TestSessionsData;
 
 public class DeleteSessionTest extends AbstractEditorTest {
 

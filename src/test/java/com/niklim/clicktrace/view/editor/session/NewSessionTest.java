@@ -1,7 +1,8 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace.view.editor.session;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -10,6 +11,8 @@ import org.fest.swing.fixture.JOptionPaneFixture;
 import org.junit.Test;
 
 import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.view.editor.AbstractEditorTest;
+import com.niklim.clicktrace.view.editor.TestSessionsData;
 
 public class NewSessionTest extends AbstractEditorTest {
 
@@ -36,6 +39,9 @@ public class NewSessionTest extends AbstractEditorTest {
 
 		boolean sessionDirExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();
+		boolean propsFileExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName + File.separator
+				+ ImageFileManager.PROP_FILENAME));
+		assertThat(propsFileExists).isTrue();
 
 		for (String item : new String[] { "Start recording", "Refresh session", "Select all screenshots", "Deselect all screenshots",
 				"Delete selected screenshots", "Delete current session" }) {

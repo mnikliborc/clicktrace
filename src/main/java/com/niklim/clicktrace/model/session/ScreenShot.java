@@ -12,7 +12,7 @@ import com.niklim.clicktrace.model.session.helper.ScreenShotDeleter;
 import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 
 public class ScreenShot {
-	private String name;
+	private String filename;
 	private String label;
 	private String description;
 	private BufferedImage image;
@@ -21,12 +21,12 @@ public class ScreenShot {
 	private ImageLoader imageLoader = SessionHelperFactory.getImageLoader();
 	private ScreenShotDeleter deleter = new ScreenShotDeleter();
 
-	public String getName() {
-		return name;
+	public String getFilename() {
+		return filename;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFilename(String name) {
+		this.filename = name;
 	}
 
 	public String getLabel() {
@@ -68,7 +68,7 @@ public class ScreenShot {
 		}
 		ScreenShot other = (ScreenShot) o;
 
-		if (!Strings.nullToEmpty(name).equals(Strings.nullToEmpty(other.getName()))) {
+		if (!Strings.nullToEmpty(filename).equals(Strings.nullToEmpty(other.getFilename()))) {
 			return false;
 		}
 
@@ -78,13 +78,13 @@ public class ScreenShot {
 	@Override
 	public int hashCode() {
 		HashFunction hf = Hashing.md5();
-		HashCode hc = hf.newHasher().putString(name, Charsets.UTF_8).hash();
+		HashCode hc = hf.newHasher().putString(filename, Charsets.UTF_8).hash();
 		return hc.asInt();
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return Strings.isNullOrEmpty(label) ? filename : label;
 	}
 
 	public Session getSession() {

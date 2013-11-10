@@ -2,8 +2,6 @@ package com.niklim.clicktrace.view.editor;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -26,12 +24,6 @@ import com.niklim.clicktrace.view.editor.session.SessionView;
 
 @Singleton
 public class Editor {
-	public static class TrashFilter implements FilenameFilter {
-		@Override
-		public boolean accept(File dir, String name) {
-			return !".".equals(name) && !"..".equals(name);
-		}
-	}
 
 	private JFrame frame;
 
@@ -141,7 +133,7 @@ public class Editor {
 	public void edit(ScreenShot shot) {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + shot.getSession().getName() + "\\"
-					+ shot.getName());
+					+ shot.getFilename());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();

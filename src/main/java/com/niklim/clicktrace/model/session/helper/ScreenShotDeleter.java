@@ -13,7 +13,7 @@ public class ScreenShotDeleter {
 	public void delete(ScreenShot shot) {
 		try {
 			Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
-					+ shot.getName());
+					+ shot.getFilename());
 			Files.delete(filePath);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -11,7 +11,8 @@ import com.niklim.clicktrace.model.session.Session;
 
 public class SessionDeleter {
 	public void delete(Session delete) {
-		for (String filename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + delete.getName())) {
+		for (String filename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + delete.getName(),
+				new ImageFileManager.TrashFilter())) {
 			try {
 				Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getName() + File.separator + filename);
 				Files.delete(filePath);
