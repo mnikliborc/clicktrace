@@ -19,8 +19,8 @@ import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.control.ControlView;
-import com.niklim.clicktrace.view.editor.control.Menu;
 import com.niklim.clicktrace.view.editor.control.Toolbar;
+import com.niklim.clicktrace.view.editor.control.menu.Menu;
 import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 import com.niklim.clicktrace.view.editor.session.SessionView;
 
@@ -91,7 +91,7 @@ public class Editor {
 		splitPane.setBottomComponent(screenShotView.getPanel());
 
 		frame.add(splitPane);
-		frame.setJMenuBar(menu.getMenu());
+		frame.setJMenuBar(menu.getMenuBar());
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
