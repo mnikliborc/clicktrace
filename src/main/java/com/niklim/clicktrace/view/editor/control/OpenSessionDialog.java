@@ -121,7 +121,7 @@ public class OpenSessionDialog extends JDialog {
 		int i = 0;
 		for (Session session : sessions) {
 			SessionMetadata metadata = session.loadMetadata();
-			table.getModel().setValueAt(session.getName(), i, 0);
+			table.getModel().setValueAt(session, i, 0);
 			table.getModel().setValueAt(metadata.getSize(), i, 1);
 			table.getModel().setValueAt(metadata.getCreated(), i, 2);
 			table.getModel().setValueAt(metadata.getModified(), i, 3);

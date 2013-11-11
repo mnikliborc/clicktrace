@@ -15,12 +15,18 @@ import com.niklim.clicktrace.ImageFileManager;
 @Singleton
 public class SessionManager {
 
+	private static final String PROP_SUFIX_LABEL = ".label";
+	private static final String PROP_SESSION_LABEL = "session.label";
+	private static final String PROP_SUFIX_DESCRIPTION = ".description";
+
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
 		for (String sessionName : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR, new ImageFileManager.TrashFilter())) {
 			Session session = new Session();
-			session.setName(sessionName);
+			session.setDirname(sessionName);
+
+			session.setLabel(loadSessionProperty(session).getProperty(PROP_SESSION_LABEL));
 
 			sessions.add(session);
 		}
@@ -30,7 +36,7 @@ public class SessionManager {
 
 	public Session createSession(String sessionName) throws SessionAlreadyExistsException {
 		Session session = new Session();
-		session.setName(sessionName);
+		session.setDirname(sessionName);
 		if (!ImageFileManager.createSessionDir(sessionName)) {
 			throw new SessionAlreadyExistsException();
 		}
@@ -39,23 +45,45 @@ public class SessionManager {
 		return session;
 	}
 
+	public void saveSessionLabel(Session session) {
+		saveSessionProperty(session, PROP_SESSION_LABEL, session.getLabel());
+	}
+
 	public void saveShotLabel(Session session, ScreenShot shot) {
-		saveSessionProperty(session, shot.getFilename() + ".label", shot.getLabel());
+		saveSessionProperty(session, shot.getFilename() + PROP_SUFIX_LABEL, shot.getLabel());
 	}
 
 	public void saveShotDescription(Session session, ScreenShot shot) {
-		saveSessionProperty(session, shot.getFilename() + ".description", shot.getDescription());
+		saveSessionProperty(session, shot.getFilename() + PROP_SUFIX_DESCRIPTION, shot.getDescription());
+	}
+
+	private Properties loadSessionProperty(Session session) {
+		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
+		Properties prop = new Properties();
+		FileInputStream fileInputStream = null;
+		try {
+			fileInputStream = new FileInputStream(propFilePath);
+			prop.load(fileInputStream);
+			fileInputStream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return prop;
 	}
 
 	private void saveSessionProperty(Session session, String key, String value) {
-		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getName() + File.separator + ImageFileManager.PROP_FILENAME;
+		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
 		try {
 			Properties prop = new Properties();
 			prop.load(new FileInputStream(propFilePath));
 
 			prop.setProperty(key, value);
 
-			prop.store(new FileOutputStream(propFilePath), null);
+			FileOutputStream fileOutputStream = new FileOutputStream(propFilePath);
+			prop.store(fileOutputStream, null);
+			fileOutputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

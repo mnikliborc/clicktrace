@@ -104,7 +104,7 @@ public class Controller {
 	public void editScreenShot() {
 		try {
 			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
-					+ activeSession.getActiveShot().getSession().getName() + "\\" + activeSession.getActiveShot().getFilename());
+					+ activeSession.getActiveShot().getSession().getDirname() + "\\" + activeSession.getActiveShot().getFilename());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -149,7 +149,7 @@ public class Controller {
 		}
 	}
 
-	public void changeActiveScreenShotName(String label) {
+	public void changeActiveScreenShotLabel(String label) {
 		ScreenShot activeShot = activeSession.getActiveShot();
 		activeShot.setLabel(label);
 		sessionManager.saveShotLabel(activeSession.getSession(), activeShot);
@@ -159,5 +159,11 @@ public class Controller {
 
 	public void saveActiveScreenShotDescription() {
 		sessionManager.saveShotDescription(activeSession.getSession(), activeSession.getActiveShot());
+	}
+
+	public void changeActiveSessionLabel(String label) {
+		Session session = activeSession.getSession();
+		session.setLabel(label);
+		sessionManager.saveSessionLabel(session);
 	}
 }

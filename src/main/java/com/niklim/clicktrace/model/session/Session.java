@@ -14,7 +14,8 @@ import com.niklim.clicktrace.model.session.helper.SessionMetadataHelper;
 import com.niklim.clicktrace.model.session.helper.SessionSaver;
 
 public class Session {
-	private String name;
+	private String dirName;
+	private String label;
 	private List<ScreenShot> shots;
 	private SessionMetadata metadata;
 
@@ -23,12 +24,12 @@ public class Session {
 	private ScreenShotLoader screenShotsLoader = SessionHelperFactory.getScreenShotLoader();
 	private SessionMetadataHelper sessionMetadataHelper = SessionHelperFactory.getSessionMetadataHelper();
 
-	public String getName() {
-		return name;
+	public String getDirname() {
+		return dirName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setDirname(String name) {
+		this.dirName = name;
 	}
 
 	public List<ScreenShot> getShots() {
@@ -67,7 +68,7 @@ public class Session {
 		}
 		Session other = (Session) o;
 
-		if (!Strings.nullToEmpty(name).equals(Strings.nullToEmpty(other.getName()))) {
+		if (!Strings.nullToEmpty(dirName).equals(Strings.nullToEmpty(other.getDirname()))) {
 			return false;
 		}
 
@@ -77,13 +78,21 @@ public class Session {
 	@Override
 	public int hashCode() {
 		HashFunction hf = Hashing.md5();
-		HashCode hc = hf.newHasher().putString(name, Charsets.UTF_8).hash();
+		HashCode hc = hf.newHasher().putString(dirName, Charsets.UTF_8).hash();
 		return hc.asInt();
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return Strings.isNullOrEmpty(label) ? dirName : label;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 }

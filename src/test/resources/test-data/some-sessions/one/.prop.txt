@@ -1,2 +1,3 @@
+session.label=some label
 2013.10.29-22.25.06.png.label=some screenshot
 2013.10.29-22.25.06.png.description=some description

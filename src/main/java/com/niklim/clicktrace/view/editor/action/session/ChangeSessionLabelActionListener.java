@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor.action.screenshot;
+package com.niklim.clicktrace.view.editor.action.session;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.Controller;
 
-public class ChangeScreenShotNameActionListener implements ActionListener {
+public class ChangeSessionLabelActionListener implements ActionListener {
 
 	@Inject
 	private Controller controller;
@@ -19,8 +19,10 @@ public class ChangeScreenShotNameActionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		String label = JOptionPane.showInputDialog("Set screenshot label", activeSession.getActiveShot().getLabel());
-		controller.changeActiveScreenShotName(label);
+		String label = JOptionPane.showInputDialog("Set session name", activeSession.getSession());
+		if (label != null) {
+			controller.changeActiveSessionLabel(label);
+		}
 	}
 
 }

@@ -11,17 +11,17 @@ import com.niklim.clicktrace.model.session.Session;
 
 public class SessionDeleter {
 	public void delete(Session delete) {
-		for (String filename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + delete.getName(),
+		for (String filename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + delete.getDirname(),
 				new ImageFileManager.TrashFilter())) {
 			try {
-				Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getName() + File.separator + filename);
+				Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getDirname() + File.separator + filename);
 				Files.delete(filePath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		try {
-			Path dirPath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getName());
+			Path dirPath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getDirname());
 			Files.delete(dirPath);
 		} catch (IOException e) {
 			e.printStackTrace();

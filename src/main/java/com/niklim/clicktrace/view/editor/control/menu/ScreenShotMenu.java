@@ -7,24 +7,24 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.ChangeScreenShotNameActionListener;
+import com.niklim.clicktrace.view.editor.action.screenshot.ChangeScreenShotLabelActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
+import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
 
 @Singleton
 public class ScreenShotMenu {
 	private JMenu menu;
 
-	private JMenuItem changeName;
+	private JMenuItem changeLabel;
 	private JMenuItem setDescription;
 	private JMenuItem delete;
 	private JMenuItem refresh;
 	private JMenuItem edit;
 
 	@Inject
-	private ChangeScreenShotNameActionListener changeScreenShotNameActionListener;
+	private ChangeScreenShotLabelActionListener changeScreenShotLabelActionListener;
 	@Inject
 	private OpenScreenShotDescriptionActionListener changeScreenShotDescritpionActionListener;
 	@Inject
@@ -41,13 +41,13 @@ public class ScreenShotMenu {
 	public void init() {
 		menu = new JMenu("Screenshot");
 
-		changeName = createChangeName();
+		changeLabel = createChangeLabel();
 		setDescription = createChangeDescription();
 		delete = createDelete();
 		edit = createEdit();
 		refresh = createRefresh();
 
-		menu.add(changeName);
+		menu.add(changeLabel);
 		menu.add(setDescription);
 		menu.addSeparator();
 		menu.add(refresh);
@@ -56,8 +56,8 @@ public class ScreenShotMenu {
 		menu.add(delete);
 	}
 
-	private JMenuItem createChangeName() {
-		JMenuItem menuItem = Menu.createMenuItem("Change name", changeScreenShotNameActionListener);
+	private JMenuItem createChangeLabel() {
+		JMenuItem menuItem = Menu.createMenuItem("Change label", changeScreenShotLabelActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
@@ -91,7 +91,7 @@ public class ScreenShotMenu {
 	}
 
 	public void sessionStateChanged() {
-		changeName.setEnabled(activeSession.isActiveShotOpen());
+		changeLabel.setEnabled(activeSession.isActiveShotOpen());
 		delete.setEnabled(activeSession.isActiveShotOpen());
 		refresh.setEnabled(activeSession.isActiveShotOpen());
 		edit.setEnabled(activeSession.isActiveShotOpen());

@@ -6,6 +6,7 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.view.editor.action.session.ChangeSessionLabelActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeselectAllScreenShotsActionListener;
@@ -23,6 +24,7 @@ public class SessionMenu {
 	JMenuItem sessionDeselectAll;
 	JMenuItem sessionStart;
 	JMenuItem sessionStop;
+	JMenuItem sessionChangeLabel;
 	JMenuItem sessionRefresh;
 
 	@Inject
@@ -49,6 +51,9 @@ public class SessionMenu {
 	@Inject
 	private DeselectAllScreenShotsActionListener deselectAllScreenShotsActionListener;
 
+	@Inject
+	private ChangeSessionLabelActionListener changeSessionLabelActionListener;
+
 	public void sessionStateChanged() {
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
@@ -58,6 +63,7 @@ public class SessionMenu {
 		sessionStart.setEnabled(activeSession.isSessionOpen() && !activeSession.getRecording());
 		sessionStop.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
 		sessionRefresh.setEnabled(activeSession.isSessionOpen());
+		sessionChangeLabel.setEnabled(activeSession.isSessionOpen());
 	}
 
 	@Inject
@@ -71,6 +77,7 @@ public class SessionMenu {
 		sessionDeselectAll = createSessionDeselectAll();
 		sessionDeleteSelected = createSessionDeleteSelected();
 		sessionDeleteActiveSession = createSessionDeleteActiveSession();
+		sessionChangeLabel = createSessionChangeLabel();
 
 		menu.add(sessionStart);
 		menu.add(sessionStop);
@@ -80,11 +87,18 @@ public class SessionMenu {
 		menu.add(sessionDeselectAll);
 		menu.add(sessionDeleteSelected);
 		menu.addSeparator();
+		menu.add(sessionChangeLabel);
 		menu.add(sessionDeleteActiveSession);
 	}
 
 	public JMenu getMenu() {
 		return menu;
+	}
+
+	private JMenuItem createSessionChangeLabel() {
+		JMenuItem menuItem = Menu.createMenuItem("Change label", changeSessionLabelActionListener);
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	private JMenuItem createSessionStart() {

@@ -35,7 +35,7 @@ public class NewSessionTest extends AbstractEditorTest {
 
 		assertThat(activeSession.isSessionOpen()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
-		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
+		assertThat(activeSession.getSession().getDirname()).isEqualTo(sessionName);
 
 		boolean sessionDirExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();

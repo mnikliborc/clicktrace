@@ -16,8 +16,10 @@ public class ScreenShotLoader {
 	public List<ScreenShot> load(Session session) {
 		Properties prop = new Properties();
 		try {
-			prop.load(new FileInputStream(ImageFileManager.SESSIONS_DIR + session.getName() + File.separator
-					+ ImageFileManager.PROP_FILENAME));
+			FileInputStream fileInputStream = new FileInputStream(ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator
+					+ ImageFileManager.PROP_FILENAME);
+			prop.load(fileInputStream);
+			fileInputStream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -25,7 +27,7 @@ public class ScreenShotLoader {
 		}
 
 		List<ScreenShot> shots = new ArrayList<ScreenShot>();
-		for (String shotFilename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + session.getName(),
+		for (String shotFilename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + session.getDirname(),
 				new ImageFileManager.ImageFilter())) {
 			ScreenShot shot = new ScreenShot();
 			shot.setFilename(shotFilename);
