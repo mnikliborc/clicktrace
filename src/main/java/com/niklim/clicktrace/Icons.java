@@ -15,6 +15,11 @@ public class Icons {
 	public static final String STOP_SESSION = "icons/media-playback-pause.png";
 	public static final String EDIT_SCREENSHOT = "icons/format-stroke-color.png";
 	public static final String DELETE_SCREENSHOT = "icons/window-close-2.png";
+	public static final String NEXT_SCREENSHOT = "icons/gnome_go_next.png";
+	public static final String PREV_SCREENSHOT = "icons/gnome_go_previous.png";
+	public static final String LAST_SCREENSHOT = "icons/gnome_go_last.png";
+	public static final String FIRST_SCREENSHOT = "icons/gnome_go_first.png";
+	public static final String DESCRIPTION_SCREENSHOT = "icons/desc_edit.png";
 
 	public static Image createIconImage(String path, String description) {
 		URL imageURL = Thread.currentThread().getContextClassLoader().getResource(path);

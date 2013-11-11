@@ -166,4 +166,30 @@ public class Controller {
 		session.setLabel(label);
 		sessionManager.saveSessionLabel(session);
 	}
+
+	public void showFirstScreenShot() {
+		showScreenShot(0);
+	}
+
+	public void showPrevScreenShot() {
+		int selectedIndex = activeSession.getActiveShotIndex();
+		int nextIndex = Math.max(0, selectedIndex - 1);
+
+		showScreenShot(nextIndex);
+	}
+
+	public void showNextScreenShot() {
+		Session session = activeSession.getSession();
+		int selectedIndex = activeSession.getActiveShotIndex();
+		int nextIndex = Math.min(selectedIndex + 1, session.getShots().size() - 1);
+
+		showScreenShot(nextIndex);
+	}
+
+	public void showLastScreenShot() {
+		Session session = activeSession.getSession();
+		int nextIndex = session.getShots().size() - 1;
+
+		showScreenShot(nextIndex);
+	}
 }

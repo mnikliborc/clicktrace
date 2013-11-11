@@ -64,24 +64,65 @@ public class ControlView {
 	private JCheckBox checkbox;
 	private JButton descriptionButton;
 
+	private JButton firstButton;
+	private JButton prevButton;
+	private JButton nextButton;
+	private JButton lastButton;
+
 	public ControlView() {
 		imagesComboBox.setEditable(false);
 
 		controlPanel.setVisible(false);
 
+		firstButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.FIRST_SCREENSHOT, "first")));
+		prevButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.PREV_SCREENSHOT, "previous")));
+		nextButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.NEXT_SCREENSHOT, "next")));
+		lastButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.LAST_SCREENSHOT, "last")));
+
 		deleteButton = new JButton("delete", new ImageIcon(Icons.createIconImage(Icons.DELETE_SCREENSHOT, "delete")));
 		editButton = new JButton("edit", new ImageIcon(Icons.createIconImage(Icons.EDIT_SCREENSHOT, "edit")));
 		refreshButton = new JButton("refresh", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
 		checkbox = new JCheckBox();
-		descriptionButton = new JButton("description", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "description")));
+		descriptionButton = new JButton("description", new ImageIcon(Icons.createIconImage(Icons.DESCRIPTION_SCREENSHOT, "description")));
 
 		controlPanel.add(new JLabel("Screen shot"));
 		controlPanel.add(imagesComboBox);
+
+		controlPanel.add(firstButton);
+		controlPanel.add(prevButton);
+		controlPanel.add(nextButton);
+		controlPanel.add(lastButton);
+
 		controlPanel.add(refreshButton);
 		controlPanel.add(editButton);
 		controlPanel.add(deleteButton);
 		controlPanel.add(descriptionButton);
 		controlPanel.add(checkbox);
+
+		firstButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.showFirstScreenShot();
+			}
+		});
+		prevButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.showPrevScreenShot();
+			}
+		});
+		nextButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.showNextScreenShot();
+			}
+		});
+		lastButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.showLastScreenShot();
+			}
+		});
 
 		imagesComboBox.addItemListener(new ItemListener() {
 			@Override
@@ -164,6 +205,16 @@ public class ControlView {
 	public void setActiveScreenShot(ScreenShot shot) {
 		imagesComboBox.getModel().setSelectedItem(shot);
 		descriptionButton.setText(Strings.isNullOrEmpty(shot.getDescription()) ? "add description" : "show description");
+
+		changeNavigationButtonState();
+	}
+
+	private void changeNavigationButtonState() {
+		int selectedIndex = Math.max(0, imagesComboBox.getSelectedIndex());
+		firstButton.setEnabled(selectedIndex != 0);
+		prevButton.setEnabled(selectedIndex != 0);
+		nextButton.setEnabled(selectedIndex < imagesComboBox.getModel().getSize() - 1);
+		lastButton.setEnabled(selectedIndex < imagesComboBox.getModel().getSize() - 1);
 	}
 
 }

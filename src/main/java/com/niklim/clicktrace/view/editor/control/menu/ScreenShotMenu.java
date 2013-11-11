@@ -63,7 +63,8 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createChangeDescription() {
-		JMenuItem menuItem = Menu.createMenuItem("Change description", changeScreenShotDescritpionActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Change description", Icons.DESCRIPTION_SCREENSHOT,
+				changeScreenShotDescritpionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

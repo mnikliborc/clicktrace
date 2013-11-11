@@ -101,8 +101,9 @@ public class Editor {
 	}
 
 	public void showSession(Session session) {
-		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		showWaitingCursor();
 
+		resetControl(session);
 		if (session.getShots().size() > 0) {
 			ScreenShot shot = session.getShots().get(0);
 			screenShotView.show(shot);
@@ -110,11 +111,18 @@ public class Editor {
 		} else {
 			screenShotView.clear();
 		}
-		resetControl(session);
 
 		refresh();
 
+		hideWaitingCursor();
+	}
+
+	private void hideWaitingCursor() {
 		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+
+	private void showWaitingCursor() {
+		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 	}
 
 	public void refresh() {
@@ -124,9 +132,11 @@ public class Editor {
 
 	public void showScreenShot(ScreenShot screenShot, boolean selected) {
 		if (screenShot != null) {
+			showWaitingCursor();
 			screenShotView.show(screenShot);
 			controlView.setActiveScreenShotSelected(selected);
 			controlView.setActiveScreenShot(screenShot);
+			hideWaitingCursor();
 		} else {
 			screenShotView.clear();
 		}
@@ -134,8 +144,8 @@ public class Editor {
 
 	public void edit(ScreenShot shot) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + shot.getSession().getDirname() + "\\"
-					+ shot.getFilename());
+			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + shot.getSession().getDirname()
+					+ "\\" + shot.getFilename());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();

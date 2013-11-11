@@ -89,4 +89,9 @@ public class ActiveSession {
 		}
 
 	}
+
+	public int getActiveShotIndex() {
+		return session.getShots().indexOf(activeShot);
+	}
+
 }
