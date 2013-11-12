@@ -11,9 +11,9 @@ import com.niklim.clicktrace.model.session.ScreenShot;
 
 public class ScreenShotDeleter {
 	public void delete(ScreenShot shot) {
+		// TODO delete screenshot properties
 		try {
-			Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + shot.getSession().getDirname() + File.separator
-					+ shot.getFilename());
+			Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + shot.getSession().getDirname() + File.separator + shot.getFilename());
 			Files.delete(filePath);
 		} catch (IOException e) {
 			e.printStackTrace();

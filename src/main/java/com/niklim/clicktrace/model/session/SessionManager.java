@@ -1,13 +1,11 @@
 package com.niklim.clicktrace.model.session;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.ImageFileManager;
@@ -26,7 +24,7 @@ public class SessionManager {
 			Session session = new Session();
 			session.setDirname(sessionName);
 
-			session.setLabel(loadSessionProperty(session).getProperty(PROP_SESSION_LABEL));
+			session.setLabel(loadSessionProperty(session).getString(PROP_SESSION_LABEL));
 
 			sessions.add(session);
 		}
@@ -57,36 +55,24 @@ public class SessionManager {
 		saveSessionProperty(session, shot.getFilename() + PROP_SUFIX_DESCRIPTION, shot.getDescription());
 	}
 
-	private Properties loadSessionProperty(Session session) {
+	private PropertiesConfiguration loadSessionProperty(Session session) {
 		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
-		Properties prop = new Properties();
-		FileInputStream fileInputStream = null;
+		PropertiesConfiguration prop = null;
 		try {
-			fileInputStream = new FileInputStream(propFilePath);
-			prop.load(fileInputStream);
-			fileInputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			prop = new PropertiesConfiguration(propFilePath);
+		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}
 		return prop;
 	}
 
 	private void saveSessionProperty(Session session, String key, String value) {
-		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
 		try {
-			Properties prop = new Properties();
-			prop.load(new FileInputStream(propFilePath));
-
+			String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
+			PropertiesConfiguration prop = new PropertiesConfiguration(propFilePath);
 			prop.setProperty(key, value);
-
-			FileOutputStream fileOutputStream = new FileOutputStream(propFilePath);
-			prop.store(fileOutputStream, null);
-			fileOutputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			prop.save();
+		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}
 	}
