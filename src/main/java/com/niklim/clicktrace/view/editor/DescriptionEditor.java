@@ -22,7 +22,9 @@ import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.view.editor.action.screenshot.SaveScreenShotDescriptionActionListener;
 
 @Singleton
-public class DescriptionEditor extends JDialog {
+public class DescriptionEditor {
+
+	private JDialog dialog;
 
 	private JTextArea textarea;
 
@@ -33,11 +35,16 @@ public class DescriptionEditor extends JDialog {
 	private SaveScreenShotDescriptionActionListener saveScreenShotDescriptionActionListener;
 
 	public DescriptionEditor() {
-		this.getContentPane().setLayout(new MigLayout());
+	}
+
+	@Inject
+	public void init() {
+		dialog = new JDialog();
+		dialog.getContentPane().setLayout(new MigLayout());
 		textarea = new JTextArea();
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
 		JButton saveButton = new JButton("Save");
 		JButton cancelButton = new JButton("Cancel");
 
@@ -45,8 +52,8 @@ public class DescriptionEditor extends JDialog {
 		buttonPanel.add(saveButton);
 		buttonPanel.add(cancelButton);
 
-		add(new JScrollPane(textarea), "w 100%, h 100%,span,wrap");
-		add(buttonPanel, "align r");
+		dialog.add(new JScrollPane(textarea), "w 100%, h 100%,span,wrap");
+		dialog.add(buttonPanel, "align r");
 
 		createListeners(saveButton, cancelButton);
 	}
@@ -58,28 +65,28 @@ public class DescriptionEditor extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				activeSession.getActiveShot().setDescription(textarea.getText());
 				saveScreenShotDescriptionActionListener.actionPerformed(null);
-				DescriptionEditor.this.setVisible(false);
+				dialog.setVisible(false);
 			}
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DescriptionEditor.this.setVisible(false);
+				dialog.setVisible(false);
 			}
 		});
 
-		getRootPane().registerKeyboardAction(new ActionListener() {
+		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DescriptionEditor.this.setVisible(false);
+				dialog.setVisible(false);
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	public void open() {
-		this.setTitle(activeSession.getActiveShot() + " - description");
+		dialog.setTitle(activeSession.getActiveShot() + " - description");
 		textarea.setText(activeSession.getActiveShot().getDescription());
-		this.setVisible(true);
+		dialog.setVisible(true);
 	}
 }

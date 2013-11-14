@@ -27,23 +27,35 @@ import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.model.session.SessionMetadata;
+import com.niklim.clicktrace.view.editor.Editor;
 
 @SuppressWarnings("serial")
 @Singleton
-public class OpenSessionDialog extends JDialog {
+public class OpenSessionDialog {
+
+	JDialog dialog;
+
 	@Inject
 	private Controller controller;
 
 	@Inject
 	private SessionManager sessionManager;
 
+	@Inject
+	private Editor editor;
+
 	JTable table;
 
 	public OpenSessionDialog() {
-		this.getContentPane().setLayout(new MigLayout());
-		this.setTitle("Open session");
+	}
+
+	@Inject
+	public void init() {
+		dialog = new JDialog(editor.getFrame(), true);
+		dialog.getContentPane().setLayout(new MigLayout());
+		dialog.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -55,8 +67,8 @@ public class OpenSessionDialog extends JDialog {
 		buttonPanel.add(openButton);
 		buttonPanel.add(cancelButton);
 
-		add(new JScrollPane(table), "wrap");
-		add(buttonPanel, "align r");
+		dialog.add(new JScrollPane(table), "wrap");
+		dialog.add(buttonPanel, "align r");
 
 		createListeners(openButton, cancelButton);
 	}
@@ -65,7 +77,7 @@ public class OpenSessionDialog extends JDialog {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					OpenSessionDialog.this.setVisible(false);
+					dialog.setVisible(false);
 					controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
 				}
 			}
@@ -85,7 +97,7 @@ public class OpenSessionDialog extends JDialog {
 			}
 		});
 
-		getRootPane().registerKeyboardAction(new ActionListener() {
+		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				close(false);
@@ -95,11 +107,11 @@ public class OpenSessionDialog extends JDialog {
 
 	public void open() {
 		loadSessions();
-		this.setVisible(true);
+		dialog.setVisible(true);
 	}
 
 	private void close(boolean openSession) {
-		OpenSessionDialog.this.setVisible(false);
+		dialog.setVisible(false);
 		if (openSession) {
 			controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
 		}
