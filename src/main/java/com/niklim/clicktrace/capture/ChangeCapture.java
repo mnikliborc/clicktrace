@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.ImageFileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
 
@@ -29,11 +30,14 @@ public class ChangeCapture {
 	@Inject
 	private ActiveSession activeSession;
 
+	@Inject
+	private AppProperties props;
+
 	private Timer time;
 
 	public void start() {
 		time = new Timer();
-		time.schedule(new CaptureTask(), 0, 1000);
+		time.schedule(new CaptureTask(), 0, (int) ((double) 1000 / props.getCaptureFrequency()));
 	}
 
 	public void stop() {

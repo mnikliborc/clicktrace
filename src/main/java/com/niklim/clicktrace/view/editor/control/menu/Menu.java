@@ -1,10 +1,8 @@
 package com.niklim.clicktrace.view.editor.control.menu;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
@@ -25,6 +23,9 @@ public class Menu {
 	@Inject
 	private ScreenShotMenu screenShotMenu;
 
+	@Inject
+	private ToolsMenu toolsMenu;
+
 	public Menu() {
 
 	}
@@ -36,23 +37,7 @@ public class Menu {
 		menubar.add(fileMenu.getMenu());
 		menubar.add(sessionMenu.getMenu());
 		menubar.add(screenShotMenu.getMenu());
-		menubar.add(createTools());
-	}
-
-	private JMenu createTools() {
-		JMenu tools = new JMenu("Tools");
-
-		JMenuItem toolsSettings = createToolsSettings();
-		tools.add(toolsSettings);
-		return tools;
-	}
-
-	private JMenuItem createToolsSettings() {
-		return createMenuItem("Settings", new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				// TODO implement
-			}
-		});
+		menubar.add(toolsMenu.getMenu());
 	}
 
 	public static JMenuItem createMenuItem(String label, ActionListener listener) {

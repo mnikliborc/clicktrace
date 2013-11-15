@@ -5,14 +5,18 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.AppProperties;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.capture.ChangeCapture;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.editor.SettingsDialog;
 
 @Singleton
 public class Controller {
@@ -27,6 +31,12 @@ public class Controller {
 
 	@Inject
 	private SessionManager sessionManager;
+
+	@Inject
+	private AppProperties props;
+
+	@Inject
+	private SettingsDialog settingsDialog;
 
 	public void startSession() {
 		activeSession.setRecording(true);
@@ -102,12 +112,17 @@ public class Controller {
 	}
 
 	public void editScreenShot() {
-		try {
-			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
-					+ activeSession.getActiveShot().getSession().getDirname() + "\\" + activeSession.getActiveShot().getFilename());
-			pb.start();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (Strings.isNullOrEmpty(props.getImageEditorPath())) {
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.NO_EDITOR_PATH_SET);
+			settingsDialog.open();
+		} else {
+			try {
+				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions\\"
+						+ activeSession.getActiveShot().getSession().getDirname() + "\\" + activeSession.getActiveShot().getFilename());
+				pb.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

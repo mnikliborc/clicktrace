@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -20,15 +21,11 @@ import com.niklim.clicktrace.view.editor.control.ControlView;
 import com.niklim.clicktrace.view.editor.control.Toolbar;
 import com.niklim.clicktrace.view.editor.control.menu.Menu;
 import com.niklim.clicktrace.view.editor.session.ScreenShotView;
-import com.niklim.clicktrace.view.editor.session.SessionView;
 
 @Singleton
 public class Editor {
 
 	private JFrame frame;
-
-	@Inject
-	private SessionView sessionView;
 
 	@Inject
 	private ScreenShotView screenShotView;
@@ -82,7 +79,7 @@ public class Editor {
 		splitPane.setTopComponent(controlView.getComponent());
 		splitPane.setBottomComponent(screenShotView.getPanel());
 
-		frame.add(splitPane);
+		frame.add(new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 		frame.setJMenuBar(menu.getMenuBar());
 
 		SwingUtilities.invokeLater(new Runnable() {

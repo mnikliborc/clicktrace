@@ -9,7 +9,6 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class AppProperties {
-	private static final String JIRA_PASSWORD = "jira.password";
 	private static final String JIRA_USERNAME = "jira.username";
 	private static final String JIRA_URL = "jira.url";
 	private static final String CAPTURE_DIM_RIGHT_BOTTOM_Y = "capture.dim.rightBottomY";
@@ -47,11 +46,11 @@ public class AppProperties {
 		prop.setProperty(IMAGE_EDITOR_PATH, imageEditorPath);
 	}
 
-	public int getCaptureFrequency() {
-		return prop.getInt(CAPTURE_FREQUENCY);
+	public double getCaptureFrequency() {
+		return prop.getDouble(CAPTURE_FREQUENCY);
 	}
 
-	public void setCaptureFrequency(int captureFrequency) {
+	public void setCaptureFrequency(double captureFrequency) {
 		prop.setProperty(CAPTURE_FREQUENCY, captureFrequency);
 	}
 
@@ -80,24 +79,21 @@ public class AppProperties {
 	}
 
 	public JiraConfig getJiraConfig() {
-		return new JiraConfig(prop.getString(JIRA_URL), prop.getString(JIRA_USERNAME), prop.getString(JIRA_PASSWORD));
+		return new JiraConfig(prop.getString(JIRA_URL), prop.getString(JIRA_USERNAME));
 	}
 
 	public void setJiraConfig(JiraConfig conf) {
 		prop.setProperty(JIRA_URL, conf.getUrl());
 		prop.setProperty(JIRA_USERNAME, conf.getUsername());
-		prop.setProperty(JIRA_PASSWORD, conf.getPassword());
 	}
 
 	public static class JiraConfig {
 		private String url;
 		private String username;
-		private String password;
 
-		public JiraConfig(String url, String username, String password) {
+		public JiraConfig(String url, String username) {
 			this.url = url;
 			this.username = username;
-			this.password = password;
 		}
 
 		public String getUrl() {
@@ -108,8 +104,5 @@ public class AppProperties {
 			return username;
 		}
 
-		public String getPassword() {
-			return password;
-		}
 	}
 }
