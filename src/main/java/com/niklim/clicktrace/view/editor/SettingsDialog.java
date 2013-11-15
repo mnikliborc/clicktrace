@@ -157,7 +157,9 @@ public class SettingsDialog {
 
 	private void createJiraPanel() {
 		jiraUrl = new JTextField();
+		jiraUrl.setName("jiraUrl");
 		jiraUsername = new JTextField();
+		jiraUsername.setName("jiraUsername");
 
 		JLabel label = new JLabel("JIRA");
 		Font font = label.getFont();
