@@ -54,7 +54,7 @@ public class ControlView {
 	@Inject
 	private OpenScreenShotDescriptionActionListener changeScreenShotDescritpionActionListener;
 
-	private JPanel panel = new JPanel(new MigLayout());
+	private JPanel panel = new JPanel(new MigLayout("ins 0"));
 	private JPanel controlPanel = new JPanel();
 	private JComboBox<ScreenShot> imagesComboBox = new JComboBox<ScreenShot>();
 

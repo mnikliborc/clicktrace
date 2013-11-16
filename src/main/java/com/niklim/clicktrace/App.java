@@ -9,6 +9,7 @@ import com.niklim.clicktrace.capture.CaptureModule;
 import com.niklim.clicktrace.capture.MouseCapture;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.controller.ControllerModule;
+import com.niklim.clicktrace.controller.KeyboardController;
 
 //A. SCREEN CAPTURE
 //1. take screenshot
@@ -37,6 +38,7 @@ public class App {
 	public static void main(String[] args) {
 		Injector injector = Guice.createInjector(new ControllerModule(), new CaptureModule());
 		injector.getInstance(MouseCapture.class);
+		injector.getInstance(KeyboardController.class);
 		injector.getInstance(Controller.class);
 
 		log.info("app start");

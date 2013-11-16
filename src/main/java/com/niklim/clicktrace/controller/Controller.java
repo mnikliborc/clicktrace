@@ -39,6 +39,10 @@ public class Controller {
 	private SettingsDialog settingsDialog;
 
 	public void startSession() {
+		if (!activeSession.isSessionOpen()) {
+			return;
+		}
+
 		activeSession.setRecording(true);
 
 		editor.sessionStateChanged();
@@ -48,6 +52,10 @@ public class Controller {
 	}
 
 	public void stopSession() {
+		if (!activeSession.isSessionOpen()) {
+			return;
+		}
+
 		changeCapture.stop();
 		activeSession.setRecording(false);
 		editor.sessionStateChanged();

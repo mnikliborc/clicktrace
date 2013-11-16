@@ -32,15 +32,12 @@ public class MouseCapture implements NativeMouseInputListener {
 
 	public MouseCapture() {
 		try {
-			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException ex) {
-			System.err.println("There was a problem registering the native hook.");
-			System.err.println(ex.getMessage());
-
-			System.exit(1);
+			if (!GlobalScreen.isNativeHookRegistered()) {
+				GlobalScreen.registerNativeHook();
+			}
+		} catch (NativeHookException e) {
+			e.printStackTrace();
 		}
-
-		// Add the appropriate listeners for the example object.
 		GlobalScreen.getInstance().addNativeMouseListener(this);
 	}
 

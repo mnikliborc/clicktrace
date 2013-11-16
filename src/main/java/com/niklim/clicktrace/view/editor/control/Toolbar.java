@@ -74,37 +74,37 @@ public class Toolbar {
 		toolbar.setFloatable(false);
 		toolbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY));
 
-		toolbar.add(createIcon("New session", Icons.NEW_SESSION, newSessionActionListener));
+		toolbar.add(createButton("New session", Icons.NEW_SESSION, newSessionActionListener));
 		toolbar.addSeparator();
-		toolbar.add(createIcon("Open session", Icons.OPEN_SESSION, openSessionActionListener));
+		toolbar.add(createButton("Open session", Icons.OPEN_SESSION, openSessionActionListener));
 		toolbar.addSeparator();
 
-		deleteSession = createIcon("Delete session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener);
+		deleteSession = createButton("Delete session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener);
 		deleteSession.setEnabled(false);
 		toolbar.add(deleteSession);
 
 		toolbar.addSeparator();
-		refreshSession = createIcon("Refresh session", Icons.REFRESH_SESSION, refreshSessionActionListener);
+		refreshSession = createButton("Refresh session", Icons.REFRESH_SESSION, refreshSessionActionListener);
 		refreshSession.setEnabled(false);
 		toolbar.add(refreshSession);
 
 		toolbar.addSeparator();
-		startSession = createIcon("Record", Icons.START_SESSION, startSessionActionListener);
+		startSession = createButton("Record", Icons.START_SESSION, startSessionActionListener);
 		startSession.setEnabled(false);
 		toolbar.add(startSession);
 
 		toolbar.addSeparator();
-		stopSession = createIcon("Pause", Icons.STOP_SESSION, stopSessionActionListener);
+		stopSession = createButton("Pause", Icons.STOP_SESSION, stopSessionActionListener);
 		stopSession.setEnabled(false);
 		toolbar.add(stopSession);
-
 	}
 
-	public JButton createIcon(String tooltip, String icon, final ActionListener listener) {
-		JButton newSession = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
-		newSession.setToolTipText(tooltip);
-		newSession.addActionListener(listener);
-		return newSession;
+	public JButton createButton(String tooltip, String icon, final ActionListener listener) {
+		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
+		button.setToolTipText(tooltip);
+		button.addActionListener(listener);
+		button.setFocusPainted(false);
+		return button;
 	}
 
 	public JToolBar getToolbar() {
