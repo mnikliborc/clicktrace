@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 
@@ -15,15 +15,15 @@ public class ScreenShotLoader {
 	public List<ScreenShot> load(Session session) {
 		PropertiesConfiguration prop = new PropertiesConfiguration();
 		try {
-			prop = new PropertiesConfiguration(ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator
-					+ ImageFileManager.PROP_FILENAME);
+			prop = new PropertiesConfiguration(FileManager.SESSIONS_DIR + session.getName() + File.separator
+					+ FileManager.PROP_FILENAME);
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}
 
 		List<ScreenShot> shots = new ArrayList<ScreenShot>();
-		for (String shotFilename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + session.getDirname(),
-				new ImageFileManager.ImageFilter())) {
+		for (String shotFilename : FileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(),
+				new FileManager.ImageFilter())) {
 			ScreenShot shot = new ScreenShot();
 			shot.setFilename(shotFilename);
 			shot.setSession(session);

@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import com.google.inject.Injector;
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
 
 public abstract class AbstractEditorTest {
@@ -33,8 +33,8 @@ public abstract class AbstractEditorTest {
 	}
 
 	private void prepareTestDir() {
-		ImageFileManager.SESSIONS_DIR = "target/testsessions/";
-		File sessionDir = new File(ImageFileManager.SESSIONS_DIR);
+		FileManager.SESSIONS_DIR = "target/testsessions/";
+		File sessionDir = new File(FileManager.SESSIONS_DIR);
 
 		if (!sessionDir.exists()) {
 			sessionDir.mkdir();
@@ -49,7 +49,7 @@ public abstract class AbstractEditorTest {
 		try {
 			File testSessionDir = new File("src/test/resources/" + getSessionsData().getPath());
 			for (File session : testSessionDir.listFiles()) {
-				FileUtils.copyDirectory(session, new File(ImageFileManager.SESSIONS_DIR + session.getName()));
+				FileUtils.copyDirectory(session, new File(FileManager.SESSIONS_DIR + session.getName()));
 			}
 		} catch (IOException e) {
 			new RuntimeException(e);
@@ -58,7 +58,7 @@ public abstract class AbstractEditorTest {
 
 	@After
 	public void cleanup() {
-		File sessionDir = new File(ImageFileManager.SESSIONS_DIR);
+		File sessionDir = new File(FileManager.SESSIONS_DIR);
 
 		for (File file : sessionDir.listFiles()) {
 			for (File sub : file.listFiles()) {

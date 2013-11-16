@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.AppProperties;
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
 
 @Singleton
@@ -60,7 +60,7 @@ public class ChangeCapture {
 
 		if (detector.detect(image)) {
 			try {
-				ImageFileManager.saveImage(image, activeSession.getSession().getDirname());
+				FileManager.saveImage(image, activeSession.getSession().getName());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

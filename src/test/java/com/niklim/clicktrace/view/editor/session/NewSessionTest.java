@@ -10,7 +10,7 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
 import org.junit.Test;
 
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.view.editor.AbstractEditorTest;
 import com.niklim.clicktrace.view.editor.TestSessionsData;
 
@@ -35,12 +35,12 @@ public class NewSessionTest extends AbstractEditorTest {
 
 		assertThat(activeSession.isSessionOpen()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
-		assertThat(activeSession.getSession().getDirname()).isEqualTo(sessionName);
+		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
 
-		boolean sessionDirExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName));
+		boolean sessionDirExists = Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();
-		boolean propsFileExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName + File.separator
-				+ ImageFileManager.PROP_FILENAME));
+		boolean propsFileExists = Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName + File.separator
+				+ FileManager.PROP_FILENAME));
 		assertThat(propsFileExists).isTrue();
 
 		for (String item : new String[] { "Start recording", "Refresh session", "Select all screenshots", "Deselect all screenshots",
@@ -71,7 +71,7 @@ public class NewSessionTest extends AbstractEditorTest {
 		assertThat(optionPane).isNotNull();
 		optionPane.button().click();
 
-		boolean sessionDirExists = Files.exists(Paths.get(ImageFileManager.SESSIONS_DIR + sessionName));
+		boolean sessionDirExists = Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();
 	}
 

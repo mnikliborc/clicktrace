@@ -57,8 +57,10 @@ public class Controller {
 		try {
 			Session session = sessionManager.createSession(sessionName);
 			openSession(session);
-		} catch (SessionAlreadyExistsException ex) {
-			JOptionPane.showMessageDialog(editor.getFrame(), "Could not create session. Already exists.");
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
+		} catch (SessionAlreadyExistsException e) {
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
 	}
 
@@ -118,7 +120,7 @@ public class Controller {
 		} else {
 			try {
 				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions\\"
-						+ activeSession.getActiveShot().getSession().getDirname() + "\\" + activeSession.getActiveShot().getFilename());
+						+ activeSession.getActiveShot().getSession().getName() + "\\" + activeSession.getActiveShot().getFilename());
 				pb.start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -176,10 +178,15 @@ public class Controller {
 		sessionManager.saveShotDescription(activeSession.getSession(), activeSession.getActiveShot());
 	}
 
-	public void changeActiveSessionLabel(String label) {
+	public void changeActiveSessionName(String name) {
 		Session session = activeSession.getSession();
-		session.setLabel(label);
-		sessionManager.saveSessionLabel(session);
+		try {
+			sessionManager.changeSessionName(session, name);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
+		} catch (SessionAlreadyExistsException e) {
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
+		}
 	}
 
 	public void showFirstScreenShot() {

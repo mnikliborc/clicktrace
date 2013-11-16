@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionMetadata;
 
@@ -16,7 +16,7 @@ public class SessionMetadataHelper {
 	public SessionMetadata loadMetadata(Session session) {
 		int size = session.getShots().size();
 		try {
-			Path sessionDir = Paths.get(ImageFileManager.SESSIONS_DIR + session.getDirname());
+			Path sessionDir = Paths.get(FileManager.SESSIONS_DIR + session.getName());
 			BasicFileAttributes attr = Files.readAttributes(sessionDir, BasicFileAttributes.class);
 			return new SessionMetadata(new Date(attr.creationTime().toMillis()), new Date(attr.lastModifiedTime()
 					.toMillis()), size);

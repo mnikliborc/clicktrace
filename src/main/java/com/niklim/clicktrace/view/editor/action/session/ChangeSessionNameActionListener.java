@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.Controller;
 
-public class ChangeSessionLabelActionListener implements ActionListener {
+public class ChangeSessionNameActionListener implements ActionListener {
 
 	@Inject
 	private Controller controller;
@@ -21,7 +21,7 @@ public class ChangeSessionLabelActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		String label = JOptionPane.showInputDialog("Set session name", activeSession.getSession());
 		if (label != null) {
-			controller.changeActiveSessionLabel(label);
+			controller.changeActiveSessionName(label);
 		}
 	}
 

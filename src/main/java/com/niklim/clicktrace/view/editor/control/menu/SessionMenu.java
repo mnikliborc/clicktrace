@@ -6,7 +6,7 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.view.editor.action.session.ChangeSessionLabelActionListener;
+import com.niklim.clicktrace.view.editor.action.session.ChangeSessionNameActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeselectAllScreenShotsActionListener;
@@ -52,7 +52,7 @@ public class SessionMenu {
 	private DeselectAllScreenShotsActionListener deselectAllScreenShotsActionListener;
 
 	@Inject
-	private ChangeSessionLabelActionListener changeSessionLabelActionListener;
+	private ChangeSessionNameActionListener changeSessionNameActionListener;
 
 	public void sessionStateChanged() {
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
@@ -96,7 +96,7 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionChangeLabel() {
-		JMenuItem menuItem = Menu.createMenuItem("Change label", changeSessionLabelActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Change name", changeSessionNameActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

@@ -1,6 +1,7 @@
 package com.niklim.clicktrace.model.session;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,23 +9,20 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 
 @Singleton
 public class SessionManager {
 
 	private static final String PROP_SUFIX_LABEL = ".label";
-	private static final String PROP_SESSION_LABEL = "session.label";
 	private static final String PROP_SUFIX_DESCRIPTION = ".description";
 
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
-		for (String sessionName : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR, new ImageFileManager.TrashFilter())) {
+		for (String sessionName : FileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
 			Session session = new Session();
-			session.setDirname(sessionName);
-
-			session.setLabel(loadSessionProperty(session).getString(PROP_SESSION_LABEL));
+			session.setName(sessionName);
 
 			sessions.add(session);
 		}
@@ -32,19 +30,19 @@ public class SessionManager {
 		return sessions;
 	}
 
-	public Session createSession(String sessionName) throws SessionAlreadyExistsException {
-		Session session = new Session();
-		session.setDirname(sessionName);
-		if (!ImageFileManager.createSessionDir(sessionName)) {
+	public Session createSession(String sessionName) throws SessionAlreadyExistsException, IOException {
+		if (FileManager.sessionExists(sessionName)) {
 			throw new SessionAlreadyExistsException();
 		}
 
-		ImageFileManager.createSessionPropsFile(sessionName);
-		return session;
-	}
+		FileManager.createSession(sessionName);
 
-	public void saveSessionLabel(Session session) {
-		saveSessionProperty(session, PROP_SESSION_LABEL, session.getLabel());
+		Session session = new Session();
+		session.setName(sessionName);
+
+		FileManager.createSessionPropsFile(sessionName);
+		return session;
+
 	}
 
 	public void saveShotLabel(Session session, ScreenShot shot) {
@@ -55,20 +53,9 @@ public class SessionManager {
 		saveSessionProperty(session, shot.getFilename() + PROP_SUFIX_DESCRIPTION, shot.getDescription());
 	}
 
-	private PropertiesConfiguration loadSessionProperty(Session session) {
-		String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
-		PropertiesConfiguration prop = null;
-		try {
-			prop = new PropertiesConfiguration(propFilePath);
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-		}
-		return prop;
-	}
-
 	private void saveSessionProperty(Session session, String key, String value) {
 		try {
-			String propFilePath = ImageFileManager.SESSIONS_DIR + session.getDirname() + File.separator + ImageFileManager.PROP_FILENAME;
+			String propFilePath = FileManager.SESSIONS_DIR + session.getName() + File.separator + FileManager.PROP_FILENAME;
 			PropertiesConfiguration prop = new PropertiesConfiguration(propFilePath);
 			prop.setProperty(key, value);
 			prop.save();
@@ -77,4 +64,15 @@ public class SessionManager {
 		}
 	}
 
+	public void changeSessionName(Session session, String newName) throws SessionAlreadyExistsException, IOException {
+		if (!FileManager.canCreateSession(newName)) {
+			throw new IOException();
+		}
+		if (FileManager.sessionExists(newName)) {
+			throw new SessionAlreadyExistsException();
+		}
+
+		FileManager.renameSession(session.getName(), newName);
+		session.setName(newName);
+	}
 }

@@ -6,22 +6,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
 
 public class SessionDeleter {
 	public void delete(Session delete) {
-		for (String filename : ImageFileManager.loadFileNames(ImageFileManager.SESSIONS_DIR + delete.getDirname(),
-				new ImageFileManager.TrashFilter())) {
+		for (String filename : FileManager.loadFileNames(FileManager.SESSIONS_DIR + delete.getName(),
+				new FileManager.TrashFilter())) {
 			try {
-				Path filePath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getDirname() + File.separator + filename);
+				Path filePath = Paths.get(FileManager.SESSIONS_DIR + delete.getName() + File.separator + filename);
 				Files.delete(filePath);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		try {
-			Path dirPath = Paths.get(ImageFileManager.SESSIONS_DIR + delete.getDirname());
+			Path dirPath = Paths.get(FileManager.SESSIONS_DIR + delete.getName());
 			Files.delete(dirPath);
 		} catch (IOException e) {
 			e.printStackTrace();

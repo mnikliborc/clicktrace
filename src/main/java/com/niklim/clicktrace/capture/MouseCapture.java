@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.ImageFileManager;
+import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
 
 @Singleton
@@ -49,7 +49,7 @@ public class MouseCapture implements NativeMouseInputListener {
 
 		drawClick(image, e.getX(), e.getY(), e.getButton());
 		try {
-			ImageFileManager.saveImage(image, activeSession.getSession().getDirname());
+			FileManager.saveImage(image, activeSession.getSession().getName());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

@@ -141,7 +141,7 @@ public class Editor {
 
 	public void edit(ScreenShot shot) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + shot.getSession().getDirname()
+			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\" + shot.getSession().getName()
 					+ "\\" + shot.getFilename());
 			pb.start();
 		} catch (IOException e) {

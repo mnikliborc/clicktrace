@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-public class ImageFileManager {
+public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 	public static final String PROP_FILENAME = ".prop.txt";
@@ -93,5 +95,29 @@ public class ImageFileManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean sessionExists(String sessionName) {
+		return Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
+	}
+
+	public static void renameSession(String oldName, String newName) throws IOException {
+		Files.move(Paths.get(FileManager.SESSIONS_DIR + oldName), Paths.get(FileManager.SESSIONS_DIR + newName));
+	}
+
+	public static void createSession(String sessionName) throws IOException {
+		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
+		if (!newDir.mkdir()) {
+			throw new IOException(FileManager.SESSIONS_DIR + sessionName);
+		}
+	}
+
+	public static boolean canCreateSession(String sessionName) {
+		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
+		boolean canCreate = newDir.mkdir();
+		if (canCreate) {
+			newDir.delete();
+		}
+		return canCreate;
 	}
 }

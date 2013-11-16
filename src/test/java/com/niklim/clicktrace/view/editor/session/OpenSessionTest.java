@@ -53,6 +53,6 @@ public class OpenSessionTest extends AbstractEditorTest {
 		ActiveSession activeSession = injector.getInstance(ActiveSession.class);
 		assertThat(activeSession.isSessionOpen()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
-		assertThat(activeSession.getSession().getDirname()).isEqualTo(sessionName);
+		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
 	}
 }
