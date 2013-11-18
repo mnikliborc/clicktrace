@@ -55,7 +55,7 @@ public class SessionManager {
 
 	private void saveSessionProperty(Session session, String key, String value) {
 		try {
-			String propFilePath = FileManager.SESSIONS_DIR + session.getName() + File.separator + FileManager.PROP_FILENAME;
+			String propFilePath = FileManager.SESSIONS_DIR + session.getName() + File.separator + FileManager.SESSION_PROPS_FILENAME;
 			PropertiesConfiguration prop = new PropertiesConfiguration(propFilePath);
 			prop.setProperty(key, value);
 			prop.save();

@@ -7,16 +7,19 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.niklim.clicktrace.capture.mouse.CollectorMouseCapture;
+import com.niklim.clicktrace.capture.mouse.MouseCapture;
 
 public class CaptureModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bind(MouseCapture.class).to(CollectorMouseCapture.class);
 	}
 
 	@Provides
 	List<ChangeVoter> provideChangeVoters() {
-		return Lists.<ChangeVoter> newArrayList(new PixelVoter());
+		return Lists.<ChangeVoter> newArrayList(new NoVoter());
 	}
 
 	@Provides

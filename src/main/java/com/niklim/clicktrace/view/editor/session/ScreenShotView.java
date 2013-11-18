@@ -3,8 +3,10 @@ package com.niklim.clicktrace.view.editor.session;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -16,6 +18,7 @@ import org.imgscalr.Scalr;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.model.session.ScreenShot.Click;
 import com.niklim.clicktrace.view.editor.Editor;
 
 @Singleton
@@ -35,12 +38,23 @@ public class ScreenShotView {
 		int thumbWidth = (int) editor.getEditorDimension().getWidth();
 		int thumbHeight = (int) editor.getEditorDimension().getHeight();
 		try {
-			BufferedImage image = scaleImage(shot.getImage(), thumbWidth);
+			BufferedImage image = scaleImage(markClicks(shot.getImage(), shot.getClicks()), thumbWidth);
 			double heightWidthRatio = (double) thumbHeight / thumbWidth;
 			panel.add(new ThumbPanel(image, thumbWidth, (int) (thumbWidth * heightWidthRatio)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private BufferedImage markClicks(BufferedImage image, List<Click> clicks) {
+		Graphics2D g = image.createGraphics();
+		for (Click click : clicks) {
+			g.setColor(Color.RED);
+			g.drawOval(click.getX() - 15, click.getY() - 15, 30, 30);
+			g.drawChars(String.valueOf(click.getButton()).toCharArray(), 0, 1, click.getX() - 15, click.getY() - 15);
+			g.dispose();
+		}
+		return image;
 	}
 
 	private BufferedImage scaleImage(BufferedImage image, int thumbWidth) throws IOException {

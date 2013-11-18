@@ -150,7 +150,7 @@ public class SettingsDialog {
 			}
 		});
 
-		dialog.add(new JLabel("Editor application path"));
+		dialog.add(new JLabel("Image editing program"));
 		dialog.add(imageEditorPath, "");
 		dialog.add(imageEditorPathChangeButton, "wrap");
 	}

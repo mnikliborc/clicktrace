@@ -40,7 +40,7 @@ public class NewSessionTest extends AbstractEditorTest {
 		boolean sessionDirExists = Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
 		assertThat(sessionDirExists).isTrue();
 		boolean propsFileExists = Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName + File.separator
-				+ FileManager.PROP_FILENAME));
+				+ FileManager.SESSION_PROPS_FILENAME));
 		assertThat(propsFileExists).isTrue();
 
 		for (String item : new String[] { "Start recording", "Refresh session", "Select all screenshots", "Deselect all screenshots",

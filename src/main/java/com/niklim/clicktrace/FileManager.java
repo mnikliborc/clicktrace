@@ -14,10 +14,13 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+
 public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
-	public static final String PROP_FILENAME = ".prop.txt";
+	public static final String SESSION_PROPS_FILENAME = ".prop.txt";
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 
@@ -31,7 +34,7 @@ public class FileManager {
 	public static class ImageFilter implements FilenameFilter {
 		@Override
 		public boolean accept(File file, String name) {
-			return !".".equals(name) && !"..".equals(name) && !PROP_FILENAME.equals(name);
+			return !".".equals(name) && !"..".equals(name) && !SESSION_PROPS_FILENAME.equals(name);
 		}
 	}
 
@@ -39,11 +42,12 @@ public class FileManager {
 		createIfDirNotExists(SESSIONS_DIR);
 	}
 
-	public static void saveImage(BufferedImage image, String sessionName) throws IOException {
+	public static String saveImage(BufferedImage image, String sessionName) throws IOException {
 		String filename = format.format(new Date()) + ".png";
 		String filePath = createFilePath(sessionName, filename);
 
 		ImageIO.write(image, "png", new File(filePath));
+		return filename;
 	}
 
 	private static String createFilePath(String sessionName, String filename) {
@@ -89,7 +93,7 @@ public class FileManager {
 	}
 
 	public static void createSessionPropsFile(String sessionName) {
-		File f = new File(SESSIONS_DIR + sessionName + File.separator + PROP_FILENAME);
+		File f = new File(SESSIONS_DIR + sessionName + File.separator + SESSION_PROPS_FILENAME);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -119,5 +123,16 @@ public class FileManager {
 			newDir.delete();
 		}
 		return canCreate;
+	}
+
+	public static PropertiesConfiguration loadSessionProperties(String sessionName) {
+		PropertiesConfiguration sessionProps;
+		try {
+			sessionProps = new PropertiesConfiguration(FileManager.SESSIONS_DIR + sessionName + File.separator + SESSION_PROPS_FILENAME);
+		} catch (ConfigurationException e) {
+			e.printStackTrace();
+			sessionProps = new PropertiesConfiguration();
+		}
+		return sessionProps;
 	}
 }

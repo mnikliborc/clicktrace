@@ -117,13 +117,12 @@ public class OpenSessionDialog {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	private void loadSessions() {
 		List<Session> sessions = sessionManager.loadAll();
 		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots", "Created", "Modified" }, sessions.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				// all cells false
+				// all cells not editable
 				return false;
 			}
 		};
