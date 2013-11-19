@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.view.editor.action.screenshot.OpenSearchDialogActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeselectAllScreenShotsActionListener;
@@ -56,6 +57,9 @@ public class Toolbar {
 	@Inject
 	private OpenSessionActionListener openSessionActionListener;
 
+	@Inject
+	private OpenSearchDialogActionListener openSearchDialogActionListener;
+
 	private JButton deleteSession;
 
 	private JButton refreshSession;
@@ -77,6 +81,9 @@ public class Toolbar {
 		toolbar.add(createButton("New session", Icons.NEW_SESSION, newSessionActionListener));
 		toolbar.addSeparator();
 		toolbar.add(createButton("Open session", Icons.OPEN_SESSION, openSessionActionListener));
+		toolbar.addSeparator();
+
+		toolbar.add(createButton("Search", Icons.SEARCH, openSearchDialogActionListener));
 		toolbar.addSeparator();
 
 		deleteSession = createButton("Delete session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener);

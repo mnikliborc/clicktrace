@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace.view.editor.dialog;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,6 +28,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.AppProperties.JiraConfig;
+import com.niklim.clicktrace.view.editor.Editor;
 
 @Singleton
 public class SettingsDialog {

@@ -8,18 +8,26 @@ import javax.swing.JMenuItem;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.view.editor.SettingsDialog;
+import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.view.editor.action.screenshot.OpenSearchDialogActionListener;
+import com.niklim.clicktrace.view.editor.dialog.SettingsDialog;
 
 @Singleton
 public class ToolsMenu {
 	@Inject
 	private SettingsDialog settingsDialog;
 
+	@Inject
+	private OpenSearchDialogActionListener openSearchDialogActionListener;
+
 	public JMenu getMenu() {
 		JMenu tools = new JMenu("Tools");
 
 		JMenuItem toolsSettings = createToolsSettings();
+		JMenuItem toolsSearch = createToolsSearch();
+
 		tools.add(toolsSettings);
+		tools.add(toolsSearch);
 		return tools;
 	}
 
@@ -30,4 +38,9 @@ public class ToolsMenu {
 			}
 		});
 	}
+
+	private JMenuItem createToolsSearch() {
+		return Menu.createMenuItem("Search", Icons.SEARCH, openSearchDialogActionListener);
+	}
+
 }

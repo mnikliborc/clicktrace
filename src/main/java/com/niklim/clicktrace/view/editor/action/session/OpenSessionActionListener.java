@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.view.editor.control.OpenSessionDialog;
+import com.niklim.clicktrace.view.editor.dialog.OpenSessionDialog;
 
 public class OpenSessionActionListener implements ActionListener {
 	@Inject

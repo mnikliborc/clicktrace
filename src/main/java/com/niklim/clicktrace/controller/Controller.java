@@ -16,7 +16,7 @@ import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
 import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
-import com.niklim.clicktrace.view.editor.SettingsDialog;
+import com.niklim.clicktrace.view.editor.dialog.SettingsDialog;
 
 @Singleton
 public class Controller {
@@ -221,5 +221,10 @@ public class Controller {
 		int nextIndex = session.getShots().size() - 1;
 
 		showScreenShot(nextIndex);
+	}
+
+	public void openSessionOnScreenShot(ScreenShot selectedShot) {
+		openSession(selectedShot.getSession());
+		editor.showScreenShot(selectedShot, false);
 	}
 }

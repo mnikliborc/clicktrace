@@ -20,6 +20,7 @@ public class Icons {
 	public static final String LAST_SCREENSHOT = "icons/gnome_go_last.png";
 	public static final String FIRST_SCREENSHOT = "icons/gnome_go_first.png";
 	public static final String DESCRIPTION_SCREENSHOT = "icons/desc_edit.png";
+	public static final String SEARCH = "icons/search.png";
 
 	public static Image createIconImage(String path, String description) {
 		URL imageURL = Thread.currentThread().getContextClassLoader().getResource(path);

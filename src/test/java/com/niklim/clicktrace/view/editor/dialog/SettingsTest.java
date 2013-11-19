@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor.settings;
+package com.niklim.clicktrace.view.editor.dialog;
 
 import static org.fest.assertions.Assertions.assertThat;
 

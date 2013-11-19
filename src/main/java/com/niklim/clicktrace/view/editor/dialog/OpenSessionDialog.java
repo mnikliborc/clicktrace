@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor.control;
+package com.niklim.clicktrace.view.editor.dialog;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
