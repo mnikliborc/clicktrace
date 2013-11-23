@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
@@ -32,16 +34,22 @@ public class DescriptionEditor {
 	private ActiveSession activeSession;
 
 	@Inject
+	private Editor editor;
+
+	@Inject
 	private SaveScreenShotDescriptionActionListener saveScreenShotDescriptionActionListener;
+
+	private TextComponentHistory history;
 
 	public DescriptionEditor() {
 	}
 
 	@Inject
 	public void init() {
-		dialog = new JDialog();
+		dialog = new JDialog(editor.getFrame());
 		dialog.getContentPane().setLayout(new MigLayout());
 		textarea = new JTextArea();
+		history = new TextComponentHistory(textarea);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
@@ -59,6 +67,18 @@ public class DescriptionEditor {
 	}
 
 	public void createListeners(JButton saveButton, JButton cancelButton) {
+		textarea.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				history.store();
+			}
+		});
+
+		textarea.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(history));
 
 		saveButton.addActionListener(new ActionListener() {
 			@Override
@@ -72,7 +92,7 @@ public class DescriptionEditor {
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
+				close();
 			}
 		});
 
@@ -87,6 +107,18 @@ public class DescriptionEditor {
 	public void open() {
 		dialog.setTitle(activeSession.getActiveShot() + " - description");
 		textarea.setText(activeSession.getActiveShot().getDescription());
+
+		resetHistory();
+
 		dialog.setVisible(true);
 	}
+
+	private void resetHistory() {
+		history.reset(activeSession.getActiveShot().getDescription());
+	}
+
+	public void close() {
+		dialog.setVisible(false);
+	}
+
 }

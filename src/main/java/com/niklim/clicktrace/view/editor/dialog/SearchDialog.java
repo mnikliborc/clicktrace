@@ -34,6 +34,7 @@ import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.search.SearchService;
 import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.editor.TextComponentHistory;
 
 @Singleton
 public class SearchDialog {
@@ -57,6 +58,8 @@ public class SearchDialog {
 	private JTextField searchQuery;
 	private JButton searchButton;
 
+	private TextComponentHistory history;
+
 	private String[] resultTableColumns = new String[] { "Label", "Filename", "Session", "Phrase" };
 
 	@Inject
@@ -75,6 +78,7 @@ public class SearchDialog {
 		resultTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		searchQuery = new JTextField();
+		history = new TextComponentHistory(searchQuery);
 		searchButton = new JButton("Search");
 
 		layoutElements();
@@ -112,6 +116,7 @@ public class SearchDialog {
 				}
 			}
 		});
+		searchQuery.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(history));
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override
@@ -144,10 +149,12 @@ public class SearchDialog {
 			allSessionsRadio.setSelected(true);
 		}
 
-		dialog.setVisible(true);
 		if (resultTable.getModel().getRowCount() == 0) {
 			resultTable.setModel(new DefaultTableModel());
 		}
+
+		history.reset(searchQuery.getText());
+		dialog.setVisible(true);
 	}
 
 	private void close() {

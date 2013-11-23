@@ -26,13 +26,13 @@ public class SearchService {
 	 * description containing given text.
 	 * 
 	 * @param text
-	 *            to be found
+	 *            text to be found
 	 * @param allSessions
-	 *            true when we search in all sessions, false when we search in
-	 *            active session only
+	 *            true when search should be performed in all sessions, false
+	 *            when we search in active session only
 	 * @param matchCase
-	 *            should we match letter case
-	 * @return pairs of {#link ScreenShot} and line containing searched text
+	 *            true when we should match letter case
+	 * @return pairs of {#link ScreenShot} and line containing found text
 	 */
 	public List<SimpleImmutableEntry<ScreenShot, String>> search(String text, boolean allSessions, boolean matchCase) {
 		List<Session> sessions;
