@@ -58,7 +58,7 @@ public class SearchService {
 		return results;
 	}
 
-	private SimpleImmutableEntry<ScreenShot, String> findText(ScreenShot shot, String text, boolean matchCase) {
+	SimpleImmutableEntry<ScreenShot, String> findText(ScreenShot shot, String text, boolean matchCase) {
 		String description = Strings.nullToEmpty(shot.getDescription());
 		String label = Strings.nullToEmpty(shot.getLabel());
 		String filename = Strings.nullToEmpty(shot.getFilename());
@@ -81,7 +81,7 @@ public class SearchService {
 
 	}
 
-	private String findLine(String description, String text, boolean matchCase) {
+	String findLine(String description, String text, boolean matchCase) {
 		for (String line : description.split("\n")) {
 			String l = line;
 			if (!matchCase) {
