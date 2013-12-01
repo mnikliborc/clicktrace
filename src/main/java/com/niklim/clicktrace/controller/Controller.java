@@ -67,11 +67,9 @@ public class Controller {
 			Session session = sessionManager.createSession(sessionName);
 			openSession(session);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(),
-					Messages.SESSION_NAME_WRONG_FOLDER);
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(),
-					Messages.SESSION_NAME_ALREADY_EXIST);
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
 	}
 
@@ -126,16 +124,13 @@ public class Controller {
 
 	public void editScreenShot() {
 		if (Strings.isNullOrEmpty(props.getImageEditorPath())) {
-			JOptionPane.showMessageDialog(editor.getFrame(),
-					Messages.NO_EDITOR_PATH_SET);
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.NO_EDITOR_PATH_SET);
 			settingsDialog.open();
 		} else {
 			try {
-				ProcessBuilder pb = new ProcessBuilder(
-						props.getImageEditorPath(), "sessions\\"
-								+ activeSession.getActiveShot().getSession()
-										.getName() + "\\"
-								+ activeSession.getActiveShot().getFilename());
+				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions\\"
+						+ activeSession.getActiveShot().getSession().getName() + "\\"
+						+ activeSession.getActiveShot().getFilename());
 				pb.start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -145,8 +140,7 @@ public class Controller {
 
 	public void deleteActiveScreenShot() {
 		ScreenShot shot = activeSession.getActiveShot();
-		int indexOfNewActive = Math.max(0, activeSession.getSession()
-				.getShots().indexOf(shot) - 1);
+		int indexOfNewActive = Math.max(0, activeSession.getSession().getShots().indexOf(shot) - 1);
 
 		activeSession.removeShot(shot);
 		shot.delete();
@@ -159,8 +153,7 @@ public class Controller {
 	}
 
 	public void deleteSelectedScreenshots() {
-		for (ScreenShot shot : activeSession.getSelectedShots().toArray(
-				new ScreenShot[0])) {
+		for (ScreenShot shot : activeSession.getSelectedShots().toArray(new ScreenShot[0])) {
 			activeSession.removeShot(shot);
 			shot.delete();
 		}
@@ -192,8 +185,7 @@ public class Controller {
 	}
 
 	public void saveActiveScreenShotDescription() {
-		sessionManager.saveShotDescription(activeSession.getSession(),
-				activeSession.getActiveShot());
+		sessionManager.saveShotDescription(activeSession.getSession(), activeSession.getActiveShot());
 	}
 
 	public void changeActiveSessionName(String name) {
@@ -201,11 +193,9 @@ public class Controller {
 		try {
 			sessionManager.changeSessionName(session, name);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(),
-					Messages.SESSION_NAME_WRONG_FOLDER);
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(),
-					Messages.SESSION_NAME_ALREADY_EXIST);
+			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
 	}
 
@@ -223,8 +213,7 @@ public class Controller {
 	public void showNextScreenShot() {
 		Session session = activeSession.getSession();
 		int selectedIndex = activeSession.getActiveShotIndex();
-		int nextIndex = Math.min(selectedIndex + 1,
-				session.getShots().size() - 1);
+		int nextIndex = Math.min(selectedIndex + 1, session.getShots().size() - 1);
 
 		showScreenShot(nextIndex);
 	}

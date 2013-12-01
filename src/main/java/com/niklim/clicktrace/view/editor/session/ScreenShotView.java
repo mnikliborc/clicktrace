@@ -44,12 +44,11 @@ public class ScreenShotView {
 	}
 
 	public void show(ScreenShot shot) {
-		panel.removeAll();
-
 		int thumbWidth = (int) editor.getEditorDimension().getWidth();
 		try {
 			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
 			BufferedImage imageFinal = scaleImage(imageWithClicks, thumbWidth - 40);
+			panel.removeAll();
 			panel.add(new ThumbPanel(imageFinal, imageFinal.getWidth(), imageFinal.getHeight()));
 		} catch (IOException e) {
 			e.printStackTrace();
