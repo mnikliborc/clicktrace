@@ -19,7 +19,7 @@ public class DeleteSelectedScreenShotsTest extends AbstractSystemTest {
 	@Test
 	public void shouldDeleteAll() {
 		// given
-		SystemTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, "one");
 
 		// when
 		editorFixture.menuItemWithPath("Session", "Select all screenshots").click();

@@ -36,7 +36,7 @@ public class OpenSessionTest extends AbstractSystemTest {
 	@Test
 	public void shouldOpenOnOkClick() throws InterruptedException {
 		// when
-		SystemTestSteps.openSession(editorFixture, 1);
+		SystemTestSteps.openSession(editorFixture, "two");
 
 		// then
 		try {

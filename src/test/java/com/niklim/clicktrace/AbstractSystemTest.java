@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.FrameFixture;
+import org.junit.After;
 import org.junit.Before;
 
 import com.google.inject.Injector;
@@ -43,7 +44,7 @@ public abstract class AbstractSystemTest {
 		if (!sessionDir.exists()) {
 			sessionDir.mkdir();
 		} else {
-			cleanup();
+			fileCleanup();
 		}
 
 		copySessions();
@@ -51,19 +52,16 @@ public abstract class AbstractSystemTest {
 
 	private void copySessions() {
 		try {
-			File testSessionDir = new File("src/test/resources/"
-					+ getSessionsData().getPath());
+			File testSessionDir = new File("src/test/resources/" + getSessionsData().getPath());
 			for (File session : testSessionDir.listFiles()) {
-				FileUtils.copyDirectory(session, new File(
-						FileManager.SESSIONS_DIR + session.getName()));
+				FileUtils.copyDirectory(session, new File(FileManager.SESSIONS_DIR + session.getName()));
 			}
 		} catch (IOException e) {
 			new RuntimeException(e);
 		}
 	}
 
-	// @After
-	public void cleanup() {
+	public void fileCleanup() {
 		File sessionDir = new File(FileManager.SESSIONS_DIR);
 
 		for (File file : sessionDir.listFiles()) {
@@ -72,7 +70,10 @@ public abstract class AbstractSystemTest {
 			}
 			file.delete();
 		}
+	}
 
+	@After
+	public void fixtureCleanup() {
 		if (editorFixture != null) {
 			editorFixture.cleanUp();
 		}

@@ -16,7 +16,7 @@ public class ChangeScreenShotLabelTest extends AbstractSystemTest {
 
 	@Test
 	public void shouldChangeLabel() throws InterruptedException {
-		SystemTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, "one");
 
 		assertThat(editorFixture.comboBox().contents()[0]).isEqualTo("some screenshot");
 		editorFixture.comboBox().selectItem(1);

@@ -17,7 +17,7 @@ public class ChangeScreenShotDescriptionTest extends AbstractSystemTest {
 
 	@Test
 	public void shouldChangeDescription() throws InterruptedException {
-		SystemTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, "one");
 
 		editorFixture.button(JButtonMatcher.withText("show description")).click();
 		assertThat(editorFixture.dialog().textBox().text()).isEqualTo("some description");

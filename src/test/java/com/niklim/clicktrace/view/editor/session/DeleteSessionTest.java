@@ -21,7 +21,7 @@ public class DeleteSessionTest extends AbstractSystemTest {
 	@Test
 	public void shouldDeleteSession() {
 		// given
-		SystemTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, "one");
 
 		// when
 		editorFixture.menuItemWithPath("Session", "Delete current session").click();
@@ -29,7 +29,7 @@ public class DeleteSessionTest extends AbstractSystemTest {
 
 		// then
 		editorFixture.menuItemWithPath("File", "Open session").click();
-		editorFixture.dialog().table().requireRowCount(1);
+		editorFixture.dialog().table().requireRowCount(2);
 		editorFixture.dialog().button(JButtonMatcher.withText("Cancel")).click();
 
 		try {
@@ -38,8 +38,9 @@ public class DeleteSessionTest extends AbstractSystemTest {
 		} catch (ComponentLookupException ex) {
 		}
 
-		for (String item : new String[] { "Start recording", "Stop recording", "Refresh session", "Select all screenshots",
-				"Deselect all screenshots", "Delete selected screenshots", "Delete current session" }) {
+		for (String item : new String[] { "Start recording", "Stop recording", "Refresh session",
+				"Select all screenshots", "Deselect all screenshots", "Delete selected screenshots",
+				"Delete current session" }) {
 			editorFixture.menuItemWithPath("Session", item).requireDisabled();
 		}
 	}

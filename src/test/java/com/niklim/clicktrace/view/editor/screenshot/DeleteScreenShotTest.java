@@ -18,7 +18,7 @@ public class DeleteScreenShotTest extends AbstractSystemTest {
 	@Test
 	public void shouldDeleteActive() {
 		// given
-		SystemTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, "one");
 
 		// when
 		editorFixture.comboBox().selectItem(1);
