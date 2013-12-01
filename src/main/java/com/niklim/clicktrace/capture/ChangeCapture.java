@@ -45,7 +45,8 @@ public class ChangeCapture {
 
 	public void start() {
 		time = new Timer();
-		time.schedule(new CaptureTask(), 0, (int) ((double) 1000 / props.getCaptureFrequency()));
+		int period = (int) ((double) 1000 / props.getCaptureFrequency());
+		time.schedule(new CaptureTask(), period, period);
 	}
 
 	public void stop() {

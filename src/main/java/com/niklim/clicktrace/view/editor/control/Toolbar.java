@@ -98,11 +98,13 @@ public class Toolbar {
 		toolbar.addSeparator();
 		startSession = createButton("Record", Icons.START_SESSION, startSessionActionListener);
 		startSession.setEnabled(false);
+		startSession.setToolTipText("Record [Ctrl+Alt+r]");
 		toolbar.add(startSession);
 
 		toolbar.addSeparator();
 		stopSession = createButton("Pause", Icons.STOP_SESSION, stopSessionActionListener);
 		stopSession.setEnabled(false);
+		stopSession.setToolTipText("Pause [Ctrl+Alt+s]");
 		toolbar.add(stopSession);
 	}
 

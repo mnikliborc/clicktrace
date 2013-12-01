@@ -176,6 +176,12 @@ public class Controller {
 		}
 	}
 
+	public void toggleSelectScreenShot() {
+		boolean selected = activeSession.getSelectedShots().contains(activeSession.getActiveShot());
+		selectScreenShot(!selected);
+		editor.setSelectedActiveScreenShot(!selected);
+	}
+
 	public void changeActiveScreenShotLabel(String label) {
 		ScreenShot activeShot = activeSession.getActiveShot();
 		activeShot.setLabel(label);
@@ -229,4 +235,5 @@ public class Controller {
 		openSession(selectedShot.getSession());
 		editor.showScreenShot(selectedShot, false);
 	}
+
 }

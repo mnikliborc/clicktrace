@@ -96,6 +96,8 @@ public class KeyboardController implements NativeKeyListener {
 			editScreenShotActionListener.actionPerformed(null);
 		} else if (event.getKeyChar() == 'd' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
 			openScreenShotDescriptionActionListener.actionPerformed(null);
+		} else if (event.getKeyChar() == 'a' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
+			controller.toggleSelectScreenShot();
 		}
 
 	}

@@ -32,15 +32,11 @@ import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActio
 import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
-import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 
 @Singleton
 public class ControlView {
 	@Inject
 	private Controller controller;
-
-	@Inject
-	private ScreenShotView screenShotView;
 
 	@Inject
 	private Toolbar toolbar;
@@ -81,9 +77,14 @@ public class ControlView {
 
 		deleteButton = new JButton("delete", new ImageIcon(Icons.createIconImage(Icons.DELETE_SCREENSHOT, "delete")));
 		editButton = new JButton("edit", new ImageIcon(Icons.createIconImage(Icons.EDIT_SCREENSHOT, "edit")));
-		refreshButton = new JButton("refresh", new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
+		editButton.setToolTipText("[Ctrl+e]");
+		refreshButton = new JButton("refresh",
+				new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
 		checkbox = new JCheckBox();
-		descriptionButton = new JButton("description", new ImageIcon(Icons.createIconImage(Icons.DESCRIPTION_SCREENSHOT, "description")));
+		checkbox.setToolTipText("Select [Ctrl+SPACE]");
+		descriptionButton = new JButton("description", new ImageIcon(Icons.createIconImage(
+				Icons.DESCRIPTION_SCREENSHOT, "description")));
+		descriptionButton.setToolTipText("[Ctrl+d]");
 
 		controlPanel.add(new JLabel("Screen shot"));
 		controlPanel.add(imagesComboBox);
@@ -204,7 +205,8 @@ public class ControlView {
 
 	public void setActiveScreenShot(ScreenShot shot) {
 		imagesComboBox.getModel().setSelectedItem(shot);
-		descriptionButton.setText(Strings.isNullOrEmpty(shot.getDescription()) ? "add description" : "show description");
+		descriptionButton
+				.setText(Strings.isNullOrEmpty(shot.getDescription()) ? "add description" : "show description");
 
 		changeNavigationButtonState();
 	}
