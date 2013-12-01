@@ -21,6 +21,8 @@ public class Icons {
 	public static final String FIRST_SCREENSHOT = "icons/gnome_go_first.png";
 	public static final String DESCRIPTION_SCREENSHOT = "icons/desc_edit.png";
 	public static final String SEARCH = "icons/search.png";
+	public static final String MOUSE_MARK_RED = "icons/mouse_red.png";
+	public static final String MOUSE_MARK_GREEN = "icons/mouse_green.png";
 
 	public static Image createIconImage(String path, String description) {
 		URL imageURL = Thread.currentThread().getContextClassLoader().getResource(path);

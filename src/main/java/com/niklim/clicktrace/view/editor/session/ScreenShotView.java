@@ -6,8 +6,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -17,8 +19,9 @@ import org.imgscalr.Scalr;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.model.session.Click;
 import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.model.session.ScreenShot.Click;
 import com.niklim.clicktrace.view.editor.Editor;
 
 @Singleton
@@ -27,9 +30,17 @@ public class ScreenShotView {
 	private Editor editor;
 
 	private JPanel panel;
+	private BufferedImage mouseMark;
 
 	public ScreenShotView() {
 		panel = new JPanel(new MigLayout());
+
+		try {
+			URL file = Thread.currentThread().getContextClassLoader().getResource(Icons.MOUSE_MARK_RED);
+			mouseMark = ImageIO.read(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void show(ScreenShot shot) {
@@ -51,6 +62,7 @@ public class ScreenShotView {
 		for (Click click : clicks) {
 			g.setColor(Color.RED);
 			g.drawOval(click.getX() - 15, click.getY() - 15, 30, 30);
+			g.drawImage(mouseMark, click.getX() + 10, click.getY() - 25, null);
 			g.drawChars(String.valueOf(click.getButton()).toCharArray(), 0, 1, click.getX() - 15, click.getY() - 15);
 			g.dispose();
 		}

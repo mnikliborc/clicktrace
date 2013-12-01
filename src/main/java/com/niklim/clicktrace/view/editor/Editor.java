@@ -40,8 +40,7 @@ public class Editor {
 	public Editor() {
 		/* Use an appropriate Look and Feel */
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -72,8 +71,7 @@ public class Editor {
 		splitPane.setTopComponent(controlView.getComponent());
 		splitPane.setBottomComponent(screenShotView.getPanel());
 
-		frame.add(new JScrollPane(splitPane,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		frame.add(new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 		frame.setJMenuBar(menu.getMenuBar());
 
@@ -136,10 +134,8 @@ public class Editor {
 
 	public void edit(ScreenShot shot) {
 		try {
-			ProcessBuilder pb = new ProcessBuilder(
-					"C:\\Windows\\system32\\mspaint.exe", "sessions\\"
-							+ shot.getSession().getName() + "\\"
-							+ shot.getFilename());
+			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
+					+ shot.getSession().getName() + "\\" + shot.getFilename());
 			pb.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -178,7 +174,7 @@ public class Editor {
 	}
 
 	public void hide() {
-		frame.setExtendedState(JFrame.ICONIFIED);
+		frame.setState(JFrame.ICONIFIED);
 	}
 
 }

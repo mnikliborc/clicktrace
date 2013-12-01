@@ -20,7 +20,7 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.model.session.ScreenShot.Click;
+import com.niklim.clicktrace.model.session.Click;
 
 @Singleton
 public class ChangeCapture {

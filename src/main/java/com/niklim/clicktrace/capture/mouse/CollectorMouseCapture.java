@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.ChangeCapture;
-import com.niklim.clicktrace.model.session.ScreenShot.Click;
+import com.niklim.clicktrace.model.session.Click;
 
 @Singleton
 public class CollectorMouseCapture extends MouseCapture {
@@ -22,7 +22,6 @@ public class CollectorMouseCapture extends MouseCapture {
 
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
-		log.debug("Mouse released");
 		if (activeSession.getRecording()) {
 			changeCapture.mouseClicked(new Click(e.getX(), e.getY(), e.getButton()));
 		}

@@ -9,8 +9,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.google.common.base.Strings;
 import com.niklim.clicktrace.FileManager;
+import com.niklim.clicktrace.model.session.Click;
 import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.model.session.ScreenShot.Click;
 import com.niklim.clicktrace.model.session.Session;
 
 public class ScreenShotLoader {
