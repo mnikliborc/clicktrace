@@ -28,6 +28,7 @@ public class ScreenShotDeleter {
 			prop.clearProperty(shot.getFilename() + ".clicks");
 			prop.clearProperty(shot.getFilename() + ".description");
 			prop.clearProperty(shot.getFilename() + ".label");
+			prop.save();
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}

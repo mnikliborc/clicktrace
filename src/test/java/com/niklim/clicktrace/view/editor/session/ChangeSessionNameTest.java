@@ -16,7 +16,6 @@ public class ChangeSessionNameTest extends AbstractSystemTest {
 	@Test
 	public void shouldChangeName() throws InterruptedException {
 		editorFixture.menuItemWithPath("File", "Open session").click();
-		editorFixture.dialog().table().cell(TableCell.row(0).column(0)).requireValue("one");
 		editorFixture.dialog().table().cell(TableCell.row(0).column(0)).click();
 		editorFixture.dialog().button(JButtonMatcher.withText("Open")).click();
 		editorFixture.maximize();

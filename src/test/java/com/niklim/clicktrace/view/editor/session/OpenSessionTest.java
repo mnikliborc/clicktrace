@@ -22,21 +22,7 @@ public class OpenSessionTest extends AbstractSystemTest {
 	public void shouldOpenOnDoubleClick() throws InterruptedException {
 		// when
 		editorFixture.menuItemWithPath("File", "Open session").click();
-		editorFixture.dialog().table().cell(TableCell.row(0).column(0)).doubleClick();
-
-		// then
-		try {
-			assertThat(editorFixture.dialog()).isNull();
-		} catch (WaitTimedOutError ex) {
-		}
-
-		assertOpen(TestSessionsData.SOME.getSessionNames()[0]);
-	}
-
-	@Test
-	public void shouldOpenOnOkClick() throws InterruptedException {
-		// when
-		SystemTestSteps.openSession(editorFixture, "two");
+		editorFixture.dialog().table().cell(TableCell.row(1).column(0)).doubleClick();
 
 		// then
 		try {
@@ -45,6 +31,20 @@ public class OpenSessionTest extends AbstractSystemTest {
 		}
 
 		assertOpen(TestSessionsData.SOME.getSessionNames()[1]);
+	}
+
+	@Test
+	public void shouldOpenOnOkClick() throws InterruptedException {
+		// when
+		SystemTestSteps.openSession(editorFixture, 2);
+
+		// then
+		try {
+			assertThat(editorFixture.dialog()).isNull();
+		} catch (WaitTimedOutError ex) {
+		}
+
+		assertOpen(TestSessionsData.SOME.getSessionNames()[2]);
 	}
 
 	private void assertOpen(String sessionName) {

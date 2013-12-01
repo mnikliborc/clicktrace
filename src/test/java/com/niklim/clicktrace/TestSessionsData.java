@@ -1,7 +1,8 @@
 package com.niklim.clicktrace;
 
 public enum TestSessionsData {
-	EMPTY("test-data/empty-sessions", new String[] {}), SOME("test-data/some-sessions", new String[] { "one", "two" });
+	EMPTY("test-data/empty-sessions", new String[] {}), SOME("test-data/some-sessions", new String[] { "empty", "one",
+			"two" });
 
 	private String path;
 	private String[] sessionNames;
