@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace.view.editor.dialog;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -21,10 +21,12 @@ import net.miginfocom.swing.MigLayout;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.editor.TextComponentHistory;
 import com.niklim.clicktrace.view.editor.action.screenshot.SaveScreenShotDescriptionActionListener;
 
 @Singleton
-public class DescriptionEditor {
+public class DescriptionDialog {
 
 	private JDialog dialog;
 
@@ -41,7 +43,7 @@ public class DescriptionEditor {
 
 	private TextComponentHistory history;
 
-	public DescriptionEditor() {
+	public DescriptionDialog() {
 	}
 
 	@Inject
@@ -83,10 +85,9 @@ public class DescriptionEditor {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				activeSession.getActiveShot().setDescription(textarea.getText());
-				saveScreenShotDescriptionActionListener.actionPerformed(null);
-				dialog.setVisible(false);
+				save();
 			}
+
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
@@ -102,6 +103,19 @@ public class DescriptionEditor {
 				dialog.setVisible(false);
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+	}
+
+	private void save() {
+		activeSession.getActiveShot().setDescription(textarea.getText());
+		saveScreenShotDescriptionActionListener.actionPerformed(null);
+		dialog.setVisible(false);
 	}
 
 	public void open() {
