@@ -47,11 +47,9 @@ public class ScreenShotView {
 		panel.removeAll();
 
 		int thumbWidth = (int) editor.getEditorDimension().getWidth();
-		int thumbHeight = (int) editor.getEditorDimension().getHeight();
 		try {
 			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
 			BufferedImage imageFinal = scaleImage(imageWithClicks, thumbWidth - 40);
-			double heightWidthRatio = (double) thumbHeight / thumbWidth;
 			panel.add(new ThumbPanel(imageFinal, imageFinal.getWidth(), imageFinal.getHeight()));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -65,8 +63,8 @@ public class ScreenShotView {
 			g.drawOval(click.getX() - 15, click.getY() - 15, 30, 30);
 			g.drawImage(mouseMark, click.getX() + 10, click.getY() - 25, null);
 			g.drawChars(String.valueOf(click.getButton()).toCharArray(), 0, 1, click.getX() - 15, click.getY() - 15);
-			g.dispose();
 		}
+		g.dispose();
 		return image;
 	}
 
