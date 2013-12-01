@@ -6,11 +6,11 @@ import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.data.TableCell;
 import org.junit.Test;
 
+import com.niklim.clicktrace.AbstractSystemTest;
+import com.niklim.clicktrace.TestSessionsData;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
 
-public class SearchDialogTest extends AbstractEditorTest {
+public class SearchDialogTest extends AbstractSystemTest {
 	@Override
 	protected TestSessionsData getSessionsData() {
 		return TestSessionsData.SOME;

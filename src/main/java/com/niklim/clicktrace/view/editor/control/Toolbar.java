@@ -108,6 +108,7 @@ public class Toolbar {
 
 	public JButton createButton(String tooltip, String icon, final ActionListener listener) {
 		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
+		button.setName(tooltip);
 		button.setToolTipText(tooltip);
 		button.addActionListener(listener);
 		button.setFocusPainted(false);

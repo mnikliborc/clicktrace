@@ -54,6 +54,11 @@ public class ChangeCapture {
 		}
 		time = null;
 		detector.reset();
+
+		if (lastImageFilename != null) {
+			saveClicks();
+			lastImageFilename = null;
+		}
 	}
 
 	private class CaptureTask extends TimerTask {

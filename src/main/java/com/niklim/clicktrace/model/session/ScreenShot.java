@@ -53,7 +53,7 @@ public class ScreenShot {
 
 		@Override
 		public String toString() {
-			return "(" + x + "," + y + "," + button + ")";
+			return "(" + x + "-" + y + "-" + button + ")";
 		}
 
 		public static List<Click> getList(String string) {
@@ -62,7 +62,8 @@ public class ScreenShot {
 				return clicks;
 			}
 			for (String click : string.split(";")) {
-				String[] vals = click.substring(0, click.length() - 1).split(",");
+				String[] vals = click.substring(1, click.length() - 1).split(
+						"-");
 				int x = Integer.parseInt(vals[0]);
 				int y = Integer.parseInt(vals[1]);
 				int button = Integer.parseInt(vals[2]);
@@ -72,7 +73,8 @@ public class ScreenShot {
 		}
 
 		public static String getString(List<Click> clicks) {
-			List<String> strings = Lists.newArrayListWithCapacity(clicks.size());
+			List<String> strings = Lists
+					.newArrayListWithCapacity(clicks.size());
 			for (Click c : clicks) {
 				strings.add(c.toString());
 			}
@@ -128,7 +130,8 @@ public class ScreenShot {
 		}
 		ScreenShot other = (ScreenShot) o;
 
-		if (!Strings.nullToEmpty(filename).equals(Strings.nullToEmpty(other.getFilename()))) {
+		if (!Strings.nullToEmpty(filename).equals(
+				Strings.nullToEmpty(other.getFilename()))) {
 			return false;
 		}
 

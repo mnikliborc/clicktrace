@@ -11,6 +11,6 @@ public class StopSessionActionListener implements ActionListener {
 	private Controller controller;
 
 	public void actionPerformed(ActionEvent event) {
-		controller.stopSession();
+		controller.stopRecording();
 	}
 }

@@ -7,11 +7,11 @@ import org.fest.swing.exception.ComponentLookupException;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.junit.Test;
 
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.EditorTestSteps;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
+import com.niklim.clicktrace.AbstractSystemTest;
+import com.niklim.clicktrace.SystemTestSteps;
+import com.niklim.clicktrace.TestSessionsData;
 
-public class DeleteSessionTest extends AbstractEditorTest {
+public class DeleteSessionTest extends AbstractSystemTest {
 
 	@Override
 	protected TestSessionsData getSessionsData() {
@@ -21,7 +21,7 @@ public class DeleteSessionTest extends AbstractEditorTest {
 	@Test
 	public void shouldDeleteSession() {
 		// given
-		EditorTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, 0);
 
 		// when
 		editorFixture.menuItemWithPath("Session", "Delete current session").click();

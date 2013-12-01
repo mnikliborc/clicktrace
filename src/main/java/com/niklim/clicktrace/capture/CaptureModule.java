@@ -19,7 +19,7 @@ public class CaptureModule extends AbstractModule {
 
 	@Provides
 	List<ChangeVoter> provideChangeVoters() {
-		return Lists.<ChangeVoter> newArrayList(new NoVoter());
+		return Lists.<ChangeVoter> newArrayList(new PixelVoter());
 	}
 
 	@Provides

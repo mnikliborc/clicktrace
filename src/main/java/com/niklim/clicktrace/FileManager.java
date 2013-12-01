@@ -34,7 +34,9 @@ public class FileManager {
 	public static class ImageFilter implements FilenameFilter {
 		@Override
 		public boolean accept(File file, String name) {
-			return !".".equals(name) && !"..".equals(name) && !SESSION_PROPS_FILENAME.equals(name);
+			return !".".equals(name) && !"..".equals(name)
+					&& !SESSION_PROPS_FILENAME.equals(name)
+					&& !name.endsWith("~");
 		}
 	}
 
@@ -42,7 +44,8 @@ public class FileManager {
 		createIfDirNotExists(SESSIONS_DIR);
 	}
 
-	public static String saveImage(BufferedImage image, String sessionName) throws IOException {
+	public static String saveImage(BufferedImage image, String sessionName)
+			throws IOException {
 		String filename = format.format(new Date()) + ".png";
 		String filePath = createFilePath(sessionName, filename);
 
@@ -76,7 +79,8 @@ public class FileManager {
 		file.delete();
 	}
 
-	public static List<String> loadFileNames(String dirName, FilenameFilter filter) {
+	public static List<String> loadFileNames(String dirName,
+			FilenameFilter filter) {
 		List<String> fileNames = new ArrayList<String>();
 
 		File[] files = new File(dirName).listFiles(filter);
@@ -93,7 +97,8 @@ public class FileManager {
 	}
 
 	public static void createSessionPropsFile(String sessionName) {
-		File f = new File(SESSIONS_DIR + sessionName + File.separator + SESSION_PROPS_FILENAME);
+		File f = new File(SESSIONS_DIR + sessionName + File.separator
+				+ SESSION_PROPS_FILENAME);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -105,8 +110,10 @@ public class FileManager {
 		return Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
 	}
 
-	public static void renameSession(String oldName, String newName) throws IOException {
-		Files.move(Paths.get(FileManager.SESSIONS_DIR + oldName), Paths.get(FileManager.SESSIONS_DIR + newName));
+	public static void renameSession(String oldName, String newName)
+			throws IOException {
+		Files.move(Paths.get(FileManager.SESSIONS_DIR + oldName),
+				Paths.get(FileManager.SESSIONS_DIR + newName));
 	}
 
 	public static void createSession(String sessionName) throws IOException {
@@ -125,10 +132,12 @@ public class FileManager {
 		return canCreate;
 	}
 
-	public static PropertiesConfiguration loadSessionProperties(String sessionName) {
+	public static PropertiesConfiguration loadSessionProperties(
+			String sessionName) {
 		PropertiesConfiguration sessionProps;
 		try {
-			sessionProps = new PropertiesConfiguration(FileManager.SESSIONS_DIR + sessionName + File.separator + SESSION_PROPS_FILENAME);
+			sessionProps = new PropertiesConfiguration(FileManager.SESSIONS_DIR
+					+ sessionName + File.separator + SESSION_PROPS_FILENAME);
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 			sessionProps = new PropertiesConfiguration();

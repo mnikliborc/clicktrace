@@ -11,6 +11,6 @@ public class StartSessionActionListener implements ActionListener {
 	private Controller controller;
 
 	public void actionPerformed(ActionEvent event) {
-		controller.startSession();
+		controller.startRecording(true);
 	}
 }

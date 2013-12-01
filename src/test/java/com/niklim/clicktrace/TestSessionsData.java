@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace;
 
 public enum TestSessionsData {
 	EMPTY("test-data/empty-sessions", new String[] {}), SOME("test-data/some-sessions", new String[] { "one", "two" });

@@ -6,12 +6,12 @@ import org.fest.swing.data.TableCell;
 import org.fest.swing.exception.WaitTimedOutError;
 import org.junit.Test;
 
+import com.niklim.clicktrace.AbstractSystemTest;
+import com.niklim.clicktrace.SystemTestSteps;
+import com.niklim.clicktrace.TestSessionsData;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.EditorTestSteps;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
 
-public class OpenSessionTest extends AbstractEditorTest {
+public class OpenSessionTest extends AbstractSystemTest {
 
 	@Override
 	protected TestSessionsData getSessionsData() {
@@ -36,7 +36,7 @@ public class OpenSessionTest extends AbstractEditorTest {
 	@Test
 	public void shouldOpenOnOkClick() throws InterruptedException {
 		// when
-		EditorTestSteps.openSession(editorFixture, 1);
+		SystemTestSteps.openSession(editorFixture, 1);
 
 		// then
 		try {

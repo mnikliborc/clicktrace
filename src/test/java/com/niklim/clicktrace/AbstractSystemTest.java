@@ -1,20 +1,20 @@
-package com.niklim.clicktrace.view.editor;
+package com.niklim.clicktrace;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.FrameFixture;
-import org.junit.After;
 import org.junit.Before;
 
 import com.google.inject.Injector;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.view.editor.Editor;
 
-public abstract class AbstractEditorTest {
+public abstract class AbstractSystemTest {
 	protected FrameFixture editorFixture;
 	protected ActiveSession activeSession;
+	protected Editor editor;
 
 	protected Injector injector;
 
@@ -24,12 +24,16 @@ public abstract class AbstractEditorTest {
 	public void setUp() {
 		prepareTestDir();
 
-		injector = TestGuiceContext.load();
-		Editor editor = injector.getInstance(Editor.class);
+		injector = loadInjector();
+		editor = injector.getInstance(Editor.class);
 		editorFixture = new FrameFixture(editor.getFrame());
 		editorFixture.show();
 
 		activeSession = injector.getInstance(ActiveSession.class);
+	}
+
+	protected Injector loadInjector() {
+		return DefaultTestGuiceContext.load();
 	}
 
 	private void prepareTestDir() {
@@ -47,16 +51,18 @@ public abstract class AbstractEditorTest {
 
 	private void copySessions() {
 		try {
-			File testSessionDir = new File("src/test/resources/" + getSessionsData().getPath());
+			File testSessionDir = new File("src/test/resources/"
+					+ getSessionsData().getPath());
 			for (File session : testSessionDir.listFiles()) {
-				FileUtils.copyDirectory(session, new File(FileManager.SESSIONS_DIR + session.getName()));
+				FileUtils.copyDirectory(session, new File(
+						FileManager.SESSIONS_DIR + session.getName()));
 			}
 		} catch (IOException e) {
 			new RuntimeException(e);
 		}
 	}
 
-	@After
+	// @After
 	public void cleanup() {
 		File sessionDir = new File(FileManager.SESSIONS_DIR);
 

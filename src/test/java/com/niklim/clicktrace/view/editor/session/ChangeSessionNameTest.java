@@ -4,10 +4,10 @@ import org.fest.swing.core.matcher.JButtonMatcher;
 import org.fest.swing.data.TableCell;
 import org.junit.Test;
 
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
+import com.niklim.clicktrace.AbstractSystemTest;
+import com.niklim.clicktrace.TestSessionsData;
 
-public class ChangeSessionNameTest extends AbstractEditorTest {
+public class ChangeSessionNameTest extends AbstractSystemTest {
 	@Override
 	protected TestSessionsData getSessionsData() {
 		return TestSessionsData.SOME;

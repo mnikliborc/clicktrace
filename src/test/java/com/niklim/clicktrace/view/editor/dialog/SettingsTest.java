@@ -5,11 +5,11 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.core.matcher.JButtonMatcher;
 import org.junit.Test;
 
+import com.niklim.clicktrace.AbstractSystemTest;
 import com.niklim.clicktrace.AppProperties;
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
+import com.niklim.clicktrace.TestSessionsData;
 
-public class SettingsTest extends AbstractEditorTest {
+public class SettingsTest extends AbstractSystemTest {
 	@Override
 	protected TestSessionsData getSessionsData() {
 		return TestSessionsData.SOME;

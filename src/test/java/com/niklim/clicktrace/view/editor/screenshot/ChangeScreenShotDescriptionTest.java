@@ -5,11 +5,11 @@ import static org.fest.assertions.Assertions.assertThat;
 import org.fest.swing.core.matcher.JButtonMatcher;
 import org.junit.Test;
 
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.EditorTestSteps;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
+import com.niklim.clicktrace.AbstractSystemTest;
+import com.niklim.clicktrace.SystemTestSteps;
+import com.niklim.clicktrace.TestSessionsData;
 
-public class ChangeScreenShotDescriptionTest extends AbstractEditorTest {
+public class ChangeScreenShotDescriptionTest extends AbstractSystemTest {
 	@Override
 	protected TestSessionsData getSessionsData() {
 		return TestSessionsData.SOME;
@@ -17,7 +17,7 @@ public class ChangeScreenShotDescriptionTest extends AbstractEditorTest {
 
 	@Test
 	public void shouldChangeDescription() throws InterruptedException {
-		EditorTestSteps.openSession(editorFixture, 0);
+		SystemTestSteps.openSession(editorFixture, 0);
 
 		editorFixture.button(JButtonMatcher.withText("show description")).click();
 		assertThat(editorFixture.dialog().textBox().text()).isEqualTo("some description");

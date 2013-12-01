@@ -10,11 +10,11 @@ import org.fest.swing.exception.WaitTimedOutError;
 import org.fest.swing.fixture.JOptionPaneFixture;
 import org.junit.Test;
 
+import com.niklim.clicktrace.AbstractSystemTest;
 import com.niklim.clicktrace.FileManager;
-import com.niklim.clicktrace.view.editor.AbstractEditorTest;
-import com.niklim.clicktrace.view.editor.TestSessionsData;
+import com.niklim.clicktrace.TestSessionsData;
 
-public class NewSessionTest extends AbstractEditorTest {
+public class NewSessionTest extends AbstractSystemTest {
 
 	@Test
 	public void shouldCreateNewSession() throws InterruptedException {
