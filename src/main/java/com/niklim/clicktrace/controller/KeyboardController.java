@@ -82,9 +82,10 @@ public class KeyboardController implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent event) {
-		if (event.getKeyChar() == 'r' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
+		if (event.getKeyChar() == 'r' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl+Alt")) {
 			startSessionActionListener.actionPerformed(null);
-		} else if (event.getKeyChar() == 's' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
+		} else if (event.getKeyChar() == 's'
+				&& NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl+Alt")) {
 			stopSessionActionListener.actionPerformed(null);
 		}
 
