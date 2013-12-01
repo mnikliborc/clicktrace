@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -24,6 +25,7 @@ import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 public class Editor {
 
 	private JFrame frame;
+	private JScrollPane scrollPane;
 
 	@Inject
 	private ScreenShotView screenShotView;
@@ -38,12 +40,8 @@ public class Editor {
 	private Toolbar toolbar;
 
 	public Editor() {
-		/* Use an appropriate Look and Feel */
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		} catch (UnsupportedLookAndFeelException ex) {
 			ex.printStackTrace();
 		} catch (IllegalAccessException ex) {
@@ -53,11 +51,7 @@ public class Editor {
 		} catch (ClassNotFoundException ex) {
 			ex.printStackTrace();
 		}
-		/* Turn off metal's use of bold fonts */
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
-		// Schedule a job for the event-dispatching thread:
-		// adding TrayIcon.
-
 	}
 
 	@Inject
@@ -71,8 +65,9 @@ public class Editor {
 		splitPane.setTopComponent(controlView.getComponent());
 		splitPane.setBottomComponent(screenShotView.getPanel());
 
-		frame.add(new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+		scrollPane = new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		frame.add(scrollPane);
 		frame.setJMenuBar(menu.getMenuBar());
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -175,6 +170,16 @@ public class Editor {
 
 	public void hide() {
 		frame.setState(JFrame.ICONIFIED);
+	}
+
+	public void scrollUp() {
+		JScrollBar vertical = scrollPane.getVerticalScrollBar();
+		vertical.setValue(vertical.getMinimum());
+	}
+
+	public void scrollDown() {
+		JScrollBar vertical = scrollPane.getVerticalScrollBar();
+		vertical.setValue(vertical.getMaximum());
 	}
 
 }

@@ -56,6 +56,15 @@ public class KeyboardController implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent event) {
+		if (!isEditorActive()) {
+			return;
+		}
+
+		if (event.getKeyCode() == NativeKeyEvent.VK_UP) {
+			editor.scrollUp();
+		} else if (event.getKeyCode() == NativeKeyEvent.VK_DOWN) {
+			editor.scrollDown();
+		}
 	}
 
 	@Override
