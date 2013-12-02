@@ -89,6 +89,7 @@ public class DescriptionDialog {
 			}
 
 		});
+		saveButton.setToolTipText("[Ctrl+s]");
 
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
@@ -96,6 +97,7 @@ public class DescriptionDialog {
 				close();
 			}
 		});
+		cancelButton.setToolTipText("[Esc]");
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override

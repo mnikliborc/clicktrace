@@ -1,6 +1,7 @@
 package com.niklim.clicktrace;
 
 import java.awt.Rectangle;
+import java.io.File;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -24,7 +25,7 @@ public class AppProperties {
 
 	public AppProperties() {
 		try {
-			prop = new PropertiesConfiguration(APP_PROPERTIES_PATH);
+			prop = new PropertiesConfiguration(new File(APP_PROPERTIES_PATH));
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
 		}

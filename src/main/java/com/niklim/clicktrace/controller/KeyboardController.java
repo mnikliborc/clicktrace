@@ -1,5 +1,13 @@
 package com.niklim.clicktrace.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.KeyStroke;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.NativeInputEvent;
@@ -56,37 +64,80 @@ public class KeyboardController implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent event) {
-		if (!isEditorActive()) {
-			return;
-		}
-
-		if (event.getKeyCode() == NativeKeyEvent.VK_UP) {
-			editor.scrollUp();
-		} else if (event.getKeyCode() == NativeKeyEvent.VK_DOWN) {
-			editor.scrollDown();
-		}
 	}
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent event) {
-		if (!isEditorActive()) {
-			return;
-		}
-		if (event.getKeyCode() == NativeKeyEvent.VK_RIGHT
-				&& NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			controller.showLastScreenShot();
-		} else if (event.getKeyCode() == NativeKeyEvent.VK_LEFT
-				&& NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			controller.showFirstScreenShot();
-		} else if (event.getKeyCode() == NativeKeyEvent.VK_RIGHT
-				&& !NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			controller.showNextScreenShot();
-		} else if (event.getKeyCode() == NativeKeyEvent.VK_LEFT
-				&& !NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			controller.showPrevScreenShot();
-		} else if (event.getKeyCode() == NativeKeyEvent.VK_DELETE) {
-			deleteScreenShotActionListener.actionPerformed(null);
-		}
+	}
+
+	public void registerKeyboardHooks(JFrame editorFrame) {
+		registerAction(editorFrame, KeyEvent.VK_UP, 0, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editor.scrollUp();
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_DOWN, 0, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editor.scrollDown();
+			}
+		});
+
+		registerAction(editorFrame, KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showLastScreenShot();
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showFirstScreenShot();
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showNextScreenShot();
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.showPrevScreenShot();
+			}
+		});
+
+		registerAction(editorFrame, KeyEvent.VK_DELETE, 0, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				deleteScreenShotActionListener.actionPerformed(null);
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editScreenShotActionListener.actionPerformed(null);
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openScreenShotDescriptionActionListener.actionPerformed(null);
+			}
+		});
+		registerAction(editorFrame, KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.toggleSelectScreenShot();
+			}
+		});
+	}
+
+	private void registerAction(JFrame frame, int key, int modifier, ActionListener listener) {
+		frame.getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(key, modifier),
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	@Override
@@ -97,21 +148,5 @@ public class KeyboardController implements NativeKeyListener {
 				&& NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl+Alt")) {
 			stopSessionActionListener.actionPerformed(null);
 		}
-
-		if (!isEditorActive()) {
-			return;
-		}
-		if (event.getKeyChar() == 'e' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			editScreenShotActionListener.actionPerformed(null);
-		} else if (event.getKeyChar() == 'd' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			openScreenShotDescriptionActionListener.actionPerformed(null);
-		} else if (event.getKeyChar() == 'a' && NativeInputEvent.getModifiersText(event.getModifiers()).equals("Ctrl")) {
-			controller.toggleSelectScreenShot();
-		}
-
-	}
-
-	private boolean isEditorActive() {
-		return editor.getFrame().isVisible() && editor.getFrame().isActive();
 	}
 }

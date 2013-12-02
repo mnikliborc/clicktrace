@@ -2,6 +2,7 @@ package com.niklim.clicktrace.view.editor;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.controller.KeyboardController;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.view.editor.control.ControlView;
@@ -39,6 +41,9 @@ public class Editor {
 	@Inject
 	private Toolbar toolbar;
 
+	@Inject
+	private KeyboardController keyboardController;
+
 	public Editor() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -57,6 +62,10 @@ public class Editor {
 	@Inject
 	public void init() {
 		frame = new JFrame("Clicktrace");
+
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.7), (int) (dim.getHeight() * 0.7));
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -66,7 +75,7 @@ public class Editor {
 		splitPane.setBottomComponent(screenShotView.getPanel());
 
 		scrollPane = new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		frame.add(scrollPane);
 		frame.setJMenuBar(menu.getMenuBar());
 
@@ -75,6 +84,8 @@ public class Editor {
 				open(null);
 			}
 		});
+
+		keyboardController.registerKeyboardHooks(frame);
 
 	}
 

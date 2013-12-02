@@ -94,6 +94,7 @@ public class SettingsDialog {
 				dialog.setVisible(false);
 			}
 		});
+		cancelButton.setToolTipText("[Esc]");
 
 		JPanel controlPanel = new JPanel(new MigLayout("align right"));
 		controlPanel.add(saveButton, "w 80");

@@ -56,7 +56,7 @@ public class CollectorMouseCaptureTest extends AbstractSystemTest {
 
 		List<ScreenShot> shots = session.getShots();
 		assertThat(shots).hasSize(2);
-		assertThat(shots.get(1).getClicks().size() == 2 || shots.get(0).getClicks().size() == 2);
+		assertThat(shots.get(1).getClicks().size() > 0 || shots.get(0).getClicks().size() > 0);
 	}
 
 	private void startRecording() throws InterruptedException {

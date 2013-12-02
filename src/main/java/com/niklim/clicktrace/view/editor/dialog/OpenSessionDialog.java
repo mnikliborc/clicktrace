@@ -96,6 +96,7 @@ public class OpenSessionDialog {
 				close(false);
 			}
 		});
+		cancelButton.setToolTipText("[Esc]");
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override
@@ -119,7 +120,8 @@ public class OpenSessionDialog {
 
 	private void loadSessions() {
 		List<Session> sessions = sessionManager.loadAll();
-		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots", "Created", "Modified" }, sessions.size()) {
+		DefaultTableModel dataModel = new DefaultTableModel(
+				new String[] { "Name", "Screenshots", "Created", "Modified" }, sessions.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells not editable

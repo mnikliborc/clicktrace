@@ -95,7 +95,8 @@ public class SearchDialog {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					dialog.setVisible(false);
-					ScreenShot selectedShot = (ScreenShot) resultTable.getModel().getValueAt(resultTable.getSelectedRow(), 0);
+					ScreenShot selectedShot = (ScreenShot) resultTable.getModel().getValueAt(
+							resultTable.getSelectedRow(), 0);
 					controller.openSessionOnScreenShot(selectedShot);
 				}
 			}
@@ -104,7 +105,8 @@ public class SearchDialog {
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				search(searchQuery.getText(), searchType.isSelected(allSessionsRadio.getModel()), matchCase.isSelected());
+				search(searchQuery.getText(), searchType.isSelected(allSessionsRadio.getModel()),
+						matchCase.isSelected());
 			}
 		});
 
@@ -112,7 +114,8 @@ public class SearchDialog {
 			@Override
 			public void keyTyped(KeyEvent event) {
 				if (event.getKeyChar() == '\n') {
-					search(searchQuery.getText(), searchType.isSelected(allSessionsRadio.getModel()), matchCase.isSelected());
+					search(searchQuery.getText(), searchType.isSelected(allSessionsRadio.getModel()),
+							matchCase.isSelected());
 				}
 			}
 		});
