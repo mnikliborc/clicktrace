@@ -119,7 +119,7 @@ public class SettingsDialog {
 	}
 
 	private void createCaptureFrequencyPanel() {
-		captureFrequency = new JSpinner(new SpinnerListModel(Lists.newArrayList(0.25d, 0.5d, 1d, 2d, 3d, 4d)));
+		captureFrequency = new JSpinner(new SpinnerListModel(Lists.newArrayList(1d, 2d, 3d, 4d)));
 		((DefaultEditor) captureFrequency.getEditor()).getTextField().setEditable(false);
 
 		JLabel laabel = new JLabel("Screenshot");
