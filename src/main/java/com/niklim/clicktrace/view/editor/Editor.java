@@ -26,6 +26,7 @@ import com.niklim.clicktrace.view.editor.session.ScreenShotView;
 @Singleton
 public class Editor {
 
+	private static final String APP_NAME = "Clicktrace";
 	private JFrame frame;
 	private JScrollPane scrollPane;
 
@@ -61,7 +62,7 @@ public class Editor {
 
 	@Inject
 	public void init() {
-		frame = new JFrame("Clicktrace");
+		frame = new JFrame(APP_NAME);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.7), (int) (dim.getHeight() * 0.7));
@@ -98,6 +99,7 @@ public class Editor {
 
 	public void showSession(Session session) {
 		showWaitingCursor();
+		frame.setTitle(APP_NAME + " - " + session.getName());
 
 		resetControl(session);
 		if (session.getShots().size() > 0) {
@@ -155,6 +157,7 @@ public class Editor {
 	public void hideSession() {
 		controlView.hide();
 		screenShotView.clear();
+		frame.setTitle(APP_NAME);
 		refresh();
 	}
 
