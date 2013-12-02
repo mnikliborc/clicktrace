@@ -3,7 +3,6 @@ package com.niklim.clicktrace.view.editor;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollBar;
@@ -137,16 +136,6 @@ public class Editor {
 			hideWaitingCursor();
 		} else {
 			screenShotView.clear();
-		}
-	}
-
-	public void edit(ScreenShot shot) {
-		try {
-			ProcessBuilder pb = new ProcessBuilder("C:\\Windows\\system32\\mspaint.exe", "sessions\\"
-					+ shot.getSession().getName() + "\\" + shot.getFilename());
-			pb.start();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 

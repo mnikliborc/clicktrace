@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.controller;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
@@ -128,8 +129,8 @@ public class Controller {
 			settingsDialog.open();
 		} else {
 			try {
-				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions\\"
-						+ activeSession.getActiveShot().getSession().getName() + "\\"
+				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions" + File.separator
+						+ activeSession.getActiveShot().getSession().getName() + File.separator
 						+ activeSession.getActiveShot().getFilename());
 				pb.start();
 			} catch (IOException e) {
