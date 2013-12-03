@@ -15,7 +15,7 @@ import com.niklim.clicktrace.TestSessionsData;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.SessionManager;
+import com.niklim.clicktrace.service.SessionManager;
 
 public class CollectorMouseCaptureTest extends AbstractSystemTest {
 

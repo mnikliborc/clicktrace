@@ -32,7 +32,7 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.search.SearchService;
+import com.niklim.clicktrace.service.SearchService;
 import com.niklim.clicktrace.view.editor.Editor;
 import com.niklim.clicktrace.view.editor.TextComponentHistory;
 

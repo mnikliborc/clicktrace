@@ -13,8 +13,9 @@ import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.capture.ChangeCapture;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.SessionAlreadyExistsException;
-import com.niklim.clicktrace.model.session.SessionManager;
+import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.service.SessionAlreadyExistsException;
+import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
 import com.niklim.clicktrace.view.editor.dialog.SettingsDialog;
 
@@ -186,13 +187,16 @@ public class Controller {
 	public void changeActiveScreenShotLabel(String label) {
 		ScreenShot activeShot = activeSession.getActiveShot();
 		activeShot.setLabel(label);
-		sessionManager.saveShotLabel(activeSession.getSession(), activeShot);
+
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
+		writer.saveShotLabel(activeSession.getActiveShot());
 
 		editor.refresh();
 	}
 
 	public void saveActiveScreenShotDescription() {
-		sessionManager.saveShotDescription(activeSession.getSession(), activeSession.getActiveShot());
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
+		writer.saveShotDescription(activeSession.getActiveShot());
 	}
 
 	public void changeActiveSessionName(String name) {

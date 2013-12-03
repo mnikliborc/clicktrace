@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +19,8 @@ import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.Click;
+import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.service.SessionManager;
 
 @Singleton
 public class ChangeCapture {
@@ -40,6 +40,9 @@ public class ChangeCapture {
 
 	@Inject
 	private FileManager fileManager;
+
+	@Inject
+	private SessionManager sessionManager;
 
 	private List<Click> clicks = new LinkedList<Click>();
 	private String lastImageFilename;
@@ -88,13 +91,8 @@ public class ChangeCapture {
 	}
 
 	private void saveClicks() {
-		PropertiesConfiguration sessionProps = fileManager.loadSessionProperties(activeSession.getSession().getName());
-		sessionProps.setProperty(lastImageFilename + ".clicks", Click.getString(clicks));
-		try {
-			sessionProps.save();
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-		}
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
+		writer.saveShotClicks(lastImageFilename, clicks);
 		clicks.clear();
 	}
 

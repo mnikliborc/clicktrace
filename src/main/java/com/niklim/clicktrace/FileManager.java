@@ -14,13 +14,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-
 public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
-	public static final String SESSION_PROPS_FILENAME = ".prop.txt";
+	public static final String SESSION_PROPS_FILENAME = "session.properties";
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 
@@ -118,7 +115,7 @@ public class FileManager {
 		Files.move(Paths.get(FileManager.SESSIONS_DIR + oldName), Paths.get(FileManager.SESSIONS_DIR + newName));
 	}
 
-	public void createSession(String sessionName) throws IOException {
+	public void createSessionFolder(String sessionName) throws IOException {
 		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
 		if (!newDir.mkdir()) {
 			throw new IOException(FileManager.SESSIONS_DIR + sessionName);
@@ -132,17 +129,5 @@ public class FileManager {
 			newDir.delete();
 		}
 		return canCreate;
-	}
-
-	public PropertiesConfiguration loadSessionProperties(String sessionName) {
-		PropertiesConfiguration sessionProps;
-		try {
-			sessionProps = new PropertiesConfiguration(FileManager.SESSIONS_DIR + sessionName + File.separator
-					+ SESSION_PROPS_FILENAME);
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-			sessionProps = new PropertiesConfiguration();
-		}
-		return sessionProps;
 	}
 }

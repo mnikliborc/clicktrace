@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.search;
+package com.niklim.clicktrace.service;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
@@ -10,7 +10,6 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.SessionManager;
 
 @Singleton
 public class SearchService {

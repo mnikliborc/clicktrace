@@ -25,8 +25,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.SessionManager;
 import com.niklim.clicktrace.model.session.SessionMetadata;
+import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
 
 @SuppressWarnings("serial")

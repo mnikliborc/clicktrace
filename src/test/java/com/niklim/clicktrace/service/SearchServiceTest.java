@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.search;
+package com.niklim.clicktrace.service;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -14,7 +14,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.SessionManager;
+import com.niklim.clicktrace.service.SearchService;
+import com.niklim.clicktrace.service.SessionManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchServiceTest {

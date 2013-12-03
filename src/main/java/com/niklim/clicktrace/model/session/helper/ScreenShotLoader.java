@@ -1,35 +1,26 @@
 package com.niklim.clicktrace.model.session.helper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-
-import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.FileManager;
-import com.niklim.clicktrace.model.session.Click;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.service.SessionManager;
 
 public class ScreenShotLoader {
 	@Inject
 	private FileManager fileManager;
+	@Inject
+	private SessionManager sessionManager;
 	@Inject
 	private ImageLoader imageLoader;
 	@Inject
 	private ScreenShotDeleter deleter;
 
 	public List<ScreenShot> load(Session session) {
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		try {
-			prop = new PropertiesConfiguration(FileManager.SESSIONS_DIR + session.getName() + File.separator
-					+ FileManager.SESSION_PROPS_FILENAME);
-		} catch (ConfigurationException e) {
-			e.printStackTrace();
-		}
+		SessionPropertiesReader reader = sessionManager.createSessionPropertiesReader(session);
 
 		List<ScreenShot> shots = new ArrayList<ScreenShot>();
 		for (String shotFilename : fileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(),
@@ -37,11 +28,10 @@ public class ScreenShotLoader {
 			ScreenShot shot = new ScreenShot(imageLoader, deleter);
 			shot.setFilename(shotFilename);
 			shot.setSession(session);
-			shot.setLabel(prop.getString(shotFilename + ".label"));
-			shot.setDescription(prop.getString(shotFilename + ".description"));
 
-			String clicks = Strings.nullToEmpty(prop.getString(shotFilename + ".clicks"));
-			shot.setClicks(Click.getList(clicks));
+			shot.setLabel(reader.getLabel(shotFilename));
+			shot.setDescription(reader.getDescription(shotFilename));
+			shot.setClicks(reader.getClicks(shotFilename));
 
 			shots.add(shot);
 		}

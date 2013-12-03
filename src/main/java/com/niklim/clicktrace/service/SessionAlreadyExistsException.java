@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.model.session;
+package com.niklim.clicktrace.service;
 
 public class SessionAlreadyExistsException extends Exception {
 
