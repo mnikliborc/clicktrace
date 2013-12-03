@@ -66,7 +66,7 @@ public class SearchServiceTest {
 		String text = "TEXT";
 		boolean matchCase = false;
 
-		ScreenShot shot = new ScreenShot();
+		ScreenShot shot = new ScreenShot(null, null);
 		shot.setDescription("kaszanka\ntext\nkaszanka");
 
 		// when
@@ -82,7 +82,7 @@ public class SearchServiceTest {
 		String text = "Text";
 		boolean matchCase = true;
 
-		ScreenShot shot = new ScreenShot();
+		ScreenShot shot = new ScreenShot(null, null);
 		shot.setDescription("kaszanka\ntext\nkaszanka");
 
 		// when
@@ -98,7 +98,7 @@ public class SearchServiceTest {
 		String text = "Text";
 		boolean matchCase = true;
 
-		ScreenShot shot = new ScreenShot();
+		ScreenShot shot = new ScreenShot(null, null);
 		shot.setDescription("kaszanka\nText\nkaszanka");
 
 		// when

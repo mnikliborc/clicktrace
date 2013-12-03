@@ -9,7 +9,6 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.niklim.clicktrace.model.session.helper.ScreenShotLoader;
 import com.niklim.clicktrace.model.session.helper.SessionDeleter;
-import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 import com.niklim.clicktrace.model.session.helper.SessionMetadataHelper;
 import com.niklim.clicktrace.model.session.helper.SessionSaver;
 
@@ -18,10 +17,18 @@ public class Session {
 	private List<ScreenShot> shots;
 	private SessionMetadata metadata;
 
-	private SessionSaver saver = SessionHelperFactory.getSessionSaver();
-	private SessionDeleter deleter = SessionHelperFactory.getSessionDeleter();
-	private ScreenShotLoader screenShotsLoader = SessionHelperFactory.getScreenShotLoader();
-	private SessionMetadataHelper sessionMetadataHelper = SessionHelperFactory.getSessionMetadataHelper();
+	private SessionSaver saver;
+	private SessionDeleter deleter;
+	private ScreenShotLoader screenShotsLoader;
+	private SessionMetadataHelper sessionMetadataHelper;
+
+	public Session(SessionSaver saver, SessionDeleter deleter, ScreenShotLoader screenShotsLoader,
+			SessionMetadataHelper sessionMetadataHelper) {
+		this.saver = saver;
+		this.deleter = deleter;
+		this.screenShotsLoader = screenShotsLoader;
+		this.sessionMetadataHelper = sessionMetadataHelper;
+	}
 
 	public String getName() {
 		return name;

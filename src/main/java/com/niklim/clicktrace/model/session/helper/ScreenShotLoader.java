@@ -8,12 +8,18 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
 import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Click;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 
 public class ScreenShotLoader {
+	@Inject
+	private ImageLoader imageLoader;
+	@Inject
+	private ScreenShotDeleter deleter;
+
 	public List<ScreenShot> load(Session session) {
 		PropertiesConfiguration prop = new PropertiesConfiguration();
 		try {
@@ -24,8 +30,9 @@ public class ScreenShotLoader {
 		}
 
 		List<ScreenShot> shots = new ArrayList<ScreenShot>();
-		for (String shotFilename : FileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(), new FileManager.ImageFilter())) {
-			ScreenShot shot = new ScreenShot();
+		for (String shotFilename : FileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(),
+				new FileManager.ImageFilter())) {
+			ScreenShot shot = new ScreenShot(imageLoader, deleter);
 			shot.setFilename(shotFilename);
 			shot.setSession(session);
 			shot.setLabel(prop.getString(shotFilename + ".label"));

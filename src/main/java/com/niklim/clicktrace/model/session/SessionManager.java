@@ -8,11 +8,25 @@ import java.util.List;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.FileManager;
+import com.niklim.clicktrace.model.session.helper.ScreenShotLoader;
+import com.niklim.clicktrace.model.session.helper.SessionDeleter;
+import com.niklim.clicktrace.model.session.helper.SessionMetadataHelper;
+import com.niklim.clicktrace.model.session.helper.SessionSaver;
 
 @Singleton
 public class SessionManager {
+
+	@Inject
+	private SessionSaver saver;
+	@Inject
+	private SessionDeleter deleter;
+	@Inject
+	private ScreenShotLoader screenShotsLoader;
+	@Inject
+	private SessionMetadataHelper sessionMetadataHelper;
 
 	private static final String PROP_SUFIX_LABEL = ".label";
 	private static final String PROP_SUFIX_DESCRIPTION = ".description";
@@ -21,13 +35,17 @@ public class SessionManager {
 		List<Session> sessions = new LinkedList<Session>();
 
 		for (String sessionName : FileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
-			Session session = new Session();
+			Session session = createSessionInstance();
 			session.setName(sessionName);
 
 			sessions.add(session);
 		}
 
 		return sessions;
+	}
+
+	private Session createSessionInstance() {
+		return new Session(saver, deleter, screenShotsLoader, sessionMetadataHelper);
 	}
 
 	public Session createSession(String sessionName) throws SessionAlreadyExistsException, IOException {
@@ -37,7 +55,7 @@ public class SessionManager {
 
 		FileManager.createSession(sessionName);
 
-		Session session = new Session();
+		Session session = createSessionInstance();
 		session.setName(sessionName);
 
 		FileManager.createSessionPropsFile(sessionName);

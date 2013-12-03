@@ -10,7 +10,6 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.niklim.clicktrace.model.session.helper.ImageLoader;
 import com.niklim.clicktrace.model.session.helper.ScreenShotDeleter;
-import com.niklim.clicktrace.model.session.helper.SessionHelperFactory;
 
 public class ScreenShot {
 	private String filename;
@@ -21,8 +20,13 @@ public class ScreenShot {
 
 	private List<Click> clicks;
 
-	private ImageLoader imageLoader = SessionHelperFactory.getImageLoader();
-	private ScreenShotDeleter deleter = new ScreenShotDeleter();
+	private ImageLoader imageLoader;
+	private ScreenShotDeleter deleter;
+
+	public ScreenShot(ImageLoader imageLoader, ScreenShotDeleter deleter) {
+		this.imageLoader = imageLoader;
+		this.deleter = deleter;
+	}
 
 	public String getFilename() {
 		return filename;
@@ -71,8 +75,7 @@ public class ScreenShot {
 		}
 		ScreenShot other = (ScreenShot) o;
 
-		if (!Strings.nullToEmpty(filename).equals(
-				Strings.nullToEmpty(other.getFilename()))) {
+		if (!Strings.nullToEmpty(filename).equals(Strings.nullToEmpty(other.getFilename()))) {
 			return false;
 		}
 
