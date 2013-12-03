@@ -68,8 +68,12 @@ public class ScreenShotView {
 	}
 
 	private BufferedImage scaleImage(BufferedImage image, int thumbWidth) throws IOException {
-		BufferedImage scaledImage = Scalr.resize(image, thumbWidth);
-		return scaledImage;
+		if (image.getWidth() <= thumbWidth) {
+			return image;
+		} else {
+			BufferedImage scaledImage = Scalr.resize(image, thumbWidth);
+			return scaledImage;
+		}
 	}
 
 	public JPanel getPanel() {
