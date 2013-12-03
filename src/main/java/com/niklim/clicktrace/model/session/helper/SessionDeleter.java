@@ -6,12 +6,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.google.inject.Inject;
 import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
 
 public class SessionDeleter {
+	@Inject
+	private FileManager fileManager;
+
 	public void delete(Session delete) {
-		for (String filename : FileManager.loadFileNames(FileManager.SESSIONS_DIR + delete.getName(),
+		for (String filename : fileManager.loadFileNames(FileManager.SESSIONS_DIR + delete.getName(),
 				new FileManager.TrashFilter())) {
 			try {
 				Path filePath = Paths.get(FileManager.SESSIONS_DIR + delete.getName() + File.separator + filename);

@@ -45,7 +45,7 @@ public class FileManager {
 		createIfDirNotExists(SESSIONS_DIR);
 	}
 
-	public static String saveImage(BufferedImage image, String sessionName) throws IOException {
+	public String saveImage(BufferedImage image, String sessionName) throws IOException {
 		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image, "jpg", "png");
 
 		String filename = format.format(new Date()) + "." + compressionResult.format;
@@ -58,7 +58,7 @@ public class FileManager {
 		return filename;
 	}
 
-	private static String createFilePath(String sessionName, String filename) {
+	private String createFilePath(String sessionName, String filename) {
 		if (sessionName == null || sessionName.trim().equals("")) {
 			createIfDirNotExists(DEFAULT_DIR);
 			return DEFAULT_DIR + filename;
@@ -78,13 +78,13 @@ public class FileManager {
 		}
 	}
 
-	public static void deleteImage(String sessionName, String imageName) {
+	public void deleteImage(String sessionName, String imageName) {
 		String filePath = createFilePath(sessionName, imageName);
 		File file = new File(filePath);
 		file.delete();
 	}
 
-	public static List<String> loadFileNames(String dirName, FilenameFilter filter) {
+	public List<String> loadFileNames(String dirName, FilenameFilter filter) {
 		List<String> fileNames = new ArrayList<String>();
 
 		File[] files = new File(dirName).listFiles(filter);
@@ -97,11 +97,11 @@ public class FileManager {
 		return fileNames;
 	}
 
-	public static boolean createSessionDir(String sessionName) {
+	public boolean createSessionDir(String sessionName) {
 		return createIfDirNotExists(SESSIONS_DIR + sessionName);
 	}
 
-	public static void createSessionPropsFile(String sessionName) {
+	public void createSessionPropsFile(String sessionName) {
 		File f = new File(SESSIONS_DIR + sessionName + File.separator + SESSION_PROPS_FILENAME);
 		try {
 			f.createNewFile();
@@ -110,22 +110,22 @@ public class FileManager {
 		}
 	}
 
-	public static boolean sessionExists(String sessionName) {
+	public boolean sessionExists(String sessionName) {
 		return Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
 	}
 
-	public static void renameSession(String oldName, String newName) throws IOException {
+	public void renameSession(String oldName, String newName) throws IOException {
 		Files.move(Paths.get(FileManager.SESSIONS_DIR + oldName), Paths.get(FileManager.SESSIONS_DIR + newName));
 	}
 
-	public static void createSession(String sessionName) throws IOException {
+	public void createSession(String sessionName) throws IOException {
 		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
 		if (!newDir.mkdir()) {
 			throw new IOException(FileManager.SESSIONS_DIR + sessionName);
 		}
 	}
 
-	public static boolean canCreateSession(String sessionName) {
+	public boolean canCreateSession(String sessionName) {
 		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
 		boolean canCreate = newDir.mkdir();
 		if (canCreate) {
@@ -134,7 +134,7 @@ public class FileManager {
 		return canCreate;
 	}
 
-	public static PropertiesConfiguration loadSessionProperties(String sessionName) {
+	public PropertiesConfiguration loadSessionProperties(String sessionName) {
 		PropertiesConfiguration sessionProps;
 		try {
 			sessionProps = new PropertiesConfiguration(FileManager.SESSIONS_DIR + sessionName + File.separator

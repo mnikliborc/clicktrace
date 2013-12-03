@@ -38,6 +38,9 @@ public class ChangeCapture {
 	@Inject
 	private AppProperties props;
 
+	@Inject
+	private FileManager fileManager;
+
 	private List<Click> clicks = new LinkedList<Click>();
 	private String lastImageFilename;
 
@@ -77,7 +80,7 @@ public class ChangeCapture {
 				saveClicks();
 			}
 			try {
-				lastImageFilename = FileManager.saveImage(image, activeSession.getSession().getName());
+				lastImageFilename = fileManager.saveImage(image, activeSession.getSession().getName());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -85,7 +88,7 @@ public class ChangeCapture {
 	}
 
 	private void saveClicks() {
-		PropertiesConfiguration sessionProps = FileManager.loadSessionProperties(activeSession.getSession().getName());
+		PropertiesConfiguration sessionProps = fileManager.loadSessionProperties(activeSession.getSession().getName());
 		sessionProps.setProperty(lastImageFilename + ".clicks", Click.getString(clicks));
 		try {
 			sessionProps.save();

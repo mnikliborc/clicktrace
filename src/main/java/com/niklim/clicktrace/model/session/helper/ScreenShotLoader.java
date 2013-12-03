@@ -16,6 +16,8 @@ import com.niklim.clicktrace.model.session.Session;
 
 public class ScreenShotLoader {
 	@Inject
+	private FileManager fileManager;
+	@Inject
 	private ImageLoader imageLoader;
 	@Inject
 	private ScreenShotDeleter deleter;
@@ -30,7 +32,7 @@ public class ScreenShotLoader {
 		}
 
 		List<ScreenShot> shots = new ArrayList<ScreenShot>();
-		for (String shotFilename : FileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(),
+		for (String shotFilename : fileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(),
 				new FileManager.ImageFilter())) {
 			ScreenShot shot = new ScreenShot(imageLoader, deleter);
 			shot.setFilename(shotFilename);

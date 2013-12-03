@@ -23,6 +23,9 @@ public class ImmediateMouseCapture extends MouseCapture {
 	@Inject
 	private Robot robot;
 
+	@Inject
+	private FileManager fileManager;
+
 	public ImmediateMouseCapture() {
 		log.info("service instantiated");
 	}
@@ -39,7 +42,7 @@ public class ImmediateMouseCapture extends MouseCapture {
 
 		drawClick(image, e.getX(), e.getY(), e.getButton());
 		try {
-			FileManager.saveImage(image, activeSession.getSession().getName());
+			fileManager.saveImage(image, activeSession.getSession().getName());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

@@ -18,6 +18,8 @@ import com.niklim.clicktrace.model.session.helper.SessionSaver;
 
 @Singleton
 public class SessionManager {
+	@Inject
+	private FileManager fileManager;
 
 	@Inject
 	private SessionSaver saver;
@@ -34,7 +36,7 @@ public class SessionManager {
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
-		for (String sessionName : FileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
+		for (String sessionName : fileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
 			Session session = createSessionInstance();
 			session.setName(sessionName);
 
@@ -49,16 +51,16 @@ public class SessionManager {
 	}
 
 	public Session createSession(String sessionName) throws SessionAlreadyExistsException, IOException {
-		if (FileManager.sessionExists(sessionName)) {
+		if (fileManager.sessionExists(sessionName)) {
 			throw new SessionAlreadyExistsException();
 		}
 
-		FileManager.createSession(sessionName);
+		fileManager.createSession(sessionName);
 
 		Session session = createSessionInstance();
 		session.setName(sessionName);
 
-		FileManager.createSessionPropsFile(sessionName);
+		fileManager.createSessionPropsFile(sessionName);
 		return session;
 
 	}
@@ -84,14 +86,14 @@ public class SessionManager {
 	}
 
 	public void changeSessionName(Session session, String newName) throws SessionAlreadyExistsException, IOException {
-		if (!FileManager.canCreateSession(newName)) {
+		if (!fileManager.canCreateSession(newName)) {
 			throw new IOException();
 		}
-		if (FileManager.sessionExists(newName)) {
+		if (fileManager.sessionExists(newName)) {
 			throw new SessionAlreadyExistsException();
 		}
 
-		FileManager.renameSession(session.getName(), newName);
+		fileManager.renameSession(session.getName(), newName);
 		session.setName(newName);
 	}
 }
