@@ -17,6 +17,7 @@ import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
 import com.niklim.clicktrace.service.SessionAlreadyExistsException;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
 import com.niklim.clicktrace.view.editor.dialog.SettingsDialog;
 
 @Singleton
@@ -40,14 +41,23 @@ public class Controller {
 	private SettingsDialog settingsDialog;
 
 	@Inject
+	private NewSessionActionListener newSessionActionListener;
+
+	@Inject
 	public void init() {
 		Session session = sessionManager.findSessionByName(props.getLastSessionName());
-		openSession(session);
+		if (session != null) {
+			openSession(session);
+		}
 		editor.open();
 	}
 
 	public void startRecording(boolean hideEditor) {
 		if (!activeSession.isSessionOpen()) {
+			boolean sessionCreated = newSessionActionListener.createSession();
+			if (sessionCreated) {
+				startRecording(true);
+			}
 			return;
 		}
 
@@ -70,20 +80,24 @@ public class Controller {
 		activeSession.setRecording(false);
 		editor.sessionStateChanged();
 
-		int index = activeSession.getActiveShotIndex();
 		refreshSession();
-		showScreenShot(index);
+		int index = activeSession.getActiveShotIndex();
+		if (index >= 0) {
+			showScreenShot(index);
+		}
 	}
 
-	public void newSession(String sessionName) {
+	public boolean newSession(String sessionName) {
 		try {
 			Session session = sessionManager.createSession(sessionName);
 			openSession(session);
+			return true;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
 			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
+		return false;
 	}
 
 	public void openSession(Session session) {

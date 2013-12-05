@@ -13,7 +13,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.controller.KeyboardController;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
@@ -43,9 +42,6 @@ public class Editor {
 
 	@Inject
 	private KeyboardController keyboardController;
-
-	@Inject
-	private AppProperties props;
 
 	public Editor() {
 		try {

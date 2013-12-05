@@ -60,7 +60,7 @@ public class SessionMenu {
 		sessionDeleteSelected.setEnabled(activeSession.isSessionOpen());
 		sessionSelectAll.setEnabled(activeSession.isSessionOpen());
 		sessionDeselectAll.setEnabled(activeSession.isSessionOpen());
-		sessionStart.setEnabled(activeSession.isSessionOpen() && !activeSession.getRecording());
+		sessionStart.setEnabled(!activeSession.getRecording());
 		sessionStop.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
 		sessionRefresh.setEnabled(activeSession.isSessionOpen());
 		sessionChangeLabel.setEnabled(activeSession.isSessionOpen());
@@ -102,43 +102,50 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionStart() {
-		JMenuItem menuItem = Menu.createMenuItem("Start recording", Icons.START_SESSION, startSessionActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Start recording", Icons.START_SESSION,
+				startSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionStop() {
-		JMenuItem menuItem = Menu.createMenuItem("Stop recording", Icons.STOP_SESSION, stopSessionActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Stop recording", Icons.STOP_SESSION,
+				stopSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionRefresh() {
-		JMenuItem menuItem = Menu.createMenuItem("Refresh session", Icons.REFRESH_SESSION, refreshSessionActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Refresh session", Icons.REFRESH_SESSION,
+				refreshSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionSelectAll() {
-		JMenuItem menuItem = Menu.createMenuItem("Select all screenshots", selectAllScreenShotsActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Select all screenshots",
+				selectAllScreenShotsActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeselectAll() {
-		JMenuItem menuItem = Menu.createMenuItem("Deselect all screenshots", deselectAllScreenShotsActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Deselect all screenshots",
+				deselectAllScreenShotsActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteSelected() {
-		JMenuItem menuItem = Menu.createMenuItem("Delete selected screenshots", deleteSelectedScreenShotsActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Delete selected screenshots",
+				deleteSelectedScreenShotsActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteActiveSession() {
-		JMenuItem menuItem = Menu.createMenuItem("Delete current session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener);
+		JMenuItem menuItem = Menu.createMenuItem("Delete current session", Icons.DELETE_SESSION,
+				deleteCurrentSessionActionListener);
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

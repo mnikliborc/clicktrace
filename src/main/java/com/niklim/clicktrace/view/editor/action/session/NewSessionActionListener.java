@@ -14,9 +14,15 @@ public class NewSessionActionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String name = JOptionPane.showInputDialog("Set session name");
+
+	}
+
+	public boolean createSession() {
+		String name = JOptionPane.showInputDialog("Set new session name");
 		if (name != null) {
-			controller.newSession(name);
+			return controller.newSession(name);
+		} else {
+			return false;
 		}
 	}
 

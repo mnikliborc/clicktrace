@@ -96,9 +96,9 @@ public class Toolbar {
 		toolbar.add(deleteSession);
 
 		toolbar.addSeparator();
-		refreshSession = createButton("Refresh session "
-				+ ControlShortcutEnum.SESSION_REFRESH.text, Icons.REFRESH_SESSION,
-				refreshSessionActionListener);
+		refreshSession = createButton(
+				"Refresh session " + ControlShortcutEnum.SESSION_REFRESH.text,
+				Icons.REFRESH_SESSION, refreshSessionActionListener);
 		refreshSession.setEnabled(false);
 		toolbar.add(refreshSession);
 
@@ -131,7 +131,7 @@ public class Toolbar {
 	public void sessionStateChanged() {
 		deleteSession.setEnabled(activeSession.isSessionOpen());
 		refreshSession.setEnabled(activeSession.isSessionOpen());
-		startSession.setEnabled(activeSession.isSessionOpen() && !activeSession.getRecording());
+		startSession.setEnabled(!activeSession.getRecording());
 		stopSession.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
 	}
 

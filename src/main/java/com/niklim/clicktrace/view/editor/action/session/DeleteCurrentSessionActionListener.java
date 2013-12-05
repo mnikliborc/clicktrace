@@ -18,8 +18,8 @@ public class DeleteCurrentSessionActionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int answer = JOptionPane
-				.showConfirmDialog(editor.getFrame(), "Are you sure?", "", JOptionPane.OK_CANCEL_OPTION);
+		int answer = JOptionPane.showConfirmDialog(editor.getFrame(),
+				"Are you sure to delete the session?", "", JOptionPane.OK_CANCEL_OPTION);
 		if (answer == JOptionPane.OK_OPTION) {
 			controller.deleteActiveSession();
 		}

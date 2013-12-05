@@ -92,6 +92,10 @@ public class ActiveSession {
 	}
 
 	public void setFirstShotActive() {
+		if (session == null) {
+			return;
+		}
+
 		if (!session.getShots().isEmpty()) {
 			setActiveShot(session.getShots().get(0));
 		} else {
