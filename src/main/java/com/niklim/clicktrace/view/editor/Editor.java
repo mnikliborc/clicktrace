@@ -8,12 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.controller.KeyboardController;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
@@ -43,6 +43,9 @@ public class Editor {
 
 	@Inject
 	private KeyboardController keyboardController;
+
+	@Inject
+	private AppProperties props;
 
 	public Editor() {
 		try {
@@ -79,20 +82,11 @@ public class Editor {
 		frame.add(scrollPane);
 		frame.setJMenuBar(menu.getMenuBar());
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				open(null);
-			}
-		});
-
 		keyboardController.registerKeyboardHooks(frame);
 	}
 
-	public void open(Session session) {
+	public void open() {
 		frame.setVisible(true);
-		if (session != null) {
-			showSession(session);
-		}
 	}
 
 	public void showSession(Session session) {

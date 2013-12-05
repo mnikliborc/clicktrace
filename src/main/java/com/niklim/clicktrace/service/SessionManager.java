@@ -35,7 +35,8 @@ public class SessionManager {
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
-		for (String sessionName : fileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
+		for (String sessionName : fileManager.loadFileNames(FileManager.SESSIONS_DIR,
+				new FileManager.TrashFilter())) {
 			Session session = createSessionInstance();
 			session.setName(sessionName);
 
@@ -49,7 +50,8 @@ public class SessionManager {
 		return new Session(saver, deleter, screenShotsLoader, sessionMetadataHelper);
 	}
 
-	public Session createSession(String sessionName) throws SessionAlreadyExistsException, IOException {
+	public Session createSession(String sessionName) throws SessionAlreadyExistsException,
+			IOException {
 		if (fileManager.sessionExists(sessionName)) {
 			throw new SessionAlreadyExistsException();
 		}
@@ -72,7 +74,8 @@ public class SessionManager {
 		return new SessionPropertiesWriter(session);
 	}
 
-	public void changeSessionName(Session session, String newName) throws SessionAlreadyExistsException, IOException {
+	public void changeSessionName(Session session, String newName)
+			throws SessionAlreadyExistsException, IOException {
 		if (!fileManager.canCreateSession(newName)) {
 			throw new IOException();
 		}
@@ -82,5 +85,14 @@ public class SessionManager {
 
 		fileManager.renameSession(session.getName(), newName);
 		session.setName(newName);
+	}
+
+	public Session findSessionByName(String sessionName) {
+		for (Session session : loadAll()) {
+			if (session.getName().equals(sessionName)) {
+				return session;
+			}
+		}
+		return null;
 	}
 }

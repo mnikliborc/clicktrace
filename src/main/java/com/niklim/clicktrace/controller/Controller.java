@@ -39,6 +39,13 @@ public class Controller {
 	@Inject
 	private SettingsDialog settingsDialog;
 
+	@Inject
+	public void init() {
+		Session session = sessionManager.findSessionByName(props.getLastSessionName());
+		openSession(session);
+		editor.open();
+	}
+
 	public void startRecording(boolean hideEditor) {
 		if (!activeSession.isSessionOpen()) {
 			return;
@@ -82,12 +89,21 @@ public class Controller {
 	public void openSession(Session session) {
 		changeCapture.stop();
 
-		activeSession.setSession(session);
-		activeSession.setRecording(false);
-		activeSession.setFirstShotActive();
+		setActiveSession(session);
 
 		editor.showSession(session);
 		editor.sessionStateChanged();
+
+		if (session != null) {
+			props.setLastSessionName(session.getName());
+			props.save();
+		}
+	}
+
+	private void setActiveSession(Session session) {
+		activeSession.setSession(session);
+		activeSession.setRecording(false);
+		activeSession.setFirstShotActive();
 	}
 
 	public void deleteActiveSession() {

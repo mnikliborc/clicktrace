@@ -143,11 +143,11 @@ public class AppProperties {
 		props.setProperty(RECORD_CLICKS, record);
 	}
 
-	public String getLastSession() {
+	public String getLastSessionName() {
 		return props.getString(LAST_SESSION);
 	}
 
-	public void setLastSession(String sessionName) {
+	public void setLastSessionName(String sessionName) {
 		props.setProperty(LAST_SESSION, sessionName);
 	}
 }
