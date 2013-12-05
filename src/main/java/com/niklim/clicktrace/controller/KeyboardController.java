@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.view.editor.ControlShortcutEnum;
 import com.niklim.clicktrace.view.editor.Editor;
+import com.niklim.clicktrace.view.editor.action.screenshot.ChangeScreenShotLabelActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
@@ -36,6 +37,7 @@ import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActi
 import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.OpenOpenSessionDialogActionListener;
 import com.niklim.clicktrace.view.editor.action.session.RefreshSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.SelectAllScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.StartSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.StopSessionActionListener;
 
@@ -81,6 +83,12 @@ public class KeyboardController implements NativeKeyListener {
 
 	@Inject
 	private RefreshScreenShotActionListener refreshScreenShotActionListener;
+
+	@Inject
+	private SelectAllScreenShotsActionListener selectAllScreenShotsActionListener;
+
+	@Inject
+	private ChangeScreenShotLabelActionListener changeScreenShotLabelActionListener;
 
 	public KeyboardController() {
 		try {
@@ -165,6 +173,18 @@ public class KeyboardController implements NativeKeyListener {
 				controller.toggleSelectScreenShot();
 			}
 		});
+		registerAction(editorFrame, ControlShortcutEnum.SHOT_REFRESH, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				refreshScreenShotActionListener.actionPerformed(null);
+			}
+		});
+		registerAction(editorFrame, ControlShortcutEnum.SHOT_LABEL, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeScreenShotLabelActionListener.actionPerformed(null);
+			}
+		});
 
 		registerAction(editorFrame, ControlShortcutEnum.FIND, new ActionListener() {
 			@Override
@@ -172,12 +192,7 @@ public class KeyboardController implements NativeKeyListener {
 				openSearchDialogActionListener.actionPerformed(null);
 			}
 		});
-		registerAction(editorFrame, ControlShortcutEnum.SHOT_REFRESH, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				refreshScreenShotActionListener.actionPerformed(null);
-			}
-		});
+
 		registerAction(editorFrame, ControlShortcutEnum.SESSION_REFRESH, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -202,6 +217,13 @@ public class KeyboardController implements NativeKeyListener {
 				deleteCurrentSessionActionListener.actionPerformed(null);
 			}
 		});
+		registerAction(editorFrame, ControlShortcutEnum.SESSION_SELECT_ALL_SHOTS,
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						selectAllScreenShotsActionListener.actionPerformed(null);
+					}
+				});
 
 		registerMenuAction(editorFrame);
 	}

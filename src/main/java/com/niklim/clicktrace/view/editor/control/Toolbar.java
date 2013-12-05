@@ -105,7 +105,6 @@ public class Toolbar {
 		toolbar.addSeparator();
 		startSession = createButton("Record [Ctrl+Shift+R]", Icons.START_SESSION,
 				startSessionActionListener);
-		startSession.setEnabled(false);
 		toolbar.add(startSession);
 
 		toolbar.addSeparator();

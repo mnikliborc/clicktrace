@@ -22,6 +22,7 @@ public enum ControlShortcutEnum {
 	SESSION_NEW("[Shift+N]", KeyEvent.VK_N, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_OPEN("[Shift+O]", KeyEvent.VK_O, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_DELETE("[Shift+Del]", KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK),
+	SESSION_SELECT_ALL_SHOTS("[Shift+A]", KeyEvent.VK_A, KeyEvent.SHIFT_DOWN_MASK),
 	
 	FIND("[Ctrl+F]", KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 	// @formatter:on
