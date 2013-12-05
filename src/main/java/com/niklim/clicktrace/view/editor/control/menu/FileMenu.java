@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.OpenSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.OpenOpenSessionDialogActionListener;
 
 @Singleton
 public class FileMenu {
@@ -20,7 +20,7 @@ public class FileMenu {
 	private NewSessionActionListener newSessionActionListener;
 
 	@Inject
-	private OpenSessionActionListener openSessionActionListener;
+	private OpenOpenSessionDialogActionListener openSessionActionListener;
 
 	@Inject
 	public void init() {

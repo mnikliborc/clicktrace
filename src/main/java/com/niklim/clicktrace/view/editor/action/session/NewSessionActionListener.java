@@ -14,7 +14,7 @@ public class NewSessionActionListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		createSession();
 	}
 
 	public boolean createSession() {

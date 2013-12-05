@@ -34,7 +34,7 @@ import com.niklim.clicktrace.view.editor.action.screenshot.OpenSearchDialogActio
 import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.OpenSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.OpenOpenSessionDialogActionListener;
 import com.niklim.clicktrace.view.editor.action.session.RefreshSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.StartSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.StopSessionActionListener;
@@ -68,7 +68,7 @@ public class KeyboardController implements NativeKeyListener {
 	private OpenSearchDialogActionListener openSearchDialogActionListener;
 
 	@Inject
-	private OpenSessionActionListener openSessionActionListener;
+	private OpenOpenSessionDialogActionListener openSessionActionListener;
 
 	@Inject
 	private NewSessionActionListener newSessionActionListener;

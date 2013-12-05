@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.view.editor.dialog.OpenSessionDialog;
 
-public class OpenSessionActionListener implements ActionListener {
+public class OpenOpenSessionDialogActionListener implements ActionListener {
 	@Inject
 	private OpenSessionDialog openSessionDialog;
 

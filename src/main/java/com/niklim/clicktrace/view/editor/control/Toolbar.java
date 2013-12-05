@@ -18,7 +18,7 @@ import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActi
 import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeselectAllScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.OpenSessionActionListener;
+import com.niklim.clicktrace.view.editor.action.session.OpenOpenSessionDialogActionListener;
 import com.niklim.clicktrace.view.editor.action.session.RefreshSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.SelectAllScreenShotsActionListener;
 import com.niklim.clicktrace.view.editor.action.session.StartSessionActionListener;
@@ -56,7 +56,7 @@ public class Toolbar {
 	private DeselectAllScreenShotsActionListener deselectAllScreenShotsActionListener;
 
 	@Inject
-	private OpenSessionActionListener openSessionActionListener;
+	private OpenOpenSessionDialogActionListener openSessionActionListener;
 
 	@Inject
 	private OpenSearchDialogActionListener openSearchDialogActionListener;

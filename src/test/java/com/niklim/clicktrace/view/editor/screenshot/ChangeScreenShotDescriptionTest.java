@@ -21,6 +21,7 @@ public class ChangeScreenShotDescriptionTest extends AbstractSystemTest {
 
 		editorFixture.button(JButtonMatcher.withText("show description")).click();
 		assertThat(editorFixture.dialog().textBox().text()).isEqualTo("some description");
+		editorFixture.dialog().button(JButtonMatcher.withText("Cancel")).click();
 		editorFixture.comboBox().selectItem(1);
 
 		editorFixture.menuItemWithPath("Screenshot", "Change description").click();
