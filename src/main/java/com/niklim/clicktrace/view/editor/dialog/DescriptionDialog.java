@@ -20,7 +20,7 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.view.editor.Editor;
 import com.niklim.clicktrace.view.editor.TextComponentHistory;
 import com.niklim.clicktrace.view.editor.action.screenshot.SaveScreenShotDescriptionActionListener;
@@ -32,8 +32,7 @@ public class DescriptionDialog {
 
 	private JTextArea textarea;
 
-	@Inject
-	private ActiveSession activeSession;
+	private ScreenShot activeShot;
 
 	@Inject
 	private Editor editor;
@@ -48,13 +47,14 @@ public class DescriptionDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(editor.getFrame());
+		dialog = new JDialog(editor.getFrame(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		textarea = new JTextArea();
 		history = new TextComponentHistory(textarea);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490,
+				400);
 		JButton saveButton = new JButton("Save");
 		JButton cancelButton = new JButton("Cancel");
 
@@ -111,18 +111,20 @@ public class DescriptionDialog {
 			public void actionPerformed(ActionEvent e) {
 				save();
 			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK),
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void save() {
-		activeSession.getActiveShot().setDescription(textarea.getText());
+		activeShot.setDescription(textarea.getText());
 		saveScreenShotDescriptionActionListener.actionPerformed(null);
 		dialog.setVisible(false);
 	}
 
-	public void open() {
-		dialog.setTitle(activeSession.getActiveShot() + " - description");
-		textarea.setText(activeSession.getActiveShot().getDescription());
+	public void open(ScreenShot shot) {
+		activeShot = shot;
+		dialog.setTitle(shot + " - description");
+		textarea.setText(shot.getDescription());
 
 		resetHistory();
 
@@ -130,7 +132,7 @@ public class DescriptionDialog {
 	}
 
 	private void resetHistory() {
-		history.reset(activeSession.getActiveShot().getDescription());
+		history.reset(activeShot.getDescription());
 	}
 
 	public void close() {

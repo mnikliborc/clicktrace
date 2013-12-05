@@ -1,5 +1,7 @@
 package com.niklim.clicktrace;
 
+import javax.swing.ToolTipManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,8 @@ public class App {
 		injector.getInstance(MouseCapture.class);
 		injector.getInstance(KeyboardController.class);
 		injector.getInstance(Controller.class);
+
+		ToolTipManager.sharedInstance().setInitialDelay(1000);
 
 		log.info("app start");
 	}

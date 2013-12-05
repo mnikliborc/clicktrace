@@ -1,11 +1,14 @@
 package com.niklim.clicktrace.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.view.editor.dialog.ActiveShotListener;
 
 @Singleton
 public class ActiveSession {
@@ -13,6 +16,8 @@ public class ActiveSession {
 	private ScreenShot activeShot;
 	private boolean recording = false;
 	private Set<ScreenShot> selectedShots = new HashSet<ScreenShot>();
+
+	private List<ActiveShotListener> activeShotListeners = new ArrayList<ActiveShotListener>();
 
 	public Session getSession() {
 		return session;
@@ -39,7 +44,12 @@ public class ActiveSession {
 	}
 
 	public void setActiveShot(ScreenShot shot) {
-		this.activeShot = shot;
+		if (activeShot != shot) {
+			for (ActiveShotListener l : activeShotListeners) {
+				l.shotChanged(activeShot);
+			}
+		}
+		activeShot = shot;
 	}
 
 	public boolean isActiveShotOpen() {
@@ -83,15 +93,23 @@ public class ActiveSession {
 
 	public void setFirstShotActive() {
 		if (!session.getShots().isEmpty()) {
-			activeShot = session.getShots().get(0);
+			setActiveShot(session.getShots().get(0));
 		} else {
-			activeShot = null;
+			setActiveShot(null);
 		}
 
 	}
 
 	public int getActiveShotIndex() {
 		return session.getShots().indexOf(activeShot);
+	}
+
+	public void registerActiveShotListener(ActiveShotListener l) {
+		activeShotListeners.add(l);
+	}
+
+	public void unregisterActiveShotListener(ActiveShotListener l) {
+		activeShotListeners.remove(l);
 	}
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.helper.ScreenShotLoader;
 import com.niklim.clicktrace.model.session.helper.SessionDeleter;

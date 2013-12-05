@@ -11,6 +11,8 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class AppProperties {
+	private static final String APP_PROPERTIES_PATH = "app.properties";
+
 	private static final String JIRA_USERNAME = "jira.username";
 	private static final String JIRA_URL = "jira.url";
 	// private static final String CAPTURE_DIM_RIGHT_BOTTOM_Y =
@@ -24,7 +26,8 @@ public class AppProperties {
 	// private static final String SESSIONS_DIR = "sessions.dir";
 	private static final String CAPTURE_FREQUENCY = "capture.frequency";
 	private static final String IMAGE_EDITOR_PATH = "imageEditor.path";
-	private static final String APP_PROPERTIES_PATH = "app.properties";
+	private static final String RECORD_CLICKS = "capture.recordClicks";
+	private static final String LAST_SESSION = "lastSession";
 
 	private PropertiesConfiguration props;
 
@@ -32,6 +35,7 @@ public class AppProperties {
 	static {
 		defaults = new HashMap<String, Object>();
 		defaults.put(CAPTURE_FREQUENCY, 1.0);
+		defaults.put(RECORD_CLICKS, true);
 	}
 
 	public AppProperties() {
@@ -129,5 +133,21 @@ public class AppProperties {
 			return username;
 		}
 
+	}
+
+	public boolean getRecordMouseClicks() {
+		return props.getBoolean(RECORD_CLICKS);
+	}
+
+	public void setRecordMouseClicks(boolean record) {
+		props.setProperty(RECORD_CLICKS, record);
+	}
+
+	public String getLastSession() {
+		return props.getString(LAST_SESSION);
+	}
+
+	public void setLastSession(String sessionName) {
+		props.setProperty(LAST_SESSION, sessionName);
 	}
 }

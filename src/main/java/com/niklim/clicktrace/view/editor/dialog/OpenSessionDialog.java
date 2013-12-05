@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -55,7 +56,8 @@ public class OpenSessionDialog {
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490,
+				400);
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -77,6 +79,15 @@ public class OpenSessionDialog {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
+					dialog.setVisible(false);
+					controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+				}
+			}
+		});
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					dialog.setVisible(false);
 					controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
 				}
@@ -120,8 +131,8 @@ public class OpenSessionDialog {
 
 	private void loadSessions() {
 		List<Session> sessions = sessionManager.loadAll();
-		DefaultTableModel dataModel = new DefaultTableModel(
-				new String[] { "Name", "Screenshots", "Created", "Modified" }, sessions.size()) {
+		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots",
+				"Created", "Modified" }, sessions.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells not editable

@@ -1,4 +1,4 @@
-package com.niklim.clicktrace;
+package com.niklim.clicktrace.service;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import com.niklim.clicktrace.capture.FileCompressor;
+import com.niklim.clicktrace.capture.FileCompressor.CompressionResult;
 
 public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";

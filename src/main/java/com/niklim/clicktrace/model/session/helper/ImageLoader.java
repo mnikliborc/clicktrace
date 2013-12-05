@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.service.FileManager;
 
 public class ImageLoader {
 	public BufferedImage load(ScreenShot shot) {

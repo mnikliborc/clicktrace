@@ -62,6 +62,10 @@ public class Controller {
 		changeCapture.stop();
 		activeSession.setRecording(false);
 		editor.sessionStateChanged();
+
+		int index = activeSession.getActiveShotIndex();
+		refreshSession();
+		showScreenShot(index);
 	}
 
 	public void newSession(String sessionName) {
@@ -87,9 +91,12 @@ public class Controller {
 	}
 
 	public void deleteActiveSession() {
-		changeCapture.stop();
-
 		Session session = activeSession.getSession();
+		if (session == null) {
+			return;
+		}
+
+		changeCapture.stop();
 		session.delete();
 
 		activeSession.setSession(null);
@@ -106,6 +113,10 @@ public class Controller {
 
 	public void refreshSession() {
 		Session session = activeSession.getSession();
+		if (session == null) {
+			return;
+		}
+
 		session.loadScreenShots();
 		openSession(session);
 	}
@@ -119,20 +130,29 @@ public class Controller {
 
 	public void refreshScreenShot() {
 		ScreenShot shot = activeSession.getActiveShot();
+		if (shot == null) {
+			return;
+		}
+
 		shot.loadImage();
 		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
 		editor.refresh();
 	}
 
 	public void editScreenShot() {
+		ScreenShot activeShot = activeSession.getActiveShot();
+		if (activeShot == null) {
+			return;
+		}
+
 		if (Strings.isNullOrEmpty(props.getImageEditorPath())) {
 			JOptionPane.showMessageDialog(editor.getFrame(), Messages.NO_EDITOR_PATH_SET);
 			settingsDialog.open();
 		} else {
 			try {
-				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions" + File.separator
-						+ activeSession.getActiveShot().getSession().getName() + File.separator
-						+ activeSession.getActiveShot().getFilename());
+				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions"
+						+ File.separator + activeShot.getSession().getName() + File.separator
+						+ activeShot.getFilename());
 				pb.start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -142,6 +162,10 @@ public class Controller {
 
 	public void deleteActiveScreenShot() {
 		ScreenShot shot = activeSession.getActiveShot();
+		if (shot == null) {
+			return;
+		}
+
 		int indexOfNewActive = Math.max(0, activeSession.getSession().getShots().indexOf(shot) - 1);
 
 		activeSession.removeShot(shot);
@@ -188,14 +212,16 @@ public class Controller {
 		ScreenShot activeShot = activeSession.getActiveShot();
 		activeShot.setLabel(label);
 
-		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession
+				.getSession());
 		writer.saveShotLabel(activeSession.getActiveShot());
 
 		editor.refresh();
 	}
 
 	public void saveActiveScreenShotDescription() {
-		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession
+				.getSession());
 		writer.saveShotDescription(activeSession.getActiveShot());
 	}
 

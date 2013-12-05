@@ -86,7 +86,6 @@ public class Editor {
 		});
 
 		keyboardController.registerKeyboardHooks(frame);
-
 	}
 
 	public void open(Session session) {
@@ -173,6 +172,7 @@ public class Editor {
 
 	public void hide() {
 		frame.setState(JFrame.ICONIFIED);
+		frame.toFront();
 	}
 
 	public void scrollUp() {

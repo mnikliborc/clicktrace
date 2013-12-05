@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -48,6 +49,8 @@ public class SettingsDialog {
 	JTextField jiraUrl;
 	JTextField jiraUsername;
 
+	JCheckBox recordMouseClicks;
+
 	public SettingsDialog() {
 	}
 
@@ -59,11 +62,13 @@ public class SettingsDialog {
 		dialog.setTitle("Settings");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 270);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490,
+				270);
 
 		imageEditorFileChooser = new JFileChooser();
 
 		createCaptureFrequencyPanel();
+		createCaptureMouseClicksPanel();
 		// createCaptureDimensionPanel();
 		createImageEditorPathPanel();
 		createJiraPanel();
@@ -76,6 +81,13 @@ public class SettingsDialog {
 				dialog.setVisible(false);
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+	}
+
+	private void createCaptureMouseClicksPanel() {
+		recordMouseClicks = new JCheckBox();
+
+		dialog.add(new JLabel("Record mouse clicks"));
+		dialog.add(recordMouseClicks, "wrap");
 	}
 
 	private void createControlPanel() {
@@ -190,12 +202,14 @@ public class SettingsDialog {
 
 		jiraUrl.setText(props.getJiraConfig().getUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());
+		recordMouseClicks.setSelected(props.getRecordMouseClicks());
 	}
 
 	private void saveModel() {
 		props.setCaptureFrequency((Double) captureFrequency.getValue());
 		props.setImageEditorPath(imageEditorPath.getText());
 		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText()));
+		props.setRecordMouseClicks(recordMouseClicks.isSelected());
 
 		props.save();
 	}

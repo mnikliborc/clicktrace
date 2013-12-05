@@ -7,8 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.service.FileManager;
 
 public class SessionDeleter {
 	@Inject

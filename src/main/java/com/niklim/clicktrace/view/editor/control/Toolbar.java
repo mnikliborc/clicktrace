@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.view.editor.ControlShortcutEnum;
 import com.niklim.clicktrace.view.editor.action.screenshot.OpenSearchDialogActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
 import com.niklim.clicktrace.view.editor.action.session.DeleteSelectedScreenShotsActionListener;
@@ -78,33 +79,39 @@ public class Toolbar {
 		toolbar.setFloatable(false);
 		toolbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY));
 
-		toolbar.add(createButton("New session", Icons.NEW_SESSION, newSessionActionListener));
+		toolbar.add(createButton("New session " + ControlShortcutEnum.SESSION_NEW.text,
+				Icons.NEW_SESSION, newSessionActionListener));
 		toolbar.addSeparator();
-		toolbar.add(createButton("Open session", Icons.OPEN_SESSION, openSessionActionListener));
+		toolbar.add(createButton("Open session " + ControlShortcutEnum.SESSION_OPEN.text,
+				Icons.OPEN_SESSION, openSessionActionListener));
 		toolbar.addSeparator();
 
-		toolbar.add(createButton("Search", Icons.SEARCH, openSearchDialogActionListener));
+		toolbar.add(createButton("Find " + ControlShortcutEnum.FIND.text, Icons.SEARCH,
+				openSearchDialogActionListener));
 		toolbar.addSeparator();
 
-		deleteSession = createButton("Delete session", Icons.DELETE_SESSION, deleteCurrentSessionActionListener);
+		deleteSession = createButton("Delete session " + ControlShortcutEnum.SESSION_DELETE.text,
+				Icons.DELETE_SESSION, deleteCurrentSessionActionListener);
 		deleteSession.setEnabled(false);
 		toolbar.add(deleteSession);
 
 		toolbar.addSeparator();
-		refreshSession = createButton("Refresh session", Icons.REFRESH_SESSION, refreshSessionActionListener);
+		refreshSession = createButton("Refresh session "
+				+ ControlShortcutEnum.SESSION_REFRESH.text, Icons.REFRESH_SESSION,
+				refreshSessionActionListener);
 		refreshSession.setEnabled(false);
 		toolbar.add(refreshSession);
 
 		toolbar.addSeparator();
-		startSession = createButton("Record", Icons.START_SESSION, startSessionActionListener);
+		startSession = createButton("Record [Ctrl+Shift+R]", Icons.START_SESSION,
+				startSessionActionListener);
 		startSession.setEnabled(false);
-		startSession.setToolTipText("Record [Ctrl+Alt+r]");
 		toolbar.add(startSession);
 
 		toolbar.addSeparator();
-		stopSession = createButton("Pause", Icons.STOP_SESSION, stopSessionActionListener);
+		stopSession = createButton("Pause [Ctrl+Shift+S]", Icons.STOP_SESSION,
+				stopSessionActionListener);
 		stopSession.setEnabled(false);
-		stopSession.setToolTipText("Pause [Ctrl+Alt+s]");
 		toolbar.add(stopSession);
 	}
 

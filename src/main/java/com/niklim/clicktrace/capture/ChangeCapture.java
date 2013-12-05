@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.AppProperties;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.Click;
 import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
 @Singleton
@@ -46,10 +46,12 @@ public class ChangeCapture {
 
 	private List<Click> clicks = new LinkedList<Click>();
 	private String lastImageFilename;
+	private boolean recordMouseClicks;
 
 	private Timer time;
 
 	public void start() {
+		recordMouseClicks = props.getRecordMouseClicks();
 		time = new Timer();
 		int period = (int) ((double) 1000 / props.getCaptureFrequency());
 		time.schedule(new CaptureTask(), period, period);
@@ -76,14 +78,16 @@ public class ChangeCapture {
 	}
 
 	public synchronized void capture() {
-		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit()
+				.getScreenSize()));
 
 		if (detector.detect(image)) {
 			if (lastImageFilename != null) {
 				saveClicks();
 			}
 			try {
-				lastImageFilename = fileManager.saveImage(image, activeSession.getSession().getName());
+				lastImageFilename = fileManager.saveImage(image, activeSession.getSession()
+						.getName());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -91,7 +95,12 @@ public class ChangeCapture {
 	}
 
 	private void saveClicks() {
-		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
+		if (!recordMouseClicks) {
+			return;
+		}
+
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession
+				.getSession());
 		writer.saveShotClicks(lastImageFilename, clicks);
 		clicks.clear();
 	}

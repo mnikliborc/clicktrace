@@ -10,6 +10,7 @@ import org.junit.Before;
 
 import com.google.inject.Injector;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.view.editor.Editor;
 
 public abstract class AbstractSystemTest {

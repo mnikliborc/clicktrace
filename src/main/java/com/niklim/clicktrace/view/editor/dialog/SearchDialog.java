@@ -69,7 +69,8 @@ public class SearchDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[fill]rel[]"));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 820, 470);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 820,
+				470);
 
 		allSessionsRadio = new JRadioButton("All sessions");
 		activeSessionRadio = new JRadioButton("Active session");
@@ -102,6 +103,18 @@ public class SearchDialog {
 			}
 		});
 
+		resultTable.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					dialog.setVisible(false);
+					ScreenShot selectedShot = (ScreenShot) resultTable.getModel().getValueAt(
+							resultTable.getSelectedRow(), 0);
+					controller.openSessionOnScreenShot(selectedShot);
+				}
+			}
+		});
+
 		searchButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -114,7 +127,8 @@ public class SearchDialog {
 			@Override
 			public void keyTyped(KeyEvent event) {
 				if (event.getKeyChar() == '\n') {
-					search(searchQuery.getText(), searchType.isSelected(allSessionsRadio.getModel()),
+					search(searchQuery.getText(),
+							searchType.isSelected(allSessionsRadio.getModel()),
 							matchCase.isSelected());
 				}
 			}
@@ -166,7 +180,8 @@ public class SearchDialog {
 
 	@SuppressWarnings("serial")
 	public void search(String query, boolean allSessions, boolean matchCase) {
-		List<SimpleImmutableEntry<ScreenShot, String>> shots = searchService.search(query, allSessions, matchCase);
+		List<SimpleImmutableEntry<ScreenShot, String>> shots = searchService.search(query,
+				allSessions, matchCase);
 		DefaultTableModel dataModel = new DefaultTableModel(resultTableColumns, shots.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {

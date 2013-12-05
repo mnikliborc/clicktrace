@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
 public class ScreenShotLoader {

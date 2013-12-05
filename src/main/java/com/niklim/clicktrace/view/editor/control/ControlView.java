@@ -28,6 +28,7 @@ import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.Controller;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.view.editor.ControlShortcutEnum;
 import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
 import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
@@ -70,21 +71,27 @@ public class ControlView {
 
 		controlPanel.setVisible(false);
 
-		firstButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.FIRST_SCREENSHOT, "first")));
-		prevButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.PREV_SCREENSHOT, "previous")));
-		nextButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.NEXT_SCREENSHOT, "next")));
-		lastButton = new JButton(new ImageIcon(Icons.createIconImage(Icons.LAST_SCREENSHOT, "last")));
+		firstButton = createButton("First screenshot ", Icons.FIRST_SCREENSHOT,
+				ControlShortcutEnum.SHOT_FIRST);
+		prevButton = createButton("Previous screenshot ", Icons.PREV_SCREENSHOT,
+				ControlShortcutEnum.SHOT_PREV);
+		nextButton = createButton("Next screenshot ", Icons.NEXT_SCREENSHOT,
+				ControlShortcutEnum.SHOT_NEXT);
+		lastButton = createButton("Last screenshot ", Icons.LAST_SCREENSHOT,
+				ControlShortcutEnum.SHOT_LAST);
 
-		deleteButton = new JButton("delete", new ImageIcon(Icons.createIconImage(Icons.DELETE_SCREENSHOT, "delete")));
-		editButton = new JButton("edit", new ImageIcon(Icons.createIconImage(Icons.EDIT_SCREENSHOT, "edit")));
-		editButton.setToolTipText("[Ctrl+e]");
-		refreshButton = new JButton("refresh",
-				new ImageIcon(Icons.createIconImage(Icons.REFRESH_SCREENSHOT, "refresh")));
+		deleteButton = createButton("delete", "Delete screenshot ", Icons.DELETE_SCREENSHOT,
+				ControlShortcutEnum.SHOT_DELETE);
+		editButton = createButton("edit", "Open image editor ", Icons.EDIT_SCREENSHOT,
+				ControlShortcutEnum.SHOT_EDIT);
+		refreshButton = createButton("refresh", "Refresh screenshot ", Icons.REFRESH_SCREENSHOT,
+				ControlShortcutEnum.SHOT_REFRESH);
+
 		checkbox = new JCheckBox();
-		checkbox.setToolTipText("Select [Ctrl+SPACE]");
-		descriptionButton = new JButton("description", new ImageIcon(Icons.createIconImage(
-				Icons.DESCRIPTION_SCREENSHOT, "description")));
-		descriptionButton.setToolTipText("[Ctrl+d]");
+		checkbox.setToolTipText("Select " + ControlShortcutEnum.SHOT_SELECT.text);
+
+		descriptionButton = createButton("description", "Edit screenshot description ",
+				Icons.DESCRIPTION_SCREENSHOT, ControlShortcutEnum.SHOT_DESCRIPTION);
 
 		controlPanel.add(new JLabel("Screen shot"));
 		controlPanel.add(imagesComboBox);
@@ -179,6 +186,19 @@ public class ControlView {
 		});
 	}
 
+	private JButton createButton(String tooltip, String icon, ControlShortcutEnum shortcut) {
+		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
+		button.setToolTipText(tooltip + shortcut.text);
+		return button;
+	}
+
+	private JButton createButton(String label, String tooltip, String icon,
+			ControlShortcutEnum shortcut) {
+		JButton button = new JButton(label, new ImageIcon(Icons.createIconImage(icon, label)));
+		button.setToolTipText(tooltip + shortcut.text);
+		return button;
+	}
+
 	@Inject
 	public void init() {
 		panel.add(toolbar.getToolbar(), "wrap");
@@ -188,7 +208,8 @@ public class ControlView {
 	public void showImagesCombobox(Session session) {
 		controlPanel.setVisible(true);
 		List<ScreenShot> shots = new ArrayList<ScreenShot>(session.getShots());
-		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(shots.toArray(new ScreenShot[0])));
+		imagesComboBox.setModel(new DefaultComboBoxModel<ScreenShot>(shots
+				.toArray(new ScreenShot[0])));
 	}
 
 	public Component getComponent() {
@@ -205,8 +226,8 @@ public class ControlView {
 
 	public void setActiveScreenShot(ScreenShot shot) {
 		imagesComboBox.getModel().setSelectedItem(shot);
-		descriptionButton
-				.setText(Strings.isNullOrEmpty(shot.getDescription()) ? "add description" : "show description");
+		descriptionButton.setText(Strings.isNullOrEmpty(shot.getDescription()) ? "add description"
+				: "show description");
 
 		changeNavigationButtonState();
 	}

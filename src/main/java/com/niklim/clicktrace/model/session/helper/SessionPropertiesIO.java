@@ -5,8 +5,8 @@ import java.io.File;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.service.FileManager;
 
 public abstract class SessionPropertiesIO {
 	protected PropertiesConfiguration props;

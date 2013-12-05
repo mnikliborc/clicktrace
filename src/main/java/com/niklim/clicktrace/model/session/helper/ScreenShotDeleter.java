@@ -7,8 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
 public class ScreenShotDeleter {

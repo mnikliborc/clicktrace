@@ -11,8 +11,8 @@ import org.fest.swing.fixture.JOptionPaneFixture;
 import org.junit.Test;
 
 import com.niklim.clicktrace.AbstractSystemTest;
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.TestSessionsData;
+import com.niklim.clicktrace.service.FileManager;
 
 public class NewSessionTest extends AbstractSystemTest {
 

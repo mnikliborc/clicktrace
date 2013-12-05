@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.FileManager;
+import com.niklim.clicktrace.service.FileManager;
 
 @Singleton
 public class ImmediateMouseCapture extends MouseCapture {

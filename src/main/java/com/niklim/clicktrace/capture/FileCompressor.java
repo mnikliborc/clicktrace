@@ -1,4 +1,4 @@
-package com.niklim.clicktrace;
+package com.niklim.clicktrace.capture;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

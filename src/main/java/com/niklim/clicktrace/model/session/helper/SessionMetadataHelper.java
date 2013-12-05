@@ -7,9 +7,9 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Date;
 
-import com.niklim.clicktrace.FileManager;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.SessionMetadata;
+import com.niklim.clicktrace.service.FileManager;
 
 public class SessionMetadataHelper {
 
