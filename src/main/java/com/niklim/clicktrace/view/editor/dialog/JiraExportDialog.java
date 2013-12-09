@@ -17,14 +17,18 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.inject.Inject;
 import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.AppProperties.JiraConfig;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.service.JiraException;
 import com.niklim.clicktrace.service.JiraService;
@@ -57,7 +61,7 @@ public class JiraExportDialog {
 	private JDialog dialog;
 	JTextField jiraInstanceUrl;
 	JTextField username;
-	JTextField password;
+	JPasswordField password;
 	JTextField issueKey;
 
 	public void open() {
@@ -92,7 +96,7 @@ public class JiraExportDialog {
 
 		jiraInstanceUrl = new JTextField();
 		username = new JTextField();
-		password = new JTextField();
+		password = new JPasswordField();
 		issueKey = new JTextField();
 
 		dialog.add(new JLabel("JIRA URL"));
@@ -115,6 +119,12 @@ public class JiraExportDialog {
 		exportButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (StringUtils.isEmpty(issueKey.getText())) {
+					JOptionPane.showMessageDialog(dialog, Messages.EXPORT_ISSUE_KEY_EMPTY);
+					issueKey.requestFocus();
+					return;
+				}
+
 				if (confirmSessionExport()) {
 					exportSession();
 				}
@@ -154,7 +164,8 @@ public class JiraExportDialog {
 	}
 
 	private boolean askUserForExportConfirmation() {
-		int res = JOptionPane.showConfirmDialog(dialog, "Session exists. Overwrite?");
+		int res = JOptionPane.showConfirmDialog(dialog, "Session exists. Overwrite?", "Overwrite?",
+				JOptionPane.OK_CANCEL_OPTION);
 		if (res == JOptionPane.OK_OPTION) {
 			return true;
 		} else {
@@ -167,6 +178,9 @@ public class JiraExportDialog {
 			String content = compressedSession.get();
 			jiraService.exportSession(username.getText(), password.getText(), issueKey.getText(),
 					activeSession.getSession().getName(), content, jiraInstanceUrl.getText());
+
+			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
+			close();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(dialog, e.getMessage());

@@ -24,13 +24,8 @@ public class ClicktraceJiraRestClient extends AbstractAsynchronousRestClient {
 		try {
 			Promise<Result> p = getAndParse(new URI(jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE
 					+ issueKey + "/" + sessionName), new JsonResponseParser());
-			try {
-				return p.claim();
-			} catch (RestClientException e) {
-				e.printStackTrace();
-				return new Result(Result.Status.ERROR, e.getMessage());
-			}
-		} catch (URISyntaxException e) {
+			return p.claim();
+		} catch (Throwable e) {
 			e.printStackTrace();
 			return new Result(Result.Status.ERROR, e.getMessage());
 		}
