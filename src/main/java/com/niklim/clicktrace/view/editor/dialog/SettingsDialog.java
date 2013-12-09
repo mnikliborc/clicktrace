@@ -109,8 +109,8 @@ public class SettingsDialog {
 		cancelButton.setToolTipText("[Esc]");
 
 		JPanel controlPanel = new JPanel(new MigLayout("align right"));
-		controlPanel.add(saveButton, "w 80");
-		controlPanel.add(cancelButton, "w 80");
+		controlPanel.add(saveButton, "w 80, tag apply");
+		controlPanel.add(cancelButton, "w 80, tag cancel");
 		dialog.add(controlPanel, "span 3, grow, h 50");
 	}
 
@@ -200,7 +200,7 @@ public class SettingsDialog {
 			imageEditorPath.setText(props.getImageEditorPath());
 		}
 
-		jiraUrl.setText(props.getJiraConfig().getUrl());
+		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());
 		recordMouseClicks.setSelected(props.getRecordMouseClicks());
 	}
@@ -208,8 +208,10 @@ public class SettingsDialog {
 	private void saveModel() {
 		props.setCaptureFrequency((Double) captureFrequency.getValue());
 		props.setImageEditorPath(imageEditorPath.getText());
-		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText()));
 		props.setRecordMouseClicks(recordMouseClicks.isSelected());
+
+		String jiraRestPath = props.getJiraConfig().getRestPath();
+		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText(), jiraRestPath));
 
 		props.save();
 	}

@@ -30,17 +30,23 @@ public class ScreenShotView {
 	private Editor editor;
 
 	private JPanel panel;
-	private BufferedImage mouseMark;
+	private BufferedImage mouseMarkLeft;
+	private BufferedImage mouseMarkRight;
 
 	public ScreenShotView() {
 		panel = new JPanel(new MigLayout());
 
 		try {
-			URL file = Thread.currentThread().getContextClassLoader().getResource(Icons.MOUSE_MARK_RED);
-			mouseMark = ImageIO.read(file);
+			mouseMarkLeft = loadMoauseMark(Icons.MOUSE_MARK_RED_LEFT);
+			mouseMarkRight = loadMoauseMark(Icons.MOUSE_MARK_RED_RIGHT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private BufferedImage loadMoauseMark(String icon) throws IOException {
+		URL file = Thread.currentThread().getContextClassLoader().getResource(icon);
+		return ImageIO.read(file);
 	}
 
 	public void show(ScreenShot shot) {
@@ -57,14 +63,27 @@ public class ScreenShotView {
 
 	private BufferedImage markClicks(BufferedImage image, List<Click> clicks) {
 		Graphics2D g = image.createGraphics();
+		int clickIndex = 1;
 		for (Click click : clicks) {
-			g.setColor(Color.RED);
-			g.drawOval(click.getX() - 15, click.getY() - 15, 30, 30);
-			g.drawImage(mouseMark, click.getX() + 10, click.getY() - 25, null);
-			g.drawChars(String.valueOf(click.getButton()).toCharArray(), 0, 1, click.getX() - 15, click.getY() - 15);
+			drawMark(g, clickIndex, click);
+			clickIndex++;
 		}
 		g.dispose();
 		return image;
+	}
+
+	private void drawMark(Graphics2D g, int clickIndex, Click click) {
+		g.setColor(Color.RED);
+		g.drawOval(click.getX() - 15, click.getY() - 15, 30, 30);
+
+		if (click.getButton() == Click.Button.RIGHT) {
+			g.drawImage(mouseMarkRight, click.getX() + 10, click.getY() - 25, null);
+		} else {
+			g.drawImage(mouseMarkLeft, click.getX() + 10, click.getY() - 25, null);
+		}
+
+		g.drawChars(String.valueOf(clickIndex).toCharArray(), 0, 1, click.getX() - 15,
+				click.getY() - 15);
 	}
 
 	private BufferedImage scaleImage(BufferedImage image, int thumbWidth) throws IOException {

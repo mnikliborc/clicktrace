@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+import com.google.common.base.Strings;
 import com.google.inject.Singleton;
 
 @Singleton
@@ -14,7 +15,8 @@ public class AppProperties {
 	private static final String APP_PROPERTIES_PATH = "app.properties";
 
 	private static final String JIRA_USERNAME = "jira.username";
-	private static final String JIRA_URL = "jira.url";
+	private static final String JIRA_INSTANCE_URL = "jira.instanceUrl";
+	private static final String JIRA_REST_PATH = "jira.restPath";
 	// private static final String CAPTURE_DIM_RIGHT_BOTTOM_Y =
 	// "capture.dim.rightBottomY";
 	// private static final String CAPTURE_DIM_RIGHT_BOTTOM_X =
@@ -36,6 +38,7 @@ public class AppProperties {
 		defaults = new HashMap<String, Object>();
 		defaults.put(CAPTURE_FREQUENCY, 1.0);
 		defaults.put(RECORD_CLICKS, true);
+		defaults.put(JIRA_REST_PATH, "");
 	}
 
 	public AppProperties() {
@@ -108,31 +111,36 @@ public class AppProperties {
 	// }
 
 	public JiraConfig getJiraConfig() {
-		return new JiraConfig(props.getString(JIRA_URL), props.getString(JIRA_USERNAME));
+		return new JiraConfig(props.getString(JIRA_INSTANCE_URL), props.getString(JIRA_USERNAME),
+				props.getString(JIRA_REST_PATH));
 	}
 
 	public void setJiraConfig(JiraConfig conf) {
-		props.setProperty(JIRA_URL, conf.getUrl());
+		props.setProperty(JIRA_INSTANCE_URL, conf.getInstanceUrl());
 		props.setProperty(JIRA_USERNAME, conf.getUsername());
 	}
 
 	public static class JiraConfig {
-		private String url;
+		private String instanceUrl;
+		private String restPath;
 		private String username;
 
-		public JiraConfig(String url, String username) {
-			this.url = url;
+		public JiraConfig(String url, String username, String restPath) {
+			this.instanceUrl = url;
 			this.username = username;
 		}
 
-		public String getUrl() {
-			return url;
+		public String getInstanceUrl() {
+			return instanceUrl;
 		}
 
 		public String getUsername() {
 			return username;
 		}
 
+		public String getRestPath() {
+			return Strings.nullToEmpty(restPath);
+		}
 	}
 
 	public boolean getRecordMouseClicks() {

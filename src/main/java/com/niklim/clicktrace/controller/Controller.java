@@ -14,6 +14,7 @@ import com.niklim.clicktrace.capture.ChangeCapture;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.service.JiraService;
 import com.niklim.clicktrace.service.SessionAlreadyExistsException;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.view.editor.Editor;
@@ -36,6 +37,9 @@ public class Controller {
 
 	@Inject
 	private AppProperties props;
+
+	@Inject
+	private JiraService jiraService;
 
 	@Inject
 	private SettingsDialog settingsDialog;

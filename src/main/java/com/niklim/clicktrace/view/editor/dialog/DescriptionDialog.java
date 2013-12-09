@@ -58,11 +58,11 @@ public class DescriptionDialog {
 		JButton saveButton = new JButton("Save");
 		JButton cancelButton = new JButton("Cancel");
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(saveButton);
-		buttonPanel.add(cancelButton);
+		JPanel buttonPanel = new JPanel(new MigLayout());
+		buttonPanel.add(saveButton, "tag apply");
+		buttonPanel.add(cancelButton, "tag cancel");
 
-		dialog.add(new JScrollPane(textarea), "w 100%, h 100%,span,wrap");
+		dialog.add(new JScrollPane(textarea), "w 100%, h 100%, wrap");
 		dialog.add(buttonPanel, "align r");
 
 		createListeners(saveButton, cancelButton);
@@ -97,7 +97,6 @@ public class DescriptionDialog {
 				close();
 			}
 		});
-		cancelButton.setToolTipText("[Esc]");
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override

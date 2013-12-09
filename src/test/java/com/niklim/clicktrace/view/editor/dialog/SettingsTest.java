@@ -24,7 +24,7 @@ public class SettingsTest extends AbstractSystemTest {
 		editorFixture.dialog().button(JButtonMatcher.withText("Save")).click();
 
 		AppProperties props = injector.getInstance(AppProperties.class);
-		assertThat(props.getJiraConfig().getUrl()).isEqualTo("xyz");
+		assertThat(props.getJiraConfig().getInstanceUrl()).isEqualTo("xyz");
 		assertThat(props.getJiraConfig().getUsername()).isEqualTo("abc");
 
 		editorFixture.menuItemWithPath("Tools", "Settings").click();

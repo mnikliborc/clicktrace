@@ -65,9 +65,9 @@ public class OpenSessionDialog {
 		JButton openButton = new JButton("Open");
 		JButton cancelButton = new JButton("Cancel");
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.add(openButton);
-		buttonPanel.add(cancelButton);
+		JPanel buttonPanel = new JPanel(new MigLayout());
+		buttonPanel.add(cancelButton, "tag cancel");
+		buttonPanel.add(openButton, "tag apply");
 
 		dialog.add(new JScrollPane(table), "wrap");
 		dialog.add(buttonPanel, "align r");
@@ -107,7 +107,6 @@ public class OpenSessionDialog {
 				close(false);
 			}
 		});
-		cancelButton.setToolTipText("[Esc]");
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override

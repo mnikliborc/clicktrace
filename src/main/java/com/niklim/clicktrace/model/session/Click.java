@@ -11,12 +11,28 @@ import com.google.common.collect.Lists;
 public class Click {
 	private int x;
 	private int y;
-	private int button;
+	private Button button;
+
+	public enum Button {
+		LEFT, RIGHT, OTHER
+	}
+
+	public Click(int x, int y, Button button) {
+		this.x = x;
+		this.y = y;
+		this.button = button;
+	}
 
 	public Click(int x, int y, int button) {
 		this.x = x;
 		this.y = y;
-		this.button = button;
+		if (button == 1) {
+			this.button = Button.LEFT;
+		} else if (button == 2) {
+			this.button = Button.RIGHT;
+		} else {
+			this.button = Button.OTHER;
+		}
 	}
 
 	public int getX() {
@@ -27,7 +43,7 @@ public class Click {
 		return y;
 	}
 
-	public int getButton() {
+	public Button getButton() {
 		return button;
 	}
 
@@ -45,7 +61,7 @@ public class Click {
 			String[] vals = click.substring(1, click.length() - 1).split("-");
 			int x = Integer.parseInt(vals[0]);
 			int y = Integer.parseInt(vals[1]);
-			int button = Integer.parseInt(vals[2]);
+			Button button = Button.valueOf(vals[2]);
 			clicks.add(new Click(x, y, button));
 		}
 		return clicks;

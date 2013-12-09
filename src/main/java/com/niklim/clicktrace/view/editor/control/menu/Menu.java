@@ -59,5 +59,6 @@ public class Menu {
 	public void sessionStateChanged() {
 		sessionMenu.sessionStateChanged();
 		screenShotMenu.sessionStateChanged();
+		toolsMenu.sessionStateChanged();
 	}
 }

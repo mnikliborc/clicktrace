@@ -21,7 +21,8 @@ public class Icons {
 	public static final String FIRST_SCREENSHOT = "icons/gnome_go_first.png";
 	public static final String DESCRIPTION_SCREENSHOT = "icons/desc_edit.png";
 	public static final String SEARCH = "icons/search.png";
-	public static final String MOUSE_MARK_RED = "icons/mouse_red.png";
+	public static final String MOUSE_MARK_RED_LEFT = "icons/mouse_red_left.png";
+	public static final String MOUSE_MARK_RED_RIGHT = "icons/mouse_red_right.png";
 	public static final String MOUSE_MARK_GREEN = "icons/mouse_green.png";
 
 	public static Image createIconImage(String path, String description) {
