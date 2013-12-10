@@ -13,11 +13,10 @@ public abstract class SessionPropertiesIO {
 
 	public SessionPropertiesIO(Session session) {
 		try {
-			props = new PropertiesConfiguration(FileManager.SESSIONS_DIR + session.getName() + File.separator
-					+ FileManager.SESSION_PROPS_FILENAME);
+			props = new PropertiesConfiguration(new File(FileManager.SESSIONS_DIR
+					+ session.getName() + File.separator + FileManager.SESSION_PROPS_FILENAME));
 		} catch (ConfigurationException e) {
 			e.printStackTrace();
-			props = new PropertiesConfiguration();
 		}
 	}
 }
