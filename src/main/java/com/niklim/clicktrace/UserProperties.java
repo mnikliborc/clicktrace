@@ -1,9 +1,9 @@
 package com.niklim.clicktrace;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.google.common.base.Strings;
 import com.google.inject.Singleton;
@@ -50,11 +50,10 @@ public class UserProperties extends AbstractProperties {
 	}
 
 	public double getCaptureFrequency() {
-		BigDecimal freq = props.getBigDecimal(CAPTURE_FREQUENCY);
-		if (freq == null) {
+		try {
+			return props.getDouble(CAPTURE_FREQUENCY);
+		} catch (NoSuchElementException e) {
 			return 1.0;
-		} else {
-			return freq.doubleValue();
 		}
 	}
 
@@ -123,11 +122,10 @@ public class UserProperties extends AbstractProperties {
 	}
 
 	public boolean getRecordMouseClicks() {
-		String rec = props.getString(RECORD_CLICKS);
-		if (rec == null) {
+		try {
+			return props.getBoolean(RECORD_CLICKS);
+		} catch (NoSuchElementException e) {
 			return true;
-		} else {
-			return Boolean.valueOf(rec);
 		}
 	}
 

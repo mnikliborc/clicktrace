@@ -23,7 +23,8 @@ import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 @Path("/clicktrace")
-public class ClicktraceJiraRestMock {
+public class JiraRestClicktraceImportMock {
+	static final String FAKE_STREAM = "FAKE_STREAM";
 	public static final String ERROR_MSG = "Error message";
 
 	@GET
@@ -62,7 +63,11 @@ public class ClicktraceJiraRestMock {
 			JSONObject jsonObject;
 			try {
 				jsonObject = new JSONObject(json);
-				decompress(sessionName, jsonObject.getString("content"));
+				String stream = jsonObject
+						.getString(JiraRestClicktraceClient.JSON_CLICKTRACE_STREAM_FIELD_NAME);
+				if (!FAKE_STREAM.equals(stream)) {
+					decompress(sessionName, stream);
+				}
 				return Response.ok("{status=\"" + Result.Status.OK + "\"}").build();
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -78,9 +83,9 @@ public class ClicktraceJiraRestMock {
 		}
 	}
 
-	private void decompress(String sessionName, String content) throws IOException {
+	private void decompress(String sessionName, String stream) throws IOException {
 		try {
-			byte[] bytes = Base64.decode(content);
+			byte[] bytes = Base64.decode(stream);
 			ByteInputStream instream = new ByteInputStream(bytes, bytes.length);
 			XZInputStream inxz = new XZInputStream(instream);
 			FileOutputStream outstream = new FileOutputStream(sessionName + ".zip");

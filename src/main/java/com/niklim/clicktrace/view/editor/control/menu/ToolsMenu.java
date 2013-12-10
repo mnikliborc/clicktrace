@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.view.editor.action.screenshot.OpenSearchDialogActionListener;
 import com.niklim.clicktrace.view.editor.dialog.JiraExportDialog;
 import com.niklim.clicktrace.view.editor.dialog.SettingsDialog;
@@ -64,7 +65,12 @@ public class ToolsMenu {
 	}
 
 	public void sessionStateChanged() {
-		boolean atLeastOneShot = activeSession.getSession().getShots().size() > 0;
+		Session session = activeSession.getSession();
+
+		boolean atLeastOneShot = false;
+		if (session != null) {
+			atLeastOneShot = session.getShots().size() > 0;
+		}
 		toolsExportToJira.setEnabled(activeSession.isSessionOpen() && atLeastOneShot);
 	}
 

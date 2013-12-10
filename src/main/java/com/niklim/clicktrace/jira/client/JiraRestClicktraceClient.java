@@ -18,7 +18,7 @@ import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
 public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 	private static final Logger log = LoggerFactory.getLogger(JiraRestClicktraceClient.class);
 
-	private static final String JSON_CLICKTRACE_STREAM_FIELD_NAME = "stream";
+	static final String JSON_CLICKTRACE_STREAM_FIELD_NAME = "stream";
 
 	private final String jiraInstanceUrl;
 	private final String jiraRestClicktraceImportPath;
@@ -34,8 +34,8 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 		try {
 			log.debug("Check session: issueKey='{}', sessionName='{}', URL='{}'", issueKey,
 					sessionName, jiraInstanceUrl + jiraRestClicktraceImportPath);
-			String uri = jiraInstanceUrl + jiraRestClicktraceImportPath + "/" + issueKey + "/"
-					+ sessionName;
+
+			String uri = createUriString(issueKey, sessionName);
 			Promise<Result> p = getAndParse(new URI(uri), new JsonResponseParser());
 			return p.claim();
 		} catch (RestClientException e) {
@@ -44,6 +44,10 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 			e.printStackTrace();
 			return new Result(Result.Status.ERROR, e.getMessage());
 		}
+	}
+
+	private String createUriString(String issueKey, String sessionName) {
+		return jiraInstanceUrl + jiraRestClicktraceImportPath + "/" + issueKey + "/" + sessionName;
 	}
 
 	private Result handleRestClientException(RestClientException e) {
@@ -67,8 +71,8 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 
 			JSONObject json = new JSONObject();
 			json.put(JSON_CLICKTRACE_STREAM_FIELD_NAME, stream);
-			String uri = jiraInstanceUrl + jiraRestClicktraceImportPath + "/" + issueKey + "/"
-					+ sessionName;
+
+			String uri = createUriString(issueKey, sessionName);
 			Promise<Result> p = postAndParse(new URI(uri), json, new JsonResponseParser());
 			return p.claim();
 		} catch (RestClientException e) {
@@ -80,10 +84,13 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 	}
 
 	public class JsonResponseParser implements JsonObjectParser<Result> {
+		private static final String JIRA_RESPONSE_MSG_FIELD = "msg";
+		private static final String JIRA_RESPONSE_STATUS_FIELD = "status";
+
 		@Override
 		public Result parse(JSONObject json) throws JSONException {
-			Status status = Result.Status.valueOf(json.getString("status"));
-			String msg = json.optString("msg");
+			Status status = Result.Status.valueOf(json.getString(JIRA_RESPONSE_STATUS_FIELD));
+			String msg = json.optString(JIRA_RESPONSE_MSG_FIELD);
 			return new Result(status, msg);
 		}
 	}

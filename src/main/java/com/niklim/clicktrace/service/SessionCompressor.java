@@ -36,6 +36,7 @@ public class SessionCompressor {
 	}
 
 	private byte[] xz(byte[] zipBytes, String sessionName) throws IOException {
+		log.debug("XZ compression started");
 		ByteOutputStream outstream = new ByteOutputStream();
 		XZOutputStream outxz = new XZOutputStream(outstream, new LZMA2Options());
 		outxz.write(zipBytes);

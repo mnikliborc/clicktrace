@@ -15,7 +15,7 @@ import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
 
 public class ClicktraceJiraRestClientTest {
 	private static final String JIRA_URL = "http://localhost:9998";
-	private static final String JIRA_CLICKTRACE_PATH = "";
+	private static final String JIRA_REST_CLICKTRACE_IMPORT_PATH = "/clicktrace/import";
 
 	private static ExternalJerseyTestInstance jersey = new ExternalJerseyTestInstance();
 
@@ -51,7 +51,7 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = new JiraRestClicktraceClient(
 				new AsynchronousHttpClientFactory().createClient(new URI(JIRA_URL),
 						new BasicHttpAuthenticationHandler(user, password)), JIRA_URL,
-				JIRA_CLICKTRACE_PATH);
+				JIRA_REST_CLICKTRACE_IMPORT_PATH);
 		return cl;
 	}
 
@@ -98,7 +98,7 @@ public class ClicktraceJiraRestClientTest {
 
 		// then
 		assertThat(res.status).isEqualTo(Result.Status.ERROR);
-		assertThat(res.msg).isEqualTo(ClicktraceJiraRestMock.ERROR_MSG);
+		assertThat(res.msg).isEqualTo(JiraRestClicktraceImportMock.ERROR_MSG);
 	}
 
 	@Test
@@ -106,7 +106,7 @@ public class ClicktraceJiraRestClientTest {
 		// given
 		String issueKey = "ABC-1";
 		String sessionName = "name";
-		String stream = ".7 archive";
+		String stream = JiraRestClicktraceImportMock.FAKE_STREAM;
 
 		JiraRestClicktraceClient cl = createClient();
 
