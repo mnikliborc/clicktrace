@@ -27,8 +27,8 @@ import net.miginfocom.swing.MigLayout;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.AppProperties;
-import com.niklim.clicktrace.AppProperties.JiraConfig;
+import com.niklim.clicktrace.UserProperties;
+import com.niklim.clicktrace.UserProperties.JiraConfig;
 import com.niklim.clicktrace.view.editor.Editor;
 
 @Singleton
@@ -36,7 +36,7 @@ public class SettingsDialog {
 	JDialog dialog;
 
 	@Inject
-	private AppProperties props;
+	private UserProperties props;
 
 	@Inject
 	private Editor editor;

@@ -25,8 +25,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.AppProperties;
-import com.niklim.clicktrace.AppProperties.JiraConfig;
+import com.niklim.clicktrace.UserProperties;
+import com.niklim.clicktrace.UserProperties.JiraConfig;
 import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.service.JiraException;
@@ -42,7 +42,7 @@ public class JiraExportDialog {
 	private JiraService jiraService;
 
 	@Inject
-	private AppProperties props;
+	private UserProperties props;
 
 	@Inject
 	private ActiveSession activeSession;

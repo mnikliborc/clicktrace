@@ -6,7 +6,7 @@ import org.fest.swing.core.matcher.JButtonMatcher;
 import org.junit.Test;
 
 import com.niklim.clicktrace.AbstractSystemTest;
-import com.niklim.clicktrace.AppProperties;
+import com.niklim.clicktrace.UserProperties;
 import com.niklim.clicktrace.TestSessionsData;
 
 public class SettingsTest extends AbstractSystemTest {
@@ -23,7 +23,7 @@ public class SettingsTest extends AbstractSystemTest {
 
 		editorFixture.dialog().button(JButtonMatcher.withText("Save")).click();
 
-		AppProperties props = injector.getInstance(AppProperties.class);
+		UserProperties props = injector.getInstance(UserProperties.class);
 		assertThat(props.getJiraConfig().getInstanceUrl()).isEqualTo("xyz");
 		assertThat(props.getJiraConfig().getUsername()).isEqualTo("abc");
 

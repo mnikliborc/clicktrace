@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.AppProperties;
+import com.niklim.clicktrace.UserProperties;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.session.Click;
 import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
@@ -36,7 +36,7 @@ public class ChangeCapture {
 	private ActiveSession activeSession;
 
 	@Inject
-	private AppProperties props;
+	private UserProperties props;
 
 	@Inject
 	private FileManager fileManager;

@@ -8,24 +8,19 @@ import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.AppProperties;
-import com.niklim.clicktrace.AppProperties.JiraConfig;
-import com.niklim.clicktrace.jira.client.ClicktraceJiraRestClient;
-import com.niklim.clicktrace.jira.client.ClicktraceJiraRestClient.Result;
-import com.niklim.clicktrace.jira.client.ClicktraceJiraRestClient.Result.Status;
+import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient;
+import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
+import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
 
 public class JiraService {
 	@Inject
-	private AppProperties props;
+	private AppProperties appProps;
 
 	public boolean checkSessionExist(String username, String password, String issueKey,
 			String sessionName, String jiraInstanceUrl) throws JiraException {
 		try {
-			JiraConfig jiraConfig = props.getJiraConfig();
-			String jiraResourceUrl = jiraInstanceUrl;// +
-														// jiraConfig.getRestPath();
-
-			ClicktraceJiraRestClient client = createClient(username, password, jiraInstanceUrl);
-			Result res = client.checkSession(issueKey, sessionName, jiraResourceUrl);
+			JiraRestClicktraceClient client = createClient(username, password, jiraInstanceUrl);
+			Result res = client.checkSession(issueKey, sessionName);
 
 			return handleCheckSessionExistsResult(res);
 		} catch (URISyntaxException e) {
@@ -47,12 +42,8 @@ public class JiraService {
 	public void exportSession(String username, String password, String issueKey,
 			String sessionName, String stream, String jiraInstanceUrl) throws JiraException {
 		try {
-			JiraConfig jiraConfig = props.getJiraConfig();
-			String jiraResourceUrl = jiraInstanceUrl;// +
-														// jiraConfig.getRestPath();
-
-			ClicktraceJiraRestClient client = createClient(username, password, jiraInstanceUrl);
-			Result res = client.exportSession(issueKey, sessionName, stream, jiraResourceUrl);
+			JiraRestClicktraceClient client = createClient(username, password, jiraInstanceUrl);
+			Result res = client.exportSession(issueKey, sessionName, stream);
 
 			if (res.status == Result.Status.ERROR) {
 				throw new JiraException(res.msg);
@@ -63,7 +54,7 @@ public class JiraService {
 		}
 	}
 
-	private ClicktraceJiraRestClient createClient(String username, String password,
+	private JiraRestClicktraceClient createClient(String username, String password,
 			String jiraInstanceUrl) throws URISyntaxException {
 		URI serverUri = new URI(jiraInstanceUrl);
 		BasicHttpAuthenticationHandler authenticationHandler = new BasicHttpAuthenticationHandler(
@@ -71,7 +62,8 @@ public class JiraService {
 		HttpClient httpClient = new AsynchronousHttpClientFactory().createClient(serverUri,
 				authenticationHandler);
 
-		return new ClicktraceJiraRestClient(httpClient);
+		return new JiraRestClicktraceClient(httpClient, jiraInstanceUrl,
+				appProps.getJiraRestClicktraceImportPath());
 	}
 
 }

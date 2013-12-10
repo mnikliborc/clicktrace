@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
-import com.niklim.clicktrace.jira.client.ClicktraceJiraRestClient.Result;
+import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
 
 public class ClicktraceJiraRestClientTest {
 	private static final String JIRA_URL = "http://localhost:9998";
@@ -36,21 +36,22 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "notlogged";
 
-		ClicktraceJiraRestClient cl = createClient();
+		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName, JIRA_URL + JIRA_CLICKTRACE_PATH);
+		Result res = cl.checkSession(issueKey, sessionName);
 
 		// then
 		assertThat(res.status).isEqualTo(Result.Status.ERROR);
 	}
 
-	private ClicktraceJiraRestClient createClient() throws URISyntaxException {
+	private JiraRestClicktraceClient createClient() throws URISyntaxException {
 		String user = "admin";
 		String password = "admin";
-		ClicktraceJiraRestClient cl = new ClicktraceJiraRestClient(
+		JiraRestClicktraceClient cl = new JiraRestClicktraceClient(
 				new AsynchronousHttpClientFactory().createClient(new URI(JIRA_URL),
-						new BasicHttpAuthenticationHandler(user, password)));
+						new BasicHttpAuthenticationHandler(user, password)), JIRA_URL,
+				JIRA_CLICKTRACE_PATH);
 		return cl;
 	}
 
@@ -60,10 +61,10 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "existing";
 
-		ClicktraceJiraRestClient cl = createClient();
+		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName, JIRA_URL + JIRA_CLICKTRACE_PATH);
+		Result res = cl.checkSession(issueKey, sessionName);
 
 		// then
 		assertThat(res.status).isEqualTo(Result.Status.SESSION_EXISTS);
@@ -75,10 +76,10 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "nonExisting";
 
-		ClicktraceJiraRestClient cl = createClient();
+		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName, JIRA_URL + JIRA_CLICKTRACE_PATH);
+		Result res = cl.checkSession(issueKey, sessionName);
 
 		// then
 		assertThat(res.status).isEqualTo(Result.Status.NO_SESSION);
@@ -90,10 +91,10 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "error";
 
-		ClicktraceJiraRestClient cl = createClient();
+		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName, JIRA_URL + JIRA_CLICKTRACE_PATH);
+		Result res = cl.checkSession(issueKey, sessionName);
 
 		// then
 		assertThat(res.status).isEqualTo(Result.Status.ERROR);
@@ -107,11 +108,10 @@ public class ClicktraceJiraRestClientTest {
 		String sessionName = "name";
 		String stream = ".7 archive";
 
-		ClicktraceJiraRestClient cl = createClient();
+		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.exportSession(issueKey, sessionName, stream, JIRA_URL
-				+ JIRA_CLICKTRACE_PATH);
+		Result res = cl.exportSession(issueKey, sessionName, stream);
 
 		// then
 		assertThat(res.status).isEqualTo(Result.Status.OK);

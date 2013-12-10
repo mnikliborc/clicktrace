@@ -19,7 +19,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.tukaani.xz.XZInputStream;
 
-import com.niklim.clicktrace.jira.client.ClicktraceJiraRestClient.Result;
+import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 @Path("/clicktrace")
