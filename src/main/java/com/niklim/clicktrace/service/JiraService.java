@@ -21,7 +21,8 @@ public class JiraService {
 			String sessionName, String jiraInstanceUrl) throws JiraException {
 		try {
 			JiraConfig jiraConfig = props.getJiraConfig();
-			String jiraResourceUrl = jiraInstanceUrl + jiraConfig.getRestPath();
+			String jiraResourceUrl = jiraInstanceUrl;// +
+														// jiraConfig.getRestPath();
 
 			ClicktraceJiraRestClient client = createClient(username, password, jiraInstanceUrl);
 			Result res = client.checkSession(issueKey, sessionName, jiraResourceUrl);
@@ -47,7 +48,8 @@ public class JiraService {
 			String sessionName, String content, String jiraInstanceUrl) throws JiraException {
 		try {
 			JiraConfig jiraConfig = props.getJiraConfig();
-			String jiraResourceUrl = jiraInstanceUrl + jiraConfig.getRestPath();
+			String jiraResourceUrl = jiraInstanceUrl;// +
+														// jiraConfig.getRestPath();
 
 			ClicktraceJiraRestClient client = createClient(username, password, jiraInstanceUrl);
 			Result res = client.exportSession(issueKey, sessionName, content, jiraResourceUrl);

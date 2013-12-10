@@ -38,7 +38,7 @@ public class AppProperties {
 		defaults = new HashMap<String, Object>();
 		defaults.put(CAPTURE_FREQUENCY, 1.0);
 		defaults.put(RECORD_CLICKS, true);
-		defaults.put(JIRA_REST_PATH, "");
+		defaults.put(JIRA_REST_PATH, "/rest/clicktrace/1.0");
 	}
 
 	public AppProperties() {

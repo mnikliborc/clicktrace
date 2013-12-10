@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.xml.security.utils.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,9 @@ public class SessionCompressor {
 	public String compress(Session session) throws IOException {
 		String sessionName = session.getName();
 		byte[] zipBytes = zip(sessionName);
+		log.debug("Zipped size={}", zipBytes.length);
 		byte[] xzBytes = xz(zipBytes, sessionName);
+		log.debug("XZ+Zipped size={}", xzBytes.length);
 
 		String content = Base64.encode(xzBytes);
 		return content;
@@ -50,7 +53,7 @@ public class SessionCompressor {
 		byte[] buffer = new byte[1024];
 		String source = FileManager.SESSIONS_DIR + sessionName;
 
-		ByteOutputStream bos = new ByteOutputStream();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);
 
 		List<String> filenames = fileManager.loadFileNames(source, new FilenameFilter() {
@@ -79,7 +82,7 @@ public class SessionCompressor {
 		zos.close();
 
 		log.debug("Zip compression finished");
-		return bos.getBytes();
+		return bos.toByteArray();
 	}
 
 }

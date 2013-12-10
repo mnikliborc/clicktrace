@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -116,6 +115,10 @@ public class JiraExportDialog {
 		controlPanel.add(cancelButton, "w 80, tag cancel");
 		dialog.add(controlPanel, "span 2, grow, h 50");
 
+		createActionListeners(cancelButton, exportButton);
+	}
+
+	private void createActionListeners(JButton cancelButton, JButton exportButton) {
 		exportButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -181,13 +184,10 @@ public class JiraExportDialog {
 
 			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
 			close();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(dialog, e.getMessage());
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (JiraException e) {
+			JOptionPane.showMessageDialog(dialog, e.getMessage());
+		} catch (Throwable e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		}
 
