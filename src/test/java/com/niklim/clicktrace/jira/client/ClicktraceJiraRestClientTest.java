@@ -105,12 +105,12 @@ public class ClicktraceJiraRestClientTest {
 		// given
 		String issueKey = "ABC-1";
 		String sessionName = "name";
-		String content = ".7 archive";
+		String stream = ".7 archive";
 
 		ClicktraceJiraRestClient cl = createClient();
 
 		// when
-		Result res = cl.exportSession(issueKey, sessionName, content, JIRA_URL
+		Result res = cl.exportSession(issueKey, sessionName, stream, JIRA_URL
 				+ JIRA_CLICKTRACE_PATH);
 
 		// then

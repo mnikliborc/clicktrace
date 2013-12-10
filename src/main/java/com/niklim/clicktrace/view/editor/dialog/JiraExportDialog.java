@@ -178,9 +178,9 @@ public class JiraExportDialog {
 
 	private void exportSession() {
 		try {
-			String content = compressedSession.get();
+			String stream = compressedSession.get();
 			jiraService.exportSession(username.getText(), password.getText(), issueKey.getText(),
-					activeSession.getSession().getName(), content, jiraInstanceUrl.getText());
+					activeSession.getSession().getName(), stream, jiraInstanceUrl.getText());
 
 			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
 			close();

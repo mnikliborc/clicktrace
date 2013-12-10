@@ -1,7 +1,6 @@
 package com.niklim.clicktrace.jira.client;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,12 +12,14 @@ import com.atlassian.jira.rest.client.RestClientException;
 import com.atlassian.jira.rest.client.internal.async.AbstractAsynchronousRestClient;
 import com.atlassian.jira.rest.client.internal.json.JsonObjectParser;
 import com.atlassian.util.concurrent.Promise;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.jira.client.ClicktraceJiraRestClient.Result.Status;
 
 public class ClicktraceJiraRestClient extends AbstractAsynchronousRestClient {
 	private static final Logger log = LoggerFactory.getLogger(ClicktraceJiraRestClient.class);
 
 	private static final String CLICKTRACE_IMPORT_RESOURCE = "/rest/clicktrace/1.0/clicktrace/import/";
+	private static final String JSON_CLICKTRACE_STREAM_FIELD_NAME = "stream";
 
 	public ClicktraceJiraRestClient(HttpClient client) {
 		super(client);
@@ -28,37 +29,45 @@ public class ClicktraceJiraRestClient extends AbstractAsynchronousRestClient {
 		try {
 			log.debug("Check session: issueKey='{}', sessionName='{}', URL='{}'", issueKey,
 					sessionName, jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE);
-			Promise<Result> p = getAndParse(new URI(jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE
-					+ issueKey + "/" + sessionName), new JsonResponseParser());
+			String uri = jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE + issueKey + "/" + sessionName;
+			Promise<Result> p = getAndParse(new URI(uri), new JsonResponseParser());
 			return p.claim();
+		} catch (RestClientException e) {
+			return handleRestClientException(e);
 		} catch (Throwable e) {
 			e.printStackTrace();
 			return new Result(Result.Status.ERROR, e.getMessage());
 		}
 	}
 
-	public Result exportSession(String issueKey, String sessionName, String content,
-			String jiraRestUrl) {
-
-		JSONObject json = new JSONObject();
-		try {
-			json.put("content", content);
-		} catch (JSONException e1) {
-			e1.printStackTrace();
+	private Result handleRestClientException(RestClientException e) {
+		if (e.getStatusCode().or(0) == 401) {
+			return new Result(Result.Status.ERROR, Messages.EXPORT_AUTHORIZATION_ERROR);
+		} else if (e.getStatusCode().or(0) == 404) {
+			return new Result(Result.Status.ERROR, Messages.EXPORT_WRONG_URL_ERROR);
+		} else if (e.getStatusCode().or(0) == 403) {
+			return new Result(Result.Status.ERROR, Messages.EXPORT_CAPTCHA_ERROR);
+		} else {
+			e.printStackTrace();
+			return new Result(Result.Status.ERROR, Messages.EXPORT_UNKNOWN_SERVER_ERROR);
 		}
+	}
+
+	public Result exportSession(String issueKey, String sessionName, String stream,
+			String jiraRestUrl) {
 
 		try {
 			log.debug("Export session: issueKey='{}', sessionName='{}', URL='{}'", issueKey,
 					sessionName, jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE);
-			Promise<Result> p = postAndParse(new URI(jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE
-					+ issueKey + "/" + sessionName), json, new JsonResponseParser());
-			try {
-				return p.claim();
-			} catch (RestClientException e) {
-				e.printStackTrace();
-				return new Result(Result.Status.ERROR, e.getMessage());
-			}
-		} catch (URISyntaxException e) {
+
+			JSONObject json = new JSONObject();
+			json.put(JSON_CLICKTRACE_STREAM_FIELD_NAME, stream);
+			String uri = jiraRestUrl + CLICKTRACE_IMPORT_RESOURCE + issueKey + "/" + sessionName;
+			Promise<Result> p = postAndParse(new URI(uri), json, new JsonResponseParser());
+			return p.claim();
+		} catch (RestClientException e) {
+			return handleRestClientException(e);
+		} catch (Throwable e) {
 			e.printStackTrace();
 			return new Result(Result.Status.ERROR, e.getMessage());
 		}

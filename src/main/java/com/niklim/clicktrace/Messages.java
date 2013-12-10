@@ -7,4 +7,8 @@ public interface Messages {
 
 	public static final String EXPORT_SUCCESS = "Session successfully exported to JIRA.";
 	public static final Object EXPORT_ISSUE_KEY_EMPTY = "Issue key must not be empty.";
+	public static final String EXPORT_UNKNOWN_SERVER_ERROR = "Unknown server error occured.";
+	public static final String EXPORT_AUTHORIZATION_ERROR = "Wrong username or password.";
+	public static final String EXPORT_WRONG_URL_ERROR = "Wrong JIRA URL.";
+	public static final String EXPORT_CAPTCHA_ERROR = "Sorry dude, it looks like you have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
 }
