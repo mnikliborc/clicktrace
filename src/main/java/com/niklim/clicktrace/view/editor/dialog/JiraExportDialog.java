@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.view.editor.dialog;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -25,9 +26,9 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.UserProperties;
 import com.niklim.clicktrace.UserProperties.JiraConfig;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.service.JiraException;
 import com.niklim.clicktrace.service.JiraService;
@@ -178,10 +179,12 @@ public class JiraExportDialog {
 
 	private void exportSession() {
 		try {
+			showWaitingCursor();
 			String stream = compressedSession.get();
+
 			jiraService.exportSession(username.getText(), password.getText(), issueKey.getText(),
 					activeSession.getSession().getName(), stream, jiraInstanceUrl.getText());
-
+			hideWaitingCursor();
 			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
 			close();
 		} catch (JiraException e) {
@@ -191,5 +194,13 @@ public class JiraExportDialog {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		}
 
+	}
+
+	private void showWaitingCursor() {
+		dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+	}
+
+	private void hideWaitingCursor() {
+		dialog.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 }

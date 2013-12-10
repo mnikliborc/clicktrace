@@ -37,6 +37,7 @@ public class ToolsMenu {
 		JMenuItem toolsSettings = createToolsSettings();
 		JMenuItem toolsSearch = createToolsSearch();
 		toolsExportToJira = createToolsExportToJira();
+		toolsExportToJira.setEnabled(false);
 
 		tools.add(toolsSettings);
 		tools.add(toolsSearch);
