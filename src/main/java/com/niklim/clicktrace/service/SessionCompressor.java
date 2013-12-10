@@ -17,7 +17,6 @@ import org.tukaani.xz.XZOutputStream;
 
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.session.Session;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class SessionCompressor {
 	private static final Logger log = LoggerFactory.getLogger(SessionCompressor.class);
@@ -37,7 +36,7 @@ public class SessionCompressor {
 
 	private byte[] xz(byte[] zipBytes, String sessionName) throws IOException {
 		log.debug("XZ compression started");
-		ByteOutputStream outstream = new ByteOutputStream();
+		ByteArrayOutputStream outstream = new ByteArrayOutputStream();
 		XZOutputStream outxz = new XZOutputStream(outstream, new LZMA2Options());
 		outxz.write(zipBytes);
 		outxz.flush();
@@ -45,7 +44,7 @@ public class SessionCompressor {
 		outstream.close();
 
 		log.debug("XZ compression finished");
-		return outstream.getBytes();
+		return outstream.toByteArray();
 	}
 
 	private byte[] zip(String sessionName) throws IOException {

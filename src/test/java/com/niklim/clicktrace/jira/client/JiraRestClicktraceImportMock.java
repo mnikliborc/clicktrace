@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.jira.client;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -20,7 +21,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.tukaani.xz.XZInputStream;
 
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 @Path("/clicktrace")
 public class JiraRestClicktraceImportMock {
@@ -86,7 +86,7 @@ public class JiraRestClicktraceImportMock {
 	private void decompress(String sessionName, String stream) throws IOException {
 		try {
 			byte[] bytes = Base64.decode(stream);
-			ByteInputStream instream = new ByteInputStream(bytes, bytes.length);
+			ByteArrayInputStream instream = new ByteArrayInputStream(bytes);
 			XZInputStream inxz = new XZInputStream(instream);
 			FileOutputStream outstream = new FileOutputStream(sessionName + ".zip");
 
