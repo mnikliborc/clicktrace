@@ -13,12 +13,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.controller.KeyboardController;
-import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.model.ScreenShot;
+import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.control.ControlView;
-import com.niklim.clicktrace.view.control.Toolbar;
-import com.niklim.clicktrace.view.control.menu.Menu;
+import com.niklim.clicktrace.view.control.ToolbarView;
+import com.niklim.clicktrace.view.control.menu.MenuBar;
 import com.niklim.clicktrace.view.session.ScreenShotView;
 
 @Singleton
@@ -35,13 +34,10 @@ public class MainView {
 	private ControlView controlView;
 
 	@Inject
-	private Menu menu;
+	private MenuBar menu;
 
 	@Inject
-	private Toolbar toolbar;
-
-	@Inject
-	private KeyboardController keyboardController;
+	private ToolbarView toolbar;
 
 	public MainView() {
 		try {
@@ -77,8 +73,6 @@ public class MainView {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		frame.add(scrollPane);
 		frame.setJMenuBar(menu.getMenuBar());
-
-		keyboardController.registerKeyboardHooks(frame);
 	}
 
 	public void open() {

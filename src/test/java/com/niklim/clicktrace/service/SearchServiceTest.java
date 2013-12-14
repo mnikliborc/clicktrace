@@ -12,8 +12,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.model.ScreenShot;
+import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.SearchService;
 import com.niklim.clicktrace.service.SessionManager;
 

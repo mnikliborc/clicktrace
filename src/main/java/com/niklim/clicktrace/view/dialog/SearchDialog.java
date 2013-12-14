@@ -31,7 +31,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.Controller;
-import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.SearchService;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.TextComponentHistory;

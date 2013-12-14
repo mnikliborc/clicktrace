@@ -20,8 +20,8 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.controller.action.screenshot.SaveScreenShotDescriptionActionListener;
-import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.controller.operation.screenshot.SaveScreenShotDescriptionOperation;
+import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.TextComponentHistory;
 
@@ -38,7 +38,7 @@ public class DescriptionDialog {
 	private MainView editor;
 
 	@Inject
-	private SaveScreenShotDescriptionActionListener saveScreenShotDescriptionActionListener;
+	private SaveScreenShotDescriptionOperation saveScreenShotDescriptionActionListener;
 
 	private TextComponentHistory history;
 
@@ -116,7 +116,7 @@ public class DescriptionDialog {
 
 	private void save() {
 		activeShot.setDescription(textarea.getText());
-		saveScreenShotDescriptionActionListener.actionPerformed(null);
+		saveScreenShotDescriptionActionListener.perform();
 		dialog.setVisible(false);
 	}
 

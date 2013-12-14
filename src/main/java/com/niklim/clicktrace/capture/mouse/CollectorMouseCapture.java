@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.ChangeCapture;
-import com.niklim.clicktrace.model.session.Click;
+import com.niklim.clicktrace.model.Click;
 
 @Singleton
 public class CollectorMouseCapture extends MouseCapture {

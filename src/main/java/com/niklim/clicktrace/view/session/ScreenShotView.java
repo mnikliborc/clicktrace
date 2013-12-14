@@ -20,8 +20,8 @@ import org.imgscalr.Scalr;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
-import com.niklim.clicktrace.model.session.Click;
-import com.niklim.clicktrace.model.session.ScreenShot;
+import com.niklim.clicktrace.model.Click;
+import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.view.MainView;
 
 @Singleton

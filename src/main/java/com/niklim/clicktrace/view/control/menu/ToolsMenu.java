@@ -10,8 +10,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.controller.action.screenshot.OpenSearchDialogActionListener;
-import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
+import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.dialog.JiraExportDialog;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
@@ -21,7 +21,7 @@ public class ToolsMenu {
 	private SettingsDialog settingsDialog;
 
 	@Inject
-	private OpenSearchDialogActionListener openSearchDialogActionListener;
+	private OpenSearchDialogOperation openSearchDialogOperation;
 
 	@Inject
 	private JiraExportDialog jiraExportDialog;
@@ -46,7 +46,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return Menu.createMenuItem("Export to Clicktrace on JIRA Plugin", new ActionListener() {
+		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				jiraExportDialog.open();
 			}
@@ -54,7 +54,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsSettings() {
-		return Menu.createMenuItem("Settings", new ActionListener() {
+		return MenuBar.createMenuItem("Settings", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				settingsDialog.open();
 			}
@@ -62,7 +62,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsSearch() {
-		return Menu.createMenuItem("Search", Icons.SEARCH, openSearchDialogActionListener);
+		return MenuBar.createMenuItem("Search", Icons.SEARCH, openSearchDialogOperation.action());
 	}
 
 	public void sessionStateChanged() {

@@ -11,6 +11,7 @@ import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
 import com.niklim.clicktrace.props.AppProperties;
+import com.niklim.clicktrace.service.exception.JiraException;
 
 public class JiraService {
 	@Inject

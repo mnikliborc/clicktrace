@@ -26,12 +26,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.Controller;
-import com.niklim.clicktrace.controller.action.screenshot.DeleteScreenShotActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.EditScreenShotActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.OpenScreenShotDescriptionActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.RefreshScreenShotActionListener;
-import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
+import com.niklim.clicktrace.model.ScreenShot;
+import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.ControlShortcutEnum;
 
 @Singleton
@@ -40,16 +40,16 @@ public class ControlView {
 	private Controller controller;
 
 	@Inject
-	private Toolbar toolbar;
+	private ToolbarView toolbar;
 
 	@Inject
-	private EditScreenShotActionListener editScreenShotActionListener;
+	private EditScreenShotOperation editScreenShotOperation;
 	@Inject
-	private RefreshScreenShotActionListener refreshScreenShotActionListener;
+	private RefreshScreenShotOperation refreshScreenShotOperation;
 	@Inject
-	private DeleteScreenShotActionListener deleteScreenShotActionListener;
+	private DeleteScreenShotOperation deleteScreenShotOperation;
 	@Inject
-	private OpenScreenShotDescriptionActionListener changeScreenShotDescritpionActionListener;
+	private OpenScreenShotDescriptionOperation changeScreenShotDescritpionOperation;
 
 	private JPanel panel = new JPanel(new MigLayout("ins 0"));
 	private JPanel controlPanel = new JPanel();
@@ -106,7 +106,22 @@ public class ControlView {
 		controlPanel.add(deleteButton);
 		controlPanel.add(descriptionButton);
 		controlPanel.add(checkbox);
+	}
+	
+	private JButton createButton(String tooltip, String icon, ControlShortcutEnum shortcut) {
+		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
+		button.setToolTipText(tooltip + shortcut.text);
+		return button;
+	}
 
+	private JButton createButton(String label, String tooltip, String icon, ControlShortcutEnum shortcut) {
+		JButton button = new JButton(label, new ImageIcon(Icons.createIconImage(icon, label)));
+		button.setToolTipText(tooltip + shortcut.text);
+		return button;
+	}
+
+	@Inject
+	public void init() {
 		firstButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -148,28 +163,13 @@ public class ControlView {
 		});
 
 		refreshButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		refreshButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				refreshScreenShotActionListener.actionPerformed(null);
-			}
-		});
+		refreshButton.addMouseListener(refreshScreenShotOperation.mouse());
 
 		editButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		editButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				editScreenShotActionListener.actionPerformed(null);
-			}
-		});
+		editButton.addMouseListener(editScreenShotOperation.mouse());
 
 		deleteButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		deleteButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				deleteScreenShotActionListener.actionPerformed(null);
-			}
-		});
+		deleteButton.addMouseListener(deleteScreenShotOperation.mouse());
 
 		checkbox.addActionListener(new ActionListener() {
 			@Override
@@ -178,29 +178,8 @@ public class ControlView {
 			}
 		});
 		descriptionButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		descriptionButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				changeScreenShotDescritpionActionListener.actionPerformed(null);
-			}
-		});
-	}
+		descriptionButton.addMouseListener(changeScreenShotDescritpionOperation.mouse());
 
-	private JButton createButton(String tooltip, String icon, ControlShortcutEnum shortcut) {
-		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
-		button.setToolTipText(tooltip + shortcut.text);
-		return button;
-	}
-
-	private JButton createButton(String label, String tooltip, String icon,
-			ControlShortcutEnum shortcut) {
-		JButton button = new JButton(label, new ImageIcon(Icons.createIconImage(icon, label)));
-		button.setToolTipText(tooltip + shortcut.text);
-		return button;
-	}
-
-	@Inject
-	public void init() {
 		panel.add(toolbar.getToolbar(), "wrap");
 		panel.add(controlPanel);
 	}

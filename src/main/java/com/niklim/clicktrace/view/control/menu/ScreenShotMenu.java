@@ -7,11 +7,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.controller.action.screenshot.ChangeScreenShotLabelActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.DeleteScreenShotActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.EditScreenShotActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.OpenScreenShotDescriptionActionListener;
-import com.niklim.clicktrace.controller.action.screenshot.RefreshScreenShotActionListener;
+import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotLabelOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 
 @Singleton
 public class ScreenShotMenu {
@@ -24,15 +24,15 @@ public class ScreenShotMenu {
 	private JMenuItem edit;
 
 	@Inject
-	private ChangeScreenShotLabelActionListener changeScreenShotLabelActionListener;
+	private ChangeScreenShotLabelOperation changeScreenShotLabelOperation;
 	@Inject
-	private OpenScreenShotDescriptionActionListener changeScreenShotDescritpionActionListener;
+	private OpenScreenShotDescriptionOperation changeScreenShotDescritpionOperation;
 	@Inject
-	private DeleteScreenShotActionListener deleteScreenShotActionListener;
+	private DeleteScreenShotOperation deleteScreenShotOperation;
 	@Inject
-	private RefreshScreenShotActionListener refreshScreenShotActionListener;
+	private RefreshScreenShotOperation refreshScreenShotOperation;
 	@Inject
-	private EditScreenShotActionListener editScreenShotActionListener;
+	private EditScreenShotOperation editScreenShotOperation;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -57,32 +57,35 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createChangeLabel() {
-		JMenuItem menuItem = Menu.createMenuItem("Change label", changeScreenShotLabelActionListener);
+		JMenuItem menuItem = MenuBar.createMenuItem("Change label", changeScreenShotLabelOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createChangeDescription() {
-		JMenuItem menuItem = Menu.createMenuItem("Change description", Icons.DESCRIPTION_SCREENSHOT,
-				changeScreenShotDescritpionActionListener);
+		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.DESCRIPTION_SCREENSHOT,
+				changeScreenShotDescritpionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createDelete() {
-		JMenuItem menuItem = Menu.createMenuItem("Delete screenshot", Icons.DELETE_SCREENSHOT, deleteScreenShotActionListener);
+		JMenuItem menuItem = MenuBar.createMenuItem("Delete screenshot", Icons.DELETE_SCREENSHOT,
+				deleteScreenShotOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createRefresh() {
-		JMenuItem menuItem = Menu.createMenuItem("Refresh screenshot", Icons.REFRESH_SCREENSHOT, refreshScreenShotActionListener);
+		JMenuItem menuItem = MenuBar.createMenuItem("Refresh screenshot", Icons.REFRESH_SCREENSHOT,
+				refreshScreenShotOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createEdit() {
-		JMenuItem menuItem = Menu.createMenuItem("Edit screenshot", Icons.EDIT_SCREENSHOT, editScreenShotActionListener);
+		JMenuItem menuItem = MenuBar.createMenuItem("Edit screenshot", Icons.EDIT_SCREENSHOT,
+				editScreenShotOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

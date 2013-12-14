@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.niklim.clicktrace.capture.FileCompressor;
-import com.niklim.clicktrace.capture.FileCompressor.CompressionResult;
 
 public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";

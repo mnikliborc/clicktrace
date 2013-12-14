@@ -9,18 +9,18 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
-import com.niklim.clicktrace.controller.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.controller.action.session.OpenOpenSessionDialogActionListener;
+import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
 
 @Singleton
 public class FileMenu {
 	JMenu menu;
 
 	@Inject
-	private NewSessionActionListener newSessionActionListener;
+	private NewSessionOperation newSessionOperation;
 
 	@Inject
-	private OpenOpenSessionDialogActionListener openSessionActionListener;
+	private OpenOpenSessionDialogOperation openSessionOperation;
 
 	@Inject
 	public void init() {
@@ -41,15 +41,15 @@ public class FileMenu {
 	}
 
 	private JMenuItem createFileNewSession() {
-		return Menu.createMenuItem("New session", Icons.NEW_SESSION, newSessionActionListener);
+		return MenuBar.createMenuItem("New session", Icons.NEW_SESSION, newSessionOperation.action());
 	}
 
 	private JMenuItem createFileOpenSession() {
-		return Menu.createMenuItem("Open session", Icons.OPEN_SESSION, openSessionActionListener);
+		return MenuBar.createMenuItem("Open session", Icons.OPEN_SESSION, openSessionOperation.action());
 	}
 
 	private JMenuItem createFileExit() {
-		return Menu.createMenuItem("Exit", new ActionListener() {
+		return MenuBar.createMenuItem("Exit", new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				System.exit(0);
 			}

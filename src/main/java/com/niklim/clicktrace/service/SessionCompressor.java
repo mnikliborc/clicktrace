@@ -16,7 +16,7 @@ import org.tukaani.xz.LZMA2Options;
 import org.tukaani.xz.XZOutputStream;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.model.session.Session;
+import com.niklim.clicktrace.model.Session;
 
 public class SessionCompressor {
 	private static final Logger log = LoggerFactory.getLogger(SessionCompressor.class);

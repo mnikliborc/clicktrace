@@ -30,9 +30,9 @@ import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
-import com.niklim.clicktrace.service.JiraException;
 import com.niklim.clicktrace.service.JiraService;
 import com.niklim.clicktrace.service.SessionCompressor;
+import com.niklim.clicktrace.service.exception.JiraException;
 import com.niklim.clicktrace.view.MainView;
 
 public class JiraExportDialog {

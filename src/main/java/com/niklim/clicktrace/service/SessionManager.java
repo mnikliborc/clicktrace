@@ -6,13 +6,14 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.helper.ScreenShotLoader;
-import com.niklim.clicktrace.model.session.helper.SessionDeleter;
-import com.niklim.clicktrace.model.session.helper.SessionMetadataHelper;
-import com.niklim.clicktrace.model.session.helper.SessionPropertiesReader;
-import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
-import com.niklim.clicktrace.model.session.helper.SessionSaver;
+import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.model.helper.ScreenShotLoader;
+import com.niklim.clicktrace.model.helper.SessionDeleter;
+import com.niklim.clicktrace.model.helper.SessionMetadataHelper;
+import com.niklim.clicktrace.model.helper.SessionPropertiesReader;
+import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.model.helper.SessionSaver;
+import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 
 @Singleton
 public class SessionManager {

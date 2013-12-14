@@ -10,13 +10,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.capture.ChangeCapture;
-import com.niklim.clicktrace.controller.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.model.session.ScreenShot;
-import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
+import com.niklim.clicktrace.model.ScreenShot;
+import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
 import com.niklim.clicktrace.props.UserProperties;
-import com.niklim.clicktrace.service.SessionAlreadyExistsException;
 import com.niklim.clicktrace.service.SessionManager;
+import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
@@ -41,7 +41,7 @@ public class Controller {
 	private SettingsDialog settingsDialog;
 
 	@Inject
-	private NewSessionActionListener newSessionActionListener;
+	private NewSessionOperation newSessionActionListener;
 
 	@Inject
 	public void init() {
