@@ -9,6 +9,9 @@ import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.SessionManager;
 
+/**
+ * Writes to {@link Session}'s properties file.
+ */
 public class SessionPropertiesWriter extends SessionPropertiesIO {
 
 	public SessionPropertiesWriter(Session session) {

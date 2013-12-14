@@ -8,6 +8,9 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.FileManager;
 
+/**
+ * Base class for Session's properties file operations.
+ */
 public abstract class SessionPropertiesIO {
 	protected PropertiesConfiguration props;
 

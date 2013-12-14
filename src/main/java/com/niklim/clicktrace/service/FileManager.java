@@ -14,6 +14,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Manages creating folders, properties files and saving/deleting screenshot
+ * images.
+ */
 public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
@@ -21,7 +25,7 @@ public class FileManager {
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 
-	private static FileCompressor compressor = new FileCompressor(2);
+	private static FileCompressor compressor = new FileCompressor("jpg", "png");
 
 	public static class TrashFilter implements FilenameFilter {
 		@Override
@@ -43,7 +47,7 @@ public class FileManager {
 	}
 
 	public String saveImage(BufferedImage image, String sessionName) throws IOException {
-		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image, "jpg", "png");
+		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image);
 
 		String filename = format.format(new Date()) + "." + compressionResult.format;
 		String filePath = createFilePath(sessionName, filename);
@@ -52,6 +56,7 @@ public class FileManager {
 		fop.write(compressionResult.stream.toByteArray());
 		fop.flush();
 		fop.close();
+
 		return filename;
 	}
 

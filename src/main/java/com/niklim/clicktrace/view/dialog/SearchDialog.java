@@ -159,7 +159,7 @@ public class SearchDialog {
 	}
 
 	public void open() {
-		if (activeSession.isSessionOpen()) {
+		if (activeSession.isSessionLoaded()) {
 			activeSessionRadio.setEnabled(true);
 		} else {
 			activeSessionRadio.setEnabled(false);

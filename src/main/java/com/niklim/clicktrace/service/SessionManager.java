@@ -9,10 +9,9 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.helper.ScreenShotLoader;
 import com.niklim.clicktrace.model.helper.SessionDeleter;
-import com.niklim.clicktrace.model.helper.SessionMetadataHelper;
+import com.niklim.clicktrace.model.helper.SessionMetadataLoader;
 import com.niklim.clicktrace.model.helper.SessionPropertiesReader;
 import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
-import com.niklim.clicktrace.model.helper.SessionSaver;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 
 @Singleton
@@ -25,14 +24,17 @@ public class SessionManager {
 	private FileManager fileManager;
 
 	@Inject
-	private SessionSaver saver;
-	@Inject
 	private SessionDeleter deleter;
 	@Inject
 	private ScreenShotLoader screenShotsLoader;
 	@Inject
-	private SessionMetadataHelper sessionMetadataHelper;
+	private SessionMetadataLoader sessionMetadataHelper;
 
+	/**
+	 * Loads all the {@link Session}s found in the default session folder.
+	 * 
+	 * @return all sessions
+	 */
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
@@ -48,7 +50,7 @@ public class SessionManager {
 	}
 
 	private Session createSessionInstance() {
-		return new Session(saver, deleter, screenShotsLoader, sessionMetadataHelper);
+		return new Session(deleter, screenShotsLoader, sessionMetadataHelper);
 	}
 
 	public Session createSession(String sessionName) throws SessionAlreadyExistsException,

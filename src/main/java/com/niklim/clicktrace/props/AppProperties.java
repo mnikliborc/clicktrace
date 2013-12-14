@@ -4,6 +4,9 @@ import java.io.File;
 
 import com.google.inject.Singleton;
 
+/**
+ * App specific properties. Very unlikely to be modified by the user.
+ */
 @Singleton
 public class AppProperties extends AbstractProperties {
 	private static final String APP_PROPERTIES_PATH = "app.properties";

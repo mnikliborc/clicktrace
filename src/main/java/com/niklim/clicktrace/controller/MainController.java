@@ -20,6 +20,9 @@ import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
+/**
+ * Main controller.
+ */
 @Singleton
 public class MainController {
 	@Inject
@@ -43,6 +46,9 @@ public class MainController {
 	@Inject
 	private NewSessionOperation newSessionActionListener;
 
+	/**
+	 * Opens the app window.
+	 */
 	@Inject
 	public void init() {
 		Session session = sessionManager.findSessionByName(props.getLastSessionName());
@@ -53,7 +59,7 @@ public class MainController {
 	}
 
 	public void startRecording(boolean hideEditor) {
-		if (!activeSession.isSessionOpen()) {
+		if (!activeSession.isSessionLoaded()) {
 			boolean sessionCreated = newSessionActionListener.createSession();
 			if (sessionCreated) {
 				startRecording(true);
@@ -72,7 +78,7 @@ public class MainController {
 	}
 
 	public void stopRecording() {
-		if (!activeSession.isSessionOpen()) {
+		if (!activeSession.isSessionLoaded()) {
 			return;
 		}
 
@@ -138,7 +144,7 @@ public class MainController {
 
 	public void setSelectedAllScreenshots(boolean selected) {
 		mainView.setSelectedActiveScreenShot(selected);
-		activeSession.setSelectedAllShots(selected);
+		activeSession.setAllShotsSelected(selected);
 	}
 
 	public void refreshSession() {
@@ -220,7 +226,7 @@ public class MainController {
 		if (!activeSession.isShotSelected(activeSession.getActiveShot())) {
 			mainView.showScreenShot(activeSession.getActiveShot(), false);
 		}
-		activeSession.setSelectedAllShots(false);
+		activeSession.setAllShotsSelected(false);
 		mainView.sessionStateChanged();
 	}
 

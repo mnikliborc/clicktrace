@@ -72,7 +72,7 @@ public class ToolsMenu {
 		if (session != null) {
 			atLeastOneShot = session.getShots().size() > 0;
 		}
-		toolsExportToJira.setEnabled(activeSession.isSessionOpen() && atLeastOneShot);
+		toolsExportToJira.setEnabled(activeSession.isSessionLoaded() && atLeastOneShot);
 	}
 
 }

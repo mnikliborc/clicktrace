@@ -55,15 +55,15 @@ public class SessionMenu {
 	private ChangeSessionNameOperation changeSessionNameOperation;
 
 	public void sessionStateChanged() {
-		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
-		sessionDeleteActiveSession.setEnabled(activeSession.isSessionOpen());
-		sessionDeleteSelected.setEnabled(activeSession.isSessionOpen());
-		sessionSelectAll.setEnabled(activeSession.isSessionOpen());
-		sessionDeselectAll.setEnabled(activeSession.isSessionOpen());
-		sessionStart.setEnabled(!activeSession.getRecording());
-		sessionStop.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
-		sessionRefresh.setEnabled(activeSession.isSessionOpen());
-		sessionChangeLabel.setEnabled(activeSession.isSessionOpen());
+		sessionDeleteActiveSession.setEnabled(activeSession.isSessionLoaded());
+		sessionDeleteActiveSession.setEnabled(activeSession.isSessionLoaded());
+		sessionDeleteSelected.setEnabled(activeSession.isSessionLoaded());
+		sessionSelectAll.setEnabled(activeSession.isSessionLoaded());
+		sessionDeselectAll.setEnabled(activeSession.isSessionLoaded());
+		sessionStart.setEnabled(!activeSession.isRecording());
+		sessionStop.setEnabled(activeSession.isSessionLoaded() && activeSession.isRecording());
+		sessionRefresh.setEnabled(activeSession.isSessionLoaded());
+		sessionChangeLabel.setEnabled(activeSession.isSessionLoaded());
 	}
 
 	@Inject

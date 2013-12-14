@@ -51,7 +51,7 @@ public class OpenSessionTest extends AbstractSystemTest {
 		assertThat(editorFixture.comboBox().contents()).hasSize(4);
 
 		ActiveSession activeSession = injector.getInstance(ActiveSession.class);
-		assertThat(activeSession.isSessionOpen()).isTrue();
+		assertThat(activeSession.isSessionLoaded()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
 		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
 	}

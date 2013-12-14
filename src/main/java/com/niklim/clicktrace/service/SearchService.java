@@ -24,13 +24,10 @@ public class SearchService {
 	 * Method searches for {#link ScreenShot}s which have label, filename or
 	 * description containing given text.
 	 * 
-	 * @param text
-	 *            text to be found
-	 * @param allSessions
-	 *            true when search should be performed in all sessions, false
-	 *            when we search in active session only
-	 * @param matchCase
-	 *            true when we should match letter case
+	 * @param text text to be found
+	 * @param allSessions true when search should be performed in all sessions,
+	 *            false when we search in active session only
+	 * @param matchCase true when we should match letter case
 	 * @return pairs of {#link ScreenShot} and line containing found text
 	 */
 	public List<SimpleImmutableEntry<ScreenShot, String>> search(String text, boolean allSessions, boolean matchCase) {

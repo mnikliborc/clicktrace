@@ -95,10 +95,10 @@ public class ScreenShotMenu {
 	}
 
 	public void sessionStateChanged() {
-		changeLabel.setEnabled(activeSession.isActiveShotOpen());
-		delete.setEnabled(activeSession.isActiveShotOpen());
-		refresh.setEnabled(activeSession.isActiveShotOpen());
-		edit.setEnabled(activeSession.isActiveShotOpen());
-		setDescription.setEnabled(activeSession.isActiveShotOpen());
+		changeLabel.setEnabled(activeSession.isActiveShotLoaded());
+		delete.setEnabled(activeSession.isActiveShotLoaded());
+		refresh.setEnabled(activeSession.isActiveShotLoaded());
+		edit.setEnabled(activeSession.isActiveShotLoaded());
+		setDescription.setEnabled(activeSession.isActiveShotLoaded());
 	}
 }

@@ -11,6 +11,9 @@ import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
+/**
+ * Delete {@link ScreenShot}'s image and properties from the disk.
+ */
 public class ScreenShotDeleter {
 	@Inject
 	private SessionManager sessionManager;

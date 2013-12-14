@@ -7,6 +7,9 @@ import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.SessionManager;
 
+/**
+ * Reads {@link Session}'s properties file.
+ */
 public class SessionPropertiesReader extends SessionPropertiesIO {
 	public SessionPropertiesReader(Session session) {
 		super(session);

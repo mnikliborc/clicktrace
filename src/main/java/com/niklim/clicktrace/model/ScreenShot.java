@@ -11,6 +11,10 @@ import com.google.common.hash.Hashing;
 import com.niklim.clicktrace.model.helper.ImageLoader;
 import com.niklim.clicktrace.model.helper.ScreenShotDeleter;
 
+/**
+ * Represents screenshot data. Allows loading and deleting it using Visitor like
+ * pattern.
+ */
 public class ScreenShot {
 	private String filename;
 	private String label;
@@ -23,6 +27,12 @@ public class ScreenShot {
 	private ImageLoader imageLoader;
 	private ScreenShotDeleter deleter;
 
+	/**
+	 * Creates screenshot with Visitor objects.
+	 * 
+	 * @param imageLoader
+	 * @param deleter
+	 */
 	public ScreenShot(ImageLoader imageLoader, ScreenShotDeleter deleter) {
 		this.imageLoader = imageLoader;
 		this.deleter = deleter;
@@ -102,6 +112,9 @@ public class ScreenShot {
 		this.session = session;
 	}
 
+	/**
+	 * Deletes the screenshot from the disk.
+	 */
 	public void delete() {
 		deleter.delete(this);
 	}

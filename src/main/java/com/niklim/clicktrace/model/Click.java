@@ -8,6 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+/**
+ * Represents mouse click - mouse coordinates and clicked button.
+ */
 public class Click {
 	private int x;
 	private int y;

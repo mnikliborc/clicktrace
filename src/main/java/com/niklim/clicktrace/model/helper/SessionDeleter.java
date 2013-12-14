@@ -10,6 +10,9 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.FileManager;
 
+/**
+ * Deletes {@link Session} from the disk.
+ */
 public class SessionDeleter {
 	@Inject
 	private FileManager fileManager;

@@ -45,7 +45,7 @@ public class PixelVoter implements ChangeVoter {
 			log.info("SAVE Vote");
 			return Vote.SAVE;
 		} else {
-			log.info("INDIFFERENT Vote");
+			log.info("ABSTAIN Vote");
 			return Vote.ABSTAIN;
 		}
 	}

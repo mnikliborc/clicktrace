@@ -18,15 +18,27 @@ import org.tukaani.xz.XZOutputStream;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.Session;
 
+/**
+ * Compresses Clicktrace session folder using zip and xz compression.
+ */
 public class SessionCompressor {
 	private static final Logger log = LoggerFactory.getLogger(SessionCompressor.class);
 	@Inject
 	private FileManager fileManager;
 
+	/**
+	 * Compresses given Clicktrace session and encodes it as String.
+	 * 
+	 * @param session
+	 * @return encoded and compressed Clicktrace session
+	 * @throws IOException
+	 */
 	public String compress(Session session) throws IOException {
 		String sessionName = session.getName();
+
 		byte[] zipBytes = zip(sessionName);
 		log.debug("Zipped size={}", zipBytes.length);
+
 		byte[] xzBytes = xz(zipBytes, sessionName);
 		log.debug("XZ+Zipped size={}", xzBytes.length);
 

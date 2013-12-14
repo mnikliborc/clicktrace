@@ -5,9 +5,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * Base class for reusable Clicktrace operations.
+ */
 public abstract class AbstractOperation {
 	public abstract void perform();
 
+	/**
+	 * Creates {@link ActionListener} triggering this.perform() on action event.
+	 * 
+	 * @return
+	 */
 	public ActionListener action() {
 		return new ActionListener() {
 			@Override
@@ -17,6 +25,11 @@ public abstract class AbstractOperation {
 		};
 	}
 
+	/**
+	 * Creates {@link MouseListener} triggering this.perform() on mouse click.
+	 * 
+	 * @return
+	 */
 	public MouseListener mouse() {
 		return new MouseListener() {
 			@Override

@@ -2,6 +2,10 @@ package com.niklim.clicktrace.model;
 
 import java.util.Date;
 
+/**
+ * Stores Clicktrace session metadata - creation and modification dates, number
+ * of screenshots.
+ */
 public class SessionMetadata {
 	private final Date created;
 	private final Date modified;

@@ -33,7 +33,7 @@ public class NewSessionTest extends AbstractSystemTest {
 		} catch (WaitTimedOutError ex) {
 		}
 
-		assertThat(activeSession.isSessionOpen()).isTrue();
+		assertThat(activeSession.isSessionLoaded()).isTrue();
 		assertThat(activeSession.getSession()).isNotNull();
 		assertThat(activeSession.getSession().getName()).isEqualTo(sessionName);
 

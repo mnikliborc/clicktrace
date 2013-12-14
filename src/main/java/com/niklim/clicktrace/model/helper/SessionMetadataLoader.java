@@ -11,7 +11,10 @@ import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.SessionMetadata;
 import com.niklim.clicktrace.service.FileManager;
 
-public class SessionMetadataHelper {
+/**
+ * Loads {@link SessionMetada} from the disk.
+ */
+public class SessionMetadataLoader {
 
 	public SessionMetadata loadMetadata(Session session) {
 		int size = session.getShots().size();

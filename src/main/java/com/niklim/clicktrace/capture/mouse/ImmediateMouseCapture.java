@@ -36,7 +36,7 @@ public class ImmediateMouseCapture extends MouseCapture {
 
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
-		if (activeSession.getRecording()) {
+		if (activeSession.isRecording()) {
 			capture(e);
 		}
 	}

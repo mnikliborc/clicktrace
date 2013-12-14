@@ -9,22 +9,29 @@ import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.niklim.clicktrace.model.helper.ScreenShotLoader;
 import com.niklim.clicktrace.model.helper.SessionDeleter;
-import com.niklim.clicktrace.model.helper.SessionMetadataHelper;
-import com.niklim.clicktrace.model.helper.SessionSaver;
+import com.niklim.clicktrace.model.helper.SessionMetadataLoader;
 
+/**
+ * Represents Clicktrace session data. Allows loading and deleting it using
+ * Visitor like pattern.
+ */
 public class Session {
 	private String name;
 	private List<ScreenShot> shots;
 	private SessionMetadata metadata;
 
-	private SessionSaver saver;
 	private SessionDeleter deleter;
 	private ScreenShotLoader screenShotsLoader;
-	private SessionMetadataHelper sessionMetadataHelper;
+	private SessionMetadataLoader sessionMetadataHelper;
 
-	public Session(SessionSaver saver, SessionDeleter deleter, ScreenShotLoader screenShotsLoader,
-			SessionMetadataHelper sessionMetadataHelper) {
-		this.saver = saver;
+	/**
+	 * Creates session with Visitor objects.
+	 * 
+	 * @param imageLoader
+	 * @param deleter
+	 */
+	public Session(SessionDeleter deleter, ScreenShotLoader screenShotsLoader,
+			SessionMetadataLoader sessionMetadataHelper) {
 		this.deleter = deleter;
 		this.screenShotsLoader = screenShotsLoader;
 		this.sessionMetadataHelper = sessionMetadataHelper;
@@ -57,10 +64,6 @@ public class Session {
 	public SessionMetadata loadMetadata() {
 		metadata = sessionMetadataHelper.loadMetadata(this);
 		return metadata;
-	}
-
-	public void save() {
-		saver.save(this);
 	}
 
 	public void delete() {

@@ -25,7 +25,7 @@ public class CollectorMouseCapture extends MouseCapture {
 
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
-		if (activeSession.getRecording()) {
+		if (activeSession.isRecording()) {
 			capture.mouseClicked(new Click(e.getX(), e.getY(), e.getButton()));
 		}
 	}

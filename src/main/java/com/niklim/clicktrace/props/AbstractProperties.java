@@ -7,6 +7,9 @@ import java.util.Map;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+/**
+ * Base class for handling general properties.
+ */
 public abstract class AbstractProperties {
 	protected PropertiesConfiguration props;
 	protected static final Map<String, Object> defaults = new HashMap<String, Object>();

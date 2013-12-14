@@ -9,6 +9,9 @@ import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
+/**
+ * Loads {@link ScreenShot} image from the disk.
+ */
 public class ScreenShotLoader {
 	@Inject
 	private FileManager fileManager;

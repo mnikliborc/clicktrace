@@ -17,16 +17,23 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+/**
+ * In parallel it compresses an image using given formats (jpg, png, etc.).
+ * Returns the image in the format resulting in the smallest file size.
+ */
 public class FileCompressor {
 	private static final int COMPRESSION_TIMEOUT = 500;
 	ExecutorService executor;
+	
+	String[] imageFormats;
 
-	public FileCompressor(int threadsNum) {
-		executor = Executors.newFixedThreadPool(threadsNum);
+	public FileCompressor(String... imageFormats) {
+		executor = Executors.newFixedThreadPool(imageFormats.length);
+		this.imageFormats = imageFormats;
 	}
 
-	public CompressionResult getBestCompressed(BufferedImage image, String... formats) {
-		List<Future<CompressionResult>> futures = compress(image, formats);
+	public CompressionResult getBestCompressed(BufferedImage image) {
+		List<Future<CompressionResult>> futures = compress(image);
 
 		CompressionResult minSize = null;
 		for (Future<CompressionResult> f : futures) {
@@ -42,9 +49,9 @@ public class FileCompressor {
 		return minSize;
 	}
 
-	private List<Future<CompressionResult>> compress(BufferedImage image, String... formats) {
-		List<Future<CompressionResult>> futures = new ArrayList<Future<CompressionResult>>(formats.length);
-		for (String format : formats) {
+	private List<Future<CompressionResult>> compress(BufferedImage image) {
+		List<Future<CompressionResult>> futures = new ArrayList<Future<CompressionResult>>(imageFormats.length);
+		for (String format : imageFormats) {
 			futures.add(executor.submit(new Compressing(image, format)));
 		}
 

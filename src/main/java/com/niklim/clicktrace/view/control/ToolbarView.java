@@ -119,10 +119,10 @@ public class ToolbarView {
 	}
 
 	public void sessionStateChanged() {
-		deleteSession.setEnabled(activeSession.isSessionOpen());
-		refreshSession.setEnabled(activeSession.isSessionOpen());
-		startSession.setEnabled(!activeSession.getRecording());
-		stopSession.setEnabled(activeSession.isSessionOpen() && activeSession.getRecording());
+		deleteSession.setEnabled(activeSession.isSessionLoaded());
+		refreshSession.setEnabled(activeSession.isSessionLoaded());
+		startSession.setEnabled(!activeSession.isRecording());
+		stopSession.setEnabled(activeSession.isSessionLoaded() && activeSession.isRecording());
 	}
 
 }

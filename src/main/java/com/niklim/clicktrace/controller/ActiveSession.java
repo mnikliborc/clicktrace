@@ -7,6 +7,9 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 
+/**
+ * Manages active Clicktrace session.
+ */
 @Singleton
 public class ActiveSession {
 	private Session session;
@@ -23,11 +26,11 @@ public class ActiveSession {
 		this.session = session;
 	}
 
-	public boolean isSessionOpen() {
+	public boolean isSessionLoaded() {
 		return session != null;
 	}
 
-	public boolean getRecording() {
+	public boolean isRecording() {
 		return recording;
 	}
 
@@ -43,7 +46,7 @@ public class ActiveSession {
 		activeShot = shot;
 	}
 
-	public boolean isActiveShotOpen() {
+	public boolean isActiveShotLoaded() {
 		return activeShot != null;
 	}
 
@@ -63,7 +66,7 @@ public class ActiveSession {
 		selectedShots.remove(shot);
 	}
 
-	public void setSelectedAllShots(boolean selected) {
+	public void setAllShotsSelected(boolean selected) {
 		selectedShots.clear();
 		if (selected) {
 			selectedShots.addAll(session.getShots());
@@ -74,6 +77,11 @@ public class ActiveSession {
 		return selectedShots;
 	}
 
+	/**
+	 * Removes the shot from the active session. Does not delete it from disk.
+	 * 
+	 * @param remShot
+	 */
 	public void removeShot(ScreenShot remShot) {
 		getSession().getShots().remove(remShot);
 		deselectShot(remShot);

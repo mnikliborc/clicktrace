@@ -9,6 +9,9 @@ import javax.imageio.ImageIO;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.FileManager;
 
+/**
+ * Loads {@link ScreenShot}'s image from the disk.
+ */
 public class ImageLoader {
 	public BufferedImage load(ScreenShot shot) {
 		try {
