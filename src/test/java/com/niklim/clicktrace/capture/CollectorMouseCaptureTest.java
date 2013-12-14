@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.niklim.clicktrace.AbstractSystemTest;
 import com.niklim.clicktrace.SystemTestSteps;
 import com.niklim.clicktrace.TestSessionsData;
-import com.niklim.clicktrace.controller.Controller;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.SessionManager;
@@ -60,13 +60,13 @@ public class CollectorMouseCaptureTest extends AbstractSystemTest {
 	}
 
 	private void startRecording() throws InterruptedException {
-		Controller controller = injector.getInstance(Controller.class);
+		MainController controller = injector.getInstance(MainController.class);
 		controller.startRecording(false);
 		Thread.sleep(1000);
 	}
 
 	private void stopRecording() {
-		Controller controller = injector.getInstance(Controller.class);
+		MainController controller = injector.getInstance(MainController.class);
 		controller.stopRecording();
 	}
 

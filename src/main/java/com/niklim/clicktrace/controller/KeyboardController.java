@@ -46,7 +46,7 @@ public class KeyboardController implements NativeKeyListener {
 	private static Logger log = LoggerFactory.getLogger(KeyboardController.class);
 
 	@Inject
-	private Controller controller;
+	private MainController controller;
 
 	@Inject
 	private MainView mainView;

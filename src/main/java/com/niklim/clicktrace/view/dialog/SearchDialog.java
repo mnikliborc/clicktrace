@@ -30,7 +30,7 @@ import net.miginfocom.swing.MigLayout;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.controller.Controller;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.SearchService;
 import com.niklim.clicktrace.view.MainView;
@@ -45,7 +45,7 @@ public class SearchDialog {
 	private SearchService searchService;
 
 	@Inject
-	private Controller controller;
+	private MainController controller;
 
 	@Inject
 	private ActiveSession activeSession;

@@ -8,7 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.capture.voter.ChangeVoter;
+import com.niklim.clicktrace.capture.voter.Vote;
 
+/**
+ * Decides whether given screenshot should be saved, using {@link ChangeVoter}s.
+ */
 @Singleton
 class ChangeDetector {
 	private static final Logger log = LoggerFactory.getLogger(ChangeDetector.class);
@@ -18,6 +23,12 @@ class ChangeDetector {
 
 	private BufferedImage prevImage;
 
+	/**
+	 * Decides whether change was detected (screenshot should be saved).
+	 * 
+	 * @param currentImage current screenshot
+	 * @return true if given screenshot should be saved
+	 */
 	public synchronized boolean detect(BufferedImage currentImage) {
 		if (prevImage == null) {
 			prevImage = currentImage;

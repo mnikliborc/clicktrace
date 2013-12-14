@@ -3,13 +3,13 @@ package com.niklim.clicktrace.controller.operation.session;
 import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.controller.Controller;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
 import com.niklim.clicktrace.view.MainView;
 
 public class DeleteCurrentSessionOperation extends AbstractOperation {
 	@Inject
-	private Controller controller;
+	private MainController controller;
 
 	@Inject
 	private MainView mainView;

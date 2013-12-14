@@ -47,7 +47,7 @@ public class DescriptionDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(editor.getFrame(), true);
+		dialog = new JDialog(mainView.getFrame(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		textarea = new JTextArea();
 		history = new TextComponentHistory(textarea);

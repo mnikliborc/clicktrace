@@ -3,12 +3,12 @@ package com.niklim.clicktrace.controller.operation.session;
 import javax.swing.JOptionPane;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.controller.Controller;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
 
 public class NewSessionOperation extends AbstractOperation {
 	@Inject
-	private Controller controller;
+	private MainController controller;
 
 	public boolean createSession() {
 		String name = JOptionPane.showInputDialog("Set new session name");

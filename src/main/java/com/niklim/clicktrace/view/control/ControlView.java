@@ -25,7 +25,7 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
-import com.niklim.clicktrace.controller.Controller;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
@@ -37,7 +37,7 @@ import com.niklim.clicktrace.view.ControlShortcutEnum;
 @Singleton
 public class ControlView {
 	@Inject
-	private Controller controller;
+	private MainController controller;
 
 	@Inject
 	private ToolbarView toolbar;

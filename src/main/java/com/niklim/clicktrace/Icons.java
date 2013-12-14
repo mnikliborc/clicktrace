@@ -5,6 +5,9 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
+/**
+ * Constants and util methods for icon images.
+ */
 public class Icons {
 	public static final String NEW_SESSION = "icons/1383438310_folder_add.png";
 	public static final String OPEN_SESSION = "icons/1383438320_folder.png";

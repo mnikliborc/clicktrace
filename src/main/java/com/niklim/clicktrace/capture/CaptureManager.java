@@ -22,9 +22,12 @@ import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
+/**
+ * Screenshots capturing manager. {@link UserProperties} provides configuration.
+ */
 @Singleton
-public class ChangeCapture {
-	private static final Logger log = LoggerFactory.getLogger(ChangeCapture.class);
+public class CaptureManager {
+	private static final Logger log = LoggerFactory.getLogger(CaptureManager.class);
 
 	@Inject
 	private Robot robot;
@@ -50,6 +53,9 @@ public class ChangeCapture {
 
 	private Timer time;
 
+	/**
+	 * Starts screenshots capturing.
+	 */
 	public void start() {
 		recordMouseClicks = props.getRecordMouseClicks();
 		time = new Timer();
@@ -57,6 +63,9 @@ public class ChangeCapture {
 		time.schedule(new CaptureTask(), period, period);
 	}
 
+	/**
+	 * Stops screenshots capturing.
+	 */
 	public void stop() {
 		if (time != null) {
 			time.cancel();

@@ -24,7 +24,7 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.controller.Controller;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.SessionMetadata;
 import com.niklim.clicktrace.service.SessionManager;
@@ -37,7 +37,7 @@ public class OpenSessionDialog {
 	JDialog dialog;
 
 	@Inject
-	private Controller controller;
+	private MainController controller;
 
 	@Inject
 	private SessionManager sessionManager;

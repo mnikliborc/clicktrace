@@ -9,6 +9,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.niklim.clicktrace.capture.mouse.CollectorMouseCapture;
 import com.niklim.clicktrace.capture.mouse.MouseCapture;
+import com.niklim.clicktrace.capture.voter.ChangeVoter;
+import com.niklim.clicktrace.capture.voter.PixelVoter;
 
 public class CaptureModule extends AbstractModule {
 

@@ -9,7 +9,7 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Messages;
-import com.niklim.clicktrace.capture.ChangeCapture;
+import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
@@ -21,9 +21,9 @@ import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
 @Singleton
-public class Controller {
+public class MainController {
 	@Inject
-	private ChangeCapture changeCapture;
+	private CaptureManager capture;
 
 	@Inject
 	private MainView mainView;
@@ -68,7 +68,7 @@ public class Controller {
 			mainView.hide();
 		}
 
-		changeCapture.start();
+		capture.start();
 	}
 
 	public void stopRecording() {
@@ -76,7 +76,7 @@ public class Controller {
 			return;
 		}
 
-		changeCapture.stop();
+		capture.stop();
 		activeSession.setRecording(false);
 		mainView.sessionStateChanged();
 
@@ -101,7 +101,7 @@ public class Controller {
 	}
 
 	public void openSession(Session session) {
-		changeCapture.stop();
+		capture.stop();
 
 		setActiveSession(session);
 
@@ -126,7 +126,7 @@ public class Controller {
 			return;
 		}
 
-		changeCapture.stop();
+		capture.stop();
 		session.delete();
 
 		activeSession.setSession(null);
