@@ -10,7 +10,7 @@ import com.niklim.clicktrace.view.MainView;
 
 public class DeleteScreenShotOperation extends AbstractOperation {
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 	@Inject
 	private Controller controller;
 	@Inject
@@ -22,7 +22,7 @@ public class DeleteScreenShotOperation extends AbstractOperation {
 			return;
 		}
 		String screenShot = activeSesssion.getActiveShot().toString();
-		int answer = JOptionPane.showConfirmDialog(editor.getFrame(), "Are you sure to delete '"
+		int answer = JOptionPane.showConfirmDialog(mainView.getFrame(), "Are you sure to delete '"
 				+ screenShot + "' screenshot?", "", JOptionPane.OK_CANCEL_OPTION);
 		if (answer == JOptionPane.OK_OPTION) {
 			controller.deleteActiveScreenShot();

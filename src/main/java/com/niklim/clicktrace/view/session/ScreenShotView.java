@@ -27,7 +27,7 @@ import com.niklim.clicktrace.view.MainView;
 @Singleton
 public class ScreenShotView {
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	private JPanel panel;
 	private BufferedImage mouseMarkLeft;
@@ -50,7 +50,7 @@ public class ScreenShotView {
 	}
 
 	public void show(ScreenShot shot) {
-		int thumbWidth = (int) (editor.getEditorDimension().getWidth() * 0.97);
+		int thumbWidth = (int) (mainView.getEditorDimension().getWidth() * 0.97);
 		try {
 			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
 			BufferedImage imageFinal = scaleImage(imageWithClicks, thumbWidth);

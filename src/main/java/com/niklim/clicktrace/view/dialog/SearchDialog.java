@@ -39,7 +39,7 @@ import com.niklim.clicktrace.view.TextComponentHistory;
 @Singleton
 public class SearchDialog {
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	@Inject
 	private SearchService searchService;
@@ -64,7 +64,7 @@ public class SearchDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(editor.getFrame(), true);
+		dialog = new JDialog(mainView.getFrame(), true);
 		dialog.setTitle("Search");
 		dialog.getContentPane().setLayout(new MigLayout("", "[fill]rel[]"));
 

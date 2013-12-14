@@ -49,7 +49,7 @@ public class KeyboardController implements NativeKeyListener {
 	private Controller controller;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	@Inject
 	private OpenScreenShotDescriptionOperation openScreenShotDescriptionOperation;
@@ -112,17 +112,17 @@ public class KeyboardController implements NativeKeyListener {
 
 	@Inject
 	public void registerKeyboardHooks() {
-		JFrame editorFrame = editor.getFrame();
+		JFrame editorFrame = mainView.getFrame();
 		registerAction(editorFrame, ControlShortcutEnum.SCROLL_UP, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				editor.scrollUp();
+				mainView.scrollUp();
 			}
 		});
 		registerAction(editorFrame, ControlShortcutEnum.SCROLL_DOWN, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				editor.scrollDown();
+				mainView.scrollDown();
 			}
 		});
 

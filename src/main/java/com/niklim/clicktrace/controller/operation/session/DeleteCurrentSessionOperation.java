@@ -12,12 +12,12 @@ public class DeleteCurrentSessionOperation extends AbstractOperation {
 	private Controller controller;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 
 	@Override
 	public void perform() {
-		int answer = JOptionPane.showConfirmDialog(editor.getFrame(),
+		int answer = JOptionPane.showConfirmDialog(mainView.getFrame(),
 				"Are you sure to delete the session?", "", JOptionPane.OK_CANCEL_OPTION);
 		if (answer == JOptionPane.OK_OPTION) {
 			controller.deleteActiveSession();

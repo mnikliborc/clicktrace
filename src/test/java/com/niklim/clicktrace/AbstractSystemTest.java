@@ -16,7 +16,7 @@ import com.niklim.clicktrace.view.MainView;
 public abstract class AbstractSystemTest {
 	protected FrameFixture editorFixture;
 	protected ActiveSession activeSession;
-	protected MainView editor;
+	protected MainView mainView;
 
 	protected Injector injector;
 
@@ -27,8 +27,8 @@ public abstract class AbstractSystemTest {
 		prepareTestDir();
 
 		injector = loadInjector();
-		editor = injector.getInstance(MainView.class);
-		editorFixture = new FrameFixture(editor.getFrame());
+		mainView = injector.getInstance(MainView.class);
+		editorFixture = new FrameFixture(mainView.getFrame());
 		editorFixture.show();
 
 		activeSession = injector.getInstance(ActiveSession.class);

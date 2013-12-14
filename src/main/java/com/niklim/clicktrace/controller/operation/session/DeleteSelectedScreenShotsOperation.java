@@ -15,7 +15,7 @@ public class DeleteSelectedScreenShotsOperation extends AbstractOperation {
 	private Controller controller;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -31,11 +31,11 @@ public class DeleteSelectedScreenShotsOperation extends AbstractOperation {
 
 		int selectedShotsCount = activeSession.getSelectedShots().size();
 		if (selectedShotsCount == 0) {
-			JOptionPane.showMessageDialog(editor.getFrame(), "No screenshots selected.");
+			JOptionPane.showMessageDialog(mainView.getFrame(), "No screenshots selected.");
 			return;
 		}
 
-		int answer = JOptionPane.showConfirmDialog(editor.getFrame(), "Are you sure to remove "
+		int answer = JOptionPane.showConfirmDialog(mainView.getFrame(), "Are you sure to remove "
 				+ selectedShotsCount + " screenshot(s)?", "", JOptionPane.OK_CANCEL_OPTION);
 		if (answer == JOptionPane.OK_OPTION) {
 			controller.deleteSelectedScreenshots();

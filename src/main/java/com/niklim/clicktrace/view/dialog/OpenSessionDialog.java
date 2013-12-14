@@ -43,7 +43,7 @@ public class OpenSessionDialog {
 	private SessionManager sessionManager;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	JTable table;
 
@@ -52,7 +52,7 @@ public class OpenSessionDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(editor.getFrame(), true);
+		dialog = new JDialog(mainView.getFrame(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

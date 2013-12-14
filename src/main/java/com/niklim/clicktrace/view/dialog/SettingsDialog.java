@@ -39,7 +39,7 @@ public class SettingsDialog {
 	private UserProperties props;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	JSpinner captureFrequency;
 	JTextField captureDimension;
@@ -56,7 +56,7 @@ public class SettingsDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(editor.getFrame(), true);
+		dialog = new JDialog(mainView.getFrame(), true);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
 		dialog.setTitle("Settings");

@@ -35,7 +35,7 @@ public class DescriptionDialog {
 	private ScreenShot activeShot;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	@Inject
 	private SaveScreenShotDescriptionOperation saveScreenShotDescriptionActionListener;

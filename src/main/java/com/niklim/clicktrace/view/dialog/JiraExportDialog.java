@@ -37,7 +37,7 @@ import com.niklim.clicktrace.view.MainView;
 
 public class JiraExportDialog {
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	@Inject
 	private JiraService jiraService;
@@ -86,7 +86,7 @@ public class JiraExportDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(editor.getFrame(), true);
+		dialog = new JDialog(mainView.getFrame(), true);
 		dialog.setTitle("Export to Clicktrace on JIRA Plugin");
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 

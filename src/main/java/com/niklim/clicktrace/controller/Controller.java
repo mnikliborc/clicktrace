@@ -26,7 +26,7 @@ public class Controller {
 	private ChangeCapture changeCapture;
 
 	@Inject
-	private MainView editor;
+	private MainView mainView;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -49,7 +49,7 @@ public class Controller {
 		if (session != null) {
 			openSession(session);
 		}
-		editor.open();
+		mainView.open();
 	}
 
 	public void startRecording(boolean hideEditor) {
@@ -63,9 +63,9 @@ public class Controller {
 
 		activeSession.setRecording(true);
 
-		editor.sessionStateChanged();
+		mainView.sessionStateChanged();
 		if (hideEditor) {
-			editor.hide();
+			mainView.hide();
 		}
 
 		changeCapture.start();
@@ -78,7 +78,7 @@ public class Controller {
 
 		changeCapture.stop();
 		activeSession.setRecording(false);
-		editor.sessionStateChanged();
+		mainView.sessionStateChanged();
 
 		refreshSession();
 		int index = activeSession.getActiveShotIndex();
@@ -93,9 +93,9 @@ public class Controller {
 			openSession(session);
 			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
+			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
+			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
 		return false;
 	}
@@ -105,8 +105,8 @@ public class Controller {
 
 		setActiveSession(session);
 
-		editor.showSession(session);
-		editor.sessionStateChanged();
+		mainView.showSession(session);
+		mainView.sessionStateChanged();
 
 		if (session != null) {
 			props.setLastSessionName(session.getName());
@@ -132,12 +132,12 @@ public class Controller {
 		activeSession.setSession(null);
 		activeSession.setRecording(false);
 
-		editor.sessionStateChanged();
-		editor.hideSession();
+		mainView.sessionStateChanged();
+		mainView.hideSession();
 	}
 
 	public void setSelectedAllScreenshots(boolean selected) {
-		editor.setSelectedActiveScreenShot(selected);
+		mainView.setSelectedActiveScreenShot(selected);
 		activeSession.setSelectedAllShots(selected);
 	}
 
@@ -154,8 +154,8 @@ public class Controller {
 	public void showScreenShot(int i) {
 		ScreenShot shot = activeSession.getSession().getShots().get(i);
 		activeSession.setActiveShot(shot);
-		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
-		editor.refresh();
+		mainView.showScreenShot(shot, activeSession.isShotSelected(shot));
+		mainView.refresh();
 	}
 
 	public void refreshScreenShot() {
@@ -165,8 +165,8 @@ public class Controller {
 		}
 
 		shot.loadImage();
-		editor.showScreenShot(shot, activeSession.isShotSelected(shot));
-		editor.refresh();
+		mainView.showScreenShot(shot, activeSession.isShotSelected(shot));
+		mainView.refresh();
 	}
 
 	public void editScreenShot() {
@@ -176,7 +176,7 @@ public class Controller {
 		}
 
 		if (Strings.isNullOrEmpty(props.getImageEditorPath())) {
-			JOptionPane.showMessageDialog(editor.getFrame(), Messages.NO_EDITOR_PATH_SET);
+			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.NO_EDITOR_PATH_SET);
 			settingsDialog.open();
 		} else {
 			try {
@@ -203,9 +203,9 @@ public class Controller {
 
 		ScreenShot newShot = activeSession.getShot(indexOfNewActive);
 
-		editor.resetControl(activeSession.getSession());
-		editor.showScreenShot(newShot, activeSession.isShotSelected(newShot));
-		editor.refresh();
+		mainView.resetControl(activeSession.getSession());
+		mainView.showScreenShot(newShot, activeSession.isShotSelected(newShot));
+		mainView.refresh();
 	}
 
 	public void deleteSelectedScreenshots() {
@@ -216,12 +216,12 @@ public class Controller {
 
 		activeSession.setFirstShotActive();
 
-		editor.showSession(activeSession.getSession());
+		mainView.showSession(activeSession.getSession());
 		if (!activeSession.isShotSelected(activeSession.getActiveShot())) {
-			editor.showScreenShot(activeSession.getActiveShot(), false);
+			mainView.showScreenShot(activeSession.getActiveShot(), false);
 		}
 		activeSession.setSelectedAllShots(false);
-		editor.sessionStateChanged();
+		mainView.sessionStateChanged();
 	}
 
 	public void selectScreenShot(boolean selected) {
@@ -235,7 +235,7 @@ public class Controller {
 	public void toggleSelectScreenShot() {
 		boolean selected = activeSession.getSelectedShots().contains(activeSession.getActiveShot());
 		selectScreenShot(!selected);
-		editor.setSelectedActiveScreenShot(!selected);
+		mainView.setSelectedActiveScreenShot(!selected);
 	}
 
 	public void changeActiveScreenShotLabel(String label) {
@@ -246,7 +246,7 @@ public class Controller {
 				.getSession());
 		writer.saveShotLabel(activeSession.getActiveShot());
 
-		editor.refresh();
+		mainView.refresh();
 	}
 
 	public void saveActiveScreenShotDescription() {
@@ -260,9 +260,9 @@ public class Controller {
 		try {
 			sessionManager.changeSessionName(session, name);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
+			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
-			JOptionPane.showMessageDialog(editor.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
+			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
 	}
 
@@ -294,7 +294,7 @@ public class Controller {
 
 	public void openSessionOnScreenShot(ScreenShot selectedShot) {
 		openSession(selectedShot.getSession());
-		editor.showScreenShot(selectedShot, false);
+		mainView.showScreenShot(selectedShot, false);
 	}
 
 }
