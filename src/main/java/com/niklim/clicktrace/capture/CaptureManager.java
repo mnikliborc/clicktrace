@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.ErrorNotifier;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
@@ -47,6 +49,9 @@ public class CaptureManager {
 	@Inject
 	private SessionManager sessionManager;
 
+	@Inject
+	private ErrorNotifier errorNotifier;
+
 	private List<Click> clicks = new LinkedList<Click>();
 	private String lastImageFilename;
 	private boolean recordMouseClicks;
@@ -54,9 +59,11 @@ public class CaptureManager {
 	private Timer time;
 
 	/**
-	 * Starts screenshots capturing.
+	 * Starts periodic screenshot capturing.
 	 */
 	public void start() {
+		log.debug("Capturing started");
+
 		recordMouseClicks = props.getRecordMouseClicks();
 		time = new Timer();
 		int period = (int) ((double) 1000 / props.getCaptureFrequency());
@@ -67,6 +74,8 @@ public class CaptureManager {
 	 * Stops screenshots capturing.
 	 */
 	public void stop() {
+		log.debug("Capturing stopped");
+
 		if (time != null) {
 			time.cancel();
 		}
@@ -86,11 +95,17 @@ public class CaptureManager {
 		}
 	}
 
+	/**
+	 * Takes a screenshot and decides whether it should be saved. On screenshot
+	 * save it stores recorded mouse clicks on the previous screenshot.
+	 */
 	public synchronized void capture() {
 		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit()
 				.getScreenSize()));
 
 		if (detector.detect(image)) {
+			log.debug("Screen change detected");
+
 			if (lastImageFilename != null) {
 				saveClicks();
 			}
@@ -98,6 +113,7 @@ public class CaptureManager {
 				lastImageFilename = fileManager.saveImage(image, activeSession.getSession()
 						.getName());
 			} catch (IOException e) {
+				errorNotifier.notify(Messages.SCREENSHOT_SAVE_ERROR);
 				e.printStackTrace();
 			}
 		}

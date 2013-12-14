@@ -14,4 +14,5 @@ public interface Messages {
 	public static final String EXPORT_AUTHORIZATION_ERROR = "Wrong username or password.";
 	public static final String EXPORT_WRONG_URL_ERROR = "Wrong JIRA URL.";
 	public static final String EXPORT_CAPTCHA_ERROR = "Sorry dude, it looks like you have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
+	public static final String SCREENSHOT_SAVE_ERROR = "Error occured while saving the screenshot.";
 }

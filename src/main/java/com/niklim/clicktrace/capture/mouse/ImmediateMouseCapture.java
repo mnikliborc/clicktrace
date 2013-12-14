@@ -16,6 +16,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.service.FileManager;
 
+/**
+ * On mouse click takes a screenshot, mark on in the click and saves on disk.
+ * Not used.
+ */
 @Singleton
 public class ImmediateMouseCapture extends MouseCapture {
 	private static Logger log = LoggerFactory.getLogger(ImmediateMouseCapture.class);

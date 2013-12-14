@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 
+/**
+ * Abstract class for mouse clicks capturing. Initializes JNativeHook.
+ */
 public abstract class MouseCapture implements NativeMouseInputListener {
 	private static Logger log = LoggerFactory.getLogger(MouseCapture.class);
 

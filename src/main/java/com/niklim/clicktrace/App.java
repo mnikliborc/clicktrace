@@ -20,6 +20,7 @@ public class App {
 	private static final Logger log = LoggerFactory.getLogger(App.class);
 
 	public static void main(String[] args) {
+		log.info("app started");
 		Injector injector = Guice.createInjector(new ControllerModule(), new CaptureModule());
 		injector.getInstance(MouseCapture.class);
 		injector.getInstance(KeyboardController.class);
@@ -27,6 +28,6 @@ public class App {
 
 		ToolTipManager.sharedInstance().setInitialDelay(1000);
 
-		log.info("app started");
+		log.info("app ready to work");
 	}
 }

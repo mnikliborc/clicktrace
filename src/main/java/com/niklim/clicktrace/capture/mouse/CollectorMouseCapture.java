@@ -9,6 +9,9 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.model.Click;
 
+/**
+ * On mouse click notifies {@link CaptureManager}.
+ */
 @Singleton
 public class CollectorMouseCapture extends MouseCapture {
 	private static Logger log = LoggerFactory.getLogger(ImmediateMouseCapture.class);
