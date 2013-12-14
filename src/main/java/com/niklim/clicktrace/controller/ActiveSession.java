@@ -8,7 +8,7 @@ import java.util.Set;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
-import com.niklim.clicktrace.view.editor.dialog.ActiveShotListener;
+import com.niklim.clicktrace.view.dialog.ActiveShotListener;
 
 @Singleton
 public class ActiveSession {

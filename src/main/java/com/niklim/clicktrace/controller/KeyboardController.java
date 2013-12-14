@@ -25,21 +25,21 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.view.editor.ControlShortcutEnum;
-import com.niklim.clicktrace.view.editor.Editor;
-import com.niklim.clicktrace.view.editor.action.screenshot.ChangeScreenShotLabelActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.DeleteScreenShotActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.EditScreenShotActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.OpenScreenShotDescriptionActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.OpenSearchDialogActionListener;
-import com.niklim.clicktrace.view.editor.action.screenshot.RefreshScreenShotActionListener;
-import com.niklim.clicktrace.view.editor.action.session.DeleteCurrentSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.OpenOpenSessionDialogActionListener;
-import com.niklim.clicktrace.view.editor.action.session.RefreshSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.SelectAllScreenShotsActionListener;
-import com.niklim.clicktrace.view.editor.action.session.StartSessionActionListener;
-import com.niklim.clicktrace.view.editor.action.session.StopSessionActionListener;
+import com.niklim.clicktrace.controller.action.screenshot.ChangeScreenShotLabelActionListener;
+import com.niklim.clicktrace.controller.action.screenshot.DeleteScreenShotActionListener;
+import com.niklim.clicktrace.controller.action.screenshot.EditScreenShotActionListener;
+import com.niklim.clicktrace.controller.action.screenshot.OpenScreenShotDescriptionActionListener;
+import com.niklim.clicktrace.controller.action.screenshot.OpenSearchDialogActionListener;
+import com.niklim.clicktrace.controller.action.screenshot.RefreshScreenShotActionListener;
+import com.niklim.clicktrace.controller.action.session.DeleteCurrentSessionActionListener;
+import com.niklim.clicktrace.controller.action.session.NewSessionActionListener;
+import com.niklim.clicktrace.controller.action.session.OpenOpenSessionDialogActionListener;
+import com.niklim.clicktrace.controller.action.session.RefreshSessionActionListener;
+import com.niklim.clicktrace.controller.action.session.SelectAllScreenShotsActionListener;
+import com.niklim.clicktrace.controller.action.session.StartSessionActionListener;
+import com.niklim.clicktrace.controller.action.session.StopSessionActionListener;
+import com.niklim.clicktrace.view.ControlShortcutEnum;
+import com.niklim.clicktrace.view.MainView;
 
 @Singleton
 public class KeyboardController implements NativeKeyListener {
@@ -49,7 +49,7 @@ public class KeyboardController implements NativeKeyListener {
 	private Controller controller;
 
 	@Inject
-	private Editor editor;
+	private MainView editor;
 
 	@Inject
 	private OpenScreenShotDescriptionActionListener openScreenShotDescriptionActionListener;

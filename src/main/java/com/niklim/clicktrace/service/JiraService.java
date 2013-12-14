@@ -7,10 +7,10 @@ import com.atlassian.httpclient.api.HttpClient;
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
 import com.google.inject.Inject;
-import com.niklim.clicktrace.AppProperties;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
+import com.niklim.clicktrace.props.AppProperties;
 
 public class JiraService {
 	@Inject

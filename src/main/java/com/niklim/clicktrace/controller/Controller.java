@@ -8,17 +8,17 @@ import javax.swing.JOptionPane;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.UserProperties;
 import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.capture.ChangeCapture;
+import com.niklim.clicktrace.controller.action.session.NewSessionActionListener;
 import com.niklim.clicktrace.model.session.ScreenShot;
 import com.niklim.clicktrace.model.session.Session;
 import com.niklim.clicktrace.model.session.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.SessionAlreadyExistsException;
 import com.niklim.clicktrace.service.SessionManager;
-import com.niklim.clicktrace.view.editor.Editor;
-import com.niklim.clicktrace.view.editor.action.session.NewSessionActionListener;
-import com.niklim.clicktrace.view.editor.dialog.SettingsDialog;
+import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
 @Singleton
 public class Controller {
@@ -26,7 +26,7 @@ public class Controller {
 	private ChangeCapture changeCapture;
 
 	@Inject
-	private Editor editor;
+	private MainView editor;
 
 	@Inject
 	private ActiveSession activeSession;

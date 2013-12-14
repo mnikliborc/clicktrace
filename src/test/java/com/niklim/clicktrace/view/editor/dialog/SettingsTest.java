@@ -6,8 +6,8 @@ import org.fest.swing.core.matcher.JButtonMatcher;
 import org.junit.Test;
 
 import com.niklim.clicktrace.AbstractSystemTest;
-import com.niklim.clicktrace.UserProperties;
 import com.niklim.clicktrace.TestSessionsData;
+import com.niklim.clicktrace.props.UserProperties;
 
 public class SettingsTest extends AbstractSystemTest {
 	@Override
