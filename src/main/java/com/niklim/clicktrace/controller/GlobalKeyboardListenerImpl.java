@@ -35,6 +35,7 @@ import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescripti
 import com.niklim.clicktrace.controller.operation.session.DeleteCurrentSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeselectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenHtmlExportDialogOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenJiraExportDialogOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
@@ -105,6 +106,9 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 
 	@Inject
 	private OpenJiraExportDialogOperation openJiraExportDialogOperation;
+
+	@Inject
+	private OpenHtmlExportDialogOperation openHtmlExportDialogOperation;
 
 	public GlobalKeyboardListenerImpl() {
 		try {
@@ -194,6 +198,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 				deselectAllScreenShotsOperation.action());
 
 		registerAction(mainFrame, OperationsShortcutEnum.JIRA_EXPORT, openJiraExportDialogOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.HTML_EXPORT, openHtmlExportDialogOperation.action());
 
 		registerMenuAction(mainFrame);
 	}

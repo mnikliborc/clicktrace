@@ -19,4 +19,6 @@ public interface Messages {
 	public static final String SCREENSHOT_SAVE_ERROR = "Error occured while saving the screenshot.";
 	public static final String UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR = "UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR";
 	public static final String EDITOR_APP_ERROR = "EDITOR_APP_ERROR";
+	public static final Object HTML_EXPORT_SUCCESS = "HTML_EXPORT_SUCCESS";
+	public static final Object HTML_EXPORT_IO_ERROR = "Unable to export session to given directory";
 }

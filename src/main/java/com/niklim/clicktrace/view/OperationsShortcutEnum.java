@@ -29,7 +29,8 @@ public enum OperationsShortcutEnum {
 	FIND("[Ctrl+F]", KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), 
 	RECORD_START("[Shift+Ctrl+R]", KeyEvent.VK_R, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK),
 	RECORD_STOP("[Shift+Ctrl+S]", KeyEvent.VK_S, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK),
-	JIRA_EXPORT("[Ctrl+J]", KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK);
+	JIRA_EXPORT("[Ctrl+J]", KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK), 
+	HTML_EXPORT("[Ctrl+H]", KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK);
 	// @formatter:on
 
 	public final String text;

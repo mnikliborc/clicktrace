@@ -30,15 +30,15 @@ import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
-import com.niklim.clicktrace.service.JiraService;
+import com.niklim.clicktrace.service.JiraExportService;
 import com.niklim.clicktrace.service.SessionCompressor;
-import com.niklim.clicktrace.service.exception.JiraException;
+import com.niklim.clicktrace.service.exception.JiraExportException;
 import com.niklim.clicktrace.view.MainFrameHolder;
 
 public class JiraExportDialog {
 
 	@Inject
-	private JiraService jiraService;
+	private JiraExportService jiraExportService;
 
 	@Inject
 	private UserProperties props;
@@ -151,7 +151,7 @@ public class JiraExportDialog {
 
 	private boolean confirmSessionExport() {
 		try {
-			boolean sessionExist = jiraService.checkSessionExist(username.getText(),
+			boolean sessionExist = jiraExportService.checkSessionExist(username.getText(),
 					password.getText(), issueKey.getText(), activeSession.getSession().getName(),
 					jiraInstanceUrl.getText());
 			if (sessionExist) {
@@ -159,7 +159,7 @@ public class JiraExportDialog {
 			} else {
 				return true;
 			}
-		} catch (JiraException e) {
+		} catch (JiraExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 			return false;
 		}
@@ -180,12 +180,12 @@ public class JiraExportDialog {
 			showWaitingCursor();
 			String stream = compressedSession.get();
 
-			jiraService.exportSession(username.getText(), password.getText(), issueKey.getText(),
+			jiraExportService.exportSession(username.getText(), password.getText(), issueKey.getText(),
 					activeSession.getSession().getName(), stream, jiraInstanceUrl.getText());
 			hideWaitingCursor();
 			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
 			close();
-		} catch (JiraException e) {
+		} catch (JiraExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (Throwable e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
