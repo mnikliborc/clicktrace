@@ -19,7 +19,6 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.NativeInputEvent;
 import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,16 +37,16 @@ import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperatio
 import com.niklim.clicktrace.controller.operation.session.SelectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.StopSessionOperation;
-import com.niklim.clicktrace.view.OperationsShortcutEnum;
 import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 /**
  * Listens to keystrokes and triggers operations on registered shortcuts. Uses
  * JNativeHook.
  */
 @Singleton
-public class KeyboardController implements NativeKeyListener {
-	private static Logger log = LoggerFactory.getLogger(KeyboardController.class);
+public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
+	private static Logger log = LoggerFactory.getLogger(GlobalKeyboardListener.class);
 
 	@Inject
 	private MainController controller;
@@ -94,7 +93,7 @@ public class KeyboardController implements NativeKeyListener {
 	@Inject
 	private ChangeScreenShotLabelOperation changeScreenShotLabelOperation;
 
-	public KeyboardController() {
+	public GlobalKeyboardListenerImpl() {
 		try {
 			if (!GlobalScreen.isNativeHookRegistered()) {
 				GlobalScreen.registerNativeHook();
@@ -157,8 +156,7 @@ public class KeyboardController implements NativeKeyListener {
 
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DELETE, deleteScreenShotOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_EDIT, editScreenShotOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION,
-				openScreenShotDescriptionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION, openScreenShotDescriptionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_SELECT, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -208,8 +206,7 @@ public class KeyboardController implements NativeKeyListener {
 	}
 
 	private void registerAction(JFrame frame, OperationsShortcutEnum shortcut, ActionListener listener) {
-		frame.getRootPane().registerKeyboardAction(listener,
-				KeyStroke.getKeyStroke(shortcut.code, shortcut.modifier),
+		frame.getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(shortcut.code, shortcut.modifier),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
@@ -233,3 +230,4 @@ public class KeyboardController implements NativeKeyListener {
 		return false;
 	}
 }
+

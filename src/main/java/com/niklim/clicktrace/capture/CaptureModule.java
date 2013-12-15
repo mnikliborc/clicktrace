@@ -17,6 +17,7 @@ public class CaptureModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(MouseCapture.class).to(CollectorMouseCapture.class);
+		requireBinding(MouseCapture.class);
 	}
 
 	@Provides

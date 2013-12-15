@@ -28,7 +28,7 @@ import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.SessionMetadata;
 import com.niklim.clicktrace.service.SessionManager;
-import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.MainFrameHolder;
 
 @SuppressWarnings("serial")
 @Singleton
@@ -42,9 +42,6 @@ public class OpenSessionDialog {
 	@Inject
 	private SessionManager sessionManager;
 
-	@Inject
-	private MainView mainView;
-
 	JTable table;
 
 	public OpenSessionDialog() {
@@ -52,7 +49,7 @@ public class OpenSessionDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(mainView.getFrame(), true);
+		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

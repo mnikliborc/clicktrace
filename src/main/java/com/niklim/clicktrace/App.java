@@ -10,8 +10,7 @@ import com.google.inject.Injector;
 import com.niklim.clicktrace.capture.CaptureModule;
 import com.niklim.clicktrace.capture.mouse.MouseCapture;
 import com.niklim.clicktrace.controller.ControllerModule;
-import com.niklim.clicktrace.controller.KeyboardController;
-import com.niklim.clicktrace.controller.MainController;
+import com.niklim.clicktrace.controller.GlobalKeyboardListener;
 
 /**
  * Application bootstrap.
@@ -24,8 +23,7 @@ public class App {
 
 		Injector injector = createInjector();
 		injector.getInstance(MouseCapture.class);
-		injector.getInstance(KeyboardController.class);
-		injector.getInstance(MainController.class);
+		injector.getInstance(GlobalKeyboardListener.class);
 
 		ToolTipManager.sharedInstance().setInitialDelay(1000);
 

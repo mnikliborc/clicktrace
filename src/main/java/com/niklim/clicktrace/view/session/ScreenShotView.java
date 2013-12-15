@@ -17,21 +17,17 @@ import net.miginfocom.swing.MigLayout;
 
 import org.imgscalr.Scalr;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.ScreenShot;
-import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.MainFrameHolder;
 
 /**
  * Displays screenshot image with mouse clicks.
  */
 @Singleton
 public class ScreenShotView {
-	@Inject
-	private MainView mainView;
-
 	private JPanel panel;
 	private BufferedImage mouseMarkLeft;
 	private BufferedImage mouseMarkRight;
@@ -53,7 +49,7 @@ public class ScreenShotView {
 	}
 
 	public void show(ScreenShot shot) {
-		int thumbWidth = (int) (mainView.getEditorDimension().getWidth() * 0.97);
+		int thumbWidth = (int) (MainFrameHolder.get().getSize().getWidth() * 0.97);
 		try {
 			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
 			BufferedImage imageFinal = scaleImage(imageWithClicks, thumbWidth);

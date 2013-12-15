@@ -57,6 +57,7 @@ public class MainView {
 	@Inject
 	public void init() {
 		frame = new JFrame(APP_NAME);
+		MainFrameHolder.set(frame);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.7), (int) (dim.getHeight() * 0.7));
@@ -120,10 +121,6 @@ public class MainView {
 		} else {
 			screenShotView.clear();
 		}
-	}
-
-	public Dimension getEditorDimension() {
-		return frame.getSize();
 	}
 
 	public void hideSession() {

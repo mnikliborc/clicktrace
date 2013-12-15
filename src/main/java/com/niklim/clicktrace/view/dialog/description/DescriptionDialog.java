@@ -20,7 +20,7 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.MainFrameHolder;
 import com.niklim.clicktrace.view.TextComponentHistory;
 
 @Singleton
@@ -29,9 +29,6 @@ public class DescriptionDialog {
 	private JDialog dialog;
 
 	private JTextArea textarea;
-
-	@Inject
-	private MainView mainView;
 
 	private TextComponentHistory history;
 
@@ -42,7 +39,7 @@ public class DescriptionDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(mainView.getFrame(), true);
+		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		textarea = new JTextArea();
 		history = new TextComponentHistory(textarea);

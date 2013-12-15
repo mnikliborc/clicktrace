@@ -29,7 +29,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
-import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.MainFrameHolder;
 
 @Singleton
 public class SettingsDialog {
@@ -37,9 +37,6 @@ public class SettingsDialog {
 
 	@Inject
 	private UserProperties props;
-
-	@Inject
-	private MainView mainView;
 
 	JSpinner captureFrequency;
 	JTextField captureDimension;
@@ -56,7 +53,7 @@ public class SettingsDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(mainView.getFrame(), true);
+		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
 		dialog.setTitle("Settings");
