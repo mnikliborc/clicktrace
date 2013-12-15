@@ -24,6 +24,9 @@ import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.view.MainView;
 
+/**
+ * Displays screenshot image with mouse clicks.
+ */
 @Singleton
 public class ScreenShotView {
 	@Inject
@@ -37,14 +40,14 @@ public class ScreenShotView {
 		panel = new JPanel(new MigLayout());
 
 		try {
-			mouseMarkLeft = loadMoauseMark(Icons.MOUSE_MARK_RED_LEFT);
-			mouseMarkRight = loadMoauseMark(Icons.MOUSE_MARK_RED_RIGHT);
+			mouseMarkLeft = loadMouseMark(Icons.MOUSE_MARK_RED_LEFT);
+			mouseMarkRight = loadMouseMark(Icons.MOUSE_MARK_RED_RIGHT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private BufferedImage loadMoauseMark(String icon) throws IOException {
+	private BufferedImage loadMouseMark(String icon) throws IOException {
 		URL file = Thread.currentThread().getContextClassLoader().getResource(icon);
 		return ImageIO.read(file);
 	}

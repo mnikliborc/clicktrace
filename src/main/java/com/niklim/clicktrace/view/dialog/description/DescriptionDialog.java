@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.dialog;
+package com.niklim.clicktrace.view.dialog.description;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -20,8 +20,6 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.controller.operation.screenshot.SaveScreenShotDescriptionOperation;
-import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.TextComponentHistory;
 
@@ -32,15 +30,12 @@ public class DescriptionDialog {
 
 	private JTextArea textarea;
 
-	private ScreenShot activeShot;
-
 	@Inject
 	private MainView mainView;
 
-	@Inject
-	private SaveScreenShotDescriptionOperation saveScreenShotDescriptionActionListener;
-
 	private TextComponentHistory history;
+
+	private DescriptionDialogCallback callback;
 
 	public DescriptionDialog() {
 	}
@@ -115,23 +110,23 @@ public class DescriptionDialog {
 	}
 
 	private void save() {
-		activeShot.setDescription(textarea.getText());
-		saveScreenShotDescriptionActionListener.perform();
+		callback.setText(textarea.getText());
 		dialog.setVisible(false);
 	}
 
-	public void open(ScreenShot shot) {
-		activeShot = shot;
-		dialog.setTitle(shot + " - description");
-		textarea.setText(shot.getDescription());
+	public void open(DescriptionDialogCallback callback) {
+		this.callback = callback;
 
-		resetHistory();
+		dialog.setTitle(callback.getTitle());
+		textarea.setText(callback.getText());
+
+		resetHistory(callback.getText());
 
 		dialog.setVisible(true);
 	}
 
-	private void resetHistory() {
-		history.reset(activeShot.getDescription());
+	private void resetHistory(String initialText) {
+		history.reset(initialText);
 	}
 
 	public void close() {

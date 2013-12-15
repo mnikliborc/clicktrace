@@ -2,7 +2,7 @@ package com.niklim.clicktrace.view;
 
 import java.awt.event.KeyEvent;
 
-public enum ControlShortcutEnum {
+public enum OperationsShortcutEnum {
 	// @formatter:off
 	SCROLL_UP("", KeyEvent.VK_UP, KeyEvent.CTRL_DOWN_MASK),
 	SCROLL_DOWN("", KeyEvent.VK_DOWN, KeyEvent.CTRL_DOWN_MASK),
@@ -31,7 +31,7 @@ public enum ControlShortcutEnum {
 	public final int code;
 	public final int modifier;
 
-	ControlShortcutEnum(String shortcut, int shortCutKeyCode, int shortCutKeyModifier) {
+	OperationsShortcutEnum(String shortcut, int shortCutKeyCode, int shortCutKeyModifier) {
 		this.text = shortcut;
 		this.code = shortCutKeyCode;
 		this.modifier = shortCutKeyModifier;

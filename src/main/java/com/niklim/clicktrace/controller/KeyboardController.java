@@ -38,7 +38,7 @@ import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperatio
 import com.niklim.clicktrace.controller.operation.session.SelectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.StopSessionOperation;
-import com.niklim.clicktrace.view.ControlShortcutEnum;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 import com.niklim.clicktrace.view.MainView;
 
 /**
@@ -117,64 +117,64 @@ public class KeyboardController implements NativeKeyListener {
 	@Inject
 	public void registerKeyboardHooks() {
 		JFrame mainFrame = mainView.getFrame();
-		registerAction(mainFrame, ControlShortcutEnum.SCROLL_UP, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SCROLL_UP, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainView.scrollUp();
 			}
 		});
-		registerAction(mainFrame, ControlShortcutEnum.SCROLL_DOWN, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SCROLL_DOWN, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mainView.scrollDown();
 			}
 		});
 
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_LAST, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LAST, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.showLastScreenShot();
 			}
 		});
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_FIRST, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_FIRST, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.showFirstScreenShot();
 			}
 		});
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_NEXT, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_NEXT, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.showNextScreenShot();
 			}
 		});
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_PREV, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_PREV, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.showPrevScreenShot();
 			}
 		});
 
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_DELETE, deleteScreenShotOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_EDIT, editScreenShotOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_DESCRIPTION,
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DELETE, deleteScreenShotOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_EDIT, editScreenShotOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION,
 				openScreenShotDescriptionOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_SELECT, new ActionListener() {
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_SELECT, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.toggleSelectScreenShot();
 			}
 		});
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_REFRESH, refreshScreenShotOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SHOT_LABEL, changeScreenShotLabelOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_REFRESH, refreshScreenShotOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LABEL, changeScreenShotLabelOperation.action());
 
-		registerAction(mainFrame, ControlShortcutEnum.FIND, openSearchDialogOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.FIND, openSearchDialogOperation.action());
 
-		registerAction(mainFrame, ControlShortcutEnum.SESSION_REFRESH, refreshSessionOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SESSION_OPEN, openSessionOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SESSION_NEW, newSessionOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SESSION_DELETE, deleteCurrentSessionOperation.action());
-		registerAction(mainFrame, ControlShortcutEnum.SESSION_SELECT_ALL_SHOTS,
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_REFRESH, refreshSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_OPEN, openSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_NEW, newSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE, deleteCurrentSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS,
 				selectAllScreenShotsOperation.action());
 
 		registerMenuAction(mainFrame);
@@ -207,7 +207,7 @@ public class KeyboardController implements NativeKeyListener {
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, 0, true), MENU_ACTION_KEY);
 	}
 
-	private void registerAction(JFrame frame, ControlShortcutEnum shortcut, ActionListener listener) {
+	private void registerAction(JFrame frame, OperationsShortcutEnum shortcut, ActionListener listener) {
 		frame.getRootPane().registerKeyboardAction(listener,
 				KeyStroke.getKeyStroke(shortcut.code, shortcut.modifier),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);

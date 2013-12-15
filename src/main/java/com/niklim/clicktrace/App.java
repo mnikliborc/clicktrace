@@ -21,7 +21,8 @@ public class App {
 
 	public static void main(String[] args) {
 		log.info("app started");
-		Injector injector = Guice.createInjector(new ControllerModule(), new CaptureModule());
+
+		Injector injector = createInjector();
 		injector.getInstance(MouseCapture.class);
 		injector.getInstance(KeyboardController.class);
 		injector.getInstance(MainController.class);
@@ -29,5 +30,9 @@ public class App {
 		ToolTipManager.sharedInstance().setInitialDelay(1000);
 
 		log.info("app ready to work");
+	}
+
+	public static Injector createInjector() {
+		return Guice.createInjector(new ControllerModule(), new CaptureModule());
 	}
 }

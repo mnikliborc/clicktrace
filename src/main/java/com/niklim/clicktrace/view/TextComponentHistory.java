@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.text.JTextComponent;
 
 /**
- * Class providing support for undo/redo operation on {#link JTextComponent}.
+ * Provides support for undo/redo operation on {#link JTextComponent}.
  */
 public class TextComponentHistory {
 	LinkedList<String> stack = new LinkedList<String>();
@@ -51,6 +51,7 @@ public class TextComponentHistory {
 		waitForEventPropagation();
 	}
 
+	// dirty hack to let the text modification event to propagate
 	private void waitForEventPropagation() {
 		try {
 			Thread.sleep(10);

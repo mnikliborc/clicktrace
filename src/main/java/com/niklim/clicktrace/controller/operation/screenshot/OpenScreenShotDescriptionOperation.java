@@ -4,7 +4,8 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
 import com.niklim.clicktrace.model.ScreenShot;
-import com.niklim.clicktrace.view.dialog.DescriptionDialog;
+import com.niklim.clicktrace.view.dialog.description.DescriptionDialog;
+import com.niklim.clicktrace.view.dialog.description.DescriptionDialogCallback;
 
 public class OpenScreenShotDescriptionOperation extends AbstractOperation {
 
@@ -14,11 +15,31 @@ public class OpenScreenShotDescriptionOperation extends AbstractOperation {
 	@Inject
 	private ActiveSession activeSession;
 
+	@Inject
+	private SaveScreenShotDescriptionOperation saveScreenShotDescriptionOperation;
+
 	@Override
 	public void perform() {
-		ScreenShot activeShot = activeSession.getActiveShot();
+		final ScreenShot activeShot = activeSession.getActiveShot();
 		if (activeShot != null) {
-			descriptionEditor.open(activeShot);
+			descriptionEditor.open(new DescriptionDialogCallback() {
+
+				@Override
+				public void setText(String text) {
+					activeShot.setDescription(text);
+					saveScreenShotDescriptionOperation.perform();
+				}
+
+				@Override
+				public String getTitle() {
+					return activeShot + " - description";
+				}
+
+				@Override
+				public String getText() {
+					return activeShot.getDescription();
+				}
+			});
 		}
 	}
 

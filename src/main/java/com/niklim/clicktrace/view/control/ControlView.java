@@ -32,8 +32,11 @@ import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescr
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.view.ControlShortcutEnum;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
+/**
+ * Controls for screenshot view.
+ */
 @Singleton
 public class ControlView {
 	@Inject
@@ -72,26 +75,26 @@ public class ControlView {
 		controlPanel.setVisible(false);
 
 		firstButton = createButton("First screenshot ", Icons.FIRST_SCREENSHOT,
-				ControlShortcutEnum.SHOT_FIRST);
+				OperationsShortcutEnum.SHOT_FIRST);
 		prevButton = createButton("Previous screenshot ", Icons.PREV_SCREENSHOT,
-				ControlShortcutEnum.SHOT_PREV);
+				OperationsShortcutEnum.SHOT_PREV);
 		nextButton = createButton("Next screenshot ", Icons.NEXT_SCREENSHOT,
-				ControlShortcutEnum.SHOT_NEXT);
+				OperationsShortcutEnum.SHOT_NEXT);
 		lastButton = createButton("Last screenshot ", Icons.LAST_SCREENSHOT,
-				ControlShortcutEnum.SHOT_LAST);
+				OperationsShortcutEnum.SHOT_LAST);
 
 		deleteButton = createButton("delete", "Delete screenshot ", Icons.DELETE_SCREENSHOT,
-				ControlShortcutEnum.SHOT_DELETE);
+				OperationsShortcutEnum.SHOT_DELETE);
 		editButton = createButton("edit", "Open image editor ", Icons.EDIT_SCREENSHOT,
-				ControlShortcutEnum.SHOT_EDIT);
+				OperationsShortcutEnum.SHOT_EDIT);
 		refreshButton = createButton("refresh", "Refresh screenshot ", Icons.REFRESH_SCREENSHOT,
-				ControlShortcutEnum.SHOT_REFRESH);
+				OperationsShortcutEnum.SHOT_REFRESH);
 
 		checkbox = new JCheckBox();
-		checkbox.setToolTipText("Select " + ControlShortcutEnum.SHOT_SELECT.text);
+		checkbox.setToolTipText("Select " + OperationsShortcutEnum.SHOT_SELECT.text);
 
 		descriptionButton = createButton("description", "Edit screenshot description ",
-				Icons.DESCRIPTION_SCREENSHOT, ControlShortcutEnum.SHOT_DESCRIPTION);
+				Icons.DESCRIPTION_SCREENSHOT, OperationsShortcutEnum.SHOT_DESCRIPTION);
 
 		controlPanel.add(new JLabel("Screen shot"));
 		controlPanel.add(imagesComboBox);
@@ -108,13 +111,13 @@ public class ControlView {
 		controlPanel.add(checkbox);
 	}
 	
-	private JButton createButton(String tooltip, String icon, ControlShortcutEnum shortcut) {
+	private JButton createButton(String tooltip, String icon, OperationsShortcutEnum shortcut) {
 		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
 		button.setToolTipText(tooltip + shortcut.text);
 		return button;
 	}
 
-	private JButton createButton(String label, String tooltip, String icon, ControlShortcutEnum shortcut) {
+	private JButton createButton(String label, String tooltip, String icon, OperationsShortcutEnum shortcut) {
 		JButton button = new JButton(label, new ImageIcon(Icons.createIconImage(icon, label)));
 		button.setToolTipText(tooltip + shortcut.text);
 		return button;

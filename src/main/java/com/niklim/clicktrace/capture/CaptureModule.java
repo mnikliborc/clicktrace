@@ -29,9 +29,8 @@ public class CaptureModule extends AbstractModule {
 		try {
 			return new Robot();
 		} catch (AWTException e) {
-			new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 }

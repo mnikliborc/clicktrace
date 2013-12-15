@@ -19,7 +19,7 @@ import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogO
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.StopSessionOperation;
-import com.niklim.clicktrace.view.ControlShortcutEnum;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 @Singleton
 public class ToolbarView {
@@ -67,20 +67,20 @@ public class ToolbarView {
 		toolbar.setFloatable(false);
 		toolbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY));
 
-		toolbar.add(createButton("New session " + ControlShortcutEnum.SESSION_NEW.text,
+		toolbar.add(createButton("New session " + OperationsShortcutEnum.SESSION_NEW.text,
  Icons.NEW_SESSION,
 				newSessionOperation.action()));
 		toolbar.addSeparator();
-		toolbar.add(createButton("Open session " + ControlShortcutEnum.SESSION_OPEN.text,
+		toolbar.add(createButton("Open session " + OperationsShortcutEnum.SESSION_OPEN.text,
  Icons.OPEN_SESSION,
 				openSessionOperation.action()));
 		toolbar.addSeparator();
 
-		toolbar.add(createButton("Find " + ControlShortcutEnum.FIND.text, Icons.SEARCH,
+		toolbar.add(createButton("Find " + OperationsShortcutEnum.FIND.text, Icons.SEARCH,
 				openSearchDialogOperation.action()));
 		toolbar.addSeparator();
 
-		deleteSession = createButton("Delete session " + ControlShortcutEnum.SESSION_DELETE.text,
+		deleteSession = createButton("Delete session " + OperationsShortcutEnum.SESSION_DELETE.text,
  Icons.DELETE_SESSION,
 				deleteCurrentSessionOperation.action());
 		deleteSession.setEnabled(false);
@@ -88,7 +88,7 @@ public class ToolbarView {
 
 		toolbar.addSeparator();
 		refreshSession = createButton(
-				"Refresh session " + ControlShortcutEnum.SESSION_REFRESH.text,
+				"Refresh session " + OperationsShortcutEnum.SESSION_REFRESH.text,
 				Icons.REFRESH_SESSION, refreshSessionOperation.action());
 		refreshSession.setEnabled(false);
 		toolbar.add(refreshSession);
