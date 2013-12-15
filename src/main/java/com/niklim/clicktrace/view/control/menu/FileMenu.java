@@ -11,6 +11,7 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 @Singleton
 public class FileMenu {
@@ -41,15 +42,17 @@ public class FileMenu {
 	}
 
 	private JMenuItem createFileNewSession() {
-		return MenuBar.createMenuItem("New session", Icons.NEW_SESSION, newSessionOperation.action());
+		return MenuBar.createMenuItem("New session", Icons.NEW_SESSION, OperationsShortcutEnum.SESSION_NEW,
+				newSessionOperation.action());
 	}
 
 	private JMenuItem createFileOpenSession() {
-		return MenuBar.createMenuItem("Open session", Icons.OPEN_SESSION, openSessionOperation.action());
+		return MenuBar.createMenuItem("Open session", Icons.OPEN_SESSION, OperationsShortcutEnum.SESSION_OPEN,
+				openSessionOperation.action());
 	}
 
 	private JMenuItem createFileExit() {
-		return MenuBar.createMenuItem("Exit", new ActionListener() {
+		return MenuBar.createMenuItem("Exit", null, new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				System.exit(0);
 			}

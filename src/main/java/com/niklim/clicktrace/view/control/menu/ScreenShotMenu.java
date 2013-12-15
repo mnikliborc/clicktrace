@@ -12,6 +12,7 @@ import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOpe
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 @Singleton
 public class ScreenShotMenu {
@@ -57,13 +58,15 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createChangeLabel() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Change label", changeScreenShotLabelOperation.action());
+		JMenuItem menuItem = MenuBar.createMenuItem("Change label", OperationsShortcutEnum.SHOT_LABEL,
+				changeScreenShotLabelOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createChangeDescription() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.DESCRIPTION_SCREENSHOT,
+				OperationsShortcutEnum.SHOT_DESCRIPTION,
 				changeScreenShotDescritpionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -71,6 +74,7 @@ public class ScreenShotMenu {
 
 	private JMenuItem createDelete() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Delete screenshot", Icons.DELETE_SCREENSHOT,
+				OperationsShortcutEnum.SHOT_DELETE,
 				deleteScreenShotOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -78,6 +82,7 @@ public class ScreenShotMenu {
 
 	private JMenuItem createRefresh() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Refresh screenshot", Icons.REFRESH_SCREENSHOT,
+				OperationsShortcutEnum.SHOT_REFRESH,
 				refreshScreenShotOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -85,6 +90,7 @@ public class ScreenShotMenu {
 
 	private JMenuItem createEdit() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Edit screenshot", Icons.EDIT_SCREENSHOT,
+				OperationsShortcutEnum.SHOT_EDIT,
 				editScreenShotOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;

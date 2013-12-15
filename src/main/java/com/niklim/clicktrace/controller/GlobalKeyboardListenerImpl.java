@@ -31,6 +31,7 @@ import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescr
 import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteCurrentSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.DeselectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
@@ -89,6 +90,9 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 
 	@Inject
 	private SelectAllScreenShotsOperation selectAllScreenShotsOperation;
+
+	@Inject
+	private DeselectAllScreenShotsOperation deselectAllScreenShotsOperation;
 
 	@Inject
 	private ChangeScreenShotLabelOperation changeScreenShotLabelOperation;
@@ -174,6 +178,8 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE, deleteCurrentSessionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS,
 				selectAllScreenShotsOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DESELECT_ALL_SHOTS,
+				deselectAllScreenShotsOperation.action());
 
 		registerMenuAction(mainFrame);
 	}

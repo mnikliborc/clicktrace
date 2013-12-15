@@ -14,6 +14,7 @@ import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperatio
 import com.niklim.clicktrace.controller.operation.session.SelectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.StopSessionOperation;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 public class SessionMenu {
 	JMenu menu;
@@ -96,20 +97,22 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionChangeLabel() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Change name", changeSessionNameOperation.action());
+		JMenuItem menuItem = MenuBar.createMenuItem("Change name", null, changeSessionNameOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionStart() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Start recording", Icons.START_SESSION,
+				OperationsShortcutEnum.RECORD_START,
 				startSessionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionStop() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Stop recording", Icons.STOP_SESSION,
+		JMenuItem menuItem = MenuBar.createMenuItem("Stop recording",
+				Icons.STOP_SESSION, OperationsShortcutEnum.RECORD_STOP,
  stopSessionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -117,6 +120,7 @@ public class SessionMenu {
 
 	private JMenuItem createSessionRefresh() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Refresh session", Icons.REFRESH_SESSION,
+				OperationsShortcutEnum.SESSION_REFRESH,
 				refreshSessionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -124,6 +128,7 @@ public class SessionMenu {
 
 	private JMenuItem createSessionSelectAll() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Select all screenshots",
+				OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS,
  selectAllScreenShotsOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -131,13 +136,14 @@ public class SessionMenu {
 
 	private JMenuItem createSessionDeselectAll() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Deselect all screenshots",
+				OperationsShortcutEnum.SESSION_DESELECT_ALL_SHOTS,
 				deselectAllScreenShotsOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionDeleteSelected() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Delete selected screenshots",
+		JMenuItem menuItem = MenuBar.createMenuItem("Delete selected screenshots", null,
 				deleteSelectedScreenShotsOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
@@ -145,6 +151,7 @@ public class SessionMenu {
 
 	private JMenuItem createSessionDeleteActiveSession() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Delete current session", Icons.DELETE_SESSION,
+				OperationsShortcutEnum.SESSION_DELETE,
 				deleteCurrentSessionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;

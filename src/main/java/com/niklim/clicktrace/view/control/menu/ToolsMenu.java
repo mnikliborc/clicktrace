@@ -12,6 +12,7 @@ import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.view.OperationsShortcutEnum;
 import com.niklim.clicktrace.view.dialog.JiraExportDialog;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
@@ -46,7 +47,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", new ActionListener() {
+		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", null, new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				jiraExportDialog.open();
 			}
@@ -54,7 +55,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsSettings() {
-		return MenuBar.createMenuItem("Settings", new ActionListener() {
+		return MenuBar.createMenuItem("Settings", null, new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				settingsDialog.open();
 			}
@@ -62,7 +63,8 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsSearch() {
-		return MenuBar.createMenuItem("Search", Icons.SEARCH, openSearchDialogOperation.action());
+		return MenuBar.createMenuItem("Search", Icons.SEARCH, OperationsShortcutEnum.FIND,
+				openSearchDialogOperation.action());
 	}
 
 	public void sessionStateChanged() {
