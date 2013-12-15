@@ -14,11 +14,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Manages creating folders, properties files and saving/deleting screenshot
  * images.
  */
 public class FileManager {
+	private static final Logger log = LoggerFactory.getLogger(FileManager.class);
+
 	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 	public static final String SESSION_PROPS_FILENAME = "session.properties";
@@ -108,7 +113,7 @@ public class FileManager {
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Unable to create session properties file", e);
 		}
 	}
 

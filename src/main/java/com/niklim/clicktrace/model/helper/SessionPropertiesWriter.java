@@ -13,7 +13,6 @@ import com.niklim.clicktrace.service.SessionManager;
  * Writes to {@link Session}'s properties file.
  */
 public class SessionPropertiesWriter extends SessionPropertiesIO {
-
 	public SessionPropertiesWriter(Session session) {
 		super(session);
 	}
@@ -46,7 +45,7 @@ public class SessionPropertiesWriter extends SessionPropertiesIO {
 		try {
 			props.save();
 		} catch (ConfigurationException e) {
-			e.printStackTrace();
+			log.error("Unable to save session properties", e);
 		}
 	}
 }

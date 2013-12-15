@@ -25,7 +25,6 @@ public class JiraService {
 
 			return handleCheckSessionExistsResult(res);
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
 			throw new JiraException(e.getMessage());
 		}
 	}
@@ -50,7 +49,6 @@ public class JiraService {
 				throw new JiraException(res.msg);
 			}
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
 			throw new JiraException(e.getMessage());
 		}
 	}

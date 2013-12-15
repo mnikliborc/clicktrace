@@ -6,6 +6,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.FileManager;
 
@@ -13,13 +16,14 @@ import com.niklim.clicktrace.service.FileManager;
  * Loads {@link ScreenShot}'s image from the disk.
  */
 public class ImageLoader {
+	private static final Logger log = LoggerFactory.getLogger(ImageLoader.class);
 	public BufferedImage load(ScreenShot shot) {
 		try {
 			File file = new File(FileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
 					+ shot.getFilename());
 			return ImageIO.read(file);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Unable to load screenshot image", e);
 			return null;
 		}
 	}

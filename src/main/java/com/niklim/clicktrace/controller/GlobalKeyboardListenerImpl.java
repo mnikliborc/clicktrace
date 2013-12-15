@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotLabelOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
@@ -103,7 +104,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 				GlobalScreen.registerNativeHook();
 			}
 		} catch (NativeHookException e) {
-			e.printStackTrace();
+			log.error(Messages.UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR, e);
 		}
 		GlobalScreen.getInstance().addNativeKeyListener(this);
 		log.debug("service instantiated");

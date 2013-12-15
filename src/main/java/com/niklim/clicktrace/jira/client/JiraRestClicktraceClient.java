@@ -16,6 +16,8 @@ import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
 
 public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
+	private static final String UNEXPECTED_ERROR_MSG = "Unexpected error while checking session in JIRA";
+
 	private static final Logger log = LoggerFactory.getLogger(JiraRestClicktraceClient.class);
 
 	static final String JSON_CLICKTRACE_STREAM_FIELD_NAME = "stream";
@@ -41,7 +43,7 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 		} catch (RestClientException e) {
 			return handleRestClientException(e);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			log.error(UNEXPECTED_ERROR_MSG, e);
 			return new Result(Result.Status.ERROR, e.getMessage());
 		}
 	}
@@ -58,7 +60,7 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 		} else if (e.getStatusCode().or(0) == 403) {
 			return new Result(Result.Status.ERROR, Messages.EXPORT_CAPTCHA_ERROR);
 		} else {
-			e.printStackTrace();
+			log.error(UNEXPECTED_ERROR_MSG, e);
 			return new Result(Result.Status.ERROR, Messages.EXPORT_UNKNOWN_SERVER_ERROR);
 		}
 	}
@@ -78,7 +80,7 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 		} catch (RestClientException e) {
 			return handleRestClientException(e);
 		} catch (Throwable e) {
-			e.printStackTrace();
+			log.error(UNEXPECTED_ERROR_MSG, e);
 			return new Result(Result.Status.ERROR, e.getMessage());
 		}
 	}

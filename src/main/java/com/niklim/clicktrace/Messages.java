@@ -4,6 +4,8 @@ package com.niklim.clicktrace;
  * Constants for GUI messages.
  */
 public interface Messages {
+	// TODO refactor/correct messages
+
 	public static final String NO_EDITOR_PATH_SET = "What image editing program do you want to use? Please set its path and try again.";
 	public static final String SESSION_NAME_ALREADY_EXIST = "Session already exists.";
 	public static final String SESSION_NAME_WRONG_FOLDER = "Can not create folder with given name.";
@@ -15,4 +17,6 @@ public interface Messages {
 	public static final String EXPORT_WRONG_URL_ERROR = "Wrong JIRA URL.";
 	public static final String EXPORT_CAPTCHA_ERROR = "Sorry dude, it looks like you have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
 	public static final String SCREENSHOT_SAVE_ERROR = "Error occured while saving the screenshot.";
+	public static final String UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR = "UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR";
+	public static final String EDITOR_APP_ERROR = "EDITOR_APP_ERROR";
 }

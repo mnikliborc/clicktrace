@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.ErrorNotifier;
+import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 
 /**
@@ -19,6 +21,9 @@ public abstract class MouseCapture implements NativeMouseInputListener {
 	@Inject
 	protected ActiveSession activeSession;
 
+	@Inject
+	private ErrorNotifier errorNotifier;
+
 	public MouseCapture() {
 		try {
 			if (!GlobalScreen.isNativeHookRegistered()) {
@@ -26,7 +31,8 @@ public abstract class MouseCapture implements NativeMouseInputListener {
 				log.info("Native hook registered");
 			}
 		} catch (NativeHookException e) {
-			e.printStackTrace();
+			log.error("Unable to register JNativeHook", e);
+			errorNotifier.notify(Messages.UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR);
 		}
 		GlobalScreen.getInstance().addNativeMouseListener(this);
 	}

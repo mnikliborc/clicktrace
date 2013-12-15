@@ -188,7 +188,6 @@ public class JiraExportDialog {
 		} catch (JiraException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (Throwable e) {
-			e.printStackTrace();
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		}
 

@@ -11,6 +11,9 @@ import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.ScreenShot;
@@ -22,6 +25,7 @@ import com.niklim.clicktrace.view.session.ScreenShotView;
 
 @Singleton
 public class MainView {
+	private static Logger log = LoggerFactory.getLogger(MainView.class);
 
 	private static final String APP_NAME = "Clicktrace";
 	private JFrame frame;
@@ -42,14 +46,14 @@ public class MainView {
 	public MainView() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (UnsupportedLookAndFeelException ex) {
-			ex.printStackTrace();
-		} catch (IllegalAccessException ex) {
-			ex.printStackTrace();
-		} catch (InstantiationException ex) {
-			ex.printStackTrace();
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			log.error("", e);
+		} catch (IllegalAccessException e) {
+			log.error("", e);
+		} catch (InstantiationException e) {
+			log.error("", e);
+		} catch (ClassNotFoundException e) {
+			log.error("", e);
 		}
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
 	}

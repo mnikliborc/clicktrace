@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.imgscalr.Scalr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
@@ -28,6 +30,8 @@ import com.niklim.clicktrace.view.MainFrameHolder;
  */
 @Singleton
 public class ScreenShotView {
+	private static Logger log = LoggerFactory.getLogger(ScreenShotView.class);
+
 	private JPanel panel;
 	private BufferedImage mouseMarkLeft;
 	private BufferedImage mouseMarkRight;
@@ -39,7 +43,7 @@ public class ScreenShotView {
 			mouseMarkLeft = loadMouseMark(Icons.MOUSE_MARK_RED_LEFT);
 			mouseMarkRight = loadMouseMark(Icons.MOUSE_MARK_RED_RIGHT);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Unable to load mouse mark icons", e);
 		}
 	}
 
@@ -56,7 +60,7 @@ public class ScreenShotView {
 			panel.removeAll();
 			panel.add(new ThumbPanel(imageFinal, imageFinal.getWidth(), imageFinal.getHeight()));
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Unable to scale screenshot image", e);
 		}
 	}
 

@@ -48,7 +48,7 @@ public class ImmediateMouseCapture extends MouseCapture {
 		try {
 			fileManager.saveImage(image, activeSession.getSession().getName());
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			log.error("Unable to save image", ex);
 		}
 	}
 

@@ -114,7 +114,7 @@ public class CaptureManager {
 						.getName());
 			} catch (IOException e) {
 				errorNotifier.notify(Messages.SCREENSHOT_SAVE_ERROR);
-				e.printStackTrace();
+				log.error(Messages.SCREENSHOT_SAVE_ERROR, e);
 			}
 		}
 	}

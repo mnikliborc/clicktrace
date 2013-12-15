@@ -5,9 +5,13 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
@@ -25,6 +29,8 @@ import com.niklim.clicktrace.view.dialog.SettingsDialog;
  */
 @Singleton
 public class MainController {
+	private static final Logger log = LoggerFactory.getLogger(MainController.class);
+
 	@Inject
 	private CaptureManager capture;
 
@@ -44,7 +50,10 @@ public class MainController {
 	private SettingsDialog settingsDialog;
 
 	@Inject
-	private NewSessionOperation newSessionActionListener;
+	private NewSessionOperation newSessionOperation;
+
+	@Inject
+	private ErrorNotifier errorNotifier;
 
 	/**
 	 * Opens the app window.
@@ -60,7 +69,7 @@ public class MainController {
 
 	public void startRecording(boolean hideEditor) {
 		if (!activeSession.isSessionLoaded()) {
-			boolean sessionCreated = newSessionActionListener.createSession();
+			boolean sessionCreated = newSessionOperation.createSession();
 			if (sessionCreated) {
 				startRecording(true);
 			}
@@ -191,7 +200,8 @@ public class MainController {
 						+ activeShot.getFilename());
 				pb.start();
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(Messages.EDITOR_APP_ERROR, e);
+				errorNotifier.notify(Messages.EDITOR_APP_ERROR);
 			}
 		}
 	}

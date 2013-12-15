@@ -17,11 +17,15 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * In parallel it compresses an image using given formats (jpg, png, etc.).
  * Returns the image in the format resulting in the smallest file size.
  */
 public class FileCompressor {
+	private static final Logger log = LoggerFactory.getLogger(FileCompressor.class);
 	private static final int COMPRESSION_TIMEOUT = 500;
 	ExecutorService executor;
 	
@@ -43,7 +47,7 @@ public class FileCompressor {
 					minSize = result;
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("", e);
 			}
 		}
 		return minSize;
@@ -58,7 +62,7 @@ public class FileCompressor {
 		try {
 			executor.awaitTermination(COMPRESSION_TIMEOUT, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			log.error("", e);
 		}
 		return futures;
 	}
