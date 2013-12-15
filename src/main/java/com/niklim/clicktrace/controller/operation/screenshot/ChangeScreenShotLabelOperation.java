@@ -17,6 +17,10 @@ public class ChangeScreenShotLabelOperation extends AbstractOperation {
 
 	@Override
 	public void perform() {
+		if (!activeSession.isActiveShotLoaded()) {
+			return;
+		}
+
 		String label = JOptionPane.showInputDialog("Set screenshot label", activeSession.getActiveShot());
 		if (label != null) {
 			controller.changeActiveScreenShotLabel(label);

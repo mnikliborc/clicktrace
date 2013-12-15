@@ -123,7 +123,6 @@ public class SessionMenu {
 		JMenuItem menuItem = MenuBar.createMenuItem("Start recording", Icons.START_SESSION,
 				OperationsShortcutEnum.RECORD_START,
 				startSessionOperation.action());
-		menuItem.setEnabled(false);
 		return menuItem;
 	}
 

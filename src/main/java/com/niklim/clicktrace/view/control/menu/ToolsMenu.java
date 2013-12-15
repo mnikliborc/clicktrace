@@ -11,9 +11,9 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenJiraExportDialogOperation;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
-import com.niklim.clicktrace.view.dialog.JiraExportDialog;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
 @Singleton
@@ -25,7 +25,7 @@ public class ToolsMenu {
 	private OpenSearchDialogOperation openSearchDialogOperation;
 
 	@Inject
-	private JiraExportDialog jiraExportDialog;
+	private OpenJiraExportDialogOperation openJiraExportDialogOperation;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -47,11 +47,8 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", null, new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				jiraExportDialog.open();
-			}
-		});
+		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", OperationsShortcutEnum.JIRA_EXPORT,
+				openJiraExportDialogOperation.action());
 	}
 
 	private JMenuItem createToolsSettings() {

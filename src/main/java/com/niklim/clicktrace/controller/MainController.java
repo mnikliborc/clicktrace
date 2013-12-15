@@ -153,7 +153,9 @@ public class MainController {
 
 	public void setSelectedAllScreenshots(boolean selected) {
 		mainView.setSelectedActiveScreenShot(selected);
-		activeSession.setAllShotsSelected(selected);
+		if (activeSession.isSessionLoaded()) {
+			activeSession.setAllShotsSelected(selected);
+		}
 	}
 
 	public void refreshSession() {
