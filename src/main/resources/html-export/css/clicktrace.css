@@ -4,18 +4,27 @@ div.clicktrace {
 	width: 80%;
 }
 
+p.clicktrace-session-name {
+	font-weight: bold;
+	font-size: 1.4em;
+}
+
+div.clicktrace-session-description {
+	font-size: 0.9em;
+	margin-bottom: 30px;
+}
+
 div.clicktrace-shot {
 	margin-bottom: 40px;
+}
+
+div.clicktrace-shot-description {
+	font-size: 0.9em;
 }
 
 div.clicktrace-shot img {
 	width: 100%;
 	border: 1px black solid;
-}
-
-p.clicktrace-title {
-	font-weight: bold;
-	font-size: 20px;
 }
 
 div.clicktrace-footer {

@@ -125,7 +125,7 @@ Licensed under the Creative Commons Attribution 2.5 License - http://creativecom
           this.album.push({
             link: $(a).attr('href'),
             title: $(a).attr('title'),
-			description: $(a).siblings('.clicktrace-description').html()
+			description: $(a).siblings('.clicktrace-shot-description').html()
           });
           if ($(a).attr('href') === $link.attr('href')) {
             imageNumber = i;
