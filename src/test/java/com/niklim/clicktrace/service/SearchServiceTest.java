@@ -2,8 +2,6 @@ package com.niklim.clicktrace.service;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -14,8 +12,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.service.SearchService;
-import com.niklim.clicktrace.service.SessionManager;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchServiceTest {
@@ -71,10 +67,10 @@ public class SearchServiceTest {
 		shot.setDescription("kaszanka\ntext\nkaszanka");
 
 		// when
-		SimpleImmutableEntry<ScreenShot, String> result = searchService.findText(shot, text, matchCase);
+		SearchService.ShotSearchResult result = searchService.findText(shot, text, matchCase);
 
 		// then
-		assertThat(result.getKey()).isSameAs(shot);
+		assertThat(result.shot).isSameAs(shot);
 	}
 
 	@Test
@@ -87,7 +83,7 @@ public class SearchServiceTest {
 		shot.setDescription("kaszanka\ntext\nkaszanka");
 
 		// when
-		SimpleImmutableEntry<ScreenShot, String> result = searchService.findText(shot, text, matchCase);
+		SearchService.ShotSearchResult result = searchService.findText(shot, text, matchCase);
 
 		// then
 		assertThat(result).isNull();
@@ -103,9 +99,9 @@ public class SearchServiceTest {
 		shot.setDescription("kaszanka\nText\nkaszanka");
 
 		// when
-		SimpleImmutableEntry<ScreenShot, String> result = searchService.findText(shot, text, matchCase);
+		SearchService.ShotSearchResult result = searchService.findText(shot, text, matchCase);
 
 		// then
-		assertThat(result.getKey()).isSameAs(shot);
+		assertThat(result.shot).isSameAs(shot);
 	}
 }

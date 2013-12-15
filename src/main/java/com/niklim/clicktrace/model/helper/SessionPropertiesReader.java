@@ -19,8 +19,12 @@ public class SessionPropertiesReader extends SessionPropertiesIO {
 		return props.getString(shotFilename + SessionManager.PROP_SUFFIX_LABEL);
 	}
 
-	public String getDescription(String shotFilename) {
+	public String getShotDescription(String shotFilename) {
 		return props.getString(shotFilename + SessionManager.PROP_SUFFIX_DESCRIPTION);
+	}
+
+	public String getSessionDescription() {
+		return props.getString(SessionManager.PROP_SESSION_DESCRIPTION);
 	}
 
 	public List<Click> getClicks(String shotFilename) {

@@ -13,6 +13,7 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
+import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteCurrentSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
@@ -49,6 +50,9 @@ public class ToolbarView {
 	@Inject
 	private OpenSearchDialogOperation openSearchDialogOperation;
 
+	@Inject
+	private ChangeSessionDescriptionOperation changeSessionDescriptionOperation;
+
 	private JButton deleteSession;
 
 	private JButton refreshSession;
@@ -56,6 +60,8 @@ public class ToolbarView {
 	private JButton startSession;
 
 	private JButton stopSession;
+
+	private JButton sessionDescription;
 
 	public ToolbarView() {
 
@@ -68,21 +74,23 @@ public class ToolbarView {
 		toolbar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.GRAY));
 
 		toolbar.add(createButton("New session " + OperationsShortcutEnum.SESSION_NEW.text,
- Icons.NEW_SESSION,
-				newSessionOperation.action()));
+				Icons.NEW_SESSION, newSessionOperation.action()));
 		toolbar.addSeparator();
 		toolbar.add(createButton("Open session " + OperationsShortcutEnum.SESSION_OPEN.text,
- Icons.OPEN_SESSION,
-				openSessionOperation.action()));
+				Icons.OPEN_SESSION, openSessionOperation.action()));
 		toolbar.addSeparator();
 
 		toolbar.add(createButton("Find " + OperationsShortcutEnum.FIND.text, Icons.SEARCH,
 				openSearchDialogOperation.action()));
 		toolbar.addSeparator();
+		
+		sessionDescription = createButton("Session description " + OperationsShortcutEnum.SESSION_DESCRIPTION.text,
+				Icons.DESCRIPTION_SESSION, changeSessionDescriptionOperation.action());
+		sessionDescription.setEnabled(false);
+		toolbar.add(sessionDescription);
 
 		deleteSession = createButton("Delete session " + OperationsShortcutEnum.SESSION_DELETE.text,
- Icons.DELETE_SESSION,
-				deleteCurrentSessionOperation.action());
+				Icons.DELETE_SESSION, deleteCurrentSessionOperation.action());
 		deleteSession.setEnabled(false);
 		toolbar.add(deleteSession);
 
@@ -95,12 +103,12 @@ public class ToolbarView {
 
 		toolbar.addSeparator();
 		startSession = createButton("Record [Ctrl+Shift+R]", Icons.START_SESSION,
- startSessionOperation.action());
+				startSessionOperation.action());
 		toolbar.add(startSession);
 
 		toolbar.addSeparator();
 		stopSession = createButton("Pause [Ctrl+Shift+S]", Icons.STOP_SESSION,
- stopSessionOperation.action());
+				stopSessionOperation.action());
 		stopSession.setEnabled(false);
 		toolbar.add(stopSession);
 	}
@@ -119,6 +127,7 @@ public class ToolbarView {
 	}
 
 	public void sessionStateChanged() {
+		sessionDescription.setEnabled(activeSession.isSessionLoaded());
 		deleteSession.setEnabled(activeSession.isSessionLoaded());
 		refreshSession.setEnabled(activeSession.isSessionLoaded());
 		startSession.setEnabled(!activeSession.isRecording());

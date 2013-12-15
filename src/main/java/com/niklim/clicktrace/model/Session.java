@@ -17,6 +17,7 @@ import com.niklim.clicktrace.model.helper.SessionMetadataLoader;
  */
 public class Session {
 	private String name;
+	private String description;
 	private List<ScreenShot> shots;
 	private SessionMetadata metadata;
 
@@ -94,6 +95,14 @@ public class Session {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

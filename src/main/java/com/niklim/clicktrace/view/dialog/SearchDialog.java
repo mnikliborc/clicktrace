@@ -8,7 +8,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -33,6 +32,7 @@ import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.SearchService;
+import com.niklim.clicktrace.service.SearchService.SearchResult;
 import com.niklim.clicktrace.view.MainFrameHolder;
 import com.niklim.clicktrace.view.TextComponentHistory;
 
@@ -93,9 +93,9 @@ public class SearchDialog {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					dialog.setVisible(false);
-					ScreenShot selectedShot = (ScreenShot) resultTable.getModel().getValueAt(
+					SearchService.SearchResult result = (SearchService.SearchResult) resultTable.getModel().getValueAt(
 							resultTable.getSelectedRow(), 0);
-					controller.openSessionOnScreenShot(selectedShot);
+					openResult(result);
 				}
 			}
 		});
@@ -140,6 +140,17 @@ public class SearchDialog {
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
+	private void openResult(SearchResult result) {
+		if (result instanceof SearchService.ShotSearchResult) {
+			SearchService.ShotSearchResult r = (SearchService.ShotSearchResult) result;
+			controller.openSessionOnScreenShot(r.shot);
+		}
+ else if (result instanceof SearchService.SessionSearchResult) {
+			SearchService.SessionSearchResult r = (SearchService.SessionSearchResult) result;
+			controller.openSession(r.session);
+		}
+	}
+
 	private void layoutElements() {
 		JPanel controlPanel = new JPanel(new MigLayout("left"));
 		controlPanel.add(allSessionsRadio);
@@ -177,7 +188,7 @@ public class SearchDialog {
 
 	@SuppressWarnings("serial")
 	public void search(String query, boolean allSessions, boolean matchCase) {
-		List<SimpleImmutableEntry<ScreenShot, String>> shots = searchService.search(query,
+		List<SearchService.SearchResult> shots = searchService.search(query,
 				allSessions, matchCase);
 		DefaultTableModel dataModel = new DefaultTableModel(resultTableColumns, shots.size()) {
 			@Override
@@ -189,11 +200,19 @@ public class SearchDialog {
 		resultTable.setModel(dataModel);
 
 		int i = 0;
-		for (SimpleImmutableEntry<ScreenShot, String> shot : shots) {
-			resultTable.getModel().setValueAt(shot.getKey(), i, 0);
-			resultTable.getModel().setValueAt(shot.getKey().getFilename(), i, 1);
-			resultTable.getModel().setValueAt(shot.getKey().getSession().getName(), i, 2);
-			resultTable.getModel().setValueAt(shot.getValue(), i, 3);
+		for (SearchService.SearchResult result : shots) {
+			resultTable.getModel().setValueAt(result, i, 0);
+
+			if (result instanceof SearchService.ShotSearchResult) {
+				SearchService.ShotSearchResult r = (SearchService.ShotSearchResult) result;
+				resultTable.getModel().setValueAt(r.shot.getFilename(), i, 1);
+				resultTable.getModel().setValueAt(r.shot.getSession().getName(), i, 2);
+			}
+ else if (result instanceof SearchService.SessionSearchResult) {
+				resultTable.getModel().setValueAt("-", i, 1);
+				resultTable.getModel().setValueAt("-", i, 2);
+			}
+			resultTable.getModel().setValueAt(result.highlight, i, 3);
 			i++;
 		}
 	}

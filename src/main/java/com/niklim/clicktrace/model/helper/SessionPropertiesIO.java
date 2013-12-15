@@ -16,8 +16,10 @@ import com.niklim.clicktrace.service.FileManager;
 public abstract class SessionPropertiesIO {
 	protected static final Logger log = LoggerFactory.getLogger(SessionPropertiesIO.class);
 	protected PropertiesConfiguration props;
+	protected final Session session;
 
 	public SessionPropertiesIO(Session session) {
+		this.session = session;
 		try {
 			props = new PropertiesConfiguration(new File(FileManager.SESSIONS_DIR
 					+ session.getName() + File.separator + FileManager.SESSION_PROPS_FILENAME));

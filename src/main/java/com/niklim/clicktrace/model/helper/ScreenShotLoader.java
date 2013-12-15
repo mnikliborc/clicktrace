@@ -33,7 +33,7 @@ public class ScreenShotLoader {
 			shot.setSession(session);
 
 			shot.setLabel(reader.getLabel(shotFilename));
-			shot.setDescription(reader.getDescription(shotFilename));
+			shot.setDescription(reader.getShotDescription(shotFilename));
 			shot.setClicks(reader.getClicks(shotFilename));
 
 			shots.add(shot);

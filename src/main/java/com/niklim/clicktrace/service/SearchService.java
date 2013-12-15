@@ -1,6 +1,5 @@
 package com.niklim.clicktrace.service;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -30,7 +29,7 @@ public class SearchService {
 	 * @param matchCase true when we should match letter case
 	 * @return pairs of {#link ScreenShot} and line containing found text
 	 */
-	public List<SimpleImmutableEntry<ScreenShot, String>> search(String text, boolean allSessions, boolean matchCase) {
+	public List<SearchResult> search(String text, boolean allSessions, boolean matchCase) {
 		List<Session> sessions;
 		if (allSessions) {
 			sessions = sessionManager.loadAll();
@@ -42,19 +41,24 @@ public class SearchService {
 			text = text.toUpperCase();
 		}
 
-		List<SimpleImmutableEntry<ScreenShot, String>> results = Lists.newArrayList();
+		List<SearchResult> results = Lists.newArrayList();
 		for (Session session : sessions) {
 			for (ScreenShot shot : session.getShots()) {
-				SimpleImmutableEntry<ScreenShot, String> result = findText(shot, text, matchCase);
+				ShotSearchResult result = findText(shot, text, matchCase);
 				if (result != null) {
 					results.add(result);
 				}
+			}
+
+			SessionSearchResult result = findText(session, text, matchCase);
+			if (result != null) {
+				results.add(result);
 			}
 		}
 		return results;
 	}
 
-	SimpleImmutableEntry<ScreenShot, String> findText(ScreenShot shot, String text, boolean matchCase) {
+	ShotSearchResult findText(ScreenShot shot, String text, boolean matchCase) {
 		String description = Strings.nullToEmpty(shot.getDescription());
 		String label = Strings.nullToEmpty(shot.getLabel());
 		String filename = Strings.nullToEmpty(shot.getFilename());
@@ -66,11 +70,27 @@ public class SearchService {
 
 		if (description.contains(text)) {
 			String descFragment = findLine(Strings.nullToEmpty(shot.getDescription()), text, matchCase);
-			return new SimpleImmutableEntry<ScreenShot, String>(shot, descFragment);
+			return new ShotSearchResult(shot, descFragment);
 		} else if (label.contains(text)) {
-			return new SimpleImmutableEntry<ScreenShot, String>(shot, shot.getLabel());
+			return new ShotSearchResult(shot, shot.getLabel());
 		} else if (filename.contains(text)) {
-			return new SimpleImmutableEntry<ScreenShot, String>(shot, shot.getFilename());
+			return new ShotSearchResult(shot, shot.getFilename());
+		} else {
+			return null;
+		}
+
+	}
+	
+	SessionSearchResult findText(Session session, String text, boolean matchCase) {
+		String description = Strings.nullToEmpty(session.getDescription());
+
+		if (!matchCase) {
+			description = description.toUpperCase();
+		}
+
+		if (description.contains(text)) {
+			String descFragment = findLine(Strings.nullToEmpty(session.getDescription()), text, matchCase);
+			return new SessionSearchResult(session, descFragment);
 		} else {
 			return null;
 		}
@@ -88,5 +108,41 @@ public class SearchService {
 			}
 		}
 		return null;
+	}
+
+	public static abstract class SearchResult {
+		public final String highlight;
+
+		public SearchResult(String highlight) {
+			this.highlight = highlight;
+		}
+	}
+
+	public static class ShotSearchResult extends SearchResult {
+		public final ScreenShot shot;
+
+		public ShotSearchResult(ScreenShot shot, String highlight) {
+			super(highlight);
+			this.shot = shot;
+		}
+
+		@Override
+		public String toString() {
+			return shot.toString();
+		}
+	}
+
+	public static class SessionSearchResult extends SearchResult {
+		public final Session session;
+
+		public SessionSearchResult(Session session, String highlight) {
+			super(highlight);
+			this.session = session;
+		}
+
+		@Override
+		public String toString() {
+			return session.toString() + " - session";
+		}
 	}
 }

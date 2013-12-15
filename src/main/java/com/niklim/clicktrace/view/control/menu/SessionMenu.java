@@ -6,6 +6,7 @@ import javax.swing.JMenuItem;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.session.ChangeSessionNameOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteCurrentSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteSelectedScreenShotsOperation;
@@ -27,6 +28,7 @@ public class SessionMenu {
 	JMenuItem sessionStop;
 	JMenuItem sessionChangeLabel;
 	JMenuItem sessionRefresh;
+	JMenuItem sessionDescription;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -55,6 +57,9 @@ public class SessionMenu {
 	@Inject
 	private ChangeSessionNameOperation changeSessionNameOperation;
 
+	@Inject
+	private ChangeSessionDescriptionOperation changeSessionDescriptionOperation;
+
 	public void sessionStateChanged() {
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionLoaded());
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionLoaded());
@@ -65,6 +70,7 @@ public class SessionMenu {
 		sessionStop.setEnabled(activeSession.isSessionLoaded() && activeSession.isRecording());
 		sessionRefresh.setEnabled(activeSession.isSessionLoaded());
 		sessionChangeLabel.setEnabled(activeSession.isSessionLoaded());
+		sessionDescription.setEnabled(activeSession.isSessionLoaded());
 	}
 
 	@Inject
@@ -79,6 +85,7 @@ public class SessionMenu {
 		sessionDeleteSelected = createSessionDeleteSelected();
 		sessionDeleteActiveSession = createSessionDeleteActiveSession();
 		sessionChangeLabel = createSessionChangeLabel();
+		sessionDescription = createSessionDescription();
 
 		menu.add(sessionStart);
 		menu.add(sessionStop);
@@ -89,7 +96,17 @@ public class SessionMenu {
 		menu.add(sessionDeleteSelected);
 		menu.addSeparator();
 		menu.add(sessionChangeLabel);
+		menu.add(sessionDescription);
+		menu.addSeparator();
 		menu.add(sessionDeleteActiveSession);
+	}
+
+	private JMenuItem createSessionDescription() {
+		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.DESCRIPTION_SESSION,
+				OperationsShortcutEnum.SESSION_DESCRIPTION,
+				changeSessionDescriptionOperation.action());
+		menuItem.setEnabled(false);
+		return menuItem;
 	}
 
 	public JMenu getMenu() {

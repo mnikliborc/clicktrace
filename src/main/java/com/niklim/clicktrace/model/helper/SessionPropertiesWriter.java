@@ -32,6 +32,10 @@ public class SessionPropertiesWriter extends SessionPropertiesIO {
 		saveSessionProperty(shot.getFilename() + SessionManager.PROP_SUFFIX_DESCRIPTION, shot.getDescription());
 	}
 
+	public void saveSessionDescription() {
+		saveSessionProperty(SessionManager.PROP_SESSION_DESCRIPTION, session.getDescription());
+	}
+
 	public void saveShotClicks(String shotFilename, List<Click> clicks) {
 		saveSessionProperty(shotFilename + SessionManager.PROP_SUFFIX_CLICKS, Click.getString(clicks));
 	}

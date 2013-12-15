@@ -19,6 +19,7 @@ public class SessionManager {
 	public static final String PROP_SUFFIX_LABEL = ".label";
 	public static final String PROP_SUFFIX_DESCRIPTION = ".description";
 	public static final String PROP_SUFFIX_CLICKS = ".clicks";
+	public static final String PROP_SESSION_DESCRIPTION = "session.description";
 
 	@Inject
 	private FileManager fileManager;
@@ -42,6 +43,9 @@ public class SessionManager {
 				new FileManager.TrashFilter())) {
 			Session session = createSessionInstance();
 			session.setName(sessionName);
+
+			SessionPropertiesReader reader = createSessionPropertiesReader(session);
+			session.setDescription(reader.getSessionDescription());
 
 			sessions.add(session);
 		}
