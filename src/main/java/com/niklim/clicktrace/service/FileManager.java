@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +14,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.niklim.clicktrace.Files;
 
 /**
  * Manages creating folders, properties files and saving/deleting screenshot
@@ -118,11 +118,11 @@ public class FileManager {
 	}
 
 	public boolean sessionExists(String sessionName) {
-		return Files.exists(Paths.get(FileManager.SESSIONS_DIR + sessionName));
+		return Files.exists(FileManager.SESSIONS_DIR + sessionName);
 	}
 
 	public void renameSession(String oldName, String newName) throws IOException {
-		Files.move(Paths.get(FileManager.SESSIONS_DIR + oldName), Paths.get(FileManager.SESSIONS_DIR + newName));
+		Files.move(FileManager.SESSIONS_DIR + oldName, FileManager.SESSIONS_DIR + newName);
 	}
 
 	public void createSessionFolder(String sessionName) throws IOException {

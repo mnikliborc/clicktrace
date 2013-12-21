@@ -53,8 +53,7 @@ public class OpenSessionDialog {
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490,
-				400);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -127,8 +126,8 @@ public class OpenSessionDialog {
 
 	private void loadSessions() {
 		List<Session> sessions = sessionManager.loadAll();
-		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots",
-				"Created", "Modified" }, sessions.size()) {
+		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots", "Modified" },
+				sessions.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// all cells not editable
@@ -143,8 +142,7 @@ public class OpenSessionDialog {
 			SessionMetadata metadata = session.loadMetadata();
 			table.getModel().setValueAt(session, i, 0);
 			table.getModel().setValueAt(metadata.getSize(), i, 1);
-			table.getModel().setValueAt(metadata.getCreated(), i, 2);
-			table.getModel().setValueAt(metadata.getModified(), i, 3);
+			table.getModel().setValueAt(metadata.getModified(), i, 2);
 			i++;
 		}
 	}

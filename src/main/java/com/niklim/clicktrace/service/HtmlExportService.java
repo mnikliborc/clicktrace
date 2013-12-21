@@ -5,13 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 import com.google.common.base.Strings;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.service.exception.HtmlExportAlreadyExistsException;
@@ -24,7 +22,7 @@ public class HtmlExportService {
 			outputDirPath += File.separator;
 		}
 
-		if (Files.exists(Paths.get(outputDirPath + session.getName()))) {
+		if (Files.exists(outputDirPath + session.getName())) {
 			throw new HtmlExportAlreadyExistsException("Unable to create '" + session.getName()
 					+ "' folder in given directory. Already exists.");
 		}
@@ -36,8 +34,7 @@ public class HtmlExportService {
 
 	private void saveHtml(Session session, String outputDirPath, String html) throws IOException {
 		try {
-			String indexPath = outputDirPath + session.getName() + File.separator
-					+ "index.html";
+			String indexPath = outputDirPath + session.getName() + File.separator + "index.html";
 			File index = new File(indexPath);
 			index.createNewFile();
 			FileOutputStream output = new FileOutputStream(index);
@@ -49,17 +46,17 @@ public class HtmlExportService {
 	}
 
 	private void copyFiles(Session session, String outputDirPath) throws IOException {
-			createDirectories(session, outputDirPath);
-			copyStaticResources(session, outputDirPath);
-			copyShots(session, outputDirPath);
+		createDirectories(session, outputDirPath);
+		copyStaticResources(session, outputDirPath);
+		copyShots(session, outputDirPath);
 	}
 
 	private void copyShots(Session session, String outputDirPath) throws IOException {
 		for (ScreenShot shot : session.getShots()) {
-			Path source = Paths.get(FileManager.SESSIONS_DIR + session.getName() + File.separator + shot.getFilename());
-			Path target = Paths.get(outputDirPath + session.getName() + File.separator + "shots" + File.separator
-					+ shot.getFilename());
-			Files.copy(source, target);
+			String fromPath = FileManager.SESSIONS_DIR + session.getName() + File.separator + shot.getFilename();
+			String toPath = outputDirPath + session.getName() + File.separator + "shots" + File.separator
+					+ shot.getFilename();
+			Files.copy(fromPath, toPath);
 		}
 	}
 
@@ -97,17 +94,17 @@ public class HtmlExportService {
 	}
 
 	private void createDirectories(Session session, String outputDirPath) throws IOException {
-		Files.createDirectory(Paths.get(outputDirPath + session.getName()));
-		Files.createDirectory(Paths.get(outputDirPath + session.getName() + File.separator + "css"));
-		Files.createDirectory(Paths.get(outputDirPath + session.getName() + File.separator + "img"));
-		Files.createDirectory(Paths.get(outputDirPath + session.getName() + File.separator + "js"));
-		Files.createDirectory(Paths.get(outputDirPath + session.getName() + File.separator + "shots"));
+		Files.createDirectory(outputDirPath + session.getName());
+		Files.createDirectory(outputDirPath + session.getName() + File.separator + "css");
+		Files.createDirectory(outputDirPath + session.getName() + File.separator + "img");
+		Files.createDirectory(outputDirPath + session.getName() + File.separator + "js");
+		Files.createDirectory(outputDirPath + session.getName() + File.separator + "shots");
 	}
 
 	private void copy(String source, String targetBasePath) throws IOException {
 		InputStream resource = Thread.currentThread().getContextClassLoader()
 				.getResourceAsStream("html-export/" + source);
-		Files.copy(resource, Paths.get(targetBasePath + File.separator + source));
+		Files.copy(resource, targetBasePath + File.separator + source);
 	}
 
 	private String loadTemplate(String templateName) {

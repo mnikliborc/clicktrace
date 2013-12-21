@@ -7,18 +7,12 @@ import java.util.Date;
  * of screenshots.
  */
 public class SessionMetadata {
-	private final Date created;
 	private final Date modified;
 	private final int size;
 
-	public SessionMetadata(Date created, Date modified, int size) {
-		this.created = created;
+	public SessionMetadata(Date modified, int size) {
 		this.modified = modified;
 		this.size = size;
-	}
-
-	public Date getCreated() {
-		return created;
 	}
 
 	public Date getModified() {

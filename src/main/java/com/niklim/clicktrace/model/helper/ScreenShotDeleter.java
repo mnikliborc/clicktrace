@@ -2,14 +2,12 @@ package com.niklim.clicktrace.model.helper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
@@ -30,8 +28,8 @@ public class ScreenShotDeleter {
 
 	private void deleteImage(ScreenShot shot) {
 		try {
-			Path filePath = Paths.get(FileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
-					+ shot.getFilename());
+			String filePath = FileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
+					+ shot.getFilename();
 			Files.delete(filePath);
 		} catch (IOException e) {
 			log.error("Unable to delete screenshot image", e);
