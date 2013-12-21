@@ -8,13 +8,13 @@ import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.session.ChangeSessionNameOperation;
-import com.niklim.clicktrace.controller.operation.session.DeleteCurrentSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.DeleteActiveSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteSelectedScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.DeselectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.SelectAllScreenShotsOperation;
-import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
-import com.niklim.clicktrace.controller.operation.session.StopSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.StartRecordingOperation;
+import com.niklim.clicktrace.controller.operation.session.StopRecordingOperation;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 public class SessionMenu {
@@ -34,13 +34,13 @@ public class SessionMenu {
 	private ActiveSession activeSession;
 
 	@Inject
-	private DeleteCurrentSessionOperation deleteCurrentSessionOperation;
+	private DeleteActiveSessionOperation deleteActiveSessionOperation;
 
 	@Inject
-	private StartSessionOperation startSessionOperation;
+	private StartRecordingOperation startRecordingOperation;
 
 	@Inject
-	private StopSessionOperation stopSessionOperation;
+	private StopRecordingOperation stopRecordingOperation;
 
 	@Inject
 	private RefreshSessionOperation refreshSessionOperation;
@@ -102,7 +102,7 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionDescription() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.DESCRIPTION_SESSION,
+		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.SESSION_DESCRIPTION,
 				OperationsShortcutEnum.SESSION_DESCRIPTION,
 				changeSessionDescriptionOperation.action());
 		menuItem.setEnabled(false);
@@ -120,22 +120,22 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionStart() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Start recording", Icons.START_SESSION,
-				OperationsShortcutEnum.RECORD_START,
-				startSessionOperation.action());
+		JMenuItem menuItem = MenuBar.createMenuItem("Start recording", Icons.START_RECORDING,
+				OperationsShortcutEnum.START_RECORDING,
+				startRecordingOperation.action());
 		return menuItem;
 	}
 
 	private JMenuItem createSessionStop() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Stop recording",
-				Icons.STOP_SESSION, OperationsShortcutEnum.RECORD_STOP,
- stopSessionOperation.action());
+				Icons.STOP_RECORDING, OperationsShortcutEnum.STOP_RECORDING,
+ stopRecordingOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
 
 	private JMenuItem createSessionRefresh() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Refresh session", Icons.REFRESH_SESSION,
+		JMenuItem menuItem = MenuBar.createMenuItem("Refresh session", Icons.SESSION_REFRESH,
 				OperationsShortcutEnum.SESSION_REFRESH,
 				refreshSessionOperation.action());
 		menuItem.setEnabled(false);
@@ -166,9 +166,9 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionDeleteActiveSession() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Delete current session", Icons.DELETE_SESSION,
+		JMenuItem menuItem = MenuBar.createMenuItem("Delete current session", Icons.SESSION_DELETE,
 				OperationsShortcutEnum.SESSION_DELETE,
-				deleteCurrentSessionOperation.action());
+				deleteActiveSessionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

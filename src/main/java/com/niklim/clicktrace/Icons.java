@@ -9,22 +9,26 @@ import javax.swing.ImageIcon;
  * Constants and util methods for icon images.
  */
 public class Icons {
-	public static final String NEW_SESSION = "icons/1383438310_folder_add.png";
-	public static final String OPEN_SESSION = "icons/1383438320_folder.png";
-	public static final String DELETE_SESSION = "icons/1383438389_folder_delete.png";
-	public static final String REFRESH_SESSION = "icons/1383454049_folder.png";
-	public static final String DESCRIPTION_SESSION = "icons/session_desc.png";
-	public static final String REFRESH_SCREENSHOT = "icons/view-refresh-5.png";
-	public static final String START_SESSION = "icons/media-record-5.png";
-	public static final String STOP_SESSION = "icons/media-playback-pause.png";
-	public static final String EDIT_SCREENSHOT = "icons/format-stroke-color.png";
-	public static final String DELETE_SCREENSHOT = "icons/window-close-2.png";
-	public static final String NEXT_SCREENSHOT = "icons/gnome_go_next.png";
-	public static final String PREV_SCREENSHOT = "icons/gnome_go_previous.png";
-	public static final String LAST_SCREENSHOT = "icons/gnome_go_last.png";
-	public static final String FIRST_SCREENSHOT = "icons/gnome_go_first.png";
-	public static final String DESCRIPTION_SCREENSHOT = "icons/desc_edit.png";
+	public static final String SESSION_NEW = "icons/1383438310_folder_add.png";
+	public static final String SESSION_OPEN = "icons/1383438320_folder.png";
+	public static final String SESSION_DELETE = "icons/1383438389_folder_delete.png";
+	public static final String SESSION_REFRESH = "icons/1383454049_folder.png";
+	public static final String SESSION_DESCRIPTION = "icons/session_desc.png";
+
+	public static final String START_RECORDING = "icons/media-record-5.png";
+	public static final String STOP_RECORDING = "icons/media-playback-pause.png";
+
+	public static final String SCREENSHOT_REFRESH = "icons/view-refresh-5.png";
+	public static final String SCREENSHOT_EDIT = "icons/format-stroke-color.png";
+	public static final String SCREENSHOT_DELETE = "icons/window-close-2.png";
+	public static final String SCREENSHOT_NEXT = "icons/gnome_go_next.png";
+	public static final String SCREENSHOT_PREV = "icons/gnome_go_previous.png";
+	public static final String SCREENSHOT_LAST = "icons/gnome_go_last.png";
+	public static final String SCREENSHOT_FIRST = "icons/gnome_go_first.png";
+	public static final String SCREENSHOT_DESCRIPTION = "icons/desc_edit.png";
+
 	public static final String SEARCH = "icons/search.png";
+
 	public static final String MOUSE_MARK_RED_LEFT = "icons/mouse_red_left.png";
 	public static final String MOUSE_MARK_RED_RIGHT = "icons/mouse_red_right.png";
 	public static final String MOUSE_MARK_GREEN = "icons/mouse_green.png";

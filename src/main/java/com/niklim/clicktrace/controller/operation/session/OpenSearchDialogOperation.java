@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.controller.operation.screenshot;
+package com.niklim.clicktrace.controller.operation.session;
 
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;

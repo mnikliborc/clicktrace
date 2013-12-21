@@ -7,7 +7,7 @@ import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.view.dialog.description.DescriptionDialog;
 import com.niklim.clicktrace.view.dialog.description.DescriptionDialogCallback;
 
-public class OpenScreenShotDescriptionOperation extends AbstractOperation {
+public class ChangeScreenShotDescriptionOperation extends AbstractOperation {
 
 	@Inject
 	private DescriptionDialog descriptionEditor;

@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Messages;
+import com.niklim.clicktrace.view.TextComponentHistory;
 
 @Singleton
 public class NewSessionDialog extends AbstractDialog {
@@ -29,16 +30,20 @@ public class NewSessionDialog extends AbstractDialog {
 	private JTextArea sessionDescription;
 	private NewSessionCallback callback;
 
+	private TextComponentHistory descriptionHistory;
+
 	@Inject
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("New session");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 600);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 400);
 
 		sessionName = new JTextField();
 		sessionDescription = new JTextArea();
+		descriptionHistory = new TextComponentHistory(sessionDescription);
+		descriptionHistory.reset("");
 
 		JButton createButton = new JButton("Create");
 		JButton cancelButton = new JButton("Cancel");
@@ -51,7 +56,7 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.add(sessionName, "wrap, w 580");
 
 		dialog.add(new JLabel("Description"), "span 2, wrap");
-		dialog.add(new JScrollPane(sessionDescription), "span 2, w 580, h 500, wrap");
+		dialog.add(new JScrollPane(sessionDescription), "span 2, w 580, h 300, wrap");
 
 		dialog.add(buttonPanel, "align r, span 2");
 
@@ -67,6 +72,8 @@ public class NewSessionDialog extends AbstractDialog {
 	}
 
 	private void createListeners(JButton createButton, JButton cancelButton) {
+		sessionDescription.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(descriptionHistory));
+
 		createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

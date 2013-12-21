@@ -3,12 +3,11 @@ package com.niklim.clicktrace.controller.operation.session;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
-import com.niklim.clicktrace.view.dialog.JiraExportDialog;
+import com.niklim.clicktrace.view.dialog.HtmlExportDialog;
 
-public class OpenJiraExportDialogOperation extends AbstractOperation {
-
+public class HtmlExportOperation extends AbstractOperation {
 	@Inject
-	private JiraExportDialog jiraExportDialog;
+	private HtmlExportDialog htmlExportDialog;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -16,8 +15,7 @@ public class OpenJiraExportDialogOperation extends AbstractOperation {
 	@Override
 	public void perform() {
 		if (activeSession.isSessionLoaded()) {
-			jiraExportDialog.open();
+			htmlExportDialog.open();
 		}
 	}
-
 }

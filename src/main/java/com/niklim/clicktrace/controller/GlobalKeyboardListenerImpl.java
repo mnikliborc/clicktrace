@@ -28,20 +28,20 @@ import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotLabelOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
-import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
-import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescriptionOperation;
-import com.niklim.clicktrace.controller.operation.session.DeleteCurrentSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.DeleteActiveSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeselectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenHtmlExportDialogOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenJiraExportDialogOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
+import com.niklim.clicktrace.controller.operation.session.HtmlExportOperation;
+import com.niklim.clicktrace.controller.operation.session.JiraExportOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenSearchDialogOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.SelectAllScreenShotsOperation;
-import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
-import com.niklim.clicktrace.controller.operation.session.StopSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.StartRecordingOperation;
+import com.niklim.clicktrace.controller.operation.session.StopRecordingOperation;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
@@ -60,7 +60,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	private MainView mainView;
 
 	@Inject
-	private OpenScreenShotDescriptionOperation openScreenShotDescriptionOperation;
+	private ChangeScreenShotDescriptionOperation changeScreenShotDescriptionOperation;
 
 	@Inject
 	private DeleteScreenShotOperation deleteScreenShotOperation;
@@ -69,22 +69,22 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	private EditScreenShotOperation editScreenShotOperation;
 
 	@Inject
-	private StartSessionOperation startSessionOperation;
+	private StartRecordingOperation startRecordingOperation;
 
 	@Inject
-	private StopSessionOperation stopSessionOperation;
+	private StopRecordingOperation stopRecordingOperation;
 
 	@Inject
 	private OpenSearchDialogOperation openSearchDialogOperation;
 
 	@Inject
-	private OpenOpenSessionDialogOperation openSessionOperation;
+	private OpenSessionOperation openSessionOperation;
 
 	@Inject
 	private NewSessionOperation newSessionOperation;
 
 	@Inject
-	private DeleteCurrentSessionOperation deleteCurrentSessionOperation;
+	private DeleteActiveSessionOperation deleteActiveSessionOperation;
 
 	@Inject
 	private RefreshSessionOperation refreshSessionOperation;
@@ -105,10 +105,10 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	private ChangeSessionDescriptionOperation changeSessionDescriptionOperation;
 
 	@Inject
-	private OpenJiraExportDialogOperation openJiraExportDialogOperation;
+	private JiraExportOperation jiraExportOperation;
 
 	@Inject
-	private OpenHtmlExportDialogOperation openHtmlExportDialogOperation;
+	private HtmlExportOperation htmlExportOperation;
 
 	public GlobalKeyboardListenerImpl() {
 		try {
@@ -173,7 +173,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DELETE, deleteScreenShotOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_EDIT, editScreenShotOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION, openScreenShotDescriptionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION, changeScreenShotDescriptionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_SELECT, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -188,7 +188,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_REFRESH, refreshSessionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_OPEN, openSessionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_NEW, newSessionOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE, deleteCurrentSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE, deleteActiveSessionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DESCRIPTION,
 				changeSessionDescriptionOperation.action());
 
@@ -197,8 +197,8 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DESELECT_ALL_SHOTS,
 				deselectAllScreenShotsOperation.action());
 
-		registerAction(mainFrame, OperationsShortcutEnum.JIRA_EXPORT, openJiraExportDialogOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.HTML_EXPORT, openHtmlExportDialogOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.JIRA_EXPORT, jiraExportOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.HTML_EXPORT, htmlExportOperation.action());
 
 		registerMenuAction(mainFrame);
 	}
@@ -239,10 +239,10 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	public void nativeKeyTyped(NativeKeyEvent event) {
 		if (Character.toUpperCase(event.getKeyChar()) == 'R'
 				&& keyModifiersMatchText(event, "Shift+Ctrl", "Ctrl+Shift")) {
-			startSessionOperation.perform();
+			startRecordingOperation.perform();
 		} else if (Character.toUpperCase(event.getKeyChar()) == 'S'
 				&& keyModifiersMatchText(event, "Shift+Ctrl", "Ctrl+Shift")) {
-			stopSessionOperation.perform();
+			stopRecordingOperation.perform();
 		}
 	}
 

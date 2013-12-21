@@ -10,9 +10,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.controller.operation.screenshot.OpenSearchDialogOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenHtmlExportDialogOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenJiraExportDialogOperation;
+import com.niklim.clicktrace.controller.operation.session.HtmlExportOperation;
+import com.niklim.clicktrace.controller.operation.session.JiraExportOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenSearchDialogOperation;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
@@ -26,10 +26,10 @@ public class ToolsMenu {
 	private OpenSearchDialogOperation openSearchDialogOperation;
 
 	@Inject
-	private OpenJiraExportDialogOperation openJiraExportDialogOperation;
+	private JiraExportOperation jiraExportOperation;
 
 	@Inject
-	private OpenHtmlExportDialogOperation openHtmlExportDialogOperation;
+	private HtmlExportOperation htmlExportOperation;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -58,12 +58,12 @@ public class ToolsMenu {
 
 	private JMenuItem createToolsExportToHtml() {
 		return MenuBar.createMenuItem("Export to HTML", OperationsShortcutEnum.HTML_EXPORT,
-				openHtmlExportDialogOperation.action());
+				htmlExportOperation.action());
 	}
 
 	private JMenuItem createToolsExportToJira() {
 		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", OperationsShortcutEnum.JIRA_EXPORT,
-				openJiraExportDialogOperation.action());
+				jiraExportOperation.action());
 	}
 
 	private JMenuItem createToolsSettings() {

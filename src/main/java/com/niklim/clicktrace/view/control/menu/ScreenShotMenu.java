@@ -10,7 +10,7 @@ import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotLabelOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
-import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
@@ -27,7 +27,7 @@ public class ScreenShotMenu {
 	@Inject
 	private ChangeScreenShotLabelOperation changeScreenShotLabelOperation;
 	@Inject
-	private OpenScreenShotDescriptionOperation changeScreenShotDescritpionOperation;
+	private ChangeScreenShotDescriptionOperation changeScreenShotDescritpionOperation;
 	@Inject
 	private DeleteScreenShotOperation deleteScreenShotOperation;
 	@Inject
@@ -65,7 +65,7 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createChangeDescription() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.DESCRIPTION_SCREENSHOT,
+		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.SCREENSHOT_DESCRIPTION,
 				OperationsShortcutEnum.SHOT_DESCRIPTION,
 				changeScreenShotDescritpionOperation.action());
 		menuItem.setEnabled(false);
@@ -73,7 +73,7 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createDelete() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Delete screenshot", Icons.DELETE_SCREENSHOT,
+		JMenuItem menuItem = MenuBar.createMenuItem("Delete screenshot", Icons.SCREENSHOT_DELETE,
 				OperationsShortcutEnum.SHOT_DELETE,
 				deleteScreenShotOperation.action());
 		menuItem.setEnabled(false);
@@ -81,7 +81,7 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createRefresh() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Refresh screenshot", Icons.REFRESH_SCREENSHOT,
+		JMenuItem menuItem = MenuBar.createMenuItem("Refresh screenshot", Icons.SCREENSHOT_REFRESH,
 				OperationsShortcutEnum.SHOT_REFRESH,
 				refreshScreenShotOperation.action());
 		menuItem.setEnabled(false);
@@ -89,7 +89,7 @@ public class ScreenShotMenu {
 	}
 
 	private JMenuItem createEdit() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Edit screenshot", Icons.EDIT_SCREENSHOT,
+		JMenuItem menuItem = MenuBar.createMenuItem("Edit screenshot", Icons.SCREENSHOT_EDIT,
 				OperationsShortcutEnum.SHOT_EDIT,
 				editScreenShotOperation.action());
 		menuItem.setEnabled(false);

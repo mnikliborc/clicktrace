@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenSessionOperation;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 @Singleton
@@ -21,7 +21,7 @@ public class FileMenu {
 	private NewSessionOperation newSessionOperation;
 
 	@Inject
-	private OpenOpenSessionDialogOperation openSessionOperation;
+	private OpenSessionOperation openSessionOperation;
 
 	@Inject
 	public void init() {
@@ -42,12 +42,12 @@ public class FileMenu {
 	}
 
 	private JMenuItem createFileNewSession() {
-		return MenuBar.createMenuItem("New session", Icons.NEW_SESSION, OperationsShortcutEnum.SESSION_NEW,
+		return MenuBar.createMenuItem("New session", Icons.SESSION_NEW, OperationsShortcutEnum.SESSION_NEW,
 				newSessionOperation.action());
 	}
 
 	private JMenuItem createFileOpenSession() {
-		return MenuBar.createMenuItem("Open session", Icons.OPEN_SESSION, OperationsShortcutEnum.SESSION_OPEN,
+		return MenuBar.createMenuItem("Open session", Icons.SESSION_OPEN, OperationsShortcutEnum.SESSION_OPEN,
 				openSessionOperation.action());
 	}
 

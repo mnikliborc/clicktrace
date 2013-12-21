@@ -27,7 +27,7 @@ import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
-import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescriptionOperation;
+import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
@@ -52,7 +52,7 @@ public class ControlView {
 	@Inject
 	private DeleteScreenShotOperation deleteScreenShotOperation;
 	@Inject
-	private OpenScreenShotDescriptionOperation changeScreenShotDescritpionOperation;
+	private ChangeScreenShotDescriptionOperation changeScreenShotDescritpionOperation;
 
 	private JPanel panel = new JPanel(new MigLayout("ins 0"));
 	private JPanel controlPanel = new JPanel();
@@ -74,22 +74,22 @@ public class ControlView {
 
 		controlPanel.setVisible(false);
 
-		firstButton = Buttons.create("First screenshot ", Icons.FIRST_SCREENSHOT, OperationsShortcutEnum.SHOT_FIRST);
-		prevButton = Buttons.create("Previous screenshot ", Icons.PREV_SCREENSHOT, OperationsShortcutEnum.SHOT_PREV);
-		nextButton = Buttons.create("Next screenshot ", Icons.NEXT_SCREENSHOT, OperationsShortcutEnum.SHOT_NEXT);
-		lastButton = Buttons.create("Last screenshot ", Icons.LAST_SCREENSHOT, OperationsShortcutEnum.SHOT_LAST);
+		firstButton = Buttons.create("First screenshot ", Icons.SCREENSHOT_FIRST, OperationsShortcutEnum.SHOT_FIRST);
+		prevButton = Buttons.create("Previous screenshot ", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_PREV);
+		nextButton = Buttons.create("Next screenshot ", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_NEXT);
+		lastButton = Buttons.create("Last screenshot ", Icons.SCREENSHOT_LAST, OperationsShortcutEnum.SHOT_LAST);
 
-		deleteButton = Buttons.create("delete", "Delete screenshot ", Icons.DELETE_SCREENSHOT,
+		deleteButton = Buttons.create("delete", "Delete screenshot ", Icons.SCREENSHOT_DELETE,
 				OperationsShortcutEnum.SHOT_DELETE);
-		editButton = Buttons.create("edit", "Open image editor ", Icons.EDIT_SCREENSHOT,
+		editButton = Buttons.create("edit", "Open image editor ", Icons.SCREENSHOT_EDIT,
 				OperationsShortcutEnum.SHOT_EDIT);
-		refreshButton = Buttons.create("refresh", "Refresh screenshot ", Icons.REFRESH_SCREENSHOT,
+		refreshButton = Buttons.create("refresh", "Refresh screenshot ", Icons.SCREENSHOT_REFRESH,
 				OperationsShortcutEnum.SHOT_REFRESH);
 
 		checkbox = new JCheckBox();
 		checkbox.setToolTipText("Select " + OperationsShortcutEnum.SHOT_SELECT.text);
 
-		descriptionButton = Buttons.create("description", "Edit screenshot description ", Icons.DESCRIPTION_SCREENSHOT,
+		descriptionButton = Buttons.create("description", "Edit screenshot description ", Icons.SCREENSHOT_DESCRIPTION,
 				OperationsShortcutEnum.SHOT_DESCRIPTION);
 
 		controlPanel.add(new JLabel("Screen shot"));

@@ -15,19 +15,19 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
-import com.niklim.clicktrace.controller.operation.session.OpenOpenSessionDialogOperation;
-import com.niklim.clicktrace.controller.operation.session.StartSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.StartRecordingOperation;
 
 @Singleton
 public class SplashScreenView {
 	@Inject
-	private StartSessionOperation startSessionOperation;
+	private StartRecordingOperation startRecordingOperation;
 
 	@Inject
 	private NewSessionOperation newSessionOperation;
 
 	@Inject
-	private OpenOpenSessionDialogOperation openOpenSessionDialogOperation;
+	private OpenSessionOperation openSessionOperation;
 
 	private JPanel panel;
 
@@ -38,10 +38,10 @@ public class SplashScreenView {
 	public SplashScreenView() {
 		panel = new JPanel(new MigLayout("align center", ""));
 
-		newSessionButton = Buttons.create("New session", "", Icons.NEW_SESSION, OperationsShortcutEnum.SESSION_NEW);
-		openSessionButton = Buttons.create("Open session", "", Icons.OPEN_SESSION, OperationsShortcutEnum.SESSION_OPEN);
-		recordSessionButton = Buttons.create("Record session", "", Icons.START_SESSION,
-				OperationsShortcutEnum.RECORD_START);
+		newSessionButton = Buttons.create("New session", "", Icons.SESSION_NEW, OperationsShortcutEnum.SESSION_NEW);
+		openSessionButton = Buttons.create("Open session", "", Icons.SESSION_OPEN, OperationsShortcutEnum.SESSION_OPEN);
+		recordSessionButton = Buttons.create("Record session", "", Icons.START_RECORDING,
+				OperationsShortcutEnum.START_RECORDING);
 
 		JPanel buttonsPanel = new JPanel(new MigLayout("align center", ""));
 		buttonsPanel.add(newSessionButton);
@@ -62,8 +62,8 @@ public class SplashScreenView {
 	@Inject
 	public void init() {
 		newSessionButton.addMouseListener(newSessionOperation.mouse());
-		openSessionButton.addMouseListener(openOpenSessionDialogOperation.mouse());
-		recordSessionButton.addMouseListener(startSessionOperation.mouse());
+		openSessionButton.addMouseListener(openSessionOperation.mouse());
+		recordSessionButton.addMouseListener(startRecordingOperation.mouse());
 	}
 
 	public JPanel getPanel() {

@@ -8,7 +8,7 @@ import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
 import com.niklim.clicktrace.view.MainView;
 
-public class DeleteCurrentSessionOperation extends AbstractOperation {
+public class DeleteActiveSessionOperation extends AbstractOperation {
 	@Inject
 	private MainController controller;
 

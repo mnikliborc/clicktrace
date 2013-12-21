@@ -30,7 +30,7 @@ public class HtmlExportDialog extends AbstractDialog {
 	private ActiveSession activeSession;
 
 	private JTextField outputDirPath;
-	JFileChooser outputDirFileChooser;
+	private JFileChooser outputDirFileChooser;
 
 	public HtmlExportDialog() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));

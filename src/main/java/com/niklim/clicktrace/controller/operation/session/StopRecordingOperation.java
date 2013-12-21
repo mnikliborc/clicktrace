@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
 
-public class StartSessionOperation extends AbstractOperation {
+public class StopRecordingOperation extends AbstractOperation {
 	@Inject
 	private MainController controller;
 
 	@Override
 	public void perform() {
-		controller.startRecording(true);
+		controller.stopRecording();
 	}
 }
