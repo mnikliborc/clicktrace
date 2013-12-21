@@ -86,7 +86,7 @@ public class JiraExportDialog extends AbstractDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 480, 200);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 480, 220);
 
 		jiraInstanceUrl = new JTextField();
 		username = new JTextField();

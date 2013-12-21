@@ -64,10 +64,10 @@ public class MainView {
 		MainFrameHolder.set(frame);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.7), (int) (dim.getHeight() * 0.7));
+		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.8), (int) (dim.getHeight() * 0.8));
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setEnabled(false);

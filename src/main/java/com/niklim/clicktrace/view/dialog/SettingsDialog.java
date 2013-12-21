@@ -9,7 +9,6 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +28,6 @@ import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 
 @Singleton
 public class SettingsDialog extends AbstractDialog {
-	JDialog dialog;
 
 	@Inject
 	private UserProperties props;
@@ -44,9 +42,6 @@ public class SettingsDialog extends AbstractDialog {
 
 	JCheckBox recordMouseClicks;
 
-	public SettingsDialog() {
-	}
-
 	@Inject
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
@@ -54,7 +49,7 @@ public class SettingsDialog extends AbstractDialog {
 		dialog.setTitle("Settings");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 270);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 280);
 
 		imageEditorFileChooser = new JFileChooser();
 

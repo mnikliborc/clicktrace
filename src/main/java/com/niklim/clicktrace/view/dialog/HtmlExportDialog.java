@@ -36,7 +36,7 @@ public class HtmlExportDialog extends AbstractDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 100);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 120);
 
 		createImageEditorPathPanel();
 		createControlPanel();

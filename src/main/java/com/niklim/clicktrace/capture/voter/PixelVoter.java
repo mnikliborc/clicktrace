@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class PixelVoter implements ChangeVoter {
 	private static final Logger log = LoggerFactory.getLogger(PixelVoter.class);
 
-	private int imgDiffThreshold = 20000;
+	private float imgDiffThresholdRatio = 0.02f;
 
 	@Override
 	public Vote vote(BufferedImage prev, BufferedImage current) {
@@ -27,6 +27,8 @@ public class PixelVoter implements ChangeVoter {
 
 		int imgDiff = 0;
 		List<Point> diffPoints = new LinkedList<Point>();
+		System.out.println(prev.getWidth());
+		System.out.println(prev.getHeight());
 		for (int i = 0; i < prev.getWidth(); i++) {
 			for (int j = 0; j < prev.getHeight(); j++) {
 				Color prevColor = new Color(prev.getRGB(i, j));
@@ -40,8 +42,13 @@ public class PixelVoter implements ChangeVoter {
 				imgDiff += pixelDiff;
 			}
 		}
-		log.debug("imgDiff={}, {}", imgDiff, pointsToString(diffPoints));
-		if (imgDiff > imgDiffThreshold) {
+
+		return decide(prev.getWidth(), prev.getHeight(), imgDiff);
+	}
+
+	private Vote decide(int imgWidth, int imgHeight, int imgDiff) {
+		int pixelsNum = imgWidth * imgHeight;
+		if (imgDiff > pixelsNum * imgDiffThresholdRatio) {
 			log.info("SAVE Vote");
 			return Vote.SAVE;
 		} else {
@@ -56,15 +63,6 @@ public class PixelVoter implements ChangeVoter {
 		int blueDiff = Math.abs(prevColor.getBlue() - currentColor.getBlue());
 		int diff = redDiff + greenDiff + blueDiff;
 		return diff;
-	}
-
-	private Object pointsToString(List<Point> diffPoints) {
-		List<Point> first5Points = diffPoints.subList(0, Math.min(5, diffPoints.size()));
-		StringBuffer buffer = new StringBuffer();
-		for (Point p : first5Points) {
-			buffer.append("(" + p.getX() + "," + p.getY() + ")");
-		}
-		return buffer.toString();
 	}
 
 }
