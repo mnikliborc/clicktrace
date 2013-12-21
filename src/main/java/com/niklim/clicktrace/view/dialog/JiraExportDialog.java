@@ -5,21 +5,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -35,7 +32,7 @@ import com.niklim.clicktrace.service.SessionCompressor;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 import com.niklim.clicktrace.view.MainFrameHolder;
 
-public class JiraExportDialog {
+public class JiraExportDialog extends AbstractDialog {
 
 	@Inject
 	private JiraExportService jiraExportService;
@@ -56,7 +53,6 @@ public class JiraExportDialog {
 		executor = Executors.newFixedThreadPool(1);
 	}
 
-	private JDialog dialog;
 	JTextField jiraInstanceUrl;
 	JTextField username;
 	JPasswordField password;
@@ -77,7 +73,8 @@ public class JiraExportDialog {
 		dialog.setVisible(true);
 	}
 
-	private void close() {
+	@Override
+	protected void close() {
 		compressedSession = null;
 		dialog.setVisible(false);
 	}
@@ -89,8 +86,7 @@ public class JiraExportDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 480,
-				200);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 480, 200);
 
 		jiraInstanceUrl = new JTextField();
 		username = new JTextField();
@@ -140,20 +136,12 @@ public class JiraExportDialog {
 				close();
 			}
 		});
-
-		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private boolean confirmSessionExport() {
 		try {
-			boolean sessionExist = jiraExportService.checkSessionExist(username.getText(),
-					password.getText(), issueKey.getText(), activeSession.getSession().getName(),
-					jiraInstanceUrl.getText());
+			boolean sessionExist = jiraExportService.checkSessionExist(username.getText(), password.getText(),
+					issueKey.getText(), activeSession.getSession().getName(), jiraInstanceUrl.getText());
 			if (sessionExist) {
 				return askUserForExportConfirmation();
 			} else {
@@ -180,8 +168,8 @@ public class JiraExportDialog {
 			showWaitingCursor();
 			String stream = compressedSession.get();
 
-			jiraExportService.exportSession(username.getText(), password.getText(), issueKey.getText(),
-					activeSession.getSession().getName(), stream, jiraInstanceUrl.getText());
+			jiraExportService.exportSession(username.getText(), password.getText(), issueKey.getText(), activeSession
+					.getSession().getName(), stream, jiraInstanceUrl.getText());
 			hideWaitingCursor();
 			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
 			close();

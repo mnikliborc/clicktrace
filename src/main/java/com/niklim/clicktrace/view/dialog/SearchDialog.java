@@ -13,14 +13,12 @@ import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -37,7 +35,7 @@ import com.niklim.clicktrace.view.MainFrameHolder;
 import com.niklim.clicktrace.view.TextComponentHistory;
 
 @Singleton
-public class SearchDialog {
+public class SearchDialog extends AbstractDialog {
 	@Inject
 	private SearchService searchService;
 
@@ -47,7 +45,6 @@ public class SearchDialog {
 	@Inject
 	private ActiveSession activeSession;
 
-	private JDialog dialog;
 	private JTable resultTable;
 	private JRadioButton activeSessionRadio;
 	private JRadioButton allSessionsRadio;
@@ -66,8 +63,7 @@ public class SearchDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[fill]rel[]"));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 820,
-				470);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 820, 470);
 
 		allSessionsRadio = new JRadioButton("All sessions");
 		activeSessionRadio = new JRadioButton("Active session");
@@ -124,28 +120,19 @@ public class SearchDialog {
 			@Override
 			public void keyTyped(KeyEvent event) {
 				if (event.getKeyChar() == '\n') {
-					search(searchQuery.getText(),
-							searchType.isSelected(allSessionsRadio.getModel()),
+					search(searchQuery.getText(), searchType.isSelected(allSessionsRadio.getModel()),
 							matchCase.isSelected());
 				}
 			}
 		});
 		searchQuery.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(history));
-
-		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void openResult(SearchResult result) {
 		if (result instanceof SearchService.ShotSearchResult) {
 			SearchService.ShotSearchResult r = (SearchService.ShotSearchResult) result;
 			controller.openSessionOnScreenShot(r.shot);
-		}
- else if (result instanceof SearchService.SessionSearchResult) {
+		} else if (result instanceof SearchService.SessionSearchResult) {
 			SearchService.SessionSearchResult r = (SearchService.SessionSearchResult) result;
 			controller.openSession(r.session);
 		}
@@ -182,14 +169,9 @@ public class SearchDialog {
 		dialog.setVisible(true);
 	}
 
-	private void close() {
-		dialog.setVisible(false);
-	}
-
 	@SuppressWarnings("serial")
 	public void search(String query, boolean allSessions, boolean matchCase) {
-		List<SearchService.SearchResult> shots = searchService.search(query,
-				allSessions, matchCase);
+		List<SearchService.SearchResult> shots = searchService.search(query, allSessions, matchCase);
 		DefaultTableModel dataModel = new DefaultTableModel(resultTableColumns, shots.size()) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -207,8 +189,7 @@ public class SearchDialog {
 				SearchService.ShotSearchResult r = (SearchService.ShotSearchResult) result;
 				resultTable.getModel().setValueAt(r.shot.getFilename(), i, 1);
 				resultTable.getModel().setValueAt(r.shot.getSession().getName(), i, 2);
-			}
- else if (result instanceof SearchService.SessionSearchResult) {
+			} else if (result instanceof SearchService.SessionSearchResult) {
 				resultTable.getModel().setValueAt("-", i, 1);
 				resultTable.getModel().setValueAt("-", i, 2);
 			}

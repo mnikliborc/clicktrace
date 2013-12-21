@@ -5,12 +5,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -19,7 +17,6 @@ import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.SpinnerListModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -29,10 +26,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
-import com.niklim.clicktrace.view.MainFrameHolder;
 
 @Singleton
-public class SettingsDialog {
+public class SettingsDialog extends AbstractDialog {
 	JDialog dialog;
 
 	@Inject
@@ -53,14 +49,12 @@ public class SettingsDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
 		dialog.setTitle("Settings");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490,
-				270);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 270);
 
 		imageEditorFileChooser = new JFileChooser();
 
@@ -71,13 +65,6 @@ public class SettingsDialog {
 		createJiraPanel();
 
 		createControlPanel();
-
-		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
-			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void createCaptureMouseClicksPanel() {
@@ -94,13 +81,13 @@ public class SettingsDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveModel();
-				dialog.setVisible(false);
+				close();
 			}
 		});
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
+				close();
 			}
 		});
 		cancelButton.setToolTipText("[Esc]");

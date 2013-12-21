@@ -11,12 +11,10 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,9 +30,7 @@ import com.niklim.clicktrace.view.MainFrameHolder;
 
 @SuppressWarnings("serial")
 @Singleton
-public class OpenSessionDialog {
-
-	JDialog dialog;
+public class OpenSessionDialog extends AbstractDialog {
 
 	@Inject
 	private MainController controller;
@@ -103,13 +99,6 @@ public class OpenSessionDialog {
 				close(false);
 			}
 		});
-
-		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close(false);
-			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	public void open() {
