@@ -197,9 +197,8 @@ public class MainController {
 			settingsDialog.open();
 		} else {
 			try {
-				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions"
-						+ File.separator + activeShot.getSession().getName() + File.separator
-						+ activeShot.getFilename());
+				ProcessBuilder pb = new ProcessBuilder(props.getImageEditorPath(), "sessions" + File.separator
+						+ activeShot.getSession().getName() + File.separator + activeShot.getFilename());
 				pb.start();
 			} catch (IOException e) {
 				log.error(Messages.EDITOR_APP_ERROR, e);
@@ -260,16 +259,14 @@ public class MainController {
 		ScreenShot activeShot = activeSession.getActiveShot();
 		activeShot.setLabel(label);
 
-		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession
-				.getSession());
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
 		writer.saveShotLabel(activeSession.getActiveShot());
 
 		mainView.refresh();
 	}
 
 	public void saveActiveScreenShotDescription() {
-		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession
-				.getSession());
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
 		writer.saveShotDescription(activeSession.getActiveShot());
 	}
 
@@ -292,7 +289,9 @@ public class MainController {
 		int selectedIndex = activeSession.getActiveShotIndex();
 		int nextIndex = Math.max(0, selectedIndex - 1);
 
-		showScreenShot(nextIndex);
+		if (selectedIndex != nextIndex) {
+			showScreenShot(nextIndex);
+		}
 	}
 
 	public void showNextScreenShot() {
@@ -300,7 +299,9 @@ public class MainController {
 		int selectedIndex = activeSession.getActiveShotIndex();
 		int nextIndex = Math.min(selectedIndex + 1, session.getShots().size() - 1);
 
-		showScreenShot(nextIndex);
+		if (selectedIndex != nextIndex) {
+			showScreenShot(nextIndex);
+		}
 	}
 
 	public void showLastScreenShot() {

@@ -111,7 +111,8 @@ public class MainView {
 	}
 
 	public void refresh() {
-		// frame.getContentPane().revalidate();
+		frame.getContentPane().invalidate();
+		frame.getContentPane().validate();
 		frame.getContentPane().repaint();
 	}
 
