@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.service.HtmlExportService;
-import com.niklim.clicktrace.service.exception.HtmlExportAlreadyExistsException;
+import com.niklim.clicktrace.service.exception.HtmlExportException;
 
 public class HtmlExportDialog extends AbstractDialog {
 	@Inject
@@ -76,7 +76,7 @@ public class HtmlExportDialog extends AbstractDialog {
 					htmlExportService.export(activeSession.getSession(), outputDirPath.getText());
 					JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_SUCCESS);
 					dialog.setVisible(false);
-				} catch (HtmlExportAlreadyExistsException e) {
+				} catch (HtmlExportException e) {
 					JOptionPane.showMessageDialog(dialog, e.getMessage());
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_IO_ERROR);

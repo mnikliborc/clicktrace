@@ -11,11 +11,13 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -26,7 +28,6 @@ import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.SessionMetadata;
 import com.niklim.clicktrace.service.SessionManager;
-import com.niklim.clicktrace.view.MainFrameHolder;
 
 @SuppressWarnings("serial")
 @Singleton
@@ -39,20 +40,21 @@ public class OpenSessionDialog extends AbstractDialog {
 	private SessionManager sessionManager;
 
 	JTable table;
-
-	public OpenSessionDialog() {
-	}
+	JTextArea textarea;
+	List<Session> sessions;
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("Open session");
+		dialog.setResizable(false);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 600);
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		textarea = new JTextArea();
+		textarea.setEditable(false);
 
 		JButton openButton = new JButton("Open");
 		JButton cancelButton = new JButton("Cancel");
@@ -61,7 +63,8 @@ public class OpenSessionDialog extends AbstractDialog {
 		buttonPanel.add(cancelButton, "tag cancel");
 		buttonPanel.add(openButton, "tag apply");
 
-		dialog.add(new JScrollPane(table), "wrap");
+		dialog.add(new JScrollPane(table), "h 300, w 580, wrap");
+		dialog.add(new JScrollPane(textarea), "h 250, grow, wrap");
 		dialog.add(buttonPanel, "align r");
 
 		createListeners(openButton, cancelButton);
@@ -85,6 +88,12 @@ public class OpenSessionDialog extends AbstractDialog {
 				}
 			}
 		});
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				refreshDescription();
+			}
+		});
 
 		openButton.addActionListener(new ActionListener() {
 			@Override
@@ -101,6 +110,15 @@ public class OpenSessionDialog extends AbstractDialog {
 		});
 	}
 
+	private void refreshDescription() {
+		int selectedRow = table.getSelectedRow();
+		if (selectedRow == -1) {
+			textarea.setText("");
+		} else {
+			textarea.setText(sessions.get(selectedRow).getDescription());
+		}
+	}
+
 	public void open() {
 		loadSessions();
 		dialog.setVisible(true);
@@ -114,7 +132,7 @@ public class OpenSessionDialog extends AbstractDialog {
 	}
 
 	private void loadSessions() {
-		List<Session> sessions = sessionManager.loadAll();
+		sessions = sessionManager.loadAll();
 		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots", "Modified" },
 				sessions.size()) {
 			@Override
