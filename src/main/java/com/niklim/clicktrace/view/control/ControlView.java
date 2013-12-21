@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -32,6 +31,7 @@ import com.niklim.clicktrace.controller.operation.screenshot.OpenScreenShotDescr
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.view.Buttons;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 /**
@@ -74,21 +74,22 @@ public class ControlView {
 
 		controlPanel.setVisible(false);
 
-		firstButton = createButton("First screenshot ", Icons.FIRST_SCREENSHOT, OperationsShortcutEnum.SHOT_FIRST);
-		prevButton = createButton("Previous screenshot ", Icons.PREV_SCREENSHOT, OperationsShortcutEnum.SHOT_PREV);
-		nextButton = createButton("Next screenshot ", Icons.NEXT_SCREENSHOT, OperationsShortcutEnum.SHOT_NEXT);
-		lastButton = createButton("Last screenshot ", Icons.LAST_SCREENSHOT, OperationsShortcutEnum.SHOT_LAST);
+		firstButton = Buttons.create("First screenshot ", Icons.FIRST_SCREENSHOT, OperationsShortcutEnum.SHOT_FIRST);
+		prevButton = Buttons.create("Previous screenshot ", Icons.PREV_SCREENSHOT, OperationsShortcutEnum.SHOT_PREV);
+		nextButton = Buttons.create("Next screenshot ", Icons.NEXT_SCREENSHOT, OperationsShortcutEnum.SHOT_NEXT);
+		lastButton = Buttons.create("Last screenshot ", Icons.LAST_SCREENSHOT, OperationsShortcutEnum.SHOT_LAST);
 
-		deleteButton = createButton("delete", "Delete screenshot ", Icons.DELETE_SCREENSHOT,
+		deleteButton = Buttons.create("delete", "Delete screenshot ", Icons.DELETE_SCREENSHOT,
 				OperationsShortcutEnum.SHOT_DELETE);
-		editButton = createButton("edit", "Open image editor ", Icons.EDIT_SCREENSHOT, OperationsShortcutEnum.SHOT_EDIT);
-		refreshButton = createButton("refresh", "Refresh screenshot ", Icons.REFRESH_SCREENSHOT,
+		editButton = Buttons.create("edit", "Open image editor ", Icons.EDIT_SCREENSHOT,
+				OperationsShortcutEnum.SHOT_EDIT);
+		refreshButton = Buttons.create("refresh", "Refresh screenshot ", Icons.REFRESH_SCREENSHOT,
 				OperationsShortcutEnum.SHOT_REFRESH);
 
 		checkbox = new JCheckBox();
 		checkbox.setToolTipText("Select " + OperationsShortcutEnum.SHOT_SELECT.text);
 
-		descriptionButton = createButton("description", "Edit screenshot description ", Icons.DESCRIPTION_SCREENSHOT,
+		descriptionButton = Buttons.create("description", "Edit screenshot description ", Icons.DESCRIPTION_SCREENSHOT,
 				OperationsShortcutEnum.SHOT_DESCRIPTION);
 
 		controlPanel.add(new JLabel("Screen shot"));
@@ -104,18 +105,6 @@ public class ControlView {
 		controlPanel.add(deleteButton);
 		controlPanel.add(descriptionButton);
 		controlPanel.add(checkbox);
-	}
-
-	private JButton createButton(String tooltip, String icon, OperationsShortcutEnum shortcut) {
-		JButton button = new JButton(new ImageIcon(Icons.createIconImage(icon, tooltip)));
-		button.setToolTipText(tooltip + shortcut.text);
-		return button;
-	}
-
-	private JButton createButton(String label, String tooltip, String icon, OperationsShortcutEnum shortcut) {
-		JButton button = new JButton(label, new ImageIcon(Icons.createIconImage(icon, label)));
-		button.setToolTipText(tooltip + shortcut.text);
-		return button;
 	}
 
 	@Inject

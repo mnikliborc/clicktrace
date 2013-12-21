@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -68,13 +70,9 @@ public class NewSessionDialog extends AbstractDialog {
 		createButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String name = sessionName.getText();
-				if (StringUtils.isEmpty(name.trim())) {
-					JOptionPane.showMessageDialog(dialog, Messages.NEW_SESSION_NO_NAME);
-				} else {
-					callback.create(name, sessionDescription.getText());
-				}
+				tryCreateSession();
 			}
+
 		});
 
 		cancelButton.addActionListener(new ActionListener() {
@@ -83,6 +81,23 @@ public class NewSessionDialog extends AbstractDialog {
 				close();
 			}
 		});
+		sessionName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					tryCreateSession();
+				}
+			}
+		});
+	}
+
+	private void tryCreateSession() {
+		String name = sessionName.getText();
+		if (StringUtils.isEmpty(name.trim())) {
+			JOptionPane.showMessageDialog(dialog, Messages.NEW_SESSION_NO_NAME);
+		} else {
+			callback.create(name, sessionDescription.getText());
+		}
 	}
 
 	public static interface NewSessionCallback {

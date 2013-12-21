@@ -75,7 +75,7 @@ public class OpenSessionDialog extends AbstractDialog {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					dialog.setVisible(false);
-					controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+					controller.showSession(sessionManager.loadAll().get(table.getSelectedRow()));
 				}
 			}
 		});
@@ -84,7 +84,7 @@ public class OpenSessionDialog extends AbstractDialog {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					dialog.setVisible(false);
-					controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+					controller.showSession(sessionManager.loadAll().get(table.getSelectedRow()));
 				}
 			}
 		});
@@ -112,7 +112,7 @@ public class OpenSessionDialog extends AbstractDialog {
 
 	private void refreshDescription() {
 		int selectedRow = table.getSelectedRow();
-		if (selectedRow == -1) {
+		if (selectedRow == -1 || sessions.isEmpty()) {
 			textarea.setText("");
 		} else {
 			textarea.setText(sessions.get(selectedRow).getDescription());
@@ -127,7 +127,7 @@ public class OpenSessionDialog extends AbstractDialog {
 	private void close(boolean openSession) {
 		dialog.setVisible(false);
 		if (openSession) {
-			controller.openSession(sessionManager.loadAll().get(table.getSelectedRow()));
+			controller.showSession(sessionManager.loadAll().get(table.getSelectedRow()));
 		}
 	}
 

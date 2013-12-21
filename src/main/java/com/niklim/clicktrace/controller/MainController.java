@@ -60,11 +60,12 @@ public class MainController {
 	/**
 	 * Opens the app window.
 	 */
-	@Inject
 	public void init() {
 		Session session = sessionManager.findSessionByName(props.getLastSessionName());
 		if (session != null) {
-			openSession(session);
+			showSession(session);
+		} else {
+			mainView.showSplashScreen();
 		}
 		mainView.open();
 	}
@@ -116,7 +117,7 @@ public class MainController {
 
 			handleNewSessionDescription(description, session);
 
-			openSession(session);
+			showSession(session);
 			return true;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
@@ -134,7 +135,7 @@ public class MainController {
 		}
 	}
 
-	public void openSession(Session session) {
+	public void showSession(Session session) {
 		capture.stop();
 
 		setActiveSession(session);
@@ -184,7 +185,7 @@ public class MainController {
 		}
 
 		session.loadScreenShots();
-		openSession(session);
+		showSession(session);
 	}
 
 	public void showScreenShot(int i) {
@@ -331,7 +332,7 @@ public class MainController {
 	}
 
 	public void openSessionOnScreenShot(ScreenShot selectedShot) {
-		openSession(selectedShot.getSession());
+		showSession(selectedShot.getSession());
 		mainView.showScreenShot(selectedShot, false);
 	}
 

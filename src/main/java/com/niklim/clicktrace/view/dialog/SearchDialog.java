@@ -134,7 +134,7 @@ public class SearchDialog extends AbstractDialog {
 			controller.openSessionOnScreenShot(r.shot);
 		} else if (result instanceof SearchService.SessionSearchResult) {
 			SearchService.SessionSearchResult r = (SearchService.SessionSearchResult) result;
-			controller.openSession(r.session);
+			controller.showSession(r.session);
 		}
 	}
 

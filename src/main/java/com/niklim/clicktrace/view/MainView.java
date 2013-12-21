@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.view;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -33,6 +34,9 @@ public class MainView {
 
 	@Inject
 	private ScreenShotView screenShotView;
+
+	@Inject
+	private SplashScreenView splashScreenView;
 
 	@Inject
 	private ControlView controlView;
@@ -69,23 +73,48 @@ public class MainView {
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		frame.setJMenuBar(menu.getMenuBar());
+	}
+
+	private JScrollPane createScrollPane(Component top, Component Bottom) {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setEnabled(false);
-		splitPane.setTopComponent(controlView.getComponent());
-		splitPane.setBottomComponent(screenShotView.getPanel());
+		splitPane.setTopComponent(top);
+		splitPane.setBottomComponent(Bottom);
 
 		scrollPane = new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		frame.add(scrollPane);
-		frame.setJMenuBar(menu.getMenuBar());
+
+		return scrollPane;
 	}
 
 	public void open() {
 		frame.setVisible(true);
 	}
 
+	public void showSplashScreen() {
+		if (scrollPane != null) {
+			frame.remove(scrollPane);
+		}
+
+		createScrollPane(controlView.getComponent(), splashScreenView.getPanel());
+		frame.add(scrollPane);
+	}
+
+	private void showScreenShotView() {
+		if (scrollPane != null) {
+			frame.remove(scrollPane);
+		}
+
+		createScrollPane(controlView.getComponent(), screenShotView.getPanel());
+		frame.add(scrollPane);
+	}
+
 	public void showSession(Session session) {
 		showWaitingCursor();
+
+		showScreenShotView();
+
 		frame.setTitle(APP_NAME + " - " + session.getName());
 
 		resetControl(session);
