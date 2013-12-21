@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 import com.niklim.clicktrace.view.MainView;
+import com.niklim.clicktrace.view.dialog.NewSessionDialog.NewSessionCallback;
 import com.niklim.clicktrace.view.dialog.SettingsDialog;
 
 /**
@@ -69,10 +71,16 @@ public class MainController {
 
 	public void startRecording(boolean hideEditor) {
 		if (!activeSession.isSessionLoaded()) {
-			boolean sessionCreated = newSessionOperation.createSession();
-			if (sessionCreated) {
-				startRecording(true);
-			}
+			newSessionOperation.createSession(new NewSessionCallback() {
+				@Override
+				public void create(String name, String description) {
+					boolean created = newSession(name, description);
+					if (created) {
+						newSessionOperation.closeDialog();
+						startRecording(true);
+					}
+				}
+			});
 			return;
 		}
 
@@ -102,9 +110,12 @@ public class MainController {
 		}
 	}
 
-	public boolean newSession(String sessionName) {
+	public boolean newSession(String sessionName, String description) {
 		try {
 			Session session = sessionManager.createSession(sessionName);
+
+			handleNewSessionDescription(description, session);
+
 			openSession(session);
 			return true;
 		} catch (IOException e) {
@@ -113,6 +124,14 @@ public class MainController {
 			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
 		return false;
+	}
+
+	private void handleNewSessionDescription(String description, Session session) {
+		if (!StringUtils.isEmpty(description)) {
+			session.setDescription(description);
+			SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(session);
+			writer.saveSessionDescription();
+		}
 	}
 
 	public void openSession(Session session) {

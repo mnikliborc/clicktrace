@@ -24,7 +24,7 @@ public class AbstractDialog {
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
-	protected void close() {
+	public void close() {
 		dialog.setVisible(false);
 	}
 }

@@ -74,7 +74,7 @@ public class JiraExportDialog extends AbstractDialog {
 	}
 
 	@Override
-	protected void close() {
+	public void close() {
 		compressedSession = null;
 		dialog.setVisible(false);
 	}

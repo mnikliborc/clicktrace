@@ -22,4 +22,5 @@ public interface Messages {
 	public static final Object HTML_EXPORT_SUCCESS = "HTML_EXPORT_SUCCESS";
 	public static final Object HTML_EXPORT_IO_ERROR = "Unable to export session to given directory.";
 	public static final String HTML_EXPORT_FOLDER_NOT_EXISTS = "Directory does not exist.";
+	public static final Object NEW_SESSION_NO_NAME = "Please provide session name";
 }

@@ -27,8 +27,6 @@ public class PixelVoter implements ChangeVoter {
 
 		int imgDiff = 0;
 		List<Point> diffPoints = new LinkedList<Point>();
-		System.out.println(prev.getWidth());
-		System.out.println(prev.getHeight());
 		for (int i = 0; i < prev.getWidth(); i++) {
 			for (int j = 0; j < prev.getHeight(); j++) {
 				Color prevColor = new Color(prev.getRGB(i, j));

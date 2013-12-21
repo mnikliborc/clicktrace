@@ -70,7 +70,7 @@ public class OpenSessionDialog extends AbstractDialog {
 		createListeners(openButton, cancelButton);
 	}
 
-	public void createListeners(JButton openButton, JButton cancelButton) {
+	private void createListeners(JButton openButton, JButton cancelButton) {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {

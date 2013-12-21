@@ -1,27 +1,36 @@
 package com.niklim.clicktrace.controller.operation.session;
 
-import javax.swing.JOptionPane;
-
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
+import com.niklim.clicktrace.view.dialog.NewSessionDialog;
+import com.niklim.clicktrace.view.dialog.NewSessionDialog.NewSessionCallback;
 
 public class NewSessionOperation extends AbstractOperation {
 	@Inject
 	private MainController controller;
 
-	public boolean createSession() {
-		String name = JOptionPane.showInputDialog("Set new session name");
-		if (name != null) {
-			return controller.newSession(name);
-		} else {
-			return false;
-		}
-	}
+	@Inject
+	private NewSessionDialog newSessionDialog;
 
 	@Override
 	public void perform() {
-		createSession();
+		newSessionDialog.open(new NewSessionCallback() {
+			@Override
+			public void create(String name, String description) {
+				boolean created = controller.newSession(name, description);
+				if (created) {
+					newSessionDialog.close();
+				}
+			}
+		});
 	}
 
+	public void createSession(NewSessionCallback callback) {
+		newSessionDialog.open(callback);
+	}
+
+	public void closeDialog() {
+		newSessionDialog.close();
+	}
 }
