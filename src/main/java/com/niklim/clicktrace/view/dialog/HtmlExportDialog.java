@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,21 +32,23 @@ public class HtmlExportDialog extends AbstractDialog {
 
 	private JTextField outputDirPath;
 	private JFileChooser outputDirFileChooser;
+	private JCheckBox simpleHtml;
 
 	public HtmlExportDialog() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 120);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 150);
 
-		createImageEditorPathPanel();
+		createConfigPanel();
 		createControlPanel();
 	}
 
-	private void createImageEditorPathPanel() {
+	private void createConfigPanel() {
 		outputDirPath = new JTextField();
 		outputDirFileChooser = new JFileChooser();
 		outputDirFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		simpleHtml = new JCheckBox();
 
 		JButton setPathButton = new JButton("select");
 		setPathButton.addActionListener(new ActionListener() {
@@ -64,6 +67,8 @@ public class HtmlExportDialog extends AbstractDialog {
 		dialog.add(new JLabel("Output folder path"));
 		dialog.add(outputDirPath, "w 400");
 		dialog.add(setPathButton, "wrap");
+		dialog.add(new JLabel("Simple HTML"));
+		dialog.add(simpleHtml, "wrap");
 	}
 
 	private void createControlPanel() {
@@ -73,7 +78,8 @@ public class HtmlExportDialog extends AbstractDialog {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				try {
-					htmlExportService.export(activeSession.getSession(), outputDirPath.getText());
+					htmlExportService.export(activeSession.getSession(), outputDirPath.getText(),
+							simpleHtml.isSelected());
 					JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_SUCCESS);
 					dialog.setVisible(false);
 				} catch (HtmlExportException e) {

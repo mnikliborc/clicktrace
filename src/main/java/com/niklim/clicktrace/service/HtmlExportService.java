@@ -18,7 +18,8 @@ import com.niklim.clicktrace.service.exception.HtmlExportException;
 @Singleton
 public class HtmlExportService {
 
-	public void export(Session session, String outputDirPath) throws HtmlExportException, IOException {
+	public void export(Session session, String outputDirPath, boolean simpleHtml) throws HtmlExportException,
+			IOException {
 		if (!outputDirPath.endsWith(File.separator)) {
 			outputDirPath += File.separator;
 		}
@@ -31,8 +32,8 @@ public class HtmlExportService {
 					+ "' folder in given directory. Already exists.");
 		}
 
-		copyFiles(session, outputDirPath);
-		String html = createHtml(session);
+		copyFiles(session, outputDirPath, simpleHtml);
+		String html = createHtml(session, simpleHtml);
 		saveHtml(session, outputDirPath, html);
 	}
 
@@ -49,9 +50,9 @@ public class HtmlExportService {
 		}
 	}
 
-	private void copyFiles(Session session, String outputDirPath) throws IOException {
-		createDirectories(session, outputDirPath);
-		copyStaticResources(session, outputDirPath);
+	private void copyFiles(Session session, String outputDirPath, boolean simpleHtml) throws IOException {
+		createDirectories(session, outputDirPath, simpleHtml);
+		copyStaticResources(session, outputDirPath, simpleHtml);
 		copyShots(session, outputDirPath);
 	}
 
@@ -64,8 +65,8 @@ public class HtmlExportService {
 		}
 	}
 
-	private String createHtml(Session session) {
-		String mainTemplate = loadTemplate("main.tmpl");
+	private String createHtml(Session session, boolean simpleHtml) {
+		String mainTemplate = loadTemplate(simpleHtml ? "main-simple.tmpl" : "main-lightbox.tmpl");
 		String shotTemplate = loadTemplate("shot.tmpl");
 
 		StringBuffer shotsHtmlBuffer = new StringBuffer();
@@ -83,26 +84,30 @@ public class HtmlExportService {
 		return html;
 	}
 
-	private void copyStaticResources(Session session, String outputDirPath) throws IOException {
+	private void copyStaticResources(Session session, String outputDirPath, boolean simpleHtml) throws IOException {
 		copy("css/clicktrace.css", outputDirPath + session.getName());
-		copy("css/lightbox.css", outputDirPath + session.getName());
 
-		copy("img/close.png", outputDirPath + session.getName());
-		copy("img/next.png", outputDirPath + session.getName());
-		copy("img/prev.png", outputDirPath + session.getName());
-		copy("img/loading.gif", outputDirPath + session.getName());
+		if (!simpleHtml) {
+			copy("css/lightbox.css", outputDirPath + session.getName());
+			copy("img/close.png", outputDirPath + session.getName());
+			copy("img/next.png", outputDirPath + session.getName());
+			copy("img/prev.png", outputDirPath + session.getName());
+			copy("img/loading.gif", outputDirPath + session.getName());
 
-		copy("js/clicktrace.js", outputDirPath + session.getName());
-		copy("js/jquery-1.10.2.min.js", outputDirPath + session.getName());
-		copy("js/lightbox-2.6.js", outputDirPath + session.getName());
+			copy("js/clicktrace.js", outputDirPath + session.getName());
+			copy("js/jquery-1.10.2.min.js", outputDirPath + session.getName());
+			copy("js/lightbox-2.6.js", outputDirPath + session.getName());
+		}
 	}
 
-	private void createDirectories(Session session, String outputDirPath) throws IOException {
+	private void createDirectories(Session session, String outputDirPath, boolean simpleHtml) throws IOException {
 		Files.createDirectory(outputDirPath + session.getName());
 		Files.createDirectory(outputDirPath + session.getName() + File.separator + "css");
-		Files.createDirectory(outputDirPath + session.getName() + File.separator + "img");
-		Files.createDirectory(outputDirPath + session.getName() + File.separator + "js");
 		Files.createDirectory(outputDirPath + session.getName() + File.separator + "shots");
+		if (!simpleHtml) {
+			Files.createDirectory(outputDirPath + session.getName() + File.separator + "img");
+			Files.createDirectory(outputDirPath + session.getName() + File.separator + "js");
+		}
 	}
 
 	private void copy(String source, String targetBasePath) throws IOException {
