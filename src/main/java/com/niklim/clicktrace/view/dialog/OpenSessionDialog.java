@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
@@ -40,7 +41,7 @@ public class OpenSessionDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout());
+		dialog.getContentPane().setLayout(new MigLayout("", "[]", "[grow]"));
 		dialog.setTitle("Open session");
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 600);
@@ -50,10 +51,14 @@ public class OpenSessionDialog extends AbstractDialog {
 		textarea = new JTextArea();
 		textarea.setEditable(false);
 
-		dialog.add(new JScrollPane(table), "h 30%, w 100%, wrap");
-		dialog.add(new JScrollPane(textarea), "h 60%, w 100%, wrap");
-		dialog.add(createControlPanel("Open"), "align r");
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setTopComponent(new JScrollPane(table));
+		splitPane.setBottomComponent(new JScrollPane(textarea));
+		splitPane.setResizeWeight(0.4);
 
+		dialog.add(splitPane, "push, grow, wrap");
+		dialog.add(createControlPanel("Open"), "align r");
+		dialog.pack();
 		createListeners();
 	}
 
