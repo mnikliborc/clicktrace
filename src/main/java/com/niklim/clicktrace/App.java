@@ -10,8 +10,8 @@ import com.google.inject.Injector;
 import com.niklim.clicktrace.capture.CaptureModule;
 import com.niklim.clicktrace.capture.mouse.MouseCapture;
 import com.niklim.clicktrace.controller.ControllerModule;
-import com.niklim.clicktrace.controller.GlobalKeyboardListener;
 import com.niklim.clicktrace.controller.MainController;
+import com.niklim.clicktrace.controller.hook.GlobalKeyboardListener;
 
 /**
  * Application bootstrap.

@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.OpenLastSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.StartRecordingOperation;
 
@@ -29,10 +30,14 @@ public class SplashScreenView {
 	@Inject
 	private OpenSessionOperation openSessionOperation;
 
+	@Inject
+	private OpenLastSessionOperation openLastSessionOperation;
+
 	private JPanel panel;
 
 	private JButton newSessionButton;
 	private JButton openSessionButton;
+	private JButton openLastSessionButton;
 	private JButton recordSessionButton;
 
 	public SplashScreenView() {
@@ -43,9 +48,12 @@ public class SplashScreenView {
 		recordSessionButton = Buttons.create("Record session", "", Icons.START_RECORDING,
 				OperationsShortcutEnum.START_RECORDING);
 
+		openLastSessionButton = new JButton("Open last session");
+
 		JPanel buttonsPanel = new JPanel(new MigLayout("align center", ""));
 		buttonsPanel.add(newSessionButton);
 		buttonsPanel.add(openSessionButton);
+		buttonsPanel.add(openLastSessionButton);
 		buttonsPanel.add(recordSessionButton);
 
 		panel.add(buttonsPanel, "grow, wrap");
@@ -64,6 +72,9 @@ public class SplashScreenView {
 		newSessionButton.addMouseListener(newSessionOperation.mouse());
 		openSessionButton.addMouseListener(openSessionOperation.mouse());
 		recordSessionButton.addMouseListener(startRecordingOperation.mouse());
+		openLastSessionButton.addMouseListener(openLastSessionOperation.mouse());
+
+		openLastSessionButton.setEnabled(openLastSessionOperation.lastSessionExists());
 	}
 
 	public JPanel getPanel() {
@@ -86,4 +97,5 @@ public class SplashScreenView {
 			g.drawImage(image, 0, 0, null);
 		}
 	}
+
 }

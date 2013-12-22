@@ -64,12 +64,7 @@ public class MainController {
 	 * Opens the app window.
 	 */
 	public void init() {
-		Session session = sessionManager.findSessionByName(props.getLastSessionName());
-		if (session != null) {
-			showSession(session);
-		} else {
-			mainView.showSplashScreen();
-		}
+		mainView.showSplashScreen();
 		mainView.open();
 	}
 

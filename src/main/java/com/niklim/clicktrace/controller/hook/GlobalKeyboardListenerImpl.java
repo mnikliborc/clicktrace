@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.controller;
+package com.niklim.clicktrace.controller.hook;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Messages;
+import com.niklim.clicktrace.controller.MainController;
+import com.niklim.clicktrace.controller.NavigationController;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotLabelOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;

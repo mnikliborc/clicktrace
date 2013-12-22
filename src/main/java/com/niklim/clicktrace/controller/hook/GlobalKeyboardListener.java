@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.controller;
+package com.niklim.clicktrace.controller.hook;
 
 import org.jnativehook.keyboard.NativeKeyListener;
 

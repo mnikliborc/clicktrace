@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import com.niklim.clicktrace.capture.CaptureModule;
 import com.niklim.clicktrace.capture.mouse.MouseCapture;
 import com.niklim.clicktrace.controller.ControllerModule;
-import com.niklim.clicktrace.controller.GlobalKeyboardListener;
+import com.niklim.clicktrace.controller.hook.GlobalKeyboardListener;
 
 public class DefaultTestGuiceContext {
 	public static Injector load() {
