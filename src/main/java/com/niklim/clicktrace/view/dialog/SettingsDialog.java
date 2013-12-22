@@ -85,7 +85,7 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void createCaptureFrequencyPanel() {
-		captureFrequency = new JSpinner(new SpinnerListModel(Lists.newArrayList(1d, 2d, 3d, 4d)));
+		captureFrequency = new JSpinner(new SpinnerListModel(Lists.newArrayList(0.25f, 0.5f, 1d)));
 		((DefaultEditor) captureFrequency.getEditor()).getTextField().setEditable(false);
 
 		JLabel laabel = new JLabel("Screenshot");
@@ -173,5 +173,6 @@ public class SettingsDialog extends AbstractDialog {
 	@Override
 	protected void okAction() {
 		saveModel();
+		close();
 	}
 }

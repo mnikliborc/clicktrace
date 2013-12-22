@@ -54,7 +54,8 @@ public class FileManager {
 	public String saveImage(BufferedImage image, String sessionName) throws IOException {
 		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image);
 
-		String filename = format.format(new Date()) + "." + compressionResult.format;
+		Date date = new Date();
+		String filename = format.format(date) + "." + compressionResult.format;
 		String filePath = createFilePath(sessionName, filename);
 
 		FileOutputStream fop = new FileOutputStream(new File(filePath));

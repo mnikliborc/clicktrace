@@ -25,17 +25,17 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Messages;
+import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotLabelOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
-import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteActiveSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeselectAllScreenShotsOperation;
-import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.HtmlExportOperation;
 import com.niklim.clicktrace.controller.operation.session.JiraExportOperation;
+import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSearchDialogOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
@@ -54,7 +54,10 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	private static Logger log = LoggerFactory.getLogger(GlobalKeyboardListener.class);
 
 	@Inject
-	private MainController controller;
+	private MainController mainController;
+
+	@Inject
+	private NavigationController navigationController;
 
 	@Inject
 	private MainView mainView;
@@ -149,35 +152,36 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LAST, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.showLastScreenShot();
+				navigationController.showLastScreenShot();
 			}
 		});
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_FIRST, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.showFirstScreenShot();
+				navigationController.showFirstScreenShot();
 			}
 		});
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_NEXT, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.showNextScreenShot();
+				navigationController.showNextScreenShot();
 			}
 		});
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_PREV, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.showPrevScreenShot();
+				navigationController.showPrevScreenShot();
 			}
 		});
 
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DELETE, deleteScreenShotOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_EDIT, editScreenShotOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION, changeScreenShotDescriptionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION,
+				changeScreenShotDescriptionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_SELECT, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.toggleSelectScreenShot();
+				mainController.toggleSelectScreenShot();
 			}
 		});
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_REFRESH, refreshScreenShotOperation.action());
@@ -255,4 +259,3 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		return false;
 	}
 }
-

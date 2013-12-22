@@ -25,9 +25,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.MainController;
+import com.niklim.clicktrace.controller.NavigationController;
+import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.DeleteScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOperation;
-import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
@@ -40,7 +41,10 @@ import com.niklim.clicktrace.view.OperationsShortcutEnum;
 @Singleton
 public class ControlView {
 	@Inject
-	private MainController controller;
+	private MainController mainController;
+
+	@Inject
+	private NavigationController navigationController;
 
 	@Inject
 	private ToolbarView toolbar;
@@ -112,25 +116,25 @@ public class ControlView {
 		firstButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.showFirstScreenShot();
+				navigationController.showFirstScreenShot();
 			}
 		});
 		prevButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.showPrevScreenShot();
+				navigationController.showPrevScreenShot();
 			}
 		});
 		nextButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.showNextScreenShot();
+				navigationController.showNextScreenShot();
 			}
 		});
 		lastButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				controller.showLastScreenShot();
+				navigationController.showLastScreenShot();
 			}
 		});
 
@@ -141,7 +145,7 @@ public class ControlView {
 					ScreenShot shot = (ScreenShot) imagesComboBox.getModel().getSelectedItem();
 					for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
 						if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
-							controller.showScreenShot(i);
+							navigationController.showScreenShot(i);
 							break;
 						}
 					}
@@ -161,7 +165,7 @@ public class ControlView {
 		checkbox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				controller.selectScreenShot(checkbox.isSelected());
+				mainController.selectScreenShot(checkbox.isSelected());
 			}
 		});
 		descriptionButton.setCursor(new Cursor(Cursor.HAND_CURSOR));

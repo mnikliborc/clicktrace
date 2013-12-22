@@ -37,7 +37,11 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 400);
 
 		sessionName = new JTextField();
+		sessionName.setName("name");
+
 		sessionDescription = new JTextArea();
+		sessionDescription.setName("description");
+
 		descriptionHistory = new TextComponentHistory(sessionDescription);
 		descriptionHistory.reset("");
 

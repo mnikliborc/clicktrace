@@ -57,6 +57,9 @@ public class MainController {
 	@Inject
 	private ErrorNotifier errorNotifier;
 
+	@Inject
+	private NavigationController navigationController;
+
 	/**
 	 * Opens the app window.
 	 */
@@ -107,7 +110,7 @@ public class MainController {
 		refreshSession();
 		int index = activeSession.getActiveShotIndex();
 		if (index >= 0) {
-			showScreenShot(index);
+			navigationController.showScreenShot(index);
 		}
 	}
 
@@ -186,13 +189,6 @@ public class MainController {
 
 		session.loadScreenShots();
 		showSession(session);
-	}
-
-	public void showScreenShot(int i) {
-		ScreenShot shot = activeSession.getSession().getShots().get(i);
-		activeSession.setActiveShot(shot);
-		mainView.showScreenShot(shot, activeSession.isShotSelected(shot));
-		mainView.refresh();
 	}
 
 	public void refreshScreenShot() {
@@ -299,36 +295,6 @@ public class MainController {
 		} catch (SessionAlreadyExistsException e) {
 			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
 		}
-	}
-
-	public void showFirstScreenShot() {
-		showScreenShot(0);
-	}
-
-	public void showPrevScreenShot() {
-		int selectedIndex = activeSession.getActiveShotIndex();
-		int nextIndex = Math.max(0, selectedIndex - 1);
-
-		if (selectedIndex != nextIndex) {
-			showScreenShot(nextIndex);
-		}
-	}
-
-	public void showNextScreenShot() {
-		Session session = activeSession.getSession();
-		int selectedIndex = activeSession.getActiveShotIndex();
-		int nextIndex = Math.min(selectedIndex + 1, session.getShots().size() - 1);
-
-		if (selectedIndex != nextIndex) {
-			showScreenShot(nextIndex);
-		}
-	}
-
-	public void showLastScreenShot() {
-		Session session = activeSession.getSession();
-		int nextIndex = session.getShots().size() - 1;
-
-		showScreenShot(nextIndex);
 	}
 
 	public void openSessionOnScreenShot(ScreenShot selectedShot) {

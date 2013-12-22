@@ -18,7 +18,7 @@ public class SearchDialogTest extends AbstractSystemTest {
 
 	@Test
 	public void shouldFindByDescription() throws InterruptedException {
-		editorFixture.menuItemWithPath("Tools", "Search").click();
+		editorFixture.menuItemWithPath("Tools", "Find").click();
 		editorFixture.dialog().textBox().setText("desc");
 
 		editorFixture.dialog().button(JButtonMatcher.withText("Search")).click();
