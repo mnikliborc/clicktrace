@@ -74,9 +74,8 @@ public class CaptureManager {
 	 * Stops screenshots capturing.
 	 */
 	public void stop() {
-		log.debug("Capturing stopped");
-
 		if (time != null) {
+			log.debug("Capturing stopped");
 			time.cancel();
 		}
 		time = null;
@@ -100,8 +99,7 @@ public class CaptureManager {
 	 * save it stores recorded mouse clicks on the previous screenshot.
 	 */
 	public synchronized void capture() {
-		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit()
-				.getScreenSize()));
+		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
 
 		if (detector.detect(image)) {
 			log.debug("Screen change detected");
@@ -110,8 +108,7 @@ public class CaptureManager {
 				saveClicks();
 			}
 			try {
-				lastImageFilename = fileManager.saveImage(image, activeSession.getSession()
-						.getName());
+				lastImageFilename = fileManager.saveImage(image, activeSession.getSession().getName());
 			} catch (IOException e) {
 				errorNotifier.notify(Messages.SCREENSHOT_SAVE_ERROR);
 				log.error(Messages.SCREENSHOT_SAVE_ERROR, e);
@@ -124,8 +121,7 @@ public class CaptureManager {
 			return;
 		}
 
-		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession
-				.getSession());
+		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
 		writer.saveShotClicks(lastImageFilename, clicks);
 		clicks.clear();
 	}

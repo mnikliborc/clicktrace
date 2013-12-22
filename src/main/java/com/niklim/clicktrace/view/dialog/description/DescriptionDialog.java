@@ -8,10 +8,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
@@ -20,47 +17,32 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.view.MainFrameHolder;
 import com.niklim.clicktrace.view.TextComponentHistory;
+import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 @Singleton
-public class DescriptionDialog {
-
-	private JDialog dialog;
+public class DescriptionDialog extends AbstractDialog {
 
 	private JTextArea textarea;
-
 	private TextComponentHistory history;
-
 	private DescriptionDialogCallback callback;
-
-	public DescriptionDialog() {
-	}
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.getContentPane().setLayout(new MigLayout());
 		textarea = new JTextArea();
 		history = new TextComponentHistory(textarea);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490,
-				400);
-		JButton saveButton = new JButton("Save");
-		JButton cancelButton = new JButton("Cancel");
-
-		JPanel buttonPanel = new JPanel(new MigLayout());
-		buttonPanel.add(saveButton, "tag apply");
-		buttonPanel.add(cancelButton, "tag cancel");
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
 
 		dialog.add(new JScrollPane(textarea), "w 100%, h 100%, wrap");
-		dialog.add(buttonPanel, "align r");
+		dialog.add(createControlPanel("Save"), "align r");
 
-		createListeners(saveButton, cancelButton);
+		createListeners();
 	}
 
-	public void createListeners(JButton saveButton, JButton cancelButton) {
+	public void createListeners() {
 		textarea.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -73,42 +55,20 @@ public class DescriptionDialog {
 		});
 
 		textarea.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(history));
-
-		saveButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				save();
-			}
-
-		});
-		saveButton.setToolTipText("[Ctrl+s]");
-
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		});
+		okButton.setToolTipText("[Ctrl+S]");
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
+				okAction();
 			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				save();
-			}
-		}, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK),
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
-	private void save() {
+	@Override
+	protected void okAction() {
 		callback.setText(textarea.getText());
-		dialog.setVisible(false);
+		close();
 	}
 
 	public void open(DescriptionDialogCallback callback) {

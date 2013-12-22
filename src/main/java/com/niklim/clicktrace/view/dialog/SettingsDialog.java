@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
@@ -59,7 +58,7 @@ public class SettingsDialog extends AbstractDialog {
 		createImageEditorPathPanel();
 		createJiraPanel();
 
-		createControlPanel();
+		dialog.add(createControlPanel("Save"), "align r, span 3");
 	}
 
 	private void createCaptureMouseClicksPanel() {
@@ -67,30 +66,6 @@ public class SettingsDialog extends AbstractDialog {
 
 		dialog.add(new JLabel("Record mouse clicks"));
 		dialog.add(recordMouseClicks, "wrap");
-	}
-
-	private void createControlPanel() {
-		JButton saveButton = new JButton("Save");
-		JButton cancelButton = new JButton("Cancel");
-		saveButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveModel();
-				close();
-			}
-		});
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		});
-		cancelButton.setToolTipText("[Esc]");
-
-		JPanel controlPanel = new JPanel(new MigLayout("align right"));
-		controlPanel.add(saveButton, "w 80, tag apply");
-		controlPanel.add(cancelButton, "w 80, tag cancel");
-		dialog.add(controlPanel, "span 3, grow, h 50");
 	}
 
 	private void createCaptureDimensionPanel() {
@@ -193,5 +168,10 @@ public class SettingsDialog extends AbstractDialog {
 		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText(), jiraRestPath));
 
 		props.save();
+	}
+
+	@Override
+	protected void okAction() {
+		saveModel();
 	}
 }

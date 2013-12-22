@@ -62,7 +62,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to Clicktrace on JIRA Plugin", OperationsShortcutEnum.JIRA_EXPORT,
+		return MenuBar.createMenuItem("Export to JIRA Clicktrace Plugin", OperationsShortcutEnum.JIRA_EXPORT,
 				jiraExportOperation.action());
 	}
 
@@ -75,7 +75,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsSearch() {
-		return MenuBar.createMenuItem("Search", Icons.SEARCH, OperationsShortcutEnum.FIND,
+		return MenuBar.createMenuItem("Find", Icons.SEARCH, OperationsShortcutEnum.FIND,
 				openSearchDialogOperation.action());
 	}
 

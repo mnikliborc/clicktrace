@@ -12,7 +12,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
@@ -41,7 +40,7 @@ public class HtmlExportDialog extends AbstractDialog {
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 150);
 
 		createConfigPanel();
-		createControlPanel();
+		dialog.add(createControlPanel("Export"));
 	}
 
 	private void createConfigPanel() {
@@ -50,7 +49,7 @@ public class HtmlExportDialog extends AbstractDialog {
 		outputDirFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		simpleHtml = new JCheckBox();
 
-		JButton setPathButton = new JButton("select");
+		JButton setPathButton = new JButton("Select");
 		setPathButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -71,36 +70,17 @@ public class HtmlExportDialog extends AbstractDialog {
 		dialog.add(simpleHtml, "wrap");
 	}
 
-	private void createControlPanel() {
-		JButton exportButton = new JButton("Export");
-		JButton cancelButton = new JButton("Cancel");
-		exportButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				try {
-					htmlExportService.export(activeSession.getSession(), outputDirPath.getText(),
-							simpleHtml.isSelected());
-					JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_SUCCESS);
-					dialog.setVisible(false);
-				} catch (HtmlExportException e) {
-					JOptionPane.showMessageDialog(dialog, e.getMessage());
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_IO_ERROR);
-				}
-			}
-		});
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
-			}
-		});
-		cancelButton.setToolTipText("[Esc]");
-
-		JPanel controlPanel = new JPanel(new MigLayout("align right"));
-		controlPanel.add(exportButton, "w 80, tag apply");
-		controlPanel.add(cancelButton, "w 80, tag cancel");
-		dialog.add(controlPanel, "span 3, grow, h 50");
+	@Override
+	public void okAction() {
+		try {
+			htmlExportService.export(activeSession.getSession(), outputDirPath.getText(), simpleHtml.isSelected());
+			JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_SUCCESS);
+			close();
+		} catch (HtmlExportException e) {
+			JOptionPane.showMessageDialog(dialog, e.getMessage());
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_IO_ERROR);
+		}
 	}
 
 	public void open() {

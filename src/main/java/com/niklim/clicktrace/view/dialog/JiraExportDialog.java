@@ -3,18 +3,14 @@ package com.niklim.clicktrace.view.dialog;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -102,40 +98,20 @@ public class JiraExportDialog extends AbstractDialog {
 		dialog.add(new JLabel("Issue key"));
 		dialog.add(issueKey, "w 400, wrap");
 
-		JButton cancelButton = new JButton("Cancel");
-		JButton exportButton = new JButton("Export");
-
-		JPanel controlPanel = new JPanel(new MigLayout("align right"));
-		controlPanel.add(exportButton, "w 80, tag apply");
-		controlPanel.add(cancelButton, "w 80, tag cancel");
-		dialog.add(controlPanel, "span 2, grow, h 50");
-
-		createActionListeners(cancelButton, exportButton);
+		dialog.add(createControlPanel("Export"), "span 2, h 50, align r");
 	}
 
-	private void createActionListeners(JButton cancelButton, JButton exportButton) {
-		exportButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (StringUtils.isEmpty(issueKey.getText())) {
-					JOptionPane.showMessageDialog(dialog, Messages.EXPORT_ISSUE_KEY_EMPTY);
-					issueKey.requestFocus();
-					return;
-				}
+	@Override
+	public void okAction() {
+		if (StringUtils.isEmpty(issueKey.getText())) {
+			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_ISSUE_KEY_EMPTY);
+			issueKey.requestFocus();
+			return;
+		}
 
-				if (confirmSessionExport()) {
-					exportSession();
-				}
-			}
-
-		});
-
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		});
+		if (confirmSessionExport()) {
+			exportSession();
+		}
 	}
 
 	private boolean confirmSessionExport() {

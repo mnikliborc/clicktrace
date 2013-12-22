@@ -2,16 +2,12 @@ package com.niklim.clicktrace.view.dialog;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -29,7 +25,6 @@ import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.SessionMetadata;
 import com.niklim.clicktrace.service.SessionManager;
 
-@SuppressWarnings("serial")
 @Singleton
 public class OpenSessionDialog extends AbstractDialog {
 
@@ -56,21 +51,14 @@ public class OpenSessionDialog extends AbstractDialog {
 		textarea = new JTextArea();
 		textarea.setEditable(false);
 
-		JButton openButton = new JButton("Open");
-		JButton cancelButton = new JButton("Cancel");
-
-		JPanel buttonPanel = new JPanel(new MigLayout());
-		buttonPanel.add(cancelButton, "tag cancel");
-		buttonPanel.add(openButton, "tag apply");
-
 		dialog.add(new JScrollPane(table), "h 300, w 580, wrap");
 		dialog.add(new JScrollPane(textarea), "h 250, grow, wrap");
-		dialog.add(buttonPanel, "align r");
+		dialog.add(createControlPanel("Open"), "align r");
 
-		createListeners(openButton, cancelButton);
+		createListeners();
 	}
 
-	private void createListeners(JButton openButton, JButton cancelButton) {
+	private void createListeners() {
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
@@ -94,20 +82,16 @@ public class OpenSessionDialog extends AbstractDialog {
 				refreshDescription();
 			}
 		});
+	}
 
-		openButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close(true);
-			}
-		});
+	@Override
+	protected void okAction() {
+		close(true);
+	}
 
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close(false);
-			}
-		});
+	@Override
+	protected void cancelAction() {
+		close(false);
 	}
 
 	private void refreshDescription() {
@@ -131,6 +115,7 @@ public class OpenSessionDialog extends AbstractDialog {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	private void loadSessions() {
 		sessions = sessionManager.loadAll();
 		DefaultTableModel dataModel = new DefaultTableModel(new String[] { "Name", "Screenshots", "Modified" },

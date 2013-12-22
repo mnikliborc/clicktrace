@@ -2,15 +2,11 @@ package com.niklim.clicktrace.view.dialog;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -45,22 +41,15 @@ public class NewSessionDialog extends AbstractDialog {
 		descriptionHistory = new TextComponentHistory(sessionDescription);
 		descriptionHistory.reset("");
 
-		JButton createButton = new JButton("Create");
-		JButton cancelButton = new JButton("Cancel");
-
-		JPanel buttonPanel = new JPanel(new MigLayout());
-		buttonPanel.add(cancelButton, "tag cancel");
-		buttonPanel.add(createButton, "tag apply");
-
 		dialog.add(new JLabel("Name"), "wrap");
 		dialog.add(sessionName, "wrap, w 580");
 
 		dialog.add(new JLabel("Description"), "span 2, wrap");
 		dialog.add(new JScrollPane(sessionDescription), "span 2, w 580, h 300, wrap");
 
-		dialog.add(buttonPanel, "align r, span 2");
+		dialog.add(createControlPanel("Create"), "align r, span 2");
 
-		createListeners(createButton, cancelButton);
+		createListeners();
 	}
 
 	public void open(NewSessionCallback callback) {
@@ -71,23 +60,9 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.setVisible(true);
 	}
 
-	private void createListeners(JButton createButton, JButton cancelButton) {
+	private void createListeners() {
 		sessionDescription.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(descriptionHistory));
 
-		createButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				tryCreateSession();
-			}
-
-		});
-
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				close();
-			}
-		});
 		sessionName.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -104,11 +79,17 @@ public class NewSessionDialog extends AbstractDialog {
 			JOptionPane.showMessageDialog(dialog, Messages.NEW_SESSION_NO_NAME);
 		} else {
 			callback.create(name, sessionDescription.getText());
+			close();
 		}
 	}
 
 	public static interface NewSessionCallback {
 		void create(String name, String description);
+	}
+
+	@Override
+	protected void okAction() {
+		tryCreateSession();
 	}
 
 }
