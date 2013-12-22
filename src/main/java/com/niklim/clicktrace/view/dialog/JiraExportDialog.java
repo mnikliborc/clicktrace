@@ -8,7 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -26,7 +25,6 @@ import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.service.JiraExportService;
 import com.niklim.clicktrace.service.SessionCompressor;
 import com.niklim.clicktrace.service.exception.JiraExportException;
-import com.niklim.clicktrace.view.MainFrameHolder;
 
 public class JiraExportDialog extends AbstractDialog {
 
@@ -77,9 +75,9 @@ public class JiraExportDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog = new JDialog(MainFrameHolder.get(), true);
 		dialog.setTitle("Export to Clicktrace on JIRA Plugin");
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
+		dialog.setResizable(false);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 480, 220);

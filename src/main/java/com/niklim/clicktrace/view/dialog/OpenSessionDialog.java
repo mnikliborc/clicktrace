@@ -42,7 +42,6 @@ public class OpenSessionDialog extends AbstractDialog {
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("Open session");
-		dialog.setResizable(false);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 600);
 
@@ -51,8 +50,8 @@ public class OpenSessionDialog extends AbstractDialog {
 		textarea = new JTextArea();
 		textarea.setEditable(false);
 
-		dialog.add(new JScrollPane(table), "h 300, w 580, wrap");
-		dialog.add(new JScrollPane(textarea), "h 250, grow, wrap");
+		dialog.add(new JScrollPane(table), "h 30%, w 100%, wrap");
+		dialog.add(new JScrollPane(textarea), "h 60%, w 100%, wrap");
 		dialog.add(createControlPanel("Open"), "align r");
 
 		createListeners();

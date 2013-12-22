@@ -35,12 +35,13 @@ public class HtmlExportDialog extends AbstractDialog {
 
 	public HtmlExportDialog() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
+		dialog.setResizable(false);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 150);
 
 		createConfigPanel();
-		dialog.add(createControlPanel("Export"));
+		dialog.add(createControlPanel("Export"), "align r, span 3");
 	}
 
 	private void createConfigPanel() {

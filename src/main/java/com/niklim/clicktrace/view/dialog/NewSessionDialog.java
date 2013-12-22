@@ -42,10 +42,10 @@ public class NewSessionDialog extends AbstractDialog {
 		descriptionHistory.reset("");
 
 		dialog.add(new JLabel("Name"), "wrap");
-		dialog.add(sessionName, "wrap, w 580");
+		dialog.add(sessionName, "wrap, w 100%");
 
 		dialog.add(new JLabel("Description"), "span 2, wrap");
-		dialog.add(new JScrollPane(sessionDescription), "span 2, w 580, h 300, wrap");
+		dialog.add(new JScrollPane(sessionDescription), "span 2, w 100%, h 100%, wrap");
 
 		dialog.add(createControlPanel("Create"), "align r, span 2");
 
