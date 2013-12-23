@@ -18,8 +18,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.service.JiraExportService;
@@ -102,7 +102,7 @@ public class JiraExportDialog extends AbstractDialog {
 	@Override
 	public void okAction() {
 		if (StringUtils.isEmpty(issueKey.getText())) {
-			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_ISSUE_KEY_EMPTY);
+			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_ISSUE_KEY_EMPTY);
 			issueKey.requestFocus();
 			return;
 		}
@@ -145,7 +145,7 @@ public class JiraExportDialog extends AbstractDialog {
 			jiraExportService.exportSession(username.getText(), password.getText(), issueKey.getText(), activeSession
 					.getSession().getName(), stream, jiraInstanceUrl.getText());
 			hideWaitingCursor();
-			JOptionPane.showMessageDialog(dialog, Messages.EXPORT_SUCCESS);
+			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_SUCCESS);
 			close();
 		} catch (JiraExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());

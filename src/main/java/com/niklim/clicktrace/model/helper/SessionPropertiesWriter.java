@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 
+import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.service.SessionManager;
 
 /**
@@ -49,7 +51,8 @@ public class SessionPropertiesWriter extends SessionPropertiesIO {
 		try {
 			props.save();
 		} catch (ConfigurationException e) {
-			log.error("Unable to save session properties", e);
+			log.error(ErrorMsgs.SESSION_SAVE_PROPS_ERROR, e);
+			ErrorNotifier.notify(ErrorMsgs.SESSION_SAVE_PROPS_ERROR);
 		}
 	}
 }

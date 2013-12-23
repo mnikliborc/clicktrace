@@ -10,9 +10,9 @@ import java.util.Scanner;
 import com.google.common.base.Strings;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Files;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.service.exception.HtmlExportException;
 
 @Singleton
@@ -25,7 +25,7 @@ public class HtmlExportService {
 		}
 
 		if (!Files.exists(outputDirPath)) {
-			throw new HtmlExportException(Messages.HTML_EXPORT_FOLDER_NOT_EXISTS);
+			throw new HtmlExportException(InfoMsgs.HTML_EXPORT_FOLDER_NOT_EXISTS);
 		}
 		if (Files.exists(outputDirPath + session.getName())) {
 			throw new HtmlExportException("Unable to create '" + session.getName()

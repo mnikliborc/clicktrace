@@ -28,7 +28,7 @@ public class FileCompressor {
 	private static final Logger log = LoggerFactory.getLogger(FileCompressor.class);
 	private static final int COMPRESSION_TIMEOUT = 500;
 	ExecutorService executor;
-	
+
 	String[] imageFormats;
 
 	public FileCompressor(String... imageFormats) {

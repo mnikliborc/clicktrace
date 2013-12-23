@@ -17,11 +17,12 @@ public class NewSessionOperation extends AbstractOperation {
 	public void perform() {
 		newSessionDialog.open(new NewSessionCallback() {
 			@Override
-			public void create(String name, String description) {
+			public boolean create(String name, String description) {
 				boolean created = controller.newSession(name, description);
 				if (created) {
 					newSessionDialog.close();
 				}
+				return created;
 			}
 		});
 	}

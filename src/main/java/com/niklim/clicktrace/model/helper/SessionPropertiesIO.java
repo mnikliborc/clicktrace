@@ -7,7 +7,9 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.service.FileManager;
 
 /**
@@ -21,10 +23,11 @@ public abstract class SessionPropertiesIO {
 	public SessionPropertiesIO(Session session) {
 		this.session = session;
 		try {
-			props = new PropertiesConfiguration(new File(FileManager.SESSIONS_DIR
-					+ session.getName() + File.separator + FileManager.SESSION_PROPS_FILENAME));
+			props = new PropertiesConfiguration(new File(FileManager.SESSIONS_DIR + session.getName() + File.separator
+					+ FileManager.SESSION_PROPS_FILENAME));
 		} catch (ConfigurationException e) {
-			log.error("Unable to load session properties configuration", e);
+			log.error(ErrorMsgs.SESSION_DELETE_PROPS_ERROR, e);
+			ErrorNotifier.notify(ErrorMsgs.SESSION_DELETE_PROPS_ERROR);
 		}
 	}
 }

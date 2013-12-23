@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.Messages;
+import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.view.TextComponentHistory;
 
 @Singleton
@@ -80,15 +80,16 @@ public class NewSessionDialog extends AbstractDialog {
 	private void tryCreateSession() {
 		String name = sessionName.getText();
 		if (StringUtils.isEmpty(name.trim())) {
-			JOptionPane.showMessageDialog(dialog, Messages.NEW_SESSION_NO_NAME);
+			JOptionPane.showMessageDialog(dialog, InfoMsgs.SESSION_NO_NAME);
 		} else {
-			callback.create(name, sessionDescription.getText());
-			close();
+			if (callback.create(name, sessionDescription.getText())) {
+				close();
+			}
 		}
 	}
 
 	public static interface NewSessionCallback {
-		void create(String name, String description);
+		boolean create(String name, String description);
 	}
 
 	@Override

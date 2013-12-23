@@ -15,7 +15,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
+import com.niklim.clicktrace.msg.ErrorMsgs;
 
 /**
  * Manages creating folders, properties files and saving/deleting screenshot
@@ -115,6 +117,7 @@ public class FileManager {
 			f.createNewFile();
 		} catch (IOException e) {
 			log.error("Unable to create session properties file", e);
+			ErrorNotifier.notify(ErrorMsgs.SESSION_SAVE_PROPS_ERROR);
 		}
 	}
 

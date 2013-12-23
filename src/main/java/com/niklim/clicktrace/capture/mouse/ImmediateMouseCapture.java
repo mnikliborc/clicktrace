@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.ErrorNotifier;
+import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.service.FileManager;
 
 /**
@@ -49,6 +51,7 @@ public class ImmediateMouseCapture extends MouseCapture {
 			fileManager.saveImage(image, activeSession.getSession().getName());
 		} catch (IOException ex) {
 			log.error("Unable to save image", ex);
+			ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_SAVE_ERROR);
 		}
 	}
 

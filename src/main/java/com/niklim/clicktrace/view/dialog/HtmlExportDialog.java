@@ -17,8 +17,9 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
+import com.niklim.clicktrace.msg.ErrorMsgs;
+import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.service.HtmlExportService;
 import com.niklim.clicktrace.service.exception.HtmlExportException;
 
@@ -75,12 +76,12 @@ public class HtmlExportDialog extends AbstractDialog {
 	public void okAction() {
 		try {
 			htmlExportService.export(activeSession.getSession(), outputDirPath.getText(), simpleHtml.isSelected());
-			JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_SUCCESS);
+			JOptionPane.showMessageDialog(dialog, InfoMsgs.HTML_EXPORT_SUCCESS);
 			close();
 		} catch (HtmlExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(dialog, Messages.HTML_EXPORT_IO_ERROR);
+			JOptionPane.showMessageDialog(dialog, ErrorMsgs.HTML_EXPORT_IO_ERROR);
 		}
 	}
 

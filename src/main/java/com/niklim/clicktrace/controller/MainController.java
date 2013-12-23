@@ -13,12 +13,13 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.msg.ErrorMsgs;
+import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
@@ -55,9 +56,6 @@ public class MainController {
 	private NewSessionOperation newSessionOperation;
 
 	@Inject
-	private ErrorNotifier errorNotifier;
-
-	@Inject
 	private NavigationController navigationController;
 
 	/**
@@ -72,12 +70,13 @@ public class MainController {
 		if (!activeSession.isSessionLoaded()) {
 			newSessionOperation.createSession(new NewSessionCallback() {
 				@Override
-				public void create(String name, String description) {
+				public boolean create(String name, String description) {
 					boolean created = newSession(name, description);
 					if (created) {
 						newSessionOperation.closeDialog();
 						startRecording(true);
 					}
+					return created;
 				}
 			});
 			return;
@@ -118,9 +117,9 @@ public class MainController {
 			showSession(session);
 			return true;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
+			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
-			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
+			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_ALREADY_EXIST);
 		}
 		return false;
 	}
@@ -204,7 +203,7 @@ public class MainController {
 		}
 
 		if (Strings.isNullOrEmpty(props.getImageEditorPath())) {
-			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.NO_EDITOR_PATH_SET);
+			JOptionPane.showMessageDialog(mainView.getFrame(), InfoMsgs.CONFIG_NO_EDITOR_PATH);
 			settingsDialog.open();
 		} else {
 			try {
@@ -212,8 +211,8 @@ public class MainController {
 						+ activeShot.getSession().getName() + File.separator + activeShot.getFilename());
 				pb.start();
 			} catch (IOException e) {
-				log.error(Messages.EDITOR_APP_ERROR, e);
-				errorNotifier.notify(Messages.EDITOR_APP_ERROR);
+				log.error(InfoMsgs.EDITOR_APP_ERROR, e);
+				ErrorNotifier.interrupt(InfoMsgs.EDITOR_APP_ERROR);
 			}
 		}
 	}
@@ -286,9 +285,9 @@ public class MainController {
 		try {
 			sessionManager.changeSessionName(session, name);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_WRONG_FOLDER);
+			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
-			JOptionPane.showMessageDialog(mainView.getFrame(), Messages.SESSION_NAME_ALREADY_EXIST);
+			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_ALREADY_EXIST);
 		}
 	}
 

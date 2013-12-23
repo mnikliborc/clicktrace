@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
@@ -48,9 +48,6 @@ public class CaptureManager {
 
 	@Inject
 	private SessionManager sessionManager;
-
-	@Inject
-	private ErrorNotifier errorNotifier;
 
 	private List<Click> clicks = new LinkedList<Click>();
 	private String lastImageFilename;
@@ -110,8 +107,8 @@ public class CaptureManager {
 			try {
 				lastImageFilename = fileManager.saveImage(image, activeSession.getSession().getName());
 			} catch (IOException e) {
-				errorNotifier.notify(Messages.SCREENSHOT_SAVE_ERROR);
-				log.error(Messages.SCREENSHOT_SAVE_ERROR, e);
+				log.error(ErrorMsgs.SCREENSHOT_SAVE_ERROR, e);
+				ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_SAVE_ERROR);
 			}
 		}
 	}

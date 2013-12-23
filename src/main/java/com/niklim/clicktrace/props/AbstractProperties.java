@@ -9,6 +9,9 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.niklim.clicktrace.ErrorNotifier;
+import com.niklim.clicktrace.msg.ErrorMsgs;
+
 /**
  * Base class for handling general properties.
  */
@@ -21,7 +24,8 @@ public abstract class AbstractProperties {
 		try {
 			props = new PropertiesConfiguration(getPropertiesFilePath());
 		} catch (ConfigurationException e) {
-			log.error("Unable to load properties file", e);
+			log.error(ErrorMsgs.PROPS_LOAD_ERROR, e);
+			ErrorNotifier.notify(ErrorMsgs.PROPS_LOAD_ERROR);
 		}
 		initDefaults();
 	}
@@ -41,7 +45,8 @@ public abstract class AbstractProperties {
 		try {
 			props.save();
 		} catch (ConfigurationException e) {
-			log.error("Unable to save properties file", e);
+			log.error(ErrorMsgs.PROPS_SAVE_ERROR, e);
+			ErrorNotifier.notify(ErrorMsgs.PROPS_SAVE_ERROR);
 		}
 	}
 }

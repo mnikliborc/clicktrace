@@ -12,8 +12,9 @@ import com.atlassian.jira.rest.client.RestClientException;
 import com.atlassian.jira.rest.client.internal.async.AbstractAsynchronousRestClient;
 import com.atlassian.jira.rest.client.internal.json.JsonObjectParser;
 import com.atlassian.util.concurrent.Promise;
-import com.niklim.clicktrace.Messages;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
+import com.niklim.clicktrace.msg.ErrorMsgs;
+import com.niklim.clicktrace.msg.InfoMsgs;
 
 public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 	private static final String UNEXPECTED_ERROR_MSG = "Unexpected error while checking session in JIRA";
@@ -54,14 +55,14 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 
 	private Result handleRestClientException(RestClientException e) {
 		if (e.getStatusCode().or(0) == 401) {
-			return new Result(Result.Status.ERROR, Messages.EXPORT_AUTHORIZATION_ERROR);
+			return new Result(Result.Status.ERROR, InfoMsgs.JIRA_EXPORT_AUTHENTICATION_FAILURE);
 		} else if (e.getStatusCode().or(0) == 404) {
-			return new Result(Result.Status.ERROR, Messages.EXPORT_WRONG_URL_ERROR);
+			return new Result(Result.Status.ERROR, InfoMsgs.JIRA_EXPORT_WRONG_URL);
 		} else if (e.getStatusCode().or(0) == 403) {
-			return new Result(Result.Status.ERROR, Messages.EXPORT_CAPTCHA_ERROR);
+			return new Result(Result.Status.ERROR, InfoMsgs.JIRA_EXPORT_CAPTCHA_NEEDED);
 		} else {
 			log.error(UNEXPECTED_ERROR_MSG, e);
-			return new Result(Result.Status.ERROR, Messages.EXPORT_UNKNOWN_SERVER_ERROR);
+			return new Result(Result.Status.ERROR, ErrorMsgs.JIRA_EXPORT_UNKNOWN_SERVER_ERROR);
 		}
 	}
 
