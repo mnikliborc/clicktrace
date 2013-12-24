@@ -16,13 +16,17 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Mode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.ScreenShot;
+import com.niklim.clicktrace.props.UserProperties;
+import com.niklim.clicktrace.props.UserProperties.ViewScaling;
 import com.niklim.clicktrace.view.MainFrameHolder;
 
 /**
@@ -31,6 +35,9 @@ import com.niklim.clicktrace.view.MainFrameHolder;
 @Singleton
 public class ScreenShotView {
 	private static Logger log = LoggerFactory.getLogger(ScreenShotView.class);
+
+	@Inject
+	private UserProperties props;
 
 	private JPanel panel;
 	private BufferedImage mouseMarkLeft;
@@ -53,10 +60,11 @@ public class ScreenShotView {
 	}
 
 	public void show(ScreenShot shot) {
-		int thumbWidth = (int) (MainFrameHolder.get().getSize().getWidth() * 0.97);
+		int frameWidth = (int) (MainFrameHolder.get().getSize().getWidth());
+		int frameHeight = (int) (MainFrameHolder.get().getSize().getHeight());
 		try {
 			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
-			BufferedImage imageFinal = scaleImage(imageWithClicks, thumbWidth);
+			BufferedImage imageFinal = scaleImage(imageWithClicks, frameWidth, frameHeight);
 			panel.removeAll();
 			panel.add(new ThumbPanel(imageFinal, imageFinal.getWidth(), imageFinal.getHeight()));
 		} catch (IOException e) {
@@ -85,15 +93,31 @@ public class ScreenShotView {
 			g.drawImage(mouseMarkLeft, click.getX() + 10, click.getY() - 25, null);
 		}
 
-		g.drawChars(String.valueOf(clickIndex).toCharArray(), 0, 1, click.getX() - 15,
-				click.getY() - 15);
+		g.drawChars(String.valueOf(clickIndex).toCharArray(), 0, 1, click.getX() - 15, click.getY() - 15);
 	}
 
-	private BufferedImage scaleImage(BufferedImage image, int thumbWidth) throws IOException {
-		if (image.getWidth() <= thumbWidth) {
+	private BufferedImage scaleImage(BufferedImage image, int frameWidth, int frameHeight) throws IOException {
+		int targetSize = 0;
+		Mode mode;
+		if (props.getScreenshotViewScaling() == ViewScaling.HORIZONTAL) {
+			targetSize = (int) (frameWidth * 0.97);
+			mode = Mode.FIT_TO_WIDTH;
+		} else {
+			System.out.println(frameHeight);
+			targetSize = (int) (frameHeight - 160);
+			System.out.println(targetSize);
+			mode = Mode.FIT_TO_HEIGHT;
+		}
+
+		if (mode == Mode.FIT_TO_WIDTH && image.getWidth() <= targetSize) {
+			return image;
+		} else if (mode == Mode.FIT_TO_HEIGHT && image.getHeight() <= targetSize) {
 			return image;
 		} else {
-			BufferedImage scaledImage = Scalr.resize(image, thumbWidth);
+			// BufferedImage scaledImage = Scalr.resize(image, targetWidth);
+			BufferedImage scaledImage = Scalr.resize(image, mode, targetSize);
+			// BufferedImage scaledImage = Scalr.resize(image, targetWidth,
+			// targetHeight);
 			return scaledImage;
 		}
 	}

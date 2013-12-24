@@ -1,9 +1,6 @@
 package com.niklim.clicktrace.props;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 import com.google.common.base.Strings;
 import com.google.inject.Singleton;
@@ -15,26 +12,25 @@ public class UserProperties extends AbstractProperties {
 	private static final String JIRA_USERNAME = "jira.username";
 	private static final String JIRA_INSTANCE_URL = "jira.instanceUrl";
 	private static final String JIRA_REST_PATH = "jira.restPath";
-	// private static final String CAPTURE_DIM_RIGHT_BOTTOM_Y =
-	// "capture.dim.rightBottomY";
-	// private static final String CAPTURE_DIM_RIGHT_BOTTOM_X =
-	// "capture.dim.rightBottomX";
-	// private static final String CAPTURE_DIM_LEFT_TOP_Y =
-	// "capture.dim.leftTopY";
-	// private static final String CAPTURE_DIM_LEFT_TOP_X =
-	// "capture.dim.leftTopX";
-	// private static final String SESSIONS_DIR = "sessions.dir";
 	private static final String CAPTURE_FREQUENCY = "capture.frequency";
 	private static final String IMAGE_EDITOR_PATH = "imageEditor.path";
 	private static final String RECORD_CLICKS = "capture.recordClicks";
 	private static final String LAST_SESSION = "lastSession";
+	private static final String SCREENSHOT_VIEW_SCALING = "screenshot.view.scaling";
 
-	private static final Map<String, Object> defaults;
 	static {
-		defaults = new HashMap<String, Object>();
 		defaults.put(CAPTURE_FREQUENCY, 1.0);
 		defaults.put(RECORD_CLICKS, true);
 		defaults.put(JIRA_REST_PATH, "/rest/clicktrace/1.0");
+		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.HORIZONTAL.name());
+	}
+
+	public UserProperties() {
+		super();
+	}
+
+	public static enum ViewScaling {
+		HORIZONTAL, VERTICAL;
 	}
 
 	protected File getPropertiesFilePath() {
@@ -50,43 +46,12 @@ public class UserProperties extends AbstractProperties {
 	}
 
 	public double getCaptureFrequency() {
-		try {
-			return props.getDouble(CAPTURE_FREQUENCY);
-		} catch (NoSuchElementException e) {
-			return 1.0;
-		}
+		return props.getDouble(CAPTURE_FREQUENCY);
 	}
 
 	public void setCaptureFrequency(double captureFrequency) {
 		props.setProperty(CAPTURE_FREQUENCY, captureFrequency);
 	}
-
-	// public String getSessionsDir() {
-	// return prop.getString(SESSIONS_DIR);
-	// }
-	//
-	// public void setSessionsDir(String sessionsDir) {
-	// prop.setProperty(SESSIONS_DIR, sessionsDir);
-	// }
-
-	// public Rectangle getCaptureRectangle() {
-	// int leftTopX = prop.getInt(CAPTURE_DIM_LEFT_TOP_X);
-	// int leftTopY = prop.getInt(CAPTURE_DIM_LEFT_TOP_Y);
-	// int rightBottomX = prop.getInt(CAPTURE_DIM_RIGHT_BOTTOM_X);
-	// int rightBottomY = prop.getInt(CAPTURE_DIM_RIGHT_BOTTOM_Y);
-	//
-	// return new Rectangle(leftTopX, leftTopY, rightBottomX - leftTopX,
-	// rightBottomY - leftTopY);
-	// }
-	//
-	// public void setCaptureRectangle(Rectangle rect) {
-	// prop.setProperty(CAPTURE_DIM_LEFT_TOP_X, String.valueOf(rect.getMinX()));
-	// prop.setProperty(CAPTURE_DIM_LEFT_TOP_Y, String.valueOf(rect.getMinY()));
-	// prop.setProperty(CAPTURE_DIM_RIGHT_BOTTOM_X,
-	// String.valueOf(rect.getMaxX()));
-	// prop.setProperty(CAPTURE_DIM_RIGHT_BOTTOM_Y,
-	// String.valueOf(rect.getMaxY()));
-	// }
 
 	public JiraConfig getJiraConfig() {
 		return new JiraConfig(props.getString(JIRA_INSTANCE_URL), props.getString(JIRA_USERNAME),
@@ -122,11 +87,7 @@ public class UserProperties extends AbstractProperties {
 	}
 
 	public boolean getRecordMouseClicks() {
-		try {
-			return props.getBoolean(RECORD_CLICKS);
-		} catch (NoSuchElementException e) {
-			return true;
-		}
+		return props.getBoolean(RECORD_CLICKS);
 	}
 
 	public void setRecordMouseClicks(boolean record) {
@@ -139,5 +100,13 @@ public class UserProperties extends AbstractProperties {
 
 	public void setLastSessionName(String sessionName) {
 		props.setProperty(LAST_SESSION, sessionName);
+	}
+
+	public ViewScaling getScreenshotViewScaling() {
+		return ViewScaling.valueOf(props.getString(SCREENSHOT_VIEW_SCALING));
+	}
+
+	public void setScreenshotViewScaling(ViewScaling scaling) {
+		props.setProperty(SCREENSHOT_VIEW_SCALING, scaling.name());
 	}
 }

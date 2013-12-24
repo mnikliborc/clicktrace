@@ -91,7 +91,7 @@ public class ControlView {
 				OperationsShortcutEnum.SHOT_REFRESH);
 
 		checkbox = new JCheckBox();
-		checkbox.setToolTipText("Select " + OperationsShortcutEnum.SHOT_SELECT.text);
+		checkbox.setToolTipText("Select screenshot " + OperationsShortcutEnum.SHOT_SELECT.text);
 
 		descriptionButton = Buttons.create("description", "Edit screenshot description ", Icons.SCREENSHOT_DESCRIPTION,
 				OperationsShortcutEnum.SHOT_DESCRIPTION);

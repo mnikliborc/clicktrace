@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.control.ControlView;
@@ -66,6 +67,7 @@ public class MainView {
 	public void init() {
 		frame = new JFrame(APP_NAME);
 		MainFrameHolder.set(frame);
+		frame.setIconImage(Icons.createIconImage(Icons.APP, ""));
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.8), (int) (dim.getHeight() * 0.8));

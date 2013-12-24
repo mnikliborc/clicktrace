@@ -9,6 +9,8 @@ import javax.swing.ImageIcon;
  * Constants and util methods for icon images.
  */
 public class Icons {
+	public static final String APP = "app.png";
+
 	public static final String SESSION_NEW = "icons/1383438310_folder_add.png";
 	public static final String SESSION_OPEN = "icons/1383438320_folder.png";
 	public static final String SESSION_DELETE = "icons/1383438389_folder_delete.png";

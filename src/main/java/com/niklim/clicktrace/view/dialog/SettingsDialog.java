@@ -7,10 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
@@ -24,6 +26,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
+import com.niklim.clicktrace.props.UserProperties.ViewScaling;
 
 @Singleton
 public class SettingsDialog extends AbstractDialog {
@@ -41,6 +44,10 @@ public class SettingsDialog extends AbstractDialog {
 
 	JCheckBox recordMouseClicks;
 
+	private JRadioButton horizontalScreenshotViewScalingRadio;
+	private JRadioButton verticalScreenshotViewScalingRadio;
+	private ButtonGroup screenshotViewScaling;
+
 	@Inject
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
@@ -48,17 +55,30 @@ public class SettingsDialog extends AbstractDialog {
 		dialog.setTitle("Settings");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 280);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 310);
 
 		imageEditorFileChooser = new JFileChooser();
 
 		createCaptureFrequencyPanel();
 		createCaptureMouseClicksPanel();
-		// createCaptureDimensionPanel();
 		createImageEditorPathPanel();
+		createScreenshotViewScalingPanel();
 		createJiraPanel();
 
 		dialog.add(createControlPanel("Save"), "align r, span 3");
+	}
+
+	private void createScreenshotViewScalingPanel() {
+		horizontalScreenshotViewScalingRadio = new JRadioButton("display all width");
+		verticalScreenshotViewScalingRadio = new JRadioButton("display all height");
+
+		dialog.add(new JLabel("Image scaling"));
+		dialog.add(horizontalScreenshotViewScalingRadio);
+		dialog.add(verticalScreenshotViewScalingRadio, "wrap");
+
+		screenshotViewScaling = new ButtonGroup();
+		screenshotViewScaling.add(horizontalScreenshotViewScalingRadio);
+		screenshotViewScaling.add(verticalScreenshotViewScalingRadio);
 	}
 
 	private void createCaptureMouseClicksPanel() {
@@ -66,22 +86,6 @@ public class SettingsDialog extends AbstractDialog {
 
 		dialog.add(new JLabel("Record mouse clicks"));
 		dialog.add(recordMouseClicks, "wrap");
-	}
-
-	private void createCaptureDimensionPanel() {
-		captureDimension = new JTextField();
-		JButton captureDimensionChangeButton = new JButton("change");
-		captureDimensionChangeButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-
-		dialog.add(new JLabel("Capture dimension"));
-		dialog.add(captureDimension, "w 400");
-		dialog.add(captureDimensionChangeButton, "wrap");
 	}
 
 	private void createCaptureFrequencyPanel() {
@@ -157,6 +161,12 @@ public class SettingsDialog extends AbstractDialog {
 		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());
 		recordMouseClicks.setSelected(props.getRecordMouseClicks());
+
+		if (props.getScreenshotViewScaling() == ViewScaling.HORIZONTAL) {
+			screenshotViewScaling.setSelected(horizontalScreenshotViewScalingRadio.getModel(), true);
+		} else {
+			screenshotViewScaling.setSelected(verticalScreenshotViewScalingRadio.getModel(), true);
+		}
 	}
 
 	private void saveModel() {
@@ -166,6 +176,12 @@ public class SettingsDialog extends AbstractDialog {
 
 		String jiraRestPath = props.getJiraConfig().getRestPath();
 		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText(), jiraRestPath));
+
+		if (screenshotViewScaling.isSelected(horizontalScreenshotViewScalingRadio.getModel())) {
+			props.setScreenshotViewScaling(ViewScaling.HORIZONTAL);
+		} else {
+			props.setScreenshotViewScaling(ViewScaling.VERTICAL);
+		}
 
 		props.save();
 	}

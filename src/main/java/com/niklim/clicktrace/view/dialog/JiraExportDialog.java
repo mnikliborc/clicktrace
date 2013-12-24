@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
@@ -27,6 +29,8 @@ import com.niklim.clicktrace.service.SessionCompressor;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 
 public class JiraExportDialog extends AbstractDialog {
+
+	private static final Logger log = LoggerFactory.getLogger(JiraExportDialog.class);
 
 	@Inject
 	private JiraExportService jiraExportService;
@@ -150,6 +154,7 @@ public class JiraExportDialog extends AbstractDialog {
 		} catch (JiraExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (Throwable e) {
+			log.error("unpredicted", e);
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		}
 
