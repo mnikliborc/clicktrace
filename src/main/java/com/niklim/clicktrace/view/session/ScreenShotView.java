@@ -103,9 +103,7 @@ public class ScreenShotView {
 			targetSize = (int) (frameWidth * 0.97);
 			mode = Mode.FIT_TO_WIDTH;
 		} else {
-			System.out.println(frameHeight);
 			targetSize = (int) (frameHeight - 160);
-			System.out.println(targetSize);
 			mode = Mode.FIT_TO_HEIGHT;
 		}
 
@@ -114,10 +112,7 @@ public class ScreenShotView {
 		} else if (mode == Mode.FIT_TO_HEIGHT && image.getHeight() <= targetSize) {
 			return image;
 		} else {
-			// BufferedImage scaledImage = Scalr.resize(image, targetWidth);
 			BufferedImage scaledImage = Scalr.resize(image, mode, targetSize);
-			// BufferedImage scaledImage = Scalr.resize(image, targetWidth,
-			// targetHeight);
 			return scaledImage;
 		}
 	}

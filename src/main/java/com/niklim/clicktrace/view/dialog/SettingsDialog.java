@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
@@ -69,12 +70,17 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void createScreenshotViewScalingPanel() {
-		horizontalScreenshotViewScalingRadio = new JRadioButton("display all width");
-		verticalScreenshotViewScalingRadio = new JRadioButton("display all height");
+		horizontalScreenshotViewScalingRadio = new JRadioButton("by width");
+		verticalScreenshotViewScalingRadio = new JRadioButton("by height");
+		horizontalScreenshotViewScalingRadio.setToolTipText("show screenshots in full width");
+		verticalScreenshotViewScalingRadio.setToolTipText("show screenshots in full height");
 
 		dialog.add(new JLabel("Image scaling"));
-		dialog.add(horizontalScreenshotViewScalingRadio);
-		dialog.add(verticalScreenshotViewScalingRadio, "wrap");
+		JPanel radioPanel = new JPanel(new MigLayout());
+
+		radioPanel.add(verticalScreenshotViewScalingRadio);
+		radioPanel.add(horizontalScreenshotViewScalingRadio);
+		dialog.add(radioPanel, "align l, wrap");
 
 		screenshotViewScaling = new ButtonGroup();
 		screenshotViewScaling.add(horizontalScreenshotViewScalingRadio);

@@ -22,7 +22,7 @@ public class UserProperties extends AbstractProperties {
 		defaults.put(CAPTURE_FREQUENCY, 1.0);
 		defaults.put(RECORD_CLICKS, true);
 		defaults.put(JIRA_REST_PATH, "/rest/clicktrace/1.0");
-		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.HORIZONTAL.name());
+		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.VERTICAL.name());
 	}
 
 	public UserProperties() {
