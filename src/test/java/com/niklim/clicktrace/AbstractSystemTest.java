@@ -30,6 +30,7 @@ public abstract class AbstractSystemTest {
 		mainView = injector.getInstance(MainView.class);
 		editorFixture = new FrameFixture(mainView.getFrame());
 		editorFixture.show();
+		editorFixture.maximize();
 
 		activeSession = injector.getInstance(ActiveSession.class);
 	}

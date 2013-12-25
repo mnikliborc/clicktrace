@@ -71,7 +71,9 @@ public class ReorderingDialog extends AbstractDialog {
 		dialog.add(splitPane, "push, grow, wrap");
 
 		prev = Buttons.create("Move one before", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_MOVE_PREV);
+		prev.setName("prev");
 		next = Buttons.create("Move one next", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_MOVE_NEXT);
+		next.setName("next");
 
 		JPanel navigPanel = new JPanel(new MigLayout());
 		navigPanel.add(prev);
