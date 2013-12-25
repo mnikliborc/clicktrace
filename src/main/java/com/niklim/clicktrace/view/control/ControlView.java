@@ -143,13 +143,18 @@ public class ControlView {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					ScreenShot shot = (ScreenShot) imagesComboBox.getModel().getSelectedItem();
-					for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
-						if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
-							navigationController.showScreenShot(i);
-							break;
-						}
+					int index = getItemIndex(shot);
+					navigationController.showScreenShot(index);
+				}
+			}
+
+			private int getItemIndex(ScreenShot shot) {
+				for (int i = 0; i < imagesComboBox.getModel().getSize(); i++) {
+					if (shot.equals(imagesComboBox.getModel().getElementAt(i))) {
+						return i;
 					}
 				}
+				return -1;
 			}
 		});
 

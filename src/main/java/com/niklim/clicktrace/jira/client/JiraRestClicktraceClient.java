@@ -26,8 +26,7 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 	private final String jiraInstanceUrl;
 	private final String jiraRestClicktraceImportPath;
 
-	public JiraRestClicktraceClient(HttpClient client, String jiraInstanceUrl,
-			String jiraRestClicktraceImportPath) {
+	public JiraRestClicktraceClient(HttpClient client, String jiraInstanceUrl, String jiraRestClicktraceImportPath) {
 		super(client);
 		this.jiraInstanceUrl = jiraInstanceUrl;
 		this.jiraRestClicktraceImportPath = jiraRestClicktraceImportPath;
@@ -35,8 +34,8 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 
 	public Result checkSession(String issueKey, String sessionName) {
 		try {
-			log.debug("Check session: issueKey='{}', sessionName='{}', URL='{}'", issueKey,
-					sessionName, jiraInstanceUrl + jiraRestClicktraceImportPath);
+			log.debug("Check session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName,
+					jiraInstanceUrl + jiraRestClicktraceImportPath);
 
 			String uri = createUriString(issueKey, sessionName);
 			Promise<Result> p = getAndParse(new URI(uri), new JsonResponseParser());
@@ -69,8 +68,8 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 	public Result exportSession(String issueKey, String sessionName, String stream) {
 
 		try {
-			log.debug("Export session: issueKey='{}', sessionName='{}', URL='{}'", issueKey,
-					sessionName, jiraInstanceUrl + jiraRestClicktraceImportPath);
+			log.debug("Export session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName,
+					jiraInstanceUrl + jiraRestClicktraceImportPath);
 
 			JSONObject json = new JSONObject();
 			json.put(JSON_CLICKTRACE_STREAM_FIELD_NAME, stream);

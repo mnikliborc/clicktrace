@@ -42,6 +42,7 @@ public class ScreenShotView {
 	private JPanel panel;
 	private BufferedImage mouseMarkLeft;
 	private BufferedImage mouseMarkRight;
+	private ThumbPanel thumbPanel;
 
 	public ScreenShotView() {
 		panel = new JPanel(new MigLayout());
@@ -65,8 +66,15 @@ public class ScreenShotView {
 		try {
 			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
 			BufferedImage imageFinal = scaleImage(imageWithClicks, frameWidth, frameHeight);
+
+			// should not leak, nevertheless
+			if (thumbPanel != null) {
+				thumbPanel.image = null;
+			}
 			panel.removeAll();
-			panel.add(new ThumbPanel(imageFinal, imageFinal.getWidth(), imageFinal.getHeight()));
+
+			thumbPanel = new ThumbPanel(imageFinal, imageFinal.getWidth(), imageFinal.getHeight());
+			panel.add(thumbPanel);
 		} catch (IOException e) {
 			log.error("Unable to scale screenshot image", e);
 		}
@@ -103,7 +111,7 @@ public class ScreenShotView {
 			targetSize = (int) (frameWidth * 0.97);
 			mode = Mode.FIT_TO_WIDTH;
 		} else {
-			targetSize = (int) (frameHeight - 160);
+			targetSize = frameHeight - 160;
 			mode = Mode.FIT_TO_HEIGHT;
 		}
 

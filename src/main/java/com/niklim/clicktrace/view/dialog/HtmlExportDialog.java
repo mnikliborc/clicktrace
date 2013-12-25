@@ -16,6 +16,9 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.msg.ErrorMsgs;
@@ -24,6 +27,8 @@ import com.niklim.clicktrace.service.HtmlExportService;
 import com.niklim.clicktrace.service.exception.HtmlExportException;
 
 public class HtmlExportDialog extends AbstractDialog {
+	private static final Logger log = LoggerFactory.getLogger(HtmlExportDialog.class);
+
 	@Inject
 	private HtmlExportService htmlExportService;
 
@@ -81,6 +86,7 @@ public class HtmlExportDialog extends AbstractDialog {
 		} catch (HtmlExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (IOException e) {
+			log.error("", e);
 			JOptionPane.showMessageDialog(dialog, ErrorMsgs.HTML_EXPORT_IO_ERROR);
 		}
 	}

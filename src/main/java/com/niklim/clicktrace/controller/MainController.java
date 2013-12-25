@@ -117,6 +117,7 @@ public class MainController {
 			showSession(session);
 			return true;
 		} catch (IOException e) {
+			log.error("", e);
 			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
 			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_ALREADY_EXIST);
@@ -285,6 +286,7 @@ public class MainController {
 		try {
 			sessionManager.changeSessionName(session, name);
 		} catch (IOException e) {
+			log.error("", e);
 			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_WRONG_FOLDER);
 		} catch (SessionAlreadyExistsException e) {
 			JOptionPane.showMessageDialog(mainView.getFrame(), ErrorMsgs.SESSION_NAME_ALREADY_EXIST);

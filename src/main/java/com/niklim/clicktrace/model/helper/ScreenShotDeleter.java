@@ -33,6 +33,7 @@ public class ScreenShotDeleter {
 			String filePath = FileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
 					+ shot.getFilename();
 			Files.delete(filePath);
+			shot.setImage(null);
 		} catch (IOException e) {
 			log.error(ErrorMsgs.SCREENSHOT_DELETE_IMAGE_ERROR, e);
 			ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_DELETE_IMAGE_ERROR);

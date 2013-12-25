@@ -134,11 +134,7 @@ public class JiraExportDialog extends AbstractDialog {
 	private boolean askUserForExportConfirmation() {
 		int res = JOptionPane.showConfirmDialog(dialog, "Session exists. Overwrite?", "Overwrite?",
 				JOptionPane.OK_CANCEL_OPTION);
-		if (res == JOptionPane.OK_OPTION) {
-			return true;
-		} else {
-			return false;
-		}
+		return res == JOptionPane.OK_OPTION;
 	}
 
 	private void exportSession() {
