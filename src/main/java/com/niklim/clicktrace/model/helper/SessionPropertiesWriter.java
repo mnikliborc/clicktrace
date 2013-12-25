@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 
+import com.google.common.base.Joiner;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.ScreenShot;
@@ -39,7 +40,13 @@ public class SessionPropertiesWriter extends SessionPropertiesIO {
 	}
 
 	public void saveShotClicks(String shotFilename, List<Click> clicks) {
-		saveSessionProperty(shotFilename + SessionManager.PROP_SUFFIX_CLICKS, Click.getString(clicks));
+		if (!clicks.isEmpty()) {
+			saveSessionProperty(shotFilename + SessionManager.PROP_SUFFIX_CLICKS, Click.getString(clicks));
+		}
+	}
+
+	public void saveOrdering(List<String> imgFilenames) {
+		saveSessionProperty(SessionManager.PROP_SESSION_ORDERING, Joiner.on(";").join(imgFilenames));
 	}
 
 	private void saveSessionProperty(String key, String value) {

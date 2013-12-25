@@ -20,6 +20,7 @@ public class SessionManager {
 	public static final String PROP_SUFFIX_DESCRIPTION = ".description";
 	public static final String PROP_SUFFIX_CLICKS = ".clicks";
 	public static final String PROP_SESSION_DESCRIPTION = "session.description";
+	public static final String PROP_SESSION_ORDERING = "session.ordering";
 
 	@Inject
 	private FileManager fileManager;
@@ -39,8 +40,7 @@ public class SessionManager {
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
-		for (String sessionName : fileManager.loadFileNames(FileManager.SESSIONS_DIR,
-				new FileManager.TrashFilter())) {
+		for (String sessionName : fileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
 			Session session = createSessionInstance();
 			session.setName(sessionName);
 
@@ -57,8 +57,7 @@ public class SessionManager {
 		return new Session(deleter, screenShotsLoader, sessionMetadataHelper);
 	}
 
-	public Session createSession(String sessionName) throws SessionAlreadyExistsException,
-			IOException {
+	public Session createSession(String sessionName) throws SessionAlreadyExistsException, IOException {
 		if (fileManager.sessionExists(sessionName)) {
 			throw new SessionAlreadyExistsException();
 		}
@@ -81,8 +80,7 @@ public class SessionManager {
 		return new SessionPropertiesWriter(session);
 	}
 
-	public void changeSessionName(Session session, String newName)
-			throws SessionAlreadyExistsException, IOException {
+	public void changeSessionName(Session session, String newName) throws SessionAlreadyExistsException, IOException {
 		if (!fileManager.canCreateSession(newName)) {
 			throw new IOException();
 		}
