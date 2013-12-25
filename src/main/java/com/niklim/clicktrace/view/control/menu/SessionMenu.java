@@ -110,7 +110,8 @@ public class SessionMenu {
 	}
 
 	private JMenuItem createSessionReorder() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Reorder screenshots", null, reorderOperation.action());
+		JMenuItem menuItem = MenuBar.createMenuItem("Reorder screenshots", Icons.SESSION_REORDER,
+				OperationsShortcutEnum.SESSION_REORDER, reorderOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}

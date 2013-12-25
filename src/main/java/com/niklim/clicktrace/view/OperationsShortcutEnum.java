@@ -18,6 +18,9 @@ public enum OperationsShortcutEnum {
 	SHOT_DELETE("[Ctrl+Del]", KeyEvent.VK_DELETE, KeyEvent.CTRL_DOWN_MASK),
 	SHOT_SELECT("[Ctrl+A]", KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK),
 	
+	SHOT_MOVE_NEXT("[Ctrl+W]", KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK),
+	SHOT_MOVE_PREV("[Ctrl+Q]", KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK),
+	
 	SESSION_REFRESH("[Shift+F5]", KeyEvent.VK_F5, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_NEW("[Shift+N]", KeyEvent.VK_N, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_OPEN("[Shift+O]", KeyEvent.VK_O, KeyEvent.SHIFT_DOWN_MASK),
@@ -25,6 +28,7 @@ public enum OperationsShortcutEnum {
 	SESSION_DELETE("[Shift+Del]", KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_SELECT_ALL_SHOTS("[Shift+A]", KeyEvent.VK_A, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_DESELECT_ALL_SHOTS("[Shift+Ctrl+A]", KeyEvent.VK_A, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK),
+	SESSION_REORDER("[Shift+E]", KeyEvent.VK_E, KeyEvent.SHIFT_DOWN_MASK),
 	
 	FIND("[Ctrl+F]", KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), 
 	START_RECORDING("[Shift+Ctrl+R]", KeyEvent.VK_R, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK),

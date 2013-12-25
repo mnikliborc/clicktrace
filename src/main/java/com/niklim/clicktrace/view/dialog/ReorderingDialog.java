@@ -70,8 +70,8 @@ public class ReorderingDialog extends AbstractDialog {
 
 		dialog.add(splitPane, "push, grow, wrap");
 
-		prev = Buttons.create("Move one before", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_PREV);
-		next = Buttons.create("Move one next", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_NEXT);
+		prev = Buttons.create("Move one before", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_MOVE_PREV);
+		next = Buttons.create("Move one next", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_MOVE_NEXT);
 
 		JPanel navigPanel = new JPanel(new MigLayout());
 		navigPanel.add(prev);
@@ -143,16 +143,14 @@ public class ReorderingDialog extends AbstractDialog {
 		};
 		next.addActionListener(moveNext);
 
-		dialog.getRootPane()
-				.registerKeyboardAction(
-						movePrev,
-						KeyStroke.getKeyStroke(OperationsShortcutEnum.SHOT_PREV.code,
-								OperationsShortcutEnum.SHOT_PREV.modifier), JComponent.WHEN_IN_FOCUSED_WINDOW);
-		dialog.getRootPane()
-				.registerKeyboardAction(
-						moveNext,
-						KeyStroke.getKeyStroke(OperationsShortcutEnum.SHOT_NEXT.code,
-								OperationsShortcutEnum.SHOT_NEXT.modifier), JComponent.WHEN_IN_FOCUSED_WINDOW);
+		dialog.getRootPane().registerKeyboardAction(
+				movePrev,
+				KeyStroke.getKeyStroke(OperationsShortcutEnum.SHOT_MOVE_PREV.code,
+						OperationsShortcutEnum.SHOT_MOVE_PREV.modifier), JComponent.WHEN_IN_FOCUSED_WINDOW);
+		dialog.getRootPane().registerKeyboardAction(
+				moveNext,
+				KeyStroke.getKeyStroke(OperationsShortcutEnum.SHOT_MOVE_NEXT.code,
+						OperationsShortcutEnum.SHOT_MOVE_NEXT.modifier), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void refreshDescription() {

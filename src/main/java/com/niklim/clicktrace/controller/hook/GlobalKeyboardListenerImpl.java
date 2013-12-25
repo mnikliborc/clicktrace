@@ -41,6 +41,7 @@ import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSearchDialogOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSessionOperation;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.ReorderOperation;
 import com.niklim.clicktrace.controller.operation.session.SelectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.StartRecordingOperation;
 import com.niklim.clicktrace.controller.operation.session.StopRecordingOperation;
@@ -109,6 +110,9 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 
 	@Inject
 	private ChangeSessionDescriptionOperation changeSessionDescriptionOperation;
+
+	@Inject
+	private ReorderOperation reorderOperation;
 
 	@Inject
 	private JiraExportOperation jiraExportOperation;
@@ -199,6 +203,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE, deleteActiveSessionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DESCRIPTION,
 				changeSessionDescriptionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_REORDER, reorderOperation.action());
 
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS,
 				selectAllScreenShotsOperation.action());

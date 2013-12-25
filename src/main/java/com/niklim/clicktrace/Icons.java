@@ -16,6 +16,7 @@ public class Icons {
 	public static final String SESSION_DELETE = "icons/1383438389_folder_delete.png";
 	public static final String SESSION_REFRESH = "icons/1383454049_folder.png";
 	public static final String SESSION_DESCRIPTION = "icons/session_desc.png";
+	public static final String SESSION_REORDER = "icons/reorder.png";
 
 	public static final String START_RECORDING = "icons/media-record-5.png";
 	public static final String STOP_RECORDING = "icons/media-playback-pause.png";
