@@ -30,7 +30,7 @@ import com.niklim.clicktrace.service.SessionManager;
 @Singleton
 public class CaptureManager {
 	private static final Logger log = LoggerFactory.getLogger(CaptureManager.class);
-
+	// TODO fix memory leaks
 	@Inject
 	private Robot robot;
 

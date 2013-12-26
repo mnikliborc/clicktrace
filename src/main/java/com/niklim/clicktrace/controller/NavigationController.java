@@ -18,14 +18,10 @@ public class NavigationController {
 	private ActiveSession activeSession;
 
 	public void showFirstScreenShot() {
-		disposeActiveScreenshotImage();
-
 		showScreenShot(0);
 	}
 
 	public void showPrevScreenShot() {
-		disposeActiveScreenshotImage();
-
 		int selectedIndex = activeSession.getActiveShotIndex();
 		int nextIndex = Math.max(0, selectedIndex - 1);
 
@@ -35,8 +31,6 @@ public class NavigationController {
 	}
 
 	public void showNextScreenShot() {
-		disposeActiveScreenshotImage();
-
 		Session session = activeSession.getSession();
 		int selectedIndex = activeSession.getActiveShotIndex();
 		int nextIndex = Math.min(selectedIndex + 1, session.getShots().size() - 1);
@@ -47,8 +41,6 @@ public class NavigationController {
 	}
 
 	public void showLastScreenShot() {
-		disposeActiveScreenshotImage();
-
 		Session session = activeSession.getSession();
 		int nextIndex = session.getShots().size() - 1;
 
@@ -56,18 +48,9 @@ public class NavigationController {
 	}
 
 	public void showScreenShot(int i) {
-		disposeActiveScreenshotImage();
-
 		ScreenShot shot = activeSession.getSession().getShots().get(i);
 		activeSession.setActiveShot(shot);
 		mainView.showScreenShot(shot, activeSession.isShotSelected(shot));
 		mainView.refresh();
-	}
-
-	private void disposeActiveScreenshotImage() {
-		ScreenShot activeShot = activeSession.getActiveShot();
-		if (activeShot != null) {
-			activeShot.setImage(null);
-		}
 	}
 }

@@ -19,7 +19,6 @@ public class ScreenShot {
 	private String filename;
 	private String label;
 	private String description;
-	private BufferedImage image;
 	private Session session;
 
 	private List<Click> clicks;
@@ -63,19 +62,11 @@ public class ScreenShot {
 	}
 
 	public BufferedImage getImage() {
-		if (image == null) {
-			loadImage();
-		}
-		return image;
-	}
-
-	public void setImage(BufferedImage image) {
-		this.image = image;
+		return loadImage();
 	}
 
 	public BufferedImage loadImage() {
-		image = imageLoader.load(this);
-		return image;
+		return imageLoader.load(this);
 	}
 
 	@Override
