@@ -12,8 +12,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.xml.security.utils.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tukaani.xz.LZMA2Options;
-import org.tukaani.xz.XZOutputStream;
 
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.Session;
@@ -39,24 +37,8 @@ public class SessionCompressor {
 		byte[] zipBytes = zip(sessionName);
 		log.debug("Zipped size={}", zipBytes.length);
 
-		byte[] xzBytes = xz(zipBytes, sessionName);
-		log.debug("XZ+Zipped size={}", xzBytes.length);
-
-		String content = Base64.encode(xzBytes);
+		String content = Base64.encode(zipBytes);
 		return content;
-	}
-
-	private byte[] xz(byte[] zipBytes, String sessionName) throws IOException {
-		log.debug("XZ compression started");
-		ByteArrayOutputStream outstream = new ByteArrayOutputStream();
-		XZOutputStream outxz = new XZOutputStream(outstream, new LZMA2Options());
-		outxz.write(zipBytes);
-		outxz.flush();
-		outxz.close();
-		outstream.close();
-
-		log.debug("XZ compression finished");
-		return outstream.toByteArray();
 	}
 
 	private byte[] zip(String sessionName) throws IOException {
