@@ -30,7 +30,8 @@ import com.niklim.clicktrace.service.SessionManager;
 @Singleton
 public class CaptureManager {
 	private static final Logger log = LoggerFactory.getLogger(CaptureManager.class);
-	// TODO fix memory leaks
+	private static final int CAPTURE_PERIOD_MS = 1000;
+
 	@Inject
 	private Robot robot;
 
@@ -51,20 +52,31 @@ public class CaptureManager {
 
 	private List<Click> clicks = new LinkedList<Click>();
 	private String lastImageFilename;
-	private boolean recordMouseClicks;
 
 	private Timer time;
+
+	private boolean recordMouseClicks;
+	private Rectangle screenshotRect;
 
 	/**
 	 * Starts periodic screenshot capturing.
 	 */
 	public void start() {
-		log.debug("Capturing started");
+		log.info("Capturing started");
 
-		recordMouseClicks = props.getRecordMouseClicks();
+		configure();
+
 		time = new Timer();
-		int period = (int) ((double) 1000 / props.getCaptureFrequency());
-		time.schedule(new CaptureTask(), period, period);
+		time.schedule(new CaptureTask(), CAPTURE_PERIOD_MS, CAPTURE_PERIOD_MS);
+	}
+
+	private void configure() {
+		recordMouseClicks = props.getCaptureMouseClicks();
+		if (props.getCaptureFullScreen()) {
+			screenshotRect = null;
+		} else {
+			screenshotRect = props.getCaptureRectangle();
+		}
 	}
 
 	/**
@@ -72,7 +84,7 @@ public class CaptureManager {
 	 */
 	public void stop() {
 		if (time != null) {
-			log.debug("Capturing stopped");
+			log.info("Capturing stopped");
 			time.cancel();
 		}
 		time = null;
@@ -96,7 +108,8 @@ public class CaptureManager {
 	 * save it stores recorded mouse clicks on the previous screenshot.
 	 */
 	public synchronized void capture() {
-		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+		Rectangle captureRect = getCaptureRectangle();
+		BufferedImage image = robot.createScreenCapture(captureRect);
 
 		if (detector.detect(image)) {
 			log.debug("Screen change detected");
@@ -111,6 +124,11 @@ public class CaptureManager {
 				ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_SAVE_ERROR);
 			}
 		}
+	}
+
+	private Rectangle getCaptureRectangle() {
+		return screenshotRect != null ? screenshotRect : new Rectangle(Toolkit.getDefaultToolkit()
+				.getScreenSize());
 	}
 
 	private void saveClicks() {

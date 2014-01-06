@@ -1,7 +1,8 @@
-package com.niklim.clicktrace.view.dialog;
+package com.niklim.clicktrace.view.dialog.settings;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,22 +13,26 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
-import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.JTextField;
-import javax.swing.SpinnerListModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
+import com.niklim.clicktrace.view.MainFrameHolder;
+import com.niklim.clicktrace.view.dialog.AbstractDialog;
+import com.niklim.clicktrace.view.dialog.settings.CaptureRectangleFrame.CaptureRectangleCallback;
 
 @Singleton
 public class SettingsDialog extends AbstractDialog {
@@ -35,19 +40,24 @@ public class SettingsDialog extends AbstractDialog {
 	@Inject
 	private UserProperties props;
 
+	@Inject
+	private CaptureRectangleFrame captureRectangleFrame;
+
 	JSpinner captureFrequency;
-	JTextField captureDimension;
 	JTextField imageEditorPath;
 	JFileChooser imageEditorFileChooser;
 
 	JTextField jiraUrl;
 	JTextField jiraUsername;
 
-	JCheckBox recordMouseClicks;
+	JCheckBox captureMouseClicks;
+	JCheckBox captureFullScreen;
 
 	private JRadioButton horizontalScreenshotViewScalingRadio;
 	private JRadioButton verticalScreenshotViewScalingRadio;
 	private ButtonGroup screenshotViewScaling;
+
+	private Rectangle captureRectangle;
 
 	@Inject
 	public void init() {
@@ -56,26 +66,41 @@ public class SettingsDialog extends AbstractDialog {
 		dialog.setTitle("Settings");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 310);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 450, 310);
 
 		imageEditorFileChooser = new JFileChooser();
 
-		createCaptureFrequencyPanel();
+		createSectionLabel("Recording");
 		createCaptureMouseClicksPanel();
+		createCaptureAreaPanel();
+
+		createSectionLabel("Screenshot");
 		createImageEditorPathPanel();
 		createScreenshotViewScalingPanel();
+
+		createSectionLabel("JIRA");
 		createJiraPanel();
 
 		dialog.add(createControlPanel("Save"), "align r, span 3");
 	}
 
+	private void createSectionLabel(String label) {
+		JLabel laabel = new JLabel(label);
+		Font font = laabel.getFont();
+		// same font but bold
+		Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
+		laabel.setFont(boldFont);
+		dialog.add(laabel);
+		dialog.add(new JSeparator(), "span 2, wrap");
+	}
+
 	private void createScreenshotViewScalingPanel() {
-		horizontalScreenshotViewScalingRadio = new JRadioButton("by width");
-		verticalScreenshotViewScalingRadio = new JRadioButton("by height");
+		horizontalScreenshotViewScalingRadio = new JRadioButton("full width");
+		verticalScreenshotViewScalingRadio = new JRadioButton("full height");
 		horizontalScreenshotViewScalingRadio.setToolTipText("show screenshots in full width");
 		verticalScreenshotViewScalingRadio.setToolTipText("show screenshots in full height");
 
-		dialog.add(new JLabel("Image scaling"));
+		dialog.add(new JLabel("Image display"));
 		JPanel radioPanel = new JPanel(new MigLayout());
 
 		radioPanel.add(verticalScreenshotViewScalingRadio);
@@ -88,27 +113,56 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void createCaptureMouseClicksPanel() {
-		recordMouseClicks = new JCheckBox();
+		captureMouseClicks = new JCheckBox();
 
-		dialog.add(new JLabel("Record mouse clicks"));
-		dialog.add(recordMouseClicks, "wrap");
+		dialog.add(new JLabel("Capture mouse clicks"));
+		dialog.add(captureMouseClicks, "wrap");
 	}
 
-	private void createCaptureFrequencyPanel() {
-		captureFrequency = new JSpinner(new SpinnerListModel(Lists.newArrayList(0.25f, 0.5f, 1d)));
-		((DefaultEditor) captureFrequency.getEditor()).getTextField().setEditable(false);
+	private void createCaptureAreaPanel() {
+		captureFullScreen = new JCheckBox("full screen");
 
-		JLabel laabel = new JLabel("Screenshot");
-		Font font = laabel.getFont();
-		// same font but bold
-		Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
-		laabel.setFont(boldFont);
-		dialog.add(laabel);
-		dialog.add(new JSeparator(), "span 2, wrap");
-		JLabel label = new JLabel("Capture frequency");
-		label.setToolTipText("Shots per second");
-		dialog.add(label);
-		dialog.add(captureFrequency, "w 400, wrap");
+		final JButton changeRectangle = new JButton("change");
+		final CaptureRectangleCallback callback = new CaptureRectangleCallback() {
+			public void done(Optional<Rectangle> rOpt) {
+				if (rOpt.isPresent()) {
+					captureRectangle = rOpt.get();
+					captureFullScreen.setSelected(false);
+				} else {
+					if (captureRectangle == null) {
+						captureFullScreen.setSelected(true);
+					}
+				}
+
+				MainFrameHolder.get().setVisible(true);
+				dialog.setVisible(true);
+			}
+		};
+		final ActionListener rectangleChanger = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(dialog, "Press Enter to save or Esc to cancel");
+				dialog.setVisible(false);
+				MainFrameHolder.get().setVisible(false);
+
+				captureRectangleFrame.open(captureRectangle, callback);
+			}
+
+		};
+
+		changeRectangle.addActionListener(rectangleChanger);
+
+		captureFullScreen.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				changeRectangle.setEnabled(!captureFullScreen.isSelected());
+				if (!captureFullScreen.isSelected() && captureRectangle == null) {
+					rectangleChanger.actionPerformed(null);
+				}
+			}
+		});
+
+		dialog.add(new JLabel("Capture area"));
+		dialog.add(captureFullScreen);
+		dialog.add(changeRectangle, "wrap");
 	}
 
 	private void createImageEditorPathPanel() {
@@ -139,13 +193,6 @@ public class SettingsDialog extends AbstractDialog {
 		jiraUsername = new JTextField();
 		jiraUsername.setName("jiraUsername");
 
-		JLabel label = new JLabel("JIRA");
-		Font font = label.getFont();
-		// same font but bold
-		Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
-		label.setFont(boldFont);
-		dialog.add(label);
-		dialog.add(new JSeparator(), "span 2, wrap");
 		dialog.add(new JLabel("URL"));
 		dialog.add(jiraUrl, "wrap");
 		dialog.add(new JLabel("Username"));
@@ -158,15 +205,17 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void loadModel() {
-		captureFrequency.setValue(props.getCaptureFrequency());
 		if (props.getImageEditorPath() != null) {
 			imageEditorFileChooser.setSelectedFile(new File(props.getImageEditorPath()));
 			imageEditorPath.setText(props.getImageEditorPath());
 		}
 
+		captureMouseClicks.setSelected(props.getCaptureMouseClicks());
+		captureFullScreen.setSelected(props.getCaptureFullScreen());
+		captureRectangle = props.getCaptureRectangle();
+
 		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());
-		recordMouseClicks.setSelected(props.getRecordMouseClicks());
 
 		if (props.getScreenshotViewScaling() == ViewScaling.HORIZONTAL) {
 			screenshotViewScaling.setSelected(horizontalScreenshotViewScalingRadio.getModel(), true);
@@ -176,18 +225,22 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void saveModel() {
-		props.setCaptureFrequency((Double) captureFrequency.getValue());
 		props.setImageEditorPath(imageEditorPath.getText());
-		props.setRecordMouseClicks(recordMouseClicks.isSelected());
-
-		String jiraRestPath = props.getJiraConfig().getRestPath();
-		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText(), jiraRestPath));
 
 		if (screenshotViewScaling.isSelected(horizontalScreenshotViewScalingRadio.getModel())) {
 			props.setScreenshotViewScaling(ViewScaling.HORIZONTAL);
 		} else {
 			props.setScreenshotViewScaling(ViewScaling.VERTICAL);
 		}
+
+		props.setCaptureMouseClicks(captureMouseClicks.isSelected());
+		props.setCaptureFullScreen(captureFullScreen.isSelected());
+
+		if (captureRectangle != null) {
+			props.setCaptureRectangle(captureRectangle);
+		}
+
+		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText()));
 
 		props.save();
 	}

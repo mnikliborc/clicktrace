@@ -1,27 +1,34 @@
 package com.niklim.clicktrace.props;
 
+import java.awt.Rectangle;
 import java.io.File;
+import java.util.NoSuchElementException;
 
-import com.google.common.base.Strings;
 import com.google.inject.Singleton;
 
 @Singleton
 public class UserProperties extends AbstractProperties {
 	private static final String USER_PROPERTIES_PATH = "user.properties";
 
+	private static final String LAST_SESSION = "lastSession";
+
 	private static final String JIRA_USERNAME = "jira.username";
 	private static final String JIRA_INSTANCE_URL = "jira.instanceUrl";
-	private static final String JIRA_REST_PATH = "jira.restPath";
-	private static final String CAPTURE_FREQUENCY = "capture.frequency";
+
 	private static final String IMAGE_EDITOR_PATH = "imageEditor.path";
-	private static final String RECORD_CLICKS = "capture.recordClicks";
-	private static final String LAST_SESSION = "lastSession";
 	private static final String SCREENSHOT_VIEW_SCALING = "screenshot.view.scaling";
 
+	private static final String CAPTURE_CLICKS = "capture.recordClicks";
+	private static final String CAPTURE_FULLSCREEN = "capture.dimension.fullscreen";
+
+	private static final String CAPTURE_RECTANGLE_HEIGHT = "capture.dimension.height";
+	private static final String CAPTURE_RECTANGLE_WIDTH = "capture.dimension.width";
+	private static final String CAPTURE_RECTANGLE_Y = "capture.dimension.y";
+	private static final String CAPTURE_RECTANGLE_X = "capture.dimension.x";
+
 	static {
-		defaults.put(CAPTURE_FREQUENCY, 1.0);
-		defaults.put(RECORD_CLICKS, true);
-		defaults.put(JIRA_REST_PATH, "/rest/clicktrace/1.0");
+		defaults.put(CAPTURE_CLICKS, true);
+		defaults.put(CAPTURE_FULLSCREEN, true);
 		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.VERTICAL.name());
 	}
 
@@ -45,17 +52,8 @@ public class UserProperties extends AbstractProperties {
 		props.setProperty(IMAGE_EDITOR_PATH, imageEditorPath);
 	}
 
-	public double getCaptureFrequency() {
-		return props.getDouble(CAPTURE_FREQUENCY);
-	}
-
-	public void setCaptureFrequency(double captureFrequency) {
-		props.setProperty(CAPTURE_FREQUENCY, captureFrequency);
-	}
-
 	public JiraConfig getJiraConfig() {
-		return new JiraConfig(props.getString(JIRA_INSTANCE_URL), props.getString(JIRA_USERNAME),
-				props.getString(JIRA_REST_PATH));
+		return new JiraConfig(props.getString(JIRA_INSTANCE_URL), props.getString(JIRA_USERNAME));
 	}
 
 	public void setJiraConfig(JiraConfig conf) {
@@ -65,10 +63,9 @@ public class UserProperties extends AbstractProperties {
 
 	public static class JiraConfig {
 		private String instanceUrl;
-		private String restPath;
 		private String username;
 
-		public JiraConfig(String url, String username, String restPath) {
+		public JiraConfig(String url, String username) {
 			this.instanceUrl = url;
 			this.username = username;
 		}
@@ -81,17 +78,14 @@ public class UserProperties extends AbstractProperties {
 			return username;
 		}
 
-		public String getRestPath() {
-			return Strings.nullToEmpty(restPath);
-		}
 	}
 
-	public boolean getRecordMouseClicks() {
-		return props.getBoolean(RECORD_CLICKS);
+	public boolean getCaptureMouseClicks() {
+		return props.getBoolean(CAPTURE_CLICKS);
 	}
 
-	public void setRecordMouseClicks(boolean record) {
-		props.setProperty(RECORD_CLICKS, record);
+	public void setCaptureMouseClicks(boolean record) {
+		props.setProperty(CAPTURE_CLICKS, record);
 	}
 
 	public String getLastSessionName() {
@@ -108,5 +102,32 @@ public class UserProperties extends AbstractProperties {
 
 	public void setScreenshotViewScaling(ViewScaling scaling) {
 		props.setProperty(SCREENSHOT_VIEW_SCALING, scaling.name());
+	}
+
+	public boolean getCaptureFullScreen() {
+		return props.getBoolean(CAPTURE_FULLSCREEN);
+	}
+
+	public void setCaptureFullScreen(boolean fullScreen) {
+		props.setProperty(CAPTURE_FULLSCREEN, fullScreen);
+	}
+
+	public Rectangle getCaptureRectangle() {
+		try {
+			int x = props.getInt(CAPTURE_RECTANGLE_X);
+			int y = props.getInt(CAPTURE_RECTANGLE_Y);
+			int width = props.getInt(CAPTURE_RECTANGLE_WIDTH);
+			int height = props.getInt(CAPTURE_RECTANGLE_HEIGHT);
+			return new Rectangle(x, y, width, height);
+		} catch (NoSuchElementException e) {
+			return null;
+		}
+	}
+
+	public void setCaptureRectangle(Rectangle r) {
+		props.setProperty(CAPTURE_RECTANGLE_X, r.x);
+		props.setProperty(CAPTURE_RECTANGLE_Y, r.y);
+		props.setProperty(CAPTURE_RECTANGLE_WIDTH, r.width);
+		props.setProperty(CAPTURE_RECTANGLE_HEIGHT, r.height);
 	}
 }

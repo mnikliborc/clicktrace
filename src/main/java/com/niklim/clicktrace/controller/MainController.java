@@ -25,7 +25,7 @@ import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 import com.niklim.clicktrace.view.MainView;
 import com.niklim.clicktrace.view.dialog.NewSessionDialog.NewSessionCallback;
-import com.niklim.clicktrace.view.dialog.SettingsDialog;
+import com.niklim.clicktrace.view.dialog.settings.SettingsDialog;
 
 /**
  * Main controller.
