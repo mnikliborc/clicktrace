@@ -3,13 +3,9 @@ package com.niklim.clicktrace.view.session;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
@@ -22,11 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.Icons;
-import com.niklim.clicktrace.model.Click;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
+import com.niklim.clicktrace.service.ScreenShotUtils;
 import com.niklim.clicktrace.view.MainFrameHolder;
 
 /**
@@ -40,31 +35,17 @@ public class ScreenShotView {
 	private UserProperties props;
 
 	private JPanel panel;
-	private BufferedImage mouseMarkLeft;
-	private BufferedImage mouseMarkRight;
 	private ThumbPanel thumbPanel;
 
 	public ScreenShotView() {
 		panel = new JPanel(new MigLayout());
-
-		try {
-			mouseMarkLeft = loadMouseMark(Icons.MOUSE_MARK_RED_LEFT);
-			mouseMarkRight = loadMouseMark(Icons.MOUSE_MARK_RED_RIGHT);
-		} catch (Exception e) {
-			log.error("Unable to load mouse mark icons", e);
-		}
-	}
-
-	private BufferedImage loadMouseMark(String icon) throws IOException {
-		URL file = Thread.currentThread().getContextClassLoader().getResource(icon);
-		return ImageIO.read(file);
 	}
 
 	public void show(ScreenShot shot) {
 		int frameWidth = (int) (MainFrameHolder.get().getSize().getWidth());
 		int frameHeight = (int) (MainFrameHolder.get().getSize().getHeight());
 		try {
-			BufferedImage imageWithClicks = markClicks(shot.getImage(), shot.getClicks());
+			BufferedImage imageWithClicks = ScreenShotUtils.markClicks(shot.getImage(), shot.getClicks());
 			BufferedImage imageFinal = scaleImage(imageWithClicks, frameWidth, frameHeight);
 
 			// should not leak, nevertheless
@@ -78,30 +59,6 @@ public class ScreenShotView {
 		} catch (IOException e) {
 			log.error("Unable to scale screenshot image", e);
 		}
-	}
-
-	private BufferedImage markClicks(BufferedImage image, List<Click> clicks) {
-		Graphics2D g = image.createGraphics();
-		int clickIndex = 1;
-		for (Click click : clicks) {
-			drawMark(g, clickIndex, click);
-			clickIndex++;
-		}
-		g.dispose();
-		return image;
-	}
-
-	private void drawMark(Graphics2D g, int clickIndex, Click click) {
-		g.setColor(Color.RED);
-		g.drawOval(click.getX() - 15, click.getY() - 15, 30, 30);
-
-		if (click.getButton() == Click.Button.RIGHT) {
-			g.drawImage(mouseMarkRight, click.getX() + 10, click.getY() - 25, null);
-		} else {
-			g.drawImage(mouseMarkLeft, click.getX() + 10, click.getY() - 25, null);
-		}
-
-		g.drawChars(String.valueOf(clickIndex).toCharArray(), 0, 1, click.getX() - 15, click.getY() - 15);
 	}
 
 	private BufferedImage scaleImage(BufferedImage image, int frameWidth, int frameHeight) throws IOException {

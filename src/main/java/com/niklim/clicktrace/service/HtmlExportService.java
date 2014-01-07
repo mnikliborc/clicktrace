@@ -1,11 +1,14 @@
 package com.niklim.clicktrace.service;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 import com.google.common.base.Strings;
 import com.google.inject.Singleton;
@@ -62,7 +65,15 @@ public class HtmlExportService {
 			String toPath = outputDirPath + session.getName() + File.separator + "shots" + File.separator
 					+ shot.getFilename();
 			Files.copy(fromPath, toPath);
+
+			drawClicks(shot, toPath);
 		}
+	}
+
+	private void drawClicks(ScreenShot shot, String toPath) throws IOException {
+		BufferedImage withClicks = ScreenShotUtils.markClicks(ImageIO.read(new File(toPath)), shot.getClicks());
+		File outputfile = new File(toPath);
+		ImageIO.write(withClicks, shot.getFilename().substring(shot.getFilename().lastIndexOf(".") + 1), outputfile);
 	}
 
 	private String createHtml(Session session, boolean simpleHtml) {
