@@ -10,7 +10,7 @@ public interface InfoMsgs {
 	public static final String JIRA_EXPORT_WRONG_URL = "Wrong JIRA URL.";
 	public static final String JIRA_EXPORT_CAPTCHA_NEEDED = "It looks like we have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
 
-	public static final String HTML_EXPORT_SUCCESS = "HTML_EXPORT_SUCCESS";
+	public static final String HTML_EXPORT_SUCCESS = "Session successfully exported to HTML.";
 	public static final String HTML_EXPORT_FOLDER_NOT_EXISTS = "Directory does not exist.";
 
 	public static final String SESSION_NO_NAME = "Please provide session name.";
