@@ -66,7 +66,7 @@ public class SettingsDialog extends AbstractDialog {
 		dialog.setTitle("Settings");
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 450, 310);
+		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 440, 340);
 
 		imageEditorFileChooser = new JFileChooser();
 
@@ -168,7 +168,7 @@ public class SettingsDialog extends AbstractDialog {
 	private void createImageEditorPathPanel() {
 		imageEditorPath = new JTextField();
 
-		JButton imageEditorPathChangeButton = new JButton("change");
+		JButton imageEditorPathChangeButton = new JButton("set path");
 		imageEditorPathChangeButton.addActionListener(new ActionListener() {
 
 			@Override

@@ -41,7 +41,7 @@ public abstract class AbstractDialog {
 
 		JPanel buttonPanel = new JPanel(new MigLayout());
 		buttonPanel.add(cancelButton, "tag cancel");
-		buttonPanel.add(okButton, "tag apply");
+		buttonPanel.add(okButton, "tag ok");
 
 		okButton.addActionListener(new ActionListener() {
 			@Override
