@@ -1,7 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -33,9 +31,6 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.getContentPane().setLayout(new MigLayout());
 		dialog.setTitle("New session");
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 400);
-
 		sessionName = new JTextField();
 		sessionName.setName("name");
 
@@ -49,18 +44,20 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.add(sessionName, "wrap, w 100%");
 
 		dialog.add(new JLabel("Description"), "span 2, wrap");
-		dialog.add(new JScrollPane(sessionDescription), "span 2, w 100%, h 100%, wrap");
+		dialog.add(new JScrollPane(sessionDescription), "span 2, w 600, h 300, wrap");
 
 		dialog.add(createControlPanel("Create"), "align r, span 2");
 
 		createListeners();
+		pack();
 	}
 
 	public void open(NewSessionCallback callback) {
 		sessionName.setText("");
 		sessionDescription.setText("");
-
 		this.callback = callback;
+
+		center();
 		dialog.setVisible(true);
 	}
 

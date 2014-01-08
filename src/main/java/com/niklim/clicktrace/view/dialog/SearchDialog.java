@@ -1,7 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -59,9 +57,6 @@ public class SearchDialog extends AbstractDialog {
 		dialog.setTitle("Search");
 		dialog.getContentPane().setLayout(new MigLayout("", "[fill]rel[]"));
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 820, 470);
-
 		allSessionsRadio = new JRadioButton("All sessions");
 		activeSessionRadio = new JRadioButton("Active session");
 		matchCase = new JCheckBox("Match case");
@@ -74,6 +69,8 @@ public class SearchDialog extends AbstractDialog {
 
 		layoutElements();
 		createActionListeners();
+
+		pack();
 	}
 
 	private void createActionListeners() {
@@ -147,7 +144,7 @@ public class SearchDialog extends AbstractDialog {
 
 		dialog.add(controlPanel, "wrap");
 		dialog.add(searchPanel, "wrap, span 2, grow");
-		dialog.add(new JScrollPane(resultTable), "w 100%, h 100%, span 2, wrap");
+		dialog.add(new JScrollPane(resultTable), "w 600, h 300, span 2, wrap");
 	}
 
 	public void open() {
@@ -163,6 +160,8 @@ public class SearchDialog extends AbstractDialog {
 		}
 
 		history.reset(searchQuery.getText());
+
+		center();
 		dialog.setVisible(true);
 	}
 

@@ -1,7 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -54,9 +52,6 @@ public class ReorderingDialog extends AbstractDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]", "[grow]"));
 		dialog.setTitle("Reorder screenshots");
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 560);
-
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
@@ -68,7 +63,7 @@ public class ReorderingDialog extends AbstractDialog {
 		splitPane.setBottomComponent(new JScrollPane(description));
 		splitPane.setResizeWeight(0.4);
 
-		dialog.add(splitPane, "push, grow, wrap");
+		dialog.add(splitPane, "push, grow, wrap, w 600");
 
 		prev = Buttons.create("Move one before", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_MOVE_PREV);
 		prev.setName("prev");
@@ -85,6 +80,8 @@ public class ReorderingDialog extends AbstractDialog {
 		dialog.add(buttonPanel, "push, grow, wrap");
 
 		createListeners();
+
+		pack();
 	}
 
 	private void createListeners() {
@@ -172,6 +169,8 @@ public class ReorderingDialog extends AbstractDialog {
 	public void open() {
 		loadShots();
 		refreshDescription();
+
+		center();
 		dialog.setVisible(true);
 	}
 

@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.view.dialog;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,6 +33,17 @@ public abstract class AbstractDialog {
 
 	public void close() {
 		dialog.setVisible(false);
+	}
+
+	protected void pack() {
+		dialog.pack();
+	}
+
+	protected void center() {
+		Rectangle mainFrameRect = MainFrameHolder.get().getBounds();
+		int x = mainFrameRect.x + (int) (mainFrameRect.getWidth() - dialog.getWidth()) / 2;
+		int y = mainFrameRect.y + (int) (mainFrameRect.getHeight() - dialog.getHeight()) / 2;
+		dialog.setBounds(x, y, dialog.getWidth(), dialog.getHeight());
 	}
 
 	protected JPanel createControlPanel(String okText) {

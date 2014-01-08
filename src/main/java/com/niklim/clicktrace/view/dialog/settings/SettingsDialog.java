@@ -1,9 +1,7 @@
 package com.niklim.clicktrace.view.dialog.settings;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -65,9 +63,6 @@ public class SettingsDialog extends AbstractDialog {
 		dialog.setResizable(false);
 		dialog.setTitle("Settings");
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 440, 340);
-
 		imageEditorFileChooser = new JFileChooser();
 
 		createSectionLabel("Recording");
@@ -82,6 +77,7 @@ public class SettingsDialog extends AbstractDialog {
 		createJiraPanel();
 
 		dialog.add(createControlPanel("Save"), "align r, span 3");
+		pack();
 	}
 
 	private void createSectionLabel(String label) {
@@ -201,6 +197,8 @@ public class SettingsDialog extends AbstractDialog {
 
 	public void open() {
 		loadModel();
+
+		center();
 		dialog.setVisible(true);
 	}
 

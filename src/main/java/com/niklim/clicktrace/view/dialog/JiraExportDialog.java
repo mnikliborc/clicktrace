@@ -1,8 +1,6 @@
 package com.niklim.clicktrace.view.dialog;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,6 +66,7 @@ public class JiraExportDialog extends AbstractDialog {
 			}
 		});
 
+		center();
 		dialog.setVisible(true);
 	}
 
@@ -82,9 +81,6 @@ public class JiraExportDialog extends AbstractDialog {
 		dialog.setTitle("Export to Clicktrace on JIRA Plugin");
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 		dialog.setResizable(false);
-
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 480, 220);
 
 		jiraInstanceUrl = new JTextField();
 		username = new JTextField();
@@ -101,6 +97,8 @@ public class JiraExportDialog extends AbstractDialog {
 		dialog.add(issueKey, "w 400, wrap");
 
 		dialog.add(createControlPanel("Export"), "span 2, h 50, align r");
+
+		pack();
 	}
 
 	@Override

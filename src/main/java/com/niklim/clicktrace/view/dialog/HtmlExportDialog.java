@@ -1,7 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -43,11 +41,10 @@ public class HtmlExportDialog extends AbstractDialog {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 150);
-
 		createConfigPanel();
 		dialog.add(createControlPanel("Export"), "align r, span 3");
+
+		pack();
 	}
 
 	private void createConfigPanel() {
@@ -92,6 +89,7 @@ public class HtmlExportDialog extends AbstractDialog {
 	}
 
 	public void open() {
+		center();
 		dialog.setVisible(true);
 	}
 }

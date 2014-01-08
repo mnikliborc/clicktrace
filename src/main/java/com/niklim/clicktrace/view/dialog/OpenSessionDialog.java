@@ -1,7 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -43,8 +41,6 @@ public class OpenSessionDialog extends AbstractDialog {
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]", "[grow]"));
 		dialog.setTitle("Open session");
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 300, 590, 600);
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -56,10 +52,11 @@ public class OpenSessionDialog extends AbstractDialog {
 		splitPane.setBottomComponent(new JScrollPane(textarea));
 		splitPane.setResizeWeight(0.4);
 
-		dialog.add(splitPane, "push, grow, wrap");
+		dialog.add(splitPane, "push, grow, wrap, w 600");
 		dialog.add(createControlPanel("Open"), "align r");
-		dialog.pack();
 		createListeners();
+
+		pack();
 	}
 
 	private void createListeners() {
@@ -109,6 +106,8 @@ public class OpenSessionDialog extends AbstractDialog {
 
 	public void open() {
 		loadSessions();
+
+		center();
 		dialog.setVisible(true);
 	}
 

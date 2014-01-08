@@ -1,7 +1,5 @@
 package com.niklim.clicktrace.view.dialog.description;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -33,13 +31,11 @@ public class DescriptionDialog extends AbstractDialog {
 		textarea = new JTextArea();
 		history = new TextComponentHistory(textarea);
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		dialog.setBounds((int) (dim.getWidth() / 2) - 300, (int) (dim.getHeight() / 2) - 200, 490, 400);
-
-		dialog.add(new JScrollPane(textarea), "w 100%, h 100%, wrap");
+		dialog.add(new JScrollPane(textarea), "w 600, h 300, wrap");
 		dialog.add(createControlPanel("Save"), "align r");
 
 		createListeners();
+		pack();
 	}
 
 	public void createListeners() {
@@ -79,6 +75,7 @@ public class DescriptionDialog extends AbstractDialog {
 
 		resetHistory(callback.getText());
 
+		center();
 		dialog.setVisible(true);
 	}
 
