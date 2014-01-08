@@ -21,6 +21,7 @@ public abstract class AbstractDialog {
 	protected JButton cancelButton;
 
 	public AbstractDialog() {
+		// TODO fixme: MainFrameHolder.get() == null
 		dialog = new JDialog(MainFrameHolder.get(), true);
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
@@ -72,9 +73,7 @@ public abstract class AbstractDialog {
 		return buttonPanel;
 	}
 
-	protected void okAction() {
-
-	}
+	protected abstract void okAction();
 
 	protected void cancelAction() {
 		close();

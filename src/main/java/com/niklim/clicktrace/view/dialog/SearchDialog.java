@@ -193,4 +193,8 @@ public class SearchDialog extends AbstractDialog {
 			i++;
 		}
 	}
+
+	@Override
+	protected void okAction() {
+	}
 }

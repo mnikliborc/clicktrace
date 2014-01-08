@@ -1,8 +1,8 @@
 package com.niklim.clicktrace.capture;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Robot;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -127,8 +127,12 @@ public class CaptureManager {
 	}
 
 	private Rectangle getCaptureRectangle() {
-		return screenshotRect != null ? screenshotRect : new Rectangle(Toolkit.getDefaultToolkit()
-				.getScreenSize());
+		if (screenshotRect != null) {
+			return screenshotRect;
+		} else {
+			Dimension screenSize = ScreenUtils.getPrimarySize();
+			return new Rectangle(0, 0, screenSize.width, screenSize.height);
+		}
 	}
 
 	private void saveClicks() {

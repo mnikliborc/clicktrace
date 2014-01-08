@@ -3,7 +3,6 @@ package com.niklim.clicktrace.view;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollBar;
@@ -18,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.capture.ScreenUtils;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.view.control.ControlView;
@@ -69,13 +69,18 @@ public class MainView {
 		MainFrameHolder.set(frame);
 		frame.setIconImage(Icons.createIconImage(Icons.APP, ""));
 
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setBounds(100, 100, (int) (dim.getWidth() * 0.8), (int) (dim.getHeight() * 0.8));
+		setInitSize();
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setJMenuBar(menu.getMenuBar());
+	}
+
+	private void setInitSize() {
+		Dimension screenSize = ScreenUtils.getPrimarySize();
+		frame.setBounds((int) (screenSize.getWidth() * 0.1), (int) (screenSize.getHeight() * 0.1),
+				(int) (screenSize.getWidth() * 0.8), (int) (screenSize.getHeight() * 0.8));
 	}
 
 	private JScrollPane createScrollPane(Component top, Component Bottom) {
