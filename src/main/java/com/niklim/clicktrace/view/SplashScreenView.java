@@ -51,10 +51,10 @@ public class SplashScreenView {
 		openLastSessionButton = new JButton("Open last session");
 
 		JPanel buttonsPanel = new JPanel(new MigLayout("align center", ""));
+		buttonsPanel.add(recordSessionButton);
 		buttonsPanel.add(newSessionButton);
 		buttonsPanel.add(openSessionButton);
 		buttonsPanel.add(openLastSessionButton);
-		buttonsPanel.add(recordSessionButton);
 
 		panel.add(buttonsPanel, "grow, wrap");
 
