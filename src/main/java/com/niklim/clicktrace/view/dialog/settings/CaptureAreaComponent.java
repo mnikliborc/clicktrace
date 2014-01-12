@@ -27,15 +27,12 @@ import org.jnativehook.mouse.NativeMouseMotionListener;
 import com.google.common.base.Optional;
 import com.niklim.clicktrace.capture.ScreenUtils;
 
+/**
+ * Responsible for setting capture area. User may choose full screen or a
+ * fragment of screen confined by two points.
+ */
 public class CaptureAreaComponent {
-	/**
-	 * Swing components' names.
-	 */
-	static interface NAMES {
-		static final String FULL_SCREEN_CHECKBOX = "fullScreenCheckbox";
-		static final String INFO_PANEL = "infoPanel";
-
-	}
+	static final String FULL_SCREEN_CHECKBOX_NAME = "fullScreenCheckbox";
 
 	static enum PointWidget {
 		START("startPanel", "startButton", "startTextFieldName", "start point"), END("endPanel", "endButton",
@@ -71,9 +68,6 @@ public class CaptureAreaComponent {
 
 	private JButton startButton;
 	private JButton endButton;
-
-	private Point startPoint;
-	private Point endPoint;
 
 	private static interface MouseMoveAction {
 		void moved(int x, int y);
@@ -169,10 +163,7 @@ public class CaptureAreaComponent {
 		}
 
 		private void replaceButtonListener(ActionListener oldListener, ActionListener newListener) {
-			for (ActionListener l : button.getActionListeners()) {
-				button.removeActionListener(l);
-			}
-
+			button.removeActionListener(oldListener);
 			button.addActionListener(newListener);
 		}
 	}
@@ -184,7 +175,7 @@ public class CaptureAreaComponent {
 		this.settingsDialog = settingsDialog;
 
 		fullScreen = new JCheckBox(FULLSCREEN_TXT);
-		fullScreen.setName(NAMES.FULL_SCREEN_CHECKBOX);
+		fullScreen.setName(FULL_SCREEN_CHECKBOX_NAME);
 
 		startPointField = new JTextField();
 		startPointField.setName(PointWidget.START.textFieldName);
@@ -199,6 +190,24 @@ public class CaptureAreaComponent {
 		endButton = new JButton(CHANGE_TXT);
 		endButton.setName(PointWidget.END.buttonName);
 
+		startPanel = new JPanel(new MigLayout());
+		startPanel.setName(PointWidget.START.panelName);
+		startPanel.add(new JLabel(PointWidget.START.labelText), "w 65");
+		startPanel.add(startPointField, "w 100");
+		startPanel.add(startButton);
+
+		endPanel = new JPanel(new MigLayout());
+		endPanel.setName(PointWidget.END.panelName);
+		endPanel.add(new JLabel(PointWidget.END.labelText), "w 65");
+		endPanel.add(endPointField, "w 100");
+		endPanel.add(endButton);
+
+		infoPanel = new JPanel(new MigLayout());
+		infoPanel.add(new JLabel(SET_POINT_TXT));
+		infoPanel.setVisible(false);
+
+		layoutWidgets(settingsDialog);
+
 		fullScreen.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				startPanel.setVisible(!fullScreen.isSelected());
@@ -208,59 +217,11 @@ public class CaptureAreaComponent {
 				settingsDialog.pack();
 			}
 		});
-
-	}
-
-	public void initModel(boolean captureFullScreen, Rectangle captureRectangle) {
-		this.fullScreen.setSelected(captureFullScreen);
-
-		initPoints(captureRectangle);
-
-		startPointField.setText(pointToStr(startPoint));
-		endPointField.setText(pointToStr(endPoint));
-
-		startSettingAction = new AreaSettingAction(startPoint, startButton, startPointField);
-		startButton.addActionListener(startSettingAction);
-		endSettingAction = new AreaSettingAction(endPoint, endButton, endPointField);
-		endButton.addActionListener(endSettingAction);
-	}
-
-	private void initPoints(Rectangle captureRectangle) {
-		if (captureRectangle != null) {
-			startPoint = new Point(captureRectangle.x, captureRectangle.y);
-			endPoint = new Point(captureRectangle.x + captureRectangle.width, captureRectangle.y
-					+ captureRectangle.height);
-		} else {
-			Dimension screenSize = ScreenUtils.getPrimarySize();
-			startPoint = new Point(0, 0);
-			endPoint = new Point(screenSize.width, screenSize.height);
-		}
-	}
-
-	static String pointToStr(Point point) {
-		return point.x + "," + point.y;
 	}
 
 	public void layoutWidgets(JDialog dialog) {
 		dialog.add(new JLabel("Capture area"));
 		dialog.add(fullScreen, "wrap");
-
-		startPanel = new JPanel(new MigLayout());
-		startPanel.setName(PointWidget.START.panelName);
-		startPanel.add(new JLabel(PointWidget.START.labelText), "w 70");
-		startPanel.add(startPointField, "w 100");
-		startPanel.add(startButton);
-
-		endPanel = new JPanel(new MigLayout());
-		endPanel.setName(PointWidget.END.panelName);
-		endPanel.add(new JLabel(PointWidget.END.labelText), "w 70");
-		endPanel.add(endPointField, "w 100");
-		endPanel.add(endButton);
-
-		infoPanel = new JPanel(new MigLayout());
-		infoPanel.setName(NAMES.INFO_PANEL);
-		infoPanel.add(new JLabel(SET_POINT_TXT));
-		infoPanel.setVisible(false);
 
 		layoutPanel(dialog, startPanel);
 		layoutPanel(dialog, endPanel);
@@ -272,6 +233,60 @@ public class CaptureAreaComponent {
 		gapPanel.setVisible(false);
 		dialog.add(gapPanel);
 		dialog.add(panel, "span 2, wrap");
+	}
+
+	public void init(boolean captureFullScreen, Rectangle captureRectangle) {
+		this.fullScreen.setSelected(captureFullScreen);
+
+		Model model = createModel(captureRectangle);
+
+		if (captureRectangle != null) {
+			model.startPoint = new Point(captureRectangle.x, captureRectangle.y);
+			model.endPoint = new Point(captureRectangle.x + captureRectangle.width, captureRectangle.y
+					+ captureRectangle.height);
+		} else {
+			Dimension screenSize = ScreenUtils.getPrimarySize();
+			model.startPoint = new Point(0, 0);
+			model.endPoint = new Point(screenSize.width, screenSize.height);
+		}
+
+		startPointField.setText(pointToStr(model.startPoint));
+		endPointField.setText(pointToStr(model.endPoint));
+
+		startSettingAction = new AreaSettingAction(model.startPoint, startButton, startPointField);
+		startButton.addActionListener(startSettingAction);
+		endSettingAction = new AreaSettingAction(model.endPoint, endButton, endPointField);
+		endButton.addActionListener(endSettingAction);
+	}
+
+	private Model createModel(Rectangle captureRectangle) {
+		final Point startPoint;
+		final Point endPoint;
+
+		if (captureRectangle != null) {
+			startPoint = new Point(captureRectangle.x, captureRectangle.y);
+			endPoint = new Point(captureRectangle.x + captureRectangle.width, captureRectangle.y
+					+ captureRectangle.height);
+		} else {
+			Dimension screenSize = ScreenUtils.getPrimarySize();
+			startPoint = new Point(0, 0);
+			endPoint = new Point(screenSize.width, screenSize.height);
+		}
+		return new Model(startPoint, endPoint);
+	}
+
+	private static class Model {
+		Point startPoint;
+		Point endPoint;
+
+		public Model(Point startPoint, Point endPoint) {
+			this.startPoint = startPoint;
+			this.endPoint = endPoint;
+		}
+	}
+
+	static String pointToStr(Point point) {
+		return point.x + "," + point.y;
 	}
 
 	public Optional<Rectangle> getCaptureRectangleOpt() {

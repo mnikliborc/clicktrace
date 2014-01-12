@@ -50,7 +50,6 @@ public class SettingsDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		captureAreaComponent = new CaptureAreaComponent(dialog);
 		dialog.getContentPane().setLayout(new MigLayout("hidemode 1", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
 		dialog.setTitle("Settings");
@@ -59,7 +58,7 @@ public class SettingsDialog extends AbstractDialog {
 
 		createSectionLabel("Recording");
 		createCaptureMouseClicksPanel();
-		createCaptureAreaPanel();
+		createCaptureAreaComponent();
 
 		createSectionLabel("Screenshot");
 		createImageEditorPathPanel();
@@ -107,8 +106,8 @@ public class SettingsDialog extends AbstractDialog {
 		dialog.add(captureMouseClicks, "wrap");
 	}
 
-	private void createCaptureAreaPanel() {
-		captureAreaComponent.layoutWidgets(dialog);
+	private void createCaptureAreaComponent() {
+		captureAreaComponent = new CaptureAreaComponent(dialog);
 	}
 
 	private void createImageEditorPathPanel() {
@@ -160,7 +159,7 @@ public class SettingsDialog extends AbstractDialog {
 		}
 
 		captureMouseClicks.setSelected(props.getCaptureMouseClicks());
-		captureAreaComponent.initModel(props.getCaptureFullScreen(), props.getCaptureRectangle());
+		captureAreaComponent.init(props.getCaptureFullScreen(), props.getCaptureRectangle());
 
 		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());

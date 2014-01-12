@@ -17,7 +17,6 @@ import com.niklim.clicktrace.AbstractSystemTest;
 import com.niklim.clicktrace.TestSessionsData;
 import com.niklim.clicktrace.capture.ScreenUtils;
 import com.niklim.clicktrace.props.UserProperties;
-import com.niklim.clicktrace.view.dialog.settings.CaptureAreaComponent.NAMES;
 import com.niklim.clicktrace.view.dialog.settings.CaptureAreaComponent.PointWidget;
 
 public class CaptureAreaComponentTest extends AbstractSystemTest {
@@ -40,7 +39,7 @@ public class CaptureAreaComponentTest extends AbstractSystemTest {
 
 		DialogFixture dialog = editorFixture.dialog();
 
-		dialog.checkBox(NAMES.FULL_SCREEN_CHECKBOX).click();
+		dialog.checkBox(CaptureAreaComponent.FULL_SCREEN_CHECKBOX_NAME).click();
 		assertButtonsTextIsChange(dialog);
 
 		testSettingAndCancellingPoint(dialog, PointWidget.START, new Point(400, 600), new Point(0, 0));
