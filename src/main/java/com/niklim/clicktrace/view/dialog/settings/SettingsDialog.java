@@ -200,4 +200,10 @@ public class SettingsDialog extends AbstractDialog {
 		saveModel();
 		close();
 	}
+
+	@Override
+	public void close() {
+		super.close();
+		captureAreaComponent.clear();
+	}
 }

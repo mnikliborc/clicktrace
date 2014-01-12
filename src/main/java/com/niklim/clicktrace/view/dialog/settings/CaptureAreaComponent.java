@@ -32,6 +32,7 @@ import com.niklim.clicktrace.capture.ScreenUtils;
  * fragment of screen confined by two points.
  */
 public class CaptureAreaComponent {
+	// TODO make me simpler, please...
 	static final String FULL_SCREEN_CHECKBOX_NAME = "fullScreenCheckbox";
 
 	static enum PointWidget {
@@ -69,6 +70,34 @@ public class CaptureAreaComponent {
 	private JButton startButton;
 	private JButton endButton;
 
+	private ActiveButtonXorAvailabilityListener xor = new ActiveButtonXorAvailabilityListener();
+
+	/**
+	 * Enables only one point button, when the other was activated.
+	 */
+	private class ActiveButtonXorAvailabilityListener implements ActionListener {
+		JButton activeButton;
+
+		public void actionPerformed(ActionEvent e) {
+			if (activeButton == e.getSource()) {
+				activeButton = null;
+				enableBoth();
+			} else {
+				activeButton = (JButton) e.getSource();
+				if (activeButton == startButton) {
+					endButton.setEnabled(false);
+				} else {
+					startButton.setEnabled(false);
+				}
+			}
+		}
+
+		public void enableBoth() {
+			startButton.setEnabled(true);
+			endButton.setEnabled(true);
+		}
+	}
+
 	private static interface MouseMoveAction {
 		void moved(int x, int y);
 	}
@@ -98,6 +127,11 @@ public class CaptureAreaComponent {
 		}
 	};
 
+	/**
+	 * Handles setting point coords. When point button is clicked, then it sets
+	 * {@link MouseMoveAction} which updates corresponding coords textfield.
+	 * When point button is clicked again (cancel), then its state is restored.
+	 */
 	private class AreaSettingAction implements ActionListener {
 
 		private JTextField pointTextField;
@@ -110,6 +144,7 @@ public class CaptureAreaComponent {
 
 		public AreaSettingAction(Point oldPoint, JButton button, JTextField pointTextField) {
 			this.oldPoint = oldPoint;
+			this.newPoint = new Point(oldPoint);
 			this.button = button;
 			this.pointTextField = pointTextField;
 		}
@@ -160,11 +195,18 @@ public class CaptureAreaComponent {
 					KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK));
 
 			replaceButtonListener(cancelSettingPoint, this);
+			xor.enableBoth();
 		}
 
 		private void replaceButtonListener(ActionListener oldListener, ActionListener newListener) {
 			button.removeActionListener(oldListener);
 			button.addActionListener(newListener);
+		}
+
+		public void shutdown() {
+			button.removeActionListener(this);
+			button.removeActionListener(cancelSettingPoint);
+			capture.cancelAction();
 		}
 	}
 
@@ -217,6 +259,9 @@ public class CaptureAreaComponent {
 				settingsDialog.pack();
 			}
 		});
+
+		startButton.addActionListener(xor);
+		endButton.addActionListener(xor);
 	}
 
 	public void layoutWidgets(JDialog dialog) {
@@ -257,6 +302,19 @@ public class CaptureAreaComponent {
 		startButton.addActionListener(startSettingAction);
 		endSettingAction = new AreaSettingAction(model.endPoint, endButton, endPointField);
 		endButton.addActionListener(endSettingAction);
+
+	}
+
+	public void clear() {
+		if (startSettingAction != null) {
+			startSettingAction.shutdown();
+			endSettingAction.shutdown();
+		}
+
+		startButton.setText(CHANGE_TXT);
+		endButton.setText(CHANGE_TXT);
+		xor.enableBoth();
+		infoPanel.setVisible(false);
 	}
 
 	private Model createModel(Rectangle captureRectangle) {
