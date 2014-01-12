@@ -52,7 +52,7 @@ public abstract class AbstractDialog {
 		cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("[Esc]");
 
-		JPanel buttonPanel = new JPanel(new MigLayout());
+		JPanel buttonPanel = new JPanel(new MigLayout("align r"));
 		buttonPanel.add(cancelButton, "tag cancel");
 		buttonPanel.add(okButton, "tag ok");
 

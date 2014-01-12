@@ -143,8 +143,8 @@ public class SearchDialog extends AbstractDialog {
 		searchPanel.add(searchButton);
 
 		dialog.add(controlPanel, "wrap");
-		dialog.add(searchPanel, "wrap, span 2, grow");
-		dialog.add(new JScrollPane(resultTable), "w 600, h 300, span 2, wrap");
+		dialog.add(searchPanel, "wrap, span 2");
+		dialog.add(new JScrollPane(resultTable), "w 600, h 300, span 2, wrap, grow, push");
 	}
 
 	public void open() {

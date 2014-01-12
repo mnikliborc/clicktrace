@@ -39,16 +39,20 @@ public class CaptureAreaComponentTest extends AbstractSystemTest {
 
 		DialogFixture dialog = editorFixture.dialog();
 
+		// deselect 'full screen'
 		dialog.checkBox(CaptureAreaComponent.FULL_SCREEN_CHECKBOX_NAME).click();
 		assertButtonsTextIsChange(dialog);
 
+		// set-cancel-set start point
 		testSettingAndCancellingPoint(dialog, PointWidget.START, new Point(400, 600), new Point(0, 0));
 		assertButtonsTextIsChange(dialog);
 
+		// set-cancel-set end point
 		testSettingAndCancellingPoint(dialog, PointWidget.END, new Point(200, 300),
 				new Point(ScreenUtils.getPrimarySize().width, ScreenUtils.getPrimarySize().height));
 		assertButtonsTextIsChange(dialog);
 
+		// save settings
 		dialog.button(JButtonMatcher.withText("Save")).click();
 
 		UserProperties props = injector.getInstance(UserProperties.class);
@@ -58,9 +62,11 @@ public class CaptureAreaComponentTest extends AbstractSystemTest {
 
 	private void testSettingAndCancellingPoint(DialogFixture dialog, PointWidget pointWidget, Point targetPoint,
 			Point defaultPoint) {
+		// start setting point
 		dialog.button(pointWidget.buttonName).click();
 		dialog.label(JLabelMatcher.withText(pointWidget.labelText)).requireVisible();
 
+		// point text field should be updated on mouse movement
 		moveMouseToPointAndAssertPointTextFieldText(dialog, pointWidget.textFieldName, targetPoint, targetPoint);
 
 		cancelSettingPoint(dialog, pointWidget.buttonName, pointWidget.textFieldName, defaultPoint);
@@ -69,6 +75,7 @@ public class CaptureAreaComponentTest extends AbstractSystemTest {
 		// let CTRL+ENTER KeyEvent be caught by listener
 		delay();
 
+		// point text field should NOT be updated on mouse movement
 		moveMouseToPointAndAssertPointTextFieldText(dialog, pointWidget.textFieldName, new Point(targetPoint.x + 10,
 				targetPoint.y + 10), targetPoint);
 	}

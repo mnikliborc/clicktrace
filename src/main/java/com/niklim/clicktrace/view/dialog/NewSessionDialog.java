@@ -28,7 +28,7 @@ public class NewSessionDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout());
+		dialog.getContentPane().setLayout(new MigLayout("fill", "[]"));
 		dialog.setTitle("New session");
 
 		sessionName = new JTextField();
@@ -44,7 +44,7 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.add(sessionName, "wrap, w 100%");
 
 		dialog.add(new JLabel("Description"), "span 2, wrap");
-		dialog.add(new JScrollPane(sessionDescription), "span 2, w 600, h 300, wrap");
+		dialog.add(new JScrollPane(sessionDescription), "push, grow, span 2, w 600, h 300, wrap");
 
 		dialog.add(createControlPanel("Create"), "align r, span 2");
 

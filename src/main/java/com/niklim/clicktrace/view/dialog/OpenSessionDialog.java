@@ -39,7 +39,7 @@ public class OpenSessionDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout("", "[]", "[grow]"));
+		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
 		dialog.setTitle("Open session");
 
 		table = new JTable();

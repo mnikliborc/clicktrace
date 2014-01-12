@@ -49,7 +49,7 @@ public class ReorderingDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout("", "[]", "[grow]"));
+		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
 		dialog.setTitle("Reorder screenshots");
 
 		table = new JTable();
@@ -74,11 +74,12 @@ public class ReorderingDialog extends AbstractDialog {
 		navigPanel.add(prev);
 		navigPanel.add(next);
 
-		JPanel buttonPanel = new JPanel(new MigLayout("", "[]push[]"));
-		buttonPanel.add(navigPanel);
-		buttonPanel.add(createControlPanel("Save"));
-		dialog.add(buttonPanel, "push, grow, wrap");
+		// JPanel buttonPanel = new JPanel(new MigLayout("", "[]push[]"));
+		// buttonPanel.add(navigPanel);
+		// buttonPanel.add(createControlPanel("Save"));
+		// dialog.add(buttonPanel, "push, grow, wrap");
 
+		dialog.add(createControlPanel("Save"));
 		createListeners();
 
 		pack();

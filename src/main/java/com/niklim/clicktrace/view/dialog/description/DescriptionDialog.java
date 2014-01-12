@@ -27,12 +27,12 @@ public class DescriptionDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout());
+		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
 		textarea = new JTextArea();
 		history = new TextComponentHistory(textarea);
 
-		dialog.add(new JScrollPane(textarea), "w 600, h 300, wrap");
-		dialog.add(createControlPanel("Save"), "align r");
+		dialog.add(new JScrollPane(textarea), "push, grow, w 600, h 300, wrap");
+		dialog.add(createControlPanel("Save"));
 
 		createListeners();
 		pack();
