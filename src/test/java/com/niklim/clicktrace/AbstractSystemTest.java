@@ -25,6 +25,7 @@ public abstract class AbstractSystemTest {
 	@Before
 	public void setUp() {
 		prepareTestDir();
+		deleteUserProperties();
 
 		injector = loadInjector();
 		mainView = injector.getInstance(MainView.class);
@@ -33,6 +34,13 @@ public abstract class AbstractSystemTest {
 		editorFixture.maximize();
 
 		activeSession = injector.getInstance(ActiveSession.class);
+	}
+
+	private void deleteUserProperties() {
+		File file = new File("user.properties");
+		if (file.exists()) {
+			file.delete();
+		}
 	}
 
 	protected Injector loadInjector() {
@@ -79,5 +87,23 @@ public abstract class AbstractSystemTest {
 		if (editorFixture != null) {
 			editorFixture.cleanUp();
 		}
+		deleteUserProperties();
+	}
+
+	protected void delayLong() {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected void delay() {
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

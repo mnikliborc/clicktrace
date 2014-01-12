@@ -11,14 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -28,9 +25,7 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
-import com.niklim.clicktrace.view.MainFrameHolder;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
-import com.niklim.clicktrace.view.dialog.settings.CaptureRectangleFrame.CaptureRectangleCallback;
 
 @Singleton
 public class SettingsDialog extends AbstractDialog {
@@ -38,8 +33,7 @@ public class SettingsDialog extends AbstractDialog {
 	@Inject
 	private UserProperties props;
 
-	@Inject
-	private CaptureRectangleFrame captureRectangleFrame;
+	private CaptureAreaComponent captureAreaComponent;
 
 	JSpinner captureFrequency;
 	JTextField imageEditorPath;
@@ -49,17 +43,15 @@ public class SettingsDialog extends AbstractDialog {
 	JTextField jiraUsername;
 
 	JCheckBox captureMouseClicks;
-	JCheckBox captureFullScreen;
 
 	private JRadioButton horizontalScreenshotViewScalingRadio;
 	private JRadioButton verticalScreenshotViewScalingRadio;
 	private ButtonGroup screenshotViewScaling;
 
-	private Rectangle captureRectangle;
-
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
+		captureAreaComponent = new CaptureAreaComponent(dialog);
+		dialog.getContentPane().setLayout(new MigLayout("hidemode 1", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
 		dialog.setTitle("Settings");
 
@@ -116,49 +108,7 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void createCaptureAreaPanel() {
-		captureFullScreen = new JCheckBox("full screen");
-
-		final JButton changeRectangle = new JButton("change");
-		final CaptureRectangleCallback callback = new CaptureRectangleCallback() {
-			public void done(Optional<Rectangle> rOpt) {
-				if (rOpt.isPresent()) {
-					captureRectangle = rOpt.get();
-					captureFullScreen.setSelected(false);
-				} else {
-					if (captureRectangle == null) {
-						captureFullScreen.setSelected(true);
-					}
-				}
-
-				MainFrameHolder.get().setVisible(true);
-				dialog.setVisible(true);
-			}
-		};
-		final ActionListener rectangleChanger = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(dialog, "Press Enter to save or Esc to cancel");
-				dialog.setVisible(false);
-				MainFrameHolder.get().setVisible(false);
-
-				captureRectangleFrame.open(captureRectangle, callback);
-			}
-
-		};
-
-		changeRectangle.addActionListener(rectangleChanger);
-
-		captureFullScreen.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				changeRectangle.setEnabled(!captureFullScreen.isSelected());
-				if (!captureFullScreen.isSelected() && captureRectangle == null) {
-					rectangleChanger.actionPerformed(null);
-				}
-			}
-		});
-
-		dialog.add(new JLabel("Capture area"));
-		dialog.add(captureFullScreen);
-		dialog.add(changeRectangle, "wrap");
+		captureAreaComponent.layoutWidgets(dialog);
 	}
 
 	private void createImageEditorPathPanel() {
@@ -199,6 +149,7 @@ public class SettingsDialog extends AbstractDialog {
 		loadModel();
 
 		center();
+		pack();
 		dialog.setVisible(true);
 	}
 
@@ -209,8 +160,7 @@ public class SettingsDialog extends AbstractDialog {
 		}
 
 		captureMouseClicks.setSelected(props.getCaptureMouseClicks());
-		captureFullScreen.setSelected(props.getCaptureFullScreen());
-		captureRectangle = props.getCaptureRectangle();
+		captureAreaComponent.initModel(props.getCaptureFullScreen(), props.getCaptureRectangle());
 
 		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());
@@ -232,10 +182,13 @@ public class SettingsDialog extends AbstractDialog {
 		}
 
 		props.setCaptureMouseClicks(captureMouseClicks.isSelected());
-		props.setCaptureFullScreen(captureFullScreen.isSelected());
 
-		if (captureRectangle != null) {
-			props.setCaptureRectangle(captureRectangle);
+		Optional<Rectangle> captureRectangleOpt = captureAreaComponent.getCaptureRectangleOpt();
+		if (captureRectangleOpt.isPresent()) {
+			props.setCaptureRectangle(captureRectangleOpt.get());
+			props.setCaptureFullScreen(false);
+		} else {
+			props.setCaptureFullScreen(true);
 		}
 
 		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText()));

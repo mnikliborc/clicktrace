@@ -55,7 +55,7 @@ public class CaptureManager {
 
 	private Timer time;
 
-	private boolean recordMouseClicks;
+	private boolean captureMouseClicks;
 	private Rectangle screenshotRect;
 
 	/**
@@ -71,7 +71,7 @@ public class CaptureManager {
 	}
 
 	private void configure() {
-		recordMouseClicks = props.getCaptureMouseClicks();
+		captureMouseClicks = props.getCaptureMouseClicks();
 		if (props.getCaptureFullScreen()) {
 			screenshotRect = null;
 		} else {
@@ -136,7 +136,7 @@ public class CaptureManager {
 	}
 
 	private void saveClicks() {
-		if (!recordMouseClicks) {
+		if (!captureMouseClicks) {
 			return;
 		}
 

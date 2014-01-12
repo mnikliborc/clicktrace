@@ -34,7 +34,7 @@ public class CollectorMouseCaptureTest extends AbstractSystemTest {
 		Thread.sleep(200);
 		Robot r = new Robot();
 		r.mouseMove(100, 100);
-		Thread.sleep(200);
+		Thread.sleep(1000);
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 
