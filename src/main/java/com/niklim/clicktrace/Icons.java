@@ -11,24 +11,24 @@ import javax.swing.ImageIcon;
 public class Icons {
 	public static final String APP = "app.png";
 
-	public static final String SESSION_NEW = "icons/1383438310_folder_add.png";
-	public static final String SESSION_OPEN = "icons/1383438320_folder.png";
-	public static final String SESSION_DELETE = "icons/1383438389_folder_delete.png";
-	public static final String SESSION_REFRESH = "icons/1383454049_folder.png";
-	public static final String SESSION_DESCRIPTION = "icons/session_desc.png";
+	public static final String SESSION_NEW = "icons/add_folder.png";
+	public static final String SESSION_OPEN = "icons/open_folder.png";
+	public static final String SESSION_DELETE = "icons/delete_folder.png";
+	public static final String SESSION_REFRESH = "icons/refresh_folder.png";
+	public static final String SESSION_DESCRIPTION = "icons/desc_folder.png";
 	public static final String SESSION_REORDER = "icons/reorder.png";
 
-	public static final String START_RECORDING = "icons/media-record-5.png";
-	public static final String STOP_RECORDING = "icons/media-playback-pause.png";
+	public static final String START_RECORDING = "icons/media_record.png";
+	public static final String STOP_RECORDING = "icons/Stop-icon.png";
 
-	public static final String SCREENSHOT_REFRESH = "icons/view-refresh-5.png";
+	public static final String SCREENSHOT_REFRESH = "icons/refresh.png";
 	public static final String SCREENSHOT_EDIT = "icons/format-stroke-color.png";
-	public static final String SCREENSHOT_DELETE = "icons/window-close-2.png";
-	public static final String SCREENSHOT_NEXT = "icons/gnome_go_next.png";
-	public static final String SCREENSHOT_PREV = "icons/gnome_go_previous.png";
-	public static final String SCREENSHOT_LAST = "icons/gnome_go_last.png";
-	public static final String SCREENSHOT_FIRST = "icons/gnome_go_first.png";
-	public static final String SCREENSHOT_DESCRIPTION = "icons/desc_edit.png";
+	public static final String SCREENSHOT_DELETE = "icons/delete.png";
+	public static final String SCREENSHOT_NEXT = "icons/next.png";
+	public static final String SCREENSHOT_PREV = "icons/prev.png";
+	public static final String SCREENSHOT_LAST = "icons/last.png";
+	public static final String SCREENSHOT_FIRST = "icons/first.png";
+	public static final String SCREENSHOT_DESCRIPTION = "icons/edit.png";
 
 	public static final String SEARCH = "icons/search.png";
 
