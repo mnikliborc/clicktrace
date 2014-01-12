@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -35,7 +34,6 @@ public class HtmlExportDialog extends AbstractDialog {
 
 	private JTextField outputDirPath;
 	private JFileChooser outputDirFileChooser;
-	private JCheckBox simpleHtml;
 
 	public HtmlExportDialog() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]rel[]"));
@@ -51,7 +49,6 @@ public class HtmlExportDialog extends AbstractDialog {
 		outputDirPath = new JTextField();
 		outputDirFileChooser = new JFileChooser();
 		outputDirFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		simpleHtml = new JCheckBox();
 
 		JButton setPathButton = new JButton("Select");
 		setPathButton.addActionListener(new ActionListener() {
@@ -70,14 +67,12 @@ public class HtmlExportDialog extends AbstractDialog {
 		dialog.add(new JLabel("Output folder path"));
 		dialog.add(outputDirPath, "w 400");
 		dialog.add(setPathButton, "wrap");
-		dialog.add(new JLabel("Simple HTML"));
-		dialog.add(simpleHtml, "wrap");
 	}
 
 	@Override
 	public void okAction() {
 		try {
-			htmlExportService.export(activeSession.getSession(), outputDirPath.getText(), simpleHtml.isSelected());
+			htmlExportService.export(activeSession.getSession(), outputDirPath.getText());
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.HTML_EXPORT_SUCCESS);
 			close();
 		} catch (HtmlExportException e) {
@@ -90,6 +85,7 @@ public class HtmlExportDialog extends AbstractDialog {
 
 	public void open() {
 		center();
+		pack();
 		dialog.setVisible(true);
 	}
 }
