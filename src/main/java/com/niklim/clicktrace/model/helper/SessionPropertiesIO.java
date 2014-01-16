@@ -19,12 +19,16 @@ public abstract class SessionPropertiesIO {
 	protected static final Logger log = LoggerFactory.getLogger(SessionPropertiesIO.class);
 	protected PropertiesConfiguration props;
 	protected final Session session;
-
+	
 	public SessionPropertiesIO(Session session) {
 		this.session = session;
 		try {
-			props = new PropertiesConfiguration(new File(FileManager.SESSIONS_DIR + session.getName() + File.separator
-					+ FileManager.SESSION_PROPS_FILENAME));
+			File file = new File(FileManager.SESSIONS_DIR + session.getName() + File.separator
+					+ FileManager.SESSION_PROPS_FILENAME);
+			props = new PropertiesConfiguration();
+			props.setListDelimiter((char) 0);
+			props.setFile(file);
+			props.load();
 		} catch (ConfigurationException e) {
 			log.error(ErrorMsgs.SESSION_DELETE_PROPS_ERROR, e);
 			ErrorNotifier.notify(ErrorMsgs.SESSION_DELETE_PROPS_ERROR);
