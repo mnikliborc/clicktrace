@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 import net.miginfocom.swing.MigLayout;
@@ -32,11 +33,20 @@ public abstract class AbstractDialog {
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
+	public void postInit() {
+		pack();
+	}
+
+	protected void initTextWrapping(JTextArea textarea) {
+		textarea.setWrapStyleWord(true);
+		textarea.setLineWrap(true);
+	}
+
 	public void close() {
 		dialog.setVisible(false);
 	}
 
-	protected void pack() {
+	private void pack() {
 		dialog.pack();
 	}
 
@@ -47,7 +57,7 @@ public abstract class AbstractDialog {
 		dialog.setBounds(x, y, dialog.getWidth(), dialog.getHeight());
 	}
 
-	protected JPanel createControlPanel(String okText) {
+	protected JPanel createControlPanel(String okText, JComponent... components) {
 		okButton = new JButton(okText);
 		cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("[Esc]");
@@ -55,6 +65,13 @@ public abstract class AbstractDialog {
 		JPanel buttonPanel = new JPanel(new MigLayout("align r"));
 		buttonPanel.add(cancelButton, "tag cancel");
 		buttonPanel.add(okButton, "tag ok");
+
+		JPanel controlPanel = null;
+		if (components.length == 0) {
+			controlPanel = buttonPanel;
+		} else {
+			controlPanel = embedExtraComponents(buttonPanel, components);
+		}
 
 		okButton.addActionListener(new ActionListener() {
 			@Override
@@ -70,7 +87,21 @@ public abstract class AbstractDialog {
 			}
 		});
 
-		return buttonPanel;
+		return controlPanel;
+	}
+
+	private JPanel embedExtraComponents(JPanel buttonPanel, JComponent... components) {
+		JPanel controlPanel = new JPanel(new MigLayout("", "[]push[]"));
+
+		JPanel extraPanel = new JPanel();
+		for (JComponent c : components) {
+			extraPanel.add(c);
+		}
+
+		controlPanel.add(extraPanel);
+		controlPanel.add(buttonPanel);
+
+		return controlPanel;
 	}
 
 	protected abstract void okAction();

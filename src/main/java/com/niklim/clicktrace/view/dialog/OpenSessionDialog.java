@@ -34,7 +34,7 @@ public class OpenSessionDialog extends AbstractDialog {
 	private SessionManager sessionManager;
 
 	JTable table;
-	JTextArea textarea;
+	JTextArea sessionDescription;
 	List<Session> sessions;
 
 	@Inject
@@ -44,19 +44,21 @@ public class OpenSessionDialog extends AbstractDialog {
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		textarea = new JTextArea();
-		textarea.setEditable(false);
+
+		sessionDescription = new JTextArea();
+		sessionDescription.setEditable(false);
+		initTextWrapping(sessionDescription);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setTopComponent(new JScrollPane(table));
-		splitPane.setBottomComponent(new JScrollPane(textarea));
+		splitPane.setBottomComponent(new JScrollPane(sessionDescription));
 		splitPane.setResizeWeight(0.4);
 
 		dialog.add(splitPane, "push, grow, wrap, w 600");
 		dialog.add(createControlPanel("Open"), "align r");
 		createListeners();
 
-		pack();
+		postInit();
 	}
 
 	private void createListeners() {
@@ -98,9 +100,9 @@ public class OpenSessionDialog extends AbstractDialog {
 	private void refreshDescription() {
 		int selectedRow = table.getSelectedRow();
 		if (selectedRow == -1 || sessions.isEmpty()) {
-			textarea.setText("");
+			sessionDescription.setText("");
 		} else {
-			textarea.setText(sessions.get(selectedRow).getDescription());
+			sessionDescription.setText(sessions.get(selectedRow).getDescription());
 		}
 	}
 

@@ -20,26 +20,26 @@ import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 @Singleton
 public class DescriptionDialog extends AbstractDialog {
-
-	private JTextArea textarea;
+	private JTextArea description;
 	private TextComponentHistory history;
 	private DescriptionDialogCallback callback;
 
 	@Inject
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
-		textarea = new JTextArea();
-		history = new TextComponentHistory(textarea);
+		description = new JTextArea();
+		initTextWrapping(description);
+		history = new TextComponentHistory(description);
 
-		dialog.add(new JScrollPane(textarea), "push, grow, w 600, h 300, wrap");
+		dialog.add(new JScrollPane(description), "push, grow, w 600, h 300, wrap");
 		dialog.add(createControlPanel("Save"));
 
 		createListeners();
-		pack();
+		postInit();
 	}
 
 	public void createListeners() {
-		textarea.addFocusListener(new FocusListener() {
+		description.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
 			}
@@ -50,7 +50,7 @@ public class DescriptionDialog extends AbstractDialog {
 			}
 		});
 
-		textarea.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(history));
+		description.addKeyListener(new TextComponentHistory.DefaultKeyAdapter(history));
 		okButton.setToolTipText("[Ctrl+S]");
 
 		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
@@ -63,7 +63,7 @@ public class DescriptionDialog extends AbstractDialog {
 
 	@Override
 	protected void okAction() {
-		callback.setText(textarea.getText());
+		callback.setText(description.getText());
 		close();
 	}
 
@@ -71,7 +71,8 @@ public class DescriptionDialog extends AbstractDialog {
 		this.callback = callback;
 
 		dialog.setTitle(callback.getTitle());
-		textarea.setText(callback.getText());
+		description.setText(callback.getText());
+		description.grabFocus();
 
 		resetHistory(callback.getText());
 

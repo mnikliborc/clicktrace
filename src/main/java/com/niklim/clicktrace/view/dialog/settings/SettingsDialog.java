@@ -43,6 +43,7 @@ public class SettingsDialog extends AbstractDialog {
 	JTextField jiraUsername;
 
 	JCheckBox captureMouseClicks;
+	JCheckBox captureSelectAll;
 
 	private JRadioButton horizontalScreenshotViewScalingRadio;
 	private JRadioButton verticalScreenshotViewScalingRadio;
@@ -59,8 +60,9 @@ public class SettingsDialog extends AbstractDialog {
 		createSectionLabel("Recording");
 		createCaptureMouseClicksPanel();
 		createCaptureAreaComponent();
+		createCaptureSelectAllPanel();
 
-		createSectionLabel("Screenshot");
+		createSectionLabel("Editing");
 		createImageEditorPathPanel();
 		createScreenshotViewScalingPanel();
 
@@ -68,7 +70,8 @@ public class SettingsDialog extends AbstractDialog {
 		createJiraPanel();
 
 		dialog.add(createControlPanel("Save"), "align r, span 3");
-		pack();
+
+		postInit();
 	}
 
 	private void createSectionLabel(String label) {
@@ -104,6 +107,17 @@ public class SettingsDialog extends AbstractDialog {
 
 		dialog.add(new JLabel("Capture mouse clicks"));
 		dialog.add(captureMouseClicks, "wrap");
+	}
+
+	private void createCaptureSelectAllPanel() {
+		captureSelectAll = new JCheckBox();
+
+		String tooltip = "Select all screenshots on stop recording";
+		JLabel label = new JLabel("Select all screenshots");
+		label.setToolTipText(tooltip);
+		dialog.add(label);
+		captureSelectAll.setToolTipText(tooltip);
+		dialog.add(captureSelectAll, "wrap");
 	}
 
 	private void createCaptureAreaComponent() {
@@ -148,7 +162,6 @@ public class SettingsDialog extends AbstractDialog {
 		loadModel();
 
 		center();
-		pack();
 		dialog.setVisible(true);
 	}
 
@@ -160,6 +173,7 @@ public class SettingsDialog extends AbstractDialog {
 
 		captureMouseClicks.setSelected(props.getCaptureMouseClicks());
 		captureAreaComponent.init(props.getCaptureFullScreen(), props.getCaptureRectangle());
+		captureSelectAll.setSelected(props.getCaptureSelectAll());
 
 		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
 		jiraUsername.setText(props.getJiraConfig().getUsername());
@@ -181,6 +195,7 @@ public class SettingsDialog extends AbstractDialog {
 		}
 
 		props.setCaptureMouseClicks(captureMouseClicks.isSelected());
+		props.setCaptureSelectAll(captureSelectAll.isSelected());
 
 		Optional<Rectangle> captureRectangleOpt = captureAreaComponent.getCaptureRectangleOpt();
 		if (captureRectangleOpt.isPresent()) {

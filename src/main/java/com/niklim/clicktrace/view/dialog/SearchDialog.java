@@ -70,7 +70,7 @@ public class SearchDialog extends AbstractDialog {
 		layoutElements();
 		createActionListeners();
 
-		pack();
+		postInit();
 	}
 
 	private void createActionListeners() {

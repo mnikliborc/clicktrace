@@ -36,6 +36,7 @@ public class NewSessionDialog extends AbstractDialog {
 
 		sessionDescription = new JTextArea();
 		sessionDescription.setName("description");
+		initTextWrapping(sessionDescription);
 
 		descriptionHistory = new TextComponentHistory(sessionDescription);
 		descriptionHistory.reset("");
@@ -49,7 +50,8 @@ public class NewSessionDialog extends AbstractDialog {
 		dialog.add(createControlPanel("Create"), "align r, span 2");
 
 		createListeners();
-		pack();
+
+		postInit();
 	}
 
 	public void open(NewSessionCallback callback) {

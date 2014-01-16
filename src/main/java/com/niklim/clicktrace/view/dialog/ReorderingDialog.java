@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
@@ -32,11 +31,11 @@ import com.niklim.clicktrace.view.Buttons;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 public class ReorderingDialog extends AbstractDialog {
-	JTable table;
-	JTextArea description;
+	private JTable table;
+	private JTextArea sessionDescription;
 
-	JButton prev;
-	JButton next;
+	private JButton prev;
+	private JButton next;
 
 	@Inject
 	private ActiveSession activeSession;
@@ -55,12 +54,13 @@ public class ReorderingDialog extends AbstractDialog {
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-		description = new JTextArea();
-		description.setEditable(false);
+		sessionDescription = new JTextArea();
+		sessionDescription.setEditable(false);
+		initTextWrapping(sessionDescription);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setTopComponent(new JScrollPane(table));
-		splitPane.setBottomComponent(new JScrollPane(description));
+		splitPane.setBottomComponent(new JScrollPane(sessionDescription));
 		splitPane.setResizeWeight(0.4);
 
 		dialog.add(splitPane, "push, grow, wrap, w 600");
@@ -70,19 +70,11 @@ public class ReorderingDialog extends AbstractDialog {
 		next = Buttons.create("Move one next", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_MOVE_NEXT);
 		next.setName("next");
 
-		JPanel navigPanel = new JPanel(new MigLayout());
-		navigPanel.add(prev);
-		navigPanel.add(next);
+		dialog.add(createControlPanel("Save", prev, next), "push, grow, wrap");
 
-		// JPanel buttonPanel = new JPanel(new MigLayout("", "[]push[]"));
-		// buttonPanel.add(navigPanel);
-		// buttonPanel.add(createControlPanel("Save"));
-		// dialog.add(buttonPanel, "push, grow, wrap");
-
-		dialog.add(createControlPanel("Save"));
 		createListeners();
 
-		pack();
+		postInit();
 	}
 
 	private void createListeners() {
@@ -155,15 +147,15 @@ public class ReorderingDialog extends AbstractDialog {
 
 	private void refreshDescription() {
 		if (table.getSelectedRowCount() == 1) {
-			description.setEnabled(true);
+			sessionDescription.setEnabled(true);
 			int selectedRow = table.getSelectedRow();
 			ScreenShot shot = (ScreenShot) table.getModel().getValueAt(selectedRow, 0);
 			if (shot != null) {
-				description.setText(shot.getDescription());
+				sessionDescription.setText(shot.getDescription());
 			}
 		} else {
-			description.setEnabled(false);
-			description.setText("");
+			sessionDescription.setEnabled(false);
+			sessionDescription.setText("");
 		}
 	}
 

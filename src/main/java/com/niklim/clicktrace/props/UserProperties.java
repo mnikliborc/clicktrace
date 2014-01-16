@@ -20,6 +20,7 @@ public class UserProperties extends AbstractProperties {
 
 	private static final String CAPTURE_CLICKS = "capture.recordClicks";
 	private static final String CAPTURE_FULLSCREEN = "capture.dimension.fullscreen";
+	private static final String CAPTURE_SELECT_ALL = "capture.stop.selectAllShots";
 
 	private static final String CAPTURE_RECTANGLE_HEIGHT = "capture.dimension.height";
 	private static final String CAPTURE_RECTANGLE_WIDTH = "capture.dimension.width";
@@ -29,6 +30,7 @@ public class UserProperties extends AbstractProperties {
 	static {
 		defaults.put(CAPTURE_CLICKS, true);
 		defaults.put(CAPTURE_FULLSCREEN, true);
+		defaults.put(CAPTURE_SELECT_ALL, false);
 		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.VERTICAL.name());
 	}
 
@@ -110,6 +112,14 @@ public class UserProperties extends AbstractProperties {
 
 	public void setCaptureFullScreen(boolean fullScreen) {
 		props.setProperty(CAPTURE_FULLSCREEN, fullScreen);
+	}
+
+	public boolean getCaptureSelectAll() {
+		return props.getBoolean(CAPTURE_SELECT_ALL);
+	}
+
+	public void setCaptureSelectAll(boolean selectAll) {
+		props.setProperty(CAPTURE_SELECT_ALL, selectAll);
 	}
 
 	public Rectangle getCaptureRectangle() {

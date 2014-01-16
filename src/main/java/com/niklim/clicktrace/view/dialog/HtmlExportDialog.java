@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.view.dialog;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -42,7 +43,7 @@ public class HtmlExportDialog extends AbstractDialog {
 		createConfigPanel();
 		dialog.add(createControlPanel("Export"), "align r, span 3");
 
-		pack();
+		postInit();
 	}
 
 	private void createConfigPanel() {
@@ -72,7 +73,9 @@ public class HtmlExportDialog extends AbstractDialog {
 	@Override
 	public void okAction() {
 		try {
+			showWaitingCursor();
 			htmlExportService.export(activeSession.getSession(), outputDirPath.getText());
+
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.HTML_EXPORT_SUCCESS);
 			close();
 		} catch (HtmlExportException e) {
@@ -80,12 +83,21 @@ public class HtmlExportDialog extends AbstractDialog {
 		} catch (IOException e) {
 			log.error("", e);
 			JOptionPane.showMessageDialog(dialog, ErrorMsgs.HTML_EXPORT_IO_ERROR);
+		} finally {
+			hideWaitingCursor();
 		}
+	}
+
+	private void showWaitingCursor() {
+		dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+	}
+
+	private void hideWaitingCursor() {
+		dialog.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void open() {
 		center();
-		pack();
 		dialog.setVisible(true);
 	}
 }

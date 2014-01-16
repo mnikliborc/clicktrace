@@ -71,6 +71,8 @@ public class CaptureAreaComponent {
 	private JButton endButton;
 
 	private ActiveButtonXorAvailabilityListener xor = new ActiveButtonXorAvailabilityListener();
+	private AreaSettingAction startSettingAction;
+	private AreaSettingAction endSettingAction;
 
 	/**
 	 * Enables only one point button, when the other was activated.
@@ -209,9 +211,6 @@ public class CaptureAreaComponent {
 			capture.cancelAction();
 		}
 	}
-
-	private AreaSettingAction startSettingAction;
-	private AreaSettingAction endSettingAction;
 
 	public CaptureAreaComponent(final JDialog settingsDialog) {
 		this.settingsDialog = settingsDialog;

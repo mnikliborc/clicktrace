@@ -98,7 +98,7 @@ public class JiraExportDialog extends AbstractDialog {
 
 		dialog.add(createControlPanel("Export"), "span 2, h 50, align r");
 
-		pack();
+		postInit();
 	}
 
 	@Override
