@@ -105,7 +105,6 @@ public class MainController {
 	}
 
 	public void stopRecording() {
-		System.out.println("dupa");
 		if (!activeSession.isSessionLoaded()) {
 			return;
 		}

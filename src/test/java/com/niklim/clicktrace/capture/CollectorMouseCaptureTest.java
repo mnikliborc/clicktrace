@@ -31,19 +31,25 @@ public class CollectorMouseCaptureTest extends AbstractSystemTest {
 		startRecording();
 
 		// when
-		Thread.sleep(200);
+		delay();
+
 		Robot r = new Robot();
 		r.mouseMove(100, 100);
-		Thread.sleep(1000);
+
+		delayLong();
+
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 
 		r.mouseMove(150, 100);
-		Thread.sleep(200);
+
+		delay();
+
 		r.mousePress(InputEvent.BUTTON1_MASK);
 		r.mouseRelease(InputEvent.BUTTON1_MASK);
 
-		Thread.sleep(200);
+		delay();
+
 		stopRecording();
 
 		// then
