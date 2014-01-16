@@ -1,7 +1,8 @@
 div.clicktrace {
 	margin-left:auto;
 	margin-right:auto;	
-	width: 80%;
+	width: 800px;
+	line-height: 130%;
 }
 
 p.clicktrace-session-name {
@@ -19,6 +20,7 @@ div.clicktrace-shot {
 }
 
 div.clicktrace-shot-description {
+	margin-top: 10px;
 	font-size: 0.9em;
 }
 
@@ -37,4 +39,23 @@ div.clicktrace-footer {
 
 a.clicktrace-raw {
 	font-size: 0.8em;
+}
+
+div#zoom {
+	position: fixed;
+	top: 5px;
+	right: 15px;
+}
+div#zoom p {
+	cursor: pointer;
+}
+
+div#zoom span.in {
+	font-size:1.2em;
+	font-weight: bold;
+}
+
+div#zoom span.out {
+	font-size:0.8em;
+	font-weight: bold;
 }

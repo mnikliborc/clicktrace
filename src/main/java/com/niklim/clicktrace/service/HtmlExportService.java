@@ -98,11 +98,13 @@ public class HtmlExportService {
 
 	private void copyStaticResources(Session session, String outputDirPath) throws IOException {
 		copy("css/clicktrace.css", outputDirPath + session.getName());
+		copy("js/clicktrace.js", outputDirPath + session.getName());
 	}
 
 	private void createDirectories(Session session, String outputDirPath) throws IOException {
 		Files.createDirectory(outputDirPath + session.getName());
 		Files.createDirectory(outputDirPath + session.getName() + File.separator + "css");
+		Files.createDirectory(outputDirPath + session.getName() + File.separator + "js");
 		Files.createDirectory(outputDirPath + session.getName() + File.separator + "shots");
 	}
 

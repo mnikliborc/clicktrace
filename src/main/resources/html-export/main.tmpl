@@ -1,7 +1,13 @@
 
 <link rel="stylesheet" type="text/css" href="css/clicktrace.css" />
+<script type="text/javascript" src="js/clicktrace.js"></script>
 
-<div class="clicktrace">
+<div id="zoom">
+	<p href="#" onclick="zoom(100)">zoom <span class="in">in</span></p>
+	<p href="#" onclick="zoom(-100)">zoom <span class="out">out</span></p>
+</div>
+
+<div id="view" class="clicktrace">
 	<p class="clicktrace-session-name">${session-name}</p>
 	<div class="clicktrace-session-description">${session-description}</div>
 
