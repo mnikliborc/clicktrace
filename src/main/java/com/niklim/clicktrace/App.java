@@ -18,22 +18,33 @@ import com.niklim.clicktrace.controller.hook.GlobalKeyboardListener;
  */
 public class App {
 	private static final Logger log = LoggerFactory.getLogger(App.class);
-
+	
 	public static void main(String[] args) {
+		redirectUnhandledExceptions();
+		
 		log.info("app started");
-
+		
 		Injector injector = createInjector();
 		injector.getInstance(MouseCapture.class);
 		injector.getInstance(GlobalKeyboardListener.class);
-
+		
 		MainController controller = injector.getInstance(MainController.class);
-
+		
 		ToolTipManager.sharedInstance().setInitialDelay(1000);
-
+		
 		log.info("app ready to work");
 		controller.init();
 	}
-
+	
+	private static void redirectUnhandledExceptions() {
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				log.error("Uncaught exception", e);
+			}
+		});
+	}
+	
 	public static Injector createInjector() {
 		return Guice.createInjector(new ControllerModule(), new CaptureModule());
 	}
