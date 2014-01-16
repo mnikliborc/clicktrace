@@ -1,5 +1,7 @@
 package com.niklim.clicktrace.controller;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -58,6 +60,16 @@ public class MainController {
 	@Inject
 	private NavigationController navigationController;
 
+	@Inject
+	public void registerRefreshOnFrameResize() {
+		mainView.getFrame().addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				refreshScreenShot();
+			}
+		});
+	}
+
 	/**
 	 * Opens the app window.
 	 */
@@ -93,6 +105,7 @@ public class MainController {
 	}
 
 	public void stopRecording() {
+		System.out.println("dupa");
 		if (!activeSession.isSessionLoaded()) {
 			return;
 		}
@@ -105,6 +118,10 @@ public class MainController {
 		int index = activeSession.getActiveShotIndex();
 		if (index >= 0) {
 			navigationController.showScreenShot(index);
+		}
+
+		if (props.getCaptureSelectAll()) {
+			setSelectedAllScreenshots(true);
 		}
 	}
 

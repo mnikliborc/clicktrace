@@ -17,7 +17,6 @@ public class ActiveSession {
 	private boolean recording = false;
 	private Set<ScreenShot> selectedShots = new HashSet<ScreenShot>();
 
-
 	public Session getSession() {
 		return session;
 	}
@@ -51,7 +50,11 @@ public class ActiveSession {
 	}
 
 	public ScreenShot getShot(int i) {
-		return session.getShots().get(i);
+		if (session.getShots().size() <= i) {
+			return null;
+		} else {
+			return session.getShots().get(i);
+		}
 	}
 
 	public boolean isShotSelected(ScreenShot shot) {
