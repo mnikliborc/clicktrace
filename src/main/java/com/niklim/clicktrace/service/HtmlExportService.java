@@ -21,6 +21,8 @@ import com.niklim.clicktrace.service.exception.HtmlExportException;
 @Singleton
 public class HtmlExportService {
 
+	private static final String HTML_EXPORT_FOLDER = "html-export/";
+
 	public void export(Session session, String outputDirPath) throws HtmlExportException, IOException {
 		if (!outputDirPath.endsWith(File.separator)) {
 			outputDirPath += File.separator;
@@ -106,13 +108,13 @@ public class HtmlExportService {
 
 	private void copy(String source, String targetBasePath) throws IOException {
 		InputStream resource = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("html-export/" + source);
+				.getResourceAsStream(HTML_EXPORT_FOLDER + source);
 		Files.copy(resource, targetBasePath + File.separator + source);
 	}
 
 	private String loadTemplate(String templateName) {
 		Scanner scanner = new Scanner(Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream("html-export" + File.separator + templateName));
+				.getResourceAsStream(HTML_EXPORT_FOLDER + templateName));
 		String template = scanner.useDelimiter("\\Z").next();
 
 		scanner.close();

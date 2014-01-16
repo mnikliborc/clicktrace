@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.model.Session;
 
 /**
- * Compresses Clicktrace session folder using zip and xz compression.
+ * Compresses Clicktrace session folder using zip.
  */
 public class SessionCompressor {
 	private static final Logger log = LoggerFactory.getLogger(SessionCompressor.class);
