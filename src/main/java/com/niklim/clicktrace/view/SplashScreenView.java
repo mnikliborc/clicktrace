@@ -60,7 +60,7 @@ public class SplashScreenView {
 
 		BufferedImage img;
 		try {
-			img = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("splash-screen.jpg"));
+			img = ImageIO.read(Thread.currentThread().getContextClassLoader().getResourceAsStream("splash-screen.png"));
 			panel.add(new SplashPanel(img));
 		} catch (IOException e) {
 			e.printStackTrace();
