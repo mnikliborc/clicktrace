@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.service;
+package com.niklim.clicktrace.service.export.html;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,22 +6,26 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-import com.google.common.base.Strings;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.msg.InfoMsgs;
+import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.service.ScreenShotUtils;
 import com.niklim.clicktrace.service.exception.HtmlExportException;
 
 @Singleton
 public class HtmlExportService {
 
 	private static final String HTML_EXPORT_FOLDER = "html-export/";
+
+	@Inject
+	public HtmlExportRenderer renderer;
 
 	public void export(Session session, String outputDirPath) throws HtmlExportException, IOException {
 		if (!outputDirPath.endsWith(File.separator)) {
@@ -37,13 +41,13 @@ public class HtmlExportService {
 		}
 
 		copyFiles(session, outputDirPath);
-		String html = createHtml(session);
+		String html = renderer.renderHtml(session, HTML_EXPORT_FOLDER);
 		saveHtml(session, outputDirPath, html);
 	}
 
 	private void saveHtml(Session session, String outputDirPath, String html) throws IOException {
 		try {
-			String indexPath = outputDirPath + session.getName() + File.separator + "index.html";
+			String indexPath = outputDirPath + session.getName() + File.separator + "clicktrace.html";
 			File index = new File(indexPath);
 			index.createNewFile();
 			FileOutputStream output = new FileOutputStream(index);
@@ -77,34 +81,15 @@ public class HtmlExportService {
 		ImageIO.write(withClicks, shot.getFilename().substring(shot.getFilename().lastIndexOf(".") + 1), outputfile);
 	}
 
-	private String createHtml(Session session) {
-		String mainTemplate = loadTemplate("main.tmpl");
-		String shotTemplate = loadTemplate("shot.tmpl");
-
-		StringBuffer shotsHtmlBuffer = new StringBuffer();
-		for (ScreenShot shot : session.getShots()) {
-			String shotString = shotTemplate.replace("${shot-label}", Strings.nullToEmpty(shot.getLabel()))
-					.replace("${shot-description}", Strings.nullToEmpty(shot.getDescription()))
-					.replace("${shot-filename}", shot.getFilename());
-
-			shotsHtmlBuffer.append(shotString);
-			shotsHtmlBuffer.append("\n\n");
-		}
-		String html = mainTemplate.replace("${session-name}", session.getName())
-				.replace("${session-description}", Strings.nullToEmpty(session.getDescription()))
-				.replace("${shots}", shotsHtmlBuffer.toString());
-		return html;
-	}
-
 	private void copyStaticResources(Session session, String outputDirPath) throws IOException {
-		copy("css/clicktrace.css", outputDirPath + session.getName());
-		copy("js/clicktrace.js", outputDirPath + session.getName());
+		copy("resources/clicktrace.css", outputDirPath + session.getName());
+		copy("resources/clicktrace.js", outputDirPath + session.getName());
+		copy("resources/footer.png", outputDirPath + session.getName());
 	}
 
 	private void createDirectories(Session session, String outputDirPath) throws IOException {
 		Files.createDirectory(outputDirPath + session.getName());
-		Files.createDirectory(outputDirPath + session.getName() + File.separator + "css");
-		Files.createDirectory(outputDirPath + session.getName() + File.separator + "js");
+		Files.createDirectory(outputDirPath + session.getName() + File.separator + "resources");
 		Files.createDirectory(outputDirPath + session.getName() + File.separator + "shots");
 	}
 
@@ -112,15 +97,6 @@ public class HtmlExportService {
 		InputStream resource = Thread.currentThread().getContextClassLoader()
 				.getResourceAsStream(HTML_EXPORT_FOLDER + source);
 		Files.copy(resource, targetBasePath + File.separator + source);
-	}
-
-	private String loadTemplate(String templateName) {
-		Scanner scanner = new Scanner(Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(HTML_EXPORT_FOLDER + templateName));
-		String template = scanner.useDelimiter("\\Z").next();
-
-		scanner.close();
-		return template;
 	}
 
 }

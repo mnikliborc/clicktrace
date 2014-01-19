@@ -27,6 +27,8 @@ public class UserProperties extends AbstractProperties {
 	private static final String CAPTURE_RECTANGLE_Y = "capture.dimension.y";
 	private static final String CAPTURE_RECTANGLE_X = "capture.dimension.x";
 
+	private static final String HTML_EXPORT_LAST_PATH = "export.html.lastPath";
+
 	static {
 		defaults.put(CAPTURE_CLICKS, true);
 		defaults.put(CAPTURE_FULLSCREEN, true);
@@ -120,6 +122,14 @@ public class UserProperties extends AbstractProperties {
 
 	public void setCaptureSelectAll(boolean selectAll) {
 		props.setProperty(CAPTURE_SELECT_ALL, selectAll);
+	}
+
+	public String getHtmlExportLastPath() {
+		return props.getString(HTML_EXPORT_LAST_PATH);
+	}
+
+	public void setHtmlExportLastPath(String path) {
+		props.setProperty(HTML_EXPORT_LAST_PATH, path);
 	}
 
 	public Rectangle getCaptureRectangle() {

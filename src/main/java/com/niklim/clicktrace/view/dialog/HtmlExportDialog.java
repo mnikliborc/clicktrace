@@ -21,8 +21,9 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.msg.InfoMsgs;
-import com.niklim.clicktrace.service.HtmlExportService;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.exception.HtmlExportException;
+import com.niklim.clicktrace.service.export.html.HtmlExportService;
 
 public class HtmlExportDialog extends AbstractDialog {
 	private static final Logger log = LoggerFactory.getLogger(HtmlExportDialog.class);
@@ -32,6 +33,9 @@ public class HtmlExportDialog extends AbstractDialog {
 
 	@Inject
 	private ActiveSession activeSession;
+
+	@Inject
+	private UserProperties props;
 
 	private JTextField outputDirPath;
 	private JFileChooser outputDirFileChooser;
@@ -51,7 +55,7 @@ public class HtmlExportDialog extends AbstractDialog {
 		outputDirFileChooser = new JFileChooser();
 		outputDirFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-		JButton setPathButton = new JButton("Select");
+		JButton setPathButton = new JButton("set path");
 		setPathButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -78,11 +82,15 @@ public class HtmlExportDialog extends AbstractDialog {
 
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.HTML_EXPORT_SUCCESS);
 			close();
+			saveLastPath();
 		} catch (HtmlExportException e) {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} catch (IOException e) {
 			log.error("", e);
 			JOptionPane.showMessageDialog(dialog, ErrorMsgs.HTML_EXPORT_IO_ERROR);
+		} catch (Exception e) {
+			log.error("", e);
+			JOptionPane.showMessageDialog(dialog, e.getMessage());
 		} finally {
 			hideWaitingCursor();
 		}
@@ -97,7 +105,22 @@ public class HtmlExportDialog extends AbstractDialog {
 	}
 
 	public void open() {
+		initLastPath();
+
 		center();
 		dialog.setVisible(true);
+	}
+
+	private void saveLastPath() {
+		props.setHtmlExportLastPath(outputDirPath.getText());
+		props.save();
+	}
+
+	private void initLastPath() {
+		String lastPath = props.getHtmlExportLastPath();
+		if (lastPath != null) {
+			outputDirPath.setText(lastPath);
+			outputDirFileChooser.setSelectedFile(new File(lastPath));
+		}
 	}
 }
