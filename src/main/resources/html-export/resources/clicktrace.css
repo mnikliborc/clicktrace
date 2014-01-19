@@ -15,6 +15,14 @@ div.clicktrace-session-description {
 	margin-bottom: 30px;
 }
 
+div.clicktrace-links {
+	margin-bottom: 30px;
+}
+
+div.clicktrace-links a {
+	margin-right: 10px;
+}
+
 div.clicktrace-shot {
 	margin-bottom: 40px;
 }
@@ -32,17 +40,30 @@ div.clicktrace-shot img {
 div.clicktrace-footer {
 	margin-left:auto;
 	margin-right:auto;
+	padding-bottom: 10px;
+	width: 350px;
+
 	font-weight: bold;
-	font-size: 20px;
-	width: 1%;
+	font-size: 0.9em;
+	text-align: middle;
+	line-height: 40px;
+	height: 40px;
 }
 
-a.clicktrace-raw {
-	font-size: 0.8em;
+div.clicktrace-footer img {
+	margin-right: 10px;
+	float: left;
 }
+
+div.clicktrace-footer a {
+	float: left;
+	text-decoration: none;
+	color: black;
+}
+
 
 div#zoom {
-	position: fixed;
+	position: absolute;
 	top: 5px;
 	right: 15px;
 }

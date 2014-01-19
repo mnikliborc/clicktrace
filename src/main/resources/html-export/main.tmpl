@@ -1,6 +1,6 @@
 
-<link rel="stylesheet" type="text/css" href="css/clicktrace.css" />
-<script type="text/javascript" src="js/clicktrace.js"></script>
+<link rel="stylesheet" type="text/css" href="resources/clicktrace.css" />
+<script type="text/javascript" src="resources/clicktrace.js"></script>
 
 <div id="zoom">
 	<p href="#" onclick="zoom(100)">zoom <span class="in">in</span></p>
@@ -11,7 +11,14 @@
 	<p class="clicktrace-session-name">${session-name}</p>
 	<div class="clicktrace-session-description">${session-description}</div>
 
+	<div class="clicktrace-links">
+	${links}
+	</div>
+
 ${shots}
-	<div class="clicktrace-footer">Footer</div>
+
+	<div class="clicktrace-footer">
+		<a href="http://www.clicktrace.niklim.com"><img src="resources/footer.png"/>www.clicktrace.niklim.com</a>
+	</div>
 </div>
 
