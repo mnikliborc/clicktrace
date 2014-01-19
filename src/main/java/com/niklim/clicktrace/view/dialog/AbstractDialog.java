@@ -1,5 +1,6 @@
 package com.niklim.clicktrace.view.dialog;
 
+import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -108,5 +109,13 @@ public abstract class AbstractDialog {
 
 	protected void cancelAction() {
 		close();
+	}
+
+	protected void showWaitingCursor() {
+		dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+	}
+
+	protected void hideWaitingCursor() {
+		dialog.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 }

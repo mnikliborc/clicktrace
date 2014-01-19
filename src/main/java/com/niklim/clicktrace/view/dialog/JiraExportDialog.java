@@ -1,6 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Cursor;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -154,11 +153,4 @@ public class JiraExportDialog extends AbstractDialog {
 
 	}
 
-	private void showWaitingCursor() {
-		dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	}
-
-	private void hideWaitingCursor() {
-		dialog.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	}
 }

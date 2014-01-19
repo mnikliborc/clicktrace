@@ -7,7 +7,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.service.FileManager;
@@ -19,19 +18,29 @@ public abstract class SessionPropertiesIO {
 	protected static final Logger log = LoggerFactory.getLogger(SessionPropertiesIO.class);
 	protected PropertiesConfiguration props;
 	protected final Session session;
-	
+
 	public SessionPropertiesIO(Session session) {
 		this.session = session;
+		File file = new File(FileManager.SESSIONS_DIR + session.getName() + File.separator
+				+ FileManager.SESSION_PROPS_FILENAME);
 		try {
-			File file = new File(FileManager.SESSIONS_DIR + session.getName() + File.separator
-					+ FileManager.SESSION_PROPS_FILENAME);
 			props = new PropertiesConfiguration();
 			props.setListDelimiter((char) 0);
 			props.setFile(file);
 			props.load();
 		} catch (ConfigurationException e) {
 			log.error(ErrorMsgs.SESSION_DELETE_PROPS_ERROR, e);
-			ErrorNotifier.notify(ErrorMsgs.SESSION_DELETE_PROPS_ERROR);
+			createPropertiesFile(file);
+		}
+	}
+
+	private void createPropertiesFile(File file) {
+		try {
+			props = new PropertiesConfiguration(file);
+			props.setListDelimiter((char) 0);
+			props.save();
+		} catch (ConfigurationException e) {
+			log.error(ErrorMsgs.SESSION_SAVE_PROPS_ERROR, e);
 		}
 	}
 }

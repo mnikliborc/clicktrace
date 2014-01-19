@@ -150,4 +150,5 @@ public class UserProperties extends AbstractProperties {
 		props.setProperty(CAPTURE_RECTANGLE_WIDTH, r.width);
 		props.setProperty(CAPTURE_RECTANGLE_HEIGHT, r.height);
 	}
+
 }

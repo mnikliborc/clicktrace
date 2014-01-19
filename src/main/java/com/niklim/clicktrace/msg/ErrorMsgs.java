@@ -17,7 +17,7 @@ public interface ErrorMsgs {
 	public static final String PROPS_SAVE_ERROR = "Unable to save properties file.";
 	public static final String PROPS_LOAD_ERROR = "Unable to load properties file.";
 
-	public static final String HTML_EXPORT_IO_ERROR = "Unable to export session to given directory.";
+	public static final String HTML_EXPORT_IO_ERROR = "Unable to export the session to a given directory.";
 	public static final String UNABLE_TO_REGISTER_NATIVE_HOOK_ERROR = "Unable to register JNativeHook.";
 	public static final String JIRA_EXPORT_UNKNOWN_SERVER_ERROR = "Unknown server error occured.";
 }

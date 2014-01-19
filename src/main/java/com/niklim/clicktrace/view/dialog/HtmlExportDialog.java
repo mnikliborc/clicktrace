@@ -1,6 +1,5 @@
 package com.niklim.clicktrace.view.dialog;
 
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -94,14 +93,6 @@ public class HtmlExportDialog extends AbstractDialog {
 		} finally {
 			hideWaitingCursor();
 		}
-	}
-
-	private void showWaitingCursor() {
-		dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-	}
-
-	private void hideWaitingCursor() {
-		dialog.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void open() {
