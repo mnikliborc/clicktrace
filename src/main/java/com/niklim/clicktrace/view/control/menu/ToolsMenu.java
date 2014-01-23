@@ -21,51 +21,51 @@ import com.niklim.clicktrace.view.dialog.settings.SettingsDialog;
 public class ToolsMenu {
 	@Inject
 	private SettingsDialog settingsDialog;
-
+	
 	@Inject
 	private OpenSearchDialogOperation openSearchDialogOperation;
-
+	
 	@Inject
 	private JiraExportOperation jiraExportOperation;
-
+	
 	@Inject
 	private HtmlExportOperation htmlExportOperation;
-
+	
 	@Inject
 	private ActiveSession activeSession;
-
+	
 	private JMenuItem toolsExportToJira;
-
+	
 	private JMenuItem toolsExportToHtml;
-
+	
 	public JMenu getMenu() {
 		JMenu tools = new JMenu("Tools");
-
+		
 		JMenuItem toolsSettings = createToolsSettings();
 		JMenuItem toolsSearch = createToolsSearch();
 		toolsExportToJira = createToolsExportToJira();
 		toolsExportToJira.setEnabled(false);
-
+		
 		toolsExportToHtml = createToolsExportToHtml();
 		toolsExportToHtml.setEnabled(false);
-
+		
 		tools.add(toolsSettings);
 		tools.add(toolsSearch);
-		tools.add(toolsExportToJira);
+		// tools.add(toolsExportToJira);
 		tools.add(toolsExportToHtml);
 		return tools;
 	}
-
+	
 	private JMenuItem createToolsExportToHtml() {
 		return MenuBar.createMenuItem("Export to HTML", OperationsShortcutEnum.HTML_EXPORT,
 				htmlExportOperation.action());
 	}
-
+	
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to JIRA Clicktrace Plugin", OperationsShortcutEnum.JIRA_EXPORT,
-				jiraExportOperation.action());
+		return MenuBar.createMenuItem("Export to JIRA Clicktrace Plugin",
+				OperationsShortcutEnum.JIRA_EXPORT, jiraExportOperation.action());
 	}
-
+	
 	private JMenuItem createToolsSettings() {
 		return MenuBar.createMenuItem("Settings", null, new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -73,15 +73,15 @@ public class ToolsMenu {
 			}
 		});
 	}
-
+	
 	private JMenuItem createToolsSearch() {
 		return MenuBar.createMenuItem("Find", Icons.SEARCH, OperationsShortcutEnum.FIND,
 				openSearchDialogOperation.action());
 	}
-
+	
 	public void sessionStateChanged() {
 		Session session = activeSession.getSession();
-
+		
 		boolean atLeastOneShot = false;
 		if (session != null) {
 			atLeastOneShot = session.getShots().size() > 0;
@@ -89,5 +89,5 @@ public class ToolsMenu {
 		toolsExportToJira.setEnabled(activeSession.isSessionLoaded() && atLeastOneShot);
 		toolsExportToHtml.setEnabled(activeSession.isSessionLoaded() && atLeastOneShot);
 	}
-
+	
 }

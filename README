@@ -1,8 +1,0 @@
-Copyright (C) Marcin Nikliborc
-
-Clicktrace depends on JNativeHook, which at the moment is not published on any public Maven repo. So just download the library in version
-1.1.4 from here:
-https://code.google.com/p/jnativehook/downloads/list
-
-and execute:
-mvn install:install-file -Dfile=lib/JNativeHook.jar -DgroupId=jnativehook -DartifactId=jnativehook -Dversion=1.1.4 -Dpackaging=jar

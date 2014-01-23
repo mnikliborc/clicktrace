@@ -26,6 +26,7 @@ public enum OperationsShortcutEnum {
 	SESSION_OPEN("[Shift+O]", KeyEvent.VK_O, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_DESCRIPTION("[Shift+D]", KeyEvent.VK_D, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_DELETE("[Shift+Del]", KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK),
+	SESSION_DELETE_SELECTED("[Shift+Ctrl+Del]", KeyEvent.VK_DELETE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK),
 	SESSION_SELECT_ALL_SHOTS("[Shift+A]", KeyEvent.VK_A, KeyEvent.SHIFT_DOWN_MASK),
 	SESSION_DESELECT_ALL_SHOTS("[Shift+Ctrl+A]", KeyEvent.VK_A, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK),
 	SESSION_REORDER("[Shift+E]", KeyEvent.VK_E, KeyEvent.SHIFT_DOWN_MASK),

@@ -34,6 +34,7 @@ import com.niklim.clicktrace.controller.operation.screenshot.EditScreenShotOpera
 import com.niklim.clicktrace.controller.operation.screenshot.RefreshScreenShotOperation;
 import com.niklim.clicktrace.controller.operation.session.ChangeSessionDescriptionOperation;
 import com.niklim.clicktrace.controller.operation.session.DeleteActiveSessionOperation;
+import com.niklim.clicktrace.controller.operation.session.DeleteSelectedScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.DeselectAllScreenShotsOperation;
 import com.niklim.clicktrace.controller.operation.session.HtmlExportOperation;
 import com.niklim.clicktrace.controller.operation.session.JiraExportOperation;
@@ -56,70 +57,73 @@ import com.niklim.clicktrace.view.OperationsShortcutEnum;
 @Singleton
 public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	private static Logger log = LoggerFactory.getLogger(GlobalKeyboardListener.class);
-
+	
 	@Inject
 	private MainController mainController;
-
+	
 	@Inject
 	private NavigationController navigationController;
-
+	
 	@Inject
 	private MainView mainView;
-
+	
 	@Inject
 	private ChangeScreenShotDescriptionOperation changeScreenShotDescriptionOperation;
-
+	
 	@Inject
 	private DeleteScreenShotOperation deleteScreenShotOperation;
-
+	
 	@Inject
 	private EditScreenShotOperation editScreenShotOperation;
-
+	
 	@Inject
 	private StartRecordingOperation startRecordingOperation;
-
+	
 	@Inject
 	private StopRecordingOperation stopRecordingOperation;
-
+	
 	@Inject
 	private OpenSearchDialogOperation openSearchDialogOperation;
-
+	
 	@Inject
 	private OpenSessionOperation openSessionOperation;
-
+	
 	@Inject
 	private NewSessionOperation newSessionOperation;
-
+	
 	@Inject
 	private DeleteActiveSessionOperation deleteActiveSessionOperation;
-
+	
 	@Inject
 	private RefreshSessionOperation refreshSessionOperation;
-
+	
 	@Inject
 	private RefreshScreenShotOperation refreshScreenShotOperation;
-
+	
 	@Inject
 	private SelectAllScreenShotsOperation selectAllScreenShotsOperation;
-
+	
 	@Inject
 	private DeselectAllScreenShotsOperation deselectAllScreenShotsOperation;
-
+	
+	@Inject
+	private DeleteSelectedScreenShotsOperation deleteSelectedShotsOperation;
+	
 	@Inject
 	private ChangeScreenShotLabelOperation changeScreenShotLabelOperation;
-
+	
 	@Inject
 	private ChangeSessionDescriptionOperation changeSessionDescriptionOperation;
-
+	
 	@Inject
 	private ReorderOperation reorderOperation;
-
+	
 	@Inject
 	private JiraExportOperation jiraExportOperation;
-
+	
 	@Inject
 	private HtmlExportOperation htmlExportOperation;
-
+	
 	public GlobalKeyboardListenerImpl() {
 		try {
 			if (!GlobalScreen.isNativeHookRegistered()) {
@@ -132,15 +136,15 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		GlobalScreen.getInstance().addNativeKeyListener(this);
 		log.debug("service instantiated");
 	}
-
+	
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent event) {
 	}
-
+	
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent event) {
 	}
-
+	
 	@Inject
 	public void registerKeyboardHooks() {
 		JFrame mainFrame = mainView.getFrame();
@@ -156,7 +160,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 				mainView.scrollDown();
 			}
 		});
-
+		
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LAST, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -181,9 +185,11 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 				navigationController.showPrevScreenShot();
 			}
 		});
-
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DELETE, deleteScreenShotOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_EDIT, editScreenShotOperation.action());
+		
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DELETE,
+				deleteScreenShotOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_EDIT,
+				editScreenShotOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_DESCRIPTION,
 				changeScreenShotDescriptionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SHOT_SELECT, new ActionListener() {
@@ -192,30 +198,37 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 				mainController.toggleSelectScreenShot();
 			}
 		});
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_REFRESH, refreshScreenShotOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LABEL, changeScreenShotLabelOperation.action());
-
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_REFRESH,
+				refreshScreenShotOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LABEL,
+				changeScreenShotLabelOperation.action());
+		
 		registerAction(mainFrame, OperationsShortcutEnum.FIND, openSearchDialogOperation.action());
-
-		registerAction(mainFrame, OperationsShortcutEnum.SESSION_REFRESH, refreshSessionOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SESSION_OPEN, openSessionOperation.action());
+		
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_REFRESH,
+				refreshSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_OPEN,
+				openSessionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_NEW, newSessionOperation.action());
-		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE, deleteActiveSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE,
+				deleteActiveSessionOperation.action());
+		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DELETE_SELECTED,
+				deleteSelectedShotsOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DESCRIPTION,
 				changeSessionDescriptionOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_REORDER, reorderOperation.action());
-
+		
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS,
 				selectAllScreenShotsOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.SESSION_DESELECT_ALL_SHOTS,
 				deselectAllScreenShotsOperation.action());
-
+		
 		registerAction(mainFrame, OperationsShortcutEnum.JIRA_EXPORT, jiraExportOperation.action());
 		registerAction(mainFrame, OperationsShortcutEnum.HTML_EXPORT, htmlExportOperation.action());
-
+		
 		registerMenuAction(mainFrame);
 	}
-
+	
 	/**
 	 * Makes pressing Alt key to open File Menu in the GUI.
 	 * 
@@ -224,7 +237,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	@SuppressWarnings("serial")
 	private void registerMenuAction(final JFrame mainFrame) {
 		Action menuAction = new AbstractAction() {
-
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JRootPane rootPane = mainFrame.getRootPane();
@@ -233,21 +246,23 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 				menu.doClick();
 			}
 		};
-
+		
 		JRootPane rootPane = mainFrame.getRootPane();
 		ActionMap actionMap = rootPane.getActionMap();
-
+		
 		final String MENU_ACTION_KEY = "expand_that_first_menu_please";
 		actionMap.put(MENU_ACTION_KEY, menuAction);
 		InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ALT, 0, true), MENU_ACTION_KEY);
 	}
-
-	private void registerAction(JFrame frame, OperationsShortcutEnum shortcut, ActionListener listener) {
-		frame.getRootPane().registerKeyboardAction(listener, KeyStroke.getKeyStroke(shortcut.code, shortcut.modifier),
+	
+	private void registerAction(JFrame frame, OperationsShortcutEnum shortcut,
+			ActionListener listener) {
+		frame.getRootPane().registerKeyboardAction(listener,
+				KeyStroke.getKeyStroke(shortcut.code, shortcut.modifier),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
-
+	
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent event) {
 		if (Character.toUpperCase(event.getKeyChar()) == 'R'
@@ -258,7 +273,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 			stopRecordingOperation.perform();
 		}
 	}
-
+	
 	private boolean keyModifiersMatchText(NativeKeyEvent event, String... texts) {
 		for (String text : texts) {
 			if (NativeInputEvent.getModifiersText(event.getModifiers()).equals(text)) {

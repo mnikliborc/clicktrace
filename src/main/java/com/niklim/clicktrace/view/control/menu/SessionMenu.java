@@ -20,7 +20,7 @@ import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
 public class SessionMenu {
 	JMenu menu;
-
+	
 	JMenuItem sessionDeleteActiveSession;
 	JMenuItem sessionDeleteSelected;
 	JMenuItem sessionSelectAll;
@@ -31,40 +31,40 @@ public class SessionMenu {
 	JMenuItem sessionRefresh;
 	JMenuItem sessionDescription;
 	JMenuItem sessionReorder;
-
+	
 	@Inject
 	private ActiveSession activeSession;
-
+	
 	@Inject
 	private DeleteActiveSessionOperation deleteActiveSessionOperation;
-
+	
 	@Inject
 	private StartRecordingOperation startRecordingOperation;
-
+	
 	@Inject
 	private StopRecordingOperation stopRecordingOperation;
-
+	
 	@Inject
 	private RefreshSessionOperation refreshSessionOperation;
-
+	
 	@Inject
 	private DeleteSelectedScreenShotsOperation deleteSelectedScreenShotsOperation;
-
+	
 	@Inject
 	private SelectAllScreenShotsOperation selectAllScreenShotsOperation;
-
+	
 	@Inject
 	private DeselectAllScreenShotsOperation deselectAllScreenShotsOperation;
-
+	
 	@Inject
 	private ChangeSessionNameOperation changeSessionNameOperation;
-
+	
 	@Inject
 	private ChangeSessionDescriptionOperation changeSessionDescriptionOperation;
-
+	
 	@Inject
 	private ReorderOperation reorderOperation;
-
+	
 	public void sessionStateChanged() {
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionLoaded());
 		sessionDeleteActiveSession.setEnabled(activeSession.isSessionLoaded());
@@ -78,11 +78,11 @@ public class SessionMenu {
 		sessionDescription.setEnabled(activeSession.isSessionLoaded());
 		sessionReorder.setEnabled(activeSession.isSessionLoaded());
 	}
-
+	
 	@Inject
 	public void init() {
 		menu = new JMenu("Session");
-
+		
 		sessionStart = createSessionStart();
 		sessionStop = createSessionStop();
 		sessionRefresh = createSessionRefresh();
@@ -93,7 +93,7 @@ public class SessionMenu {
 		sessionChangeLabel = createSessionChangeLabel();
 		sessionDescription = createSessionDescription();
 		sessionReorder = createSessionReorder();
-
+		
 		menu.add(sessionStart);
 		menu.add(sessionStop);
 		menu.add(sessionRefresh);
@@ -108,72 +108,77 @@ public class SessionMenu {
 		menu.addSeparator();
 		menu.add(sessionDeleteActiveSession);
 	}
-
+	
 	private JMenuItem createSessionReorder() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Reorder screenshots", Icons.SESSION_REORDER,
 				OperationsShortcutEnum.SESSION_REORDER, reorderOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionDescription() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Change description", Icons.SESSION_DESCRIPTION,
-				OperationsShortcutEnum.SESSION_DESCRIPTION, changeSessionDescriptionOperation.action());
+		JMenuItem menuItem = MenuBar.createMenuItem("Change description",
+				Icons.SESSION_DESCRIPTION, OperationsShortcutEnum.SESSION_DESCRIPTION,
+				changeSessionDescriptionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	public JMenu getMenu() {
 		return menu;
 	}
-
+	
 	private JMenuItem createSessionChangeLabel() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Change name", null, changeSessionNameOperation.action());
+		JMenuItem menuItem = MenuBar.createMenuItem("Change name", null,
+				changeSessionNameOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionStart() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Start recording", Icons.START_RECORDING,
 				OperationsShortcutEnum.START_RECORDING, startRecordingOperation.action());
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionStop() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Stop recording", Icons.STOP_RECORDING,
 				OperationsShortcutEnum.STOP_RECORDING, stopRecordingOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionRefresh() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Refresh session", Icons.SESSION_REFRESH,
 				OperationsShortcutEnum.SESSION_REFRESH, refreshSessionOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionSelectAll() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Select all screenshots",
-				OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS, selectAllScreenShotsOperation.action());
+				OperationsShortcutEnum.SESSION_SELECT_ALL_SHOTS,
+				selectAllScreenShotsOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionDeselectAll() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Deselect all screenshots",
-				OperationsShortcutEnum.SESSION_DESELECT_ALL_SHOTS, deselectAllScreenShotsOperation.action());
+				OperationsShortcutEnum.SESSION_DESELECT_ALL_SHOTS,
+				deselectAllScreenShotsOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionDeleteSelected() {
-		JMenuItem menuItem = MenuBar.createMenuItem("Delete selected screenshots", null,
+		JMenuItem menuItem = MenuBar.createMenuItem("Delete selected screenshots",
+				OperationsShortcutEnum.SESSION_DELETE_SELECTED,
 				deleteSelectedScreenShotsOperation.action());
 		menuItem.setEnabled(false);
 		return menuItem;
 	}
-
+	
 	private JMenuItem createSessionDeleteActiveSession() {
 		JMenuItem menuItem = MenuBar.createMenuItem("Delete current session", Icons.SESSION_DELETE,
 				OperationsShortcutEnum.SESSION_DELETE, deleteActiveSessionOperation.action());
