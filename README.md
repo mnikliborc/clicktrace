@@ -1,4 +1,4 @@
-# An automatic screen capture application.
+## An automatic screen capture application.
 
 **It's main idea is to take screenshots whenever something changes on the screen.**
 
@@ -6,7 +6,7 @@
 
 **Record test cases, documentation, or whatever you want.**
 
-## Features
+### Features
 
 * easily take, remove, and reorder screenshots
 * organize in sessions
