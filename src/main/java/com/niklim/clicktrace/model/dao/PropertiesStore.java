@@ -60,8 +60,7 @@ public class PropertiesStore {
 	
 	public void load() throws IOException {
 		if (file == null) {
-			// TODO do somethign
-			throw new RuntimeException();
+			throw new RuntimeException("File was not set.");
 		}
 		
 		String content = Files.load(file);

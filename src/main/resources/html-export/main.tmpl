@@ -2,9 +2,18 @@
 <link rel="stylesheet" type="text/css" href="resources/clicktrace.css" />
 <script type="text/javascript" src="resources/clicktrace.js"></script>
 
+<script type="text/javascript">
+	viewWidth = ${init-image-width};
+</script>
+<style>
+	div.clicktrace {
+		width: ${init-image-width}px;
+	}
+</style>
+
 <div id="zoom">
-	<p href="#" onclick="zoom(100)">zoom <span class="in">in</span></p>
-	<p href="#" onclick="zoom(-100)">zoom <span class="out">out</span></p>
+	<p href="#" onclick="zoom(100)"><img src="resources/zoom_in.png" /></p>
+	<p href="#" onclick="zoom(-100)"><img src="resources/zoom_out.png" /></p>
 </div>
 
 <div id="view" class="clicktrace">

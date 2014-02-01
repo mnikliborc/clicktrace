@@ -5,17 +5,20 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.text.NumberFormat;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.text.NumberFormatter;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -23,7 +26,6 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.props.UserProperties;
-import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
@@ -35,19 +37,21 @@ public class SettingsDialog extends AbstractDialog {
 	
 	private CaptureAreaComponent captureAreaComponent;
 	
-	JSpinner captureFrequency;
-	JTextField imageEditorPath;
-	JFileChooser imageEditorFileChooser;
+	private JSpinner captureFrequency;
+	private JTextField imageEditorPath;
+	private JFileChooser imageEditorFileChooser;
 	
-	JTextField jiraUrl;
-	JTextField jiraUsername;
+	private JTextField jiraUrl;
+	private JTextField jiraUsername;
 	
-	JCheckBox captureMouseClicks;
-	JCheckBox captureSelectAll;
+	private JCheckBox captureMouseClicks;
+	private JCheckBox captureSelectAll;
 	
 	private JRadioButton horizontalScreenshotViewScalingRadio;
 	private JRadioButton verticalScreenshotViewScalingRadio;
 	private ButtonGroup screenshotViewScaling;
+	
+	private JFormattedTextField imageExportWidth;
 	
 	@Inject
 	public void init() {
@@ -66,12 +70,30 @@ public class SettingsDialog extends AbstractDialog {
 		createImageEditorPathPanel();
 		createScreenshotViewScalingPanel();
 		
-		createSectionLabel("JIRA");
-		createJiraPanel();
+		createSectionLabel("Export");
+		createImageExportWidthPanel();
+		
+		// createSectionLabel("JIRA");
+		// createJiraPanel();
 		
 		dialog.add(createControlPanel("Save"), "align r, span 3");
 		
 		postInit();
+	}
+	
+	private void createImageExportWidthPanel() {
+		imageExportWidth = new JFormattedTextField();
+		NumberFormat longFormat = NumberFormat.getIntegerInstance();
+		longFormat.setGroupingUsed(false);
+		
+		NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+		numberFormatter.setAllowsInvalid(false);
+		numberFormatter.setMinimum(0);
+		numberFormatter.setMaximum(9999);
+		
+		imageExportWidth = new JFormattedTextField(numberFormatter);
+		dialog.add(new JLabel("Image initial width [px]"));
+		dialog.add(imageExportWidth, "wrap");
 	}
 	
 	private void createSectionLabel(String label) {
@@ -175,8 +197,8 @@ public class SettingsDialog extends AbstractDialog {
 		captureAreaComponent.init(props.getCaptureFullScreen(), props.getCaptureRectangle());
 		captureSelectAll.setSelected(props.getCaptureSelectAll());
 		
-		jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
-		jiraUsername.setText(props.getJiraConfig().getUsername());
+		// jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
+		// jiraUsername.setText(props.getJiraConfig().getUsername());
 		
 		if (props.getScreenshotViewScaling() == ViewScaling.HORIZONTAL) {
 			screenshotViewScaling
@@ -184,6 +206,8 @@ public class SettingsDialog extends AbstractDialog {
 		} else {
 			screenshotViewScaling.setSelected(verticalScreenshotViewScalingRadio.getModel(), true);
 		}
+		
+		imageExportWidth.setText(String.valueOf(props.getHtmlExportImageWidth()));
 	}
 	
 	private void saveModel() {
@@ -194,6 +218,7 @@ public class SettingsDialog extends AbstractDialog {
 		} else {
 			props.setScreenshotViewScaling(ViewScaling.VERTICAL);
 		}
+		props.setHtmlExportImageWidth(Integer.valueOf(imageExportWidth.getText()));
 		
 		props.setCaptureMouseClicks(captureMouseClicks.isSelected());
 		props.setCaptureSelectAll(captureSelectAll.isSelected());
@@ -206,7 +231,8 @@ public class SettingsDialog extends AbstractDialog {
 			props.setCaptureFullScreen(true);
 		}
 		
-		props.setJiraConfig(new JiraConfig(jiraUrl.getText(), jiraUsername.getText()));
+		// props.setJiraConfig(new JiraConfig(jiraUrl.getText(),
+		// jiraUsername.getText()));
 		
 		props.save();
 	}
