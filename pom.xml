@@ -121,6 +121,11 @@
 			<artifactId>pegdown</artifactId>
 			<version>1.4.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.xhtmlrenderer</groupId>
+			<artifactId>flying-saucer-core</artifactId>
+			<version>9.0.1</version>
+		</dependency>
 
 	<dependency>
 		<groupId>com.google.inject.extensions</groupId>

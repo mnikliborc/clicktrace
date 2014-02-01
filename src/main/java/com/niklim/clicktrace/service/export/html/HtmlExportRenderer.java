@@ -2,14 +2,17 @@ package com.niklim.clicktrace.service.export.html;
 
 import java.util.Scanner;
 
-import org.pegdown.PegDownProcessor;
-
 import com.google.common.base.Strings;
+import com.google.inject.Inject;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.service.MarkdownService;
 
 public class HtmlExportRenderer {
 	private static final int DESCRIPTION_LENGTH_LIMIT = 30;
+	
+	@Inject
+	private MarkdownService markdownParser;
 	
 	public String renderHtml(Session session, String htmlExportFolder, int initImageWidth) {
 		String mainTemplate = loadTemplate("main.tmpl", htmlExportFolder);
@@ -62,11 +65,6 @@ public class HtmlExportRenderer {
 			
 			if (!Strings.isNullOrEmpty(shot.getLabel())) {
 				linkText.append(shot.getLabel());
-			} else if (!Strings.isNullOrEmpty(shot.getDescription())) {
-				linkText.append(shot.getDescription().substring(0, DESCRIPTION_LENGTH_LIMIT));
-				if (shot.getDescription().length() > DESCRIPTION_LENGTH_LIMIT) {
-					linkText.append("...");
-				}
 			}
 			String link = linksTemplate.replace("${link-text}", linkText.toString()).replace(
 					"${link-href}", shot.getFilename());
@@ -87,6 +85,6 @@ public class HtmlExportRenderer {
 	}
 	
 	private String markdownToHtml(String markdown) {
-		return new PegDownProcessor().markdownToHtml(markdown);
+		return markdownParser.toHtml(markdown);
 	}
 }
