@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.ScreenShot;
+import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;

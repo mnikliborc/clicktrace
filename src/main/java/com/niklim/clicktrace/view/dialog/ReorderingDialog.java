@@ -25,7 +25,7 @@ import com.niklim.clicktrace.Icons;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
 import com.niklim.clicktrace.model.ScreenShot;
-import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.view.Buttons;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;

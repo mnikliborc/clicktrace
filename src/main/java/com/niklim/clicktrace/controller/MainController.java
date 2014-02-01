@@ -19,7 +19,7 @@ import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.props.UserProperties;

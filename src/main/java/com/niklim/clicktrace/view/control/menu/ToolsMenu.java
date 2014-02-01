@@ -51,7 +51,7 @@ public class ToolsMenu {
 		
 		tools.add(toolsSettings);
 		tools.add(toolsSearch);
-		// tools.add(toolsExportToJira);
+		tools.add(toolsExportToJira);
 		tools.add(toolsExportToHtml);
 		return tools;
 	}

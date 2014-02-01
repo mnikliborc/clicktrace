@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.model.dao.SessionPropertiesReader;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 

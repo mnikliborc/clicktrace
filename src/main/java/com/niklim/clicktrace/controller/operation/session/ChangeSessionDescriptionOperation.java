@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.view.dialog.description.DescriptionDialog;
 import com.niklim.clicktrace.view.dialog.description.DescriptionDialogCallback;
