@@ -20,8 +20,6 @@
 
 Published under GPL open-source license. Copyright (C) Marcin Nikliborc.
 
-http://www.clicktrace.me
-
 ==================
 
 Clicktrace depends on JNativeHook, which at the moment is not published on any public Maven repo. So just download the library in version
