@@ -26,66 +26,66 @@ import com.niklim.clicktrace.service.SessionCompressor;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 
 public class JiraExportDialog extends AbstractDialog {
-
+	
 	private static final Logger log = LoggerFactory.getLogger(JiraExportDialog.class);
-
+	
 	@Inject
 	private JiraExportService jiraExportService;
-
+	
 	@Inject
 	private UserProperties props;
-
+	
 	@Inject
 	private ActiveSession activeSession;
-
+	
 	@Inject
 	private SessionCompressor sessionCompressor;
-
+	
 	ExecutorService executor;
 	Future<String> compressedSession;
-
+	
 	public JiraExportDialog() {
 		executor = Executors.newFixedThreadPool(1);
 	}
-
+	
 	JTextField jiraInstanceUrl;
 	JTextField username;
 	JPasswordField password;
 	JTextField issueKey;
-
+	
 	public void open() {
 		JiraConfig jiraConfig = props.getJiraConfig();
 		jiraInstanceUrl.setText(jiraConfig.getInstanceUrl());
 		username.setText(jiraConfig.getUsername());
-
+		
 		compressedSession = executor.submit(new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return sessionCompressor.compress(activeSession.getSession());
 			}
 		});
-
+		
 		center();
 		dialog.setVisible(true);
 	}
-
+	
 	@Override
 	public void close() {
 		compressedSession = null;
 		dialog.setVisible(false);
 	}
-
+	
 	@Inject
 	public void init() {
 		dialog.setTitle("Export to Clicktrace on JIRA Plugin");
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 		dialog.setResizable(false);
-
+		
 		jiraInstanceUrl = new JTextField();
 		username = new JTextField();
 		password = new JPasswordField();
 		issueKey = new JTextField();
-
+		
 		dialog.add(new JLabel("JIRA URL"));
 		dialog.add(jiraInstanceUrl, "w 400, wrap");
 		dialog.add(new JLabel("Username"));
@@ -94,12 +94,12 @@ public class JiraExportDialog extends AbstractDialog {
 		dialog.add(password, "w 400, wrap");
 		dialog.add(new JLabel("Issue key"));
 		dialog.add(issueKey, "w 400, wrap");
-
+		
 		dialog.add(createControlPanel("Export"), "span 2, h 50, align r");
-
+		
 		postInit();
 	}
-
+	
 	@Override
 	public void okAction() {
 		if (StringUtils.isEmpty(issueKey.getText())) {
@@ -107,16 +107,17 @@ public class JiraExportDialog extends AbstractDialog {
 			issueKey.requestFocus();
 			return;
 		}
-
+		
 		if (confirmSessionExport()) {
 			exportSession();
 		}
 	}
-
+	
 	private boolean confirmSessionExport() {
 		try {
-			boolean sessionExist = jiraExportService.checkSessionExist(username.getText(), password.getText(),
-					issueKey.getText(), activeSession.getSession().getName(), jiraInstanceUrl.getText());
+			boolean sessionExist = jiraExportService.checkSessionExist(username.getText(),
+					password.getText(), issueKey.getText(), activeSession.getSession().getName(),
+					jiraInstanceUrl.getText());
 			if (sessionExist) {
 				return askUserForExportConfirmation();
 			} else {
@@ -127,21 +128,21 @@ public class JiraExportDialog extends AbstractDialog {
 			return false;
 		}
 	}
-
+	
 	private boolean askUserForExportConfirmation() {
 		int res = JOptionPane.showConfirmDialog(dialog, "Session exists. Overwrite?", "Overwrite?",
 				JOptionPane.OK_CANCEL_OPTION);
 		return res == JOptionPane.OK_OPTION;
 	}
-
+	
 	private void exportSession() {
 		try {
 			showWaitingCursor();
 			String stream = compressedSession.get();
-
-			jiraExportService.exportSession(username.getText(), password.getText(), issueKey.getText(), activeSession
-					.getSession().getName(), stream, jiraInstanceUrl.getText());
-			hideWaitingCursor();
+			
+			jiraExportService.exportSession(username.getText(), password.getText(),
+					issueKey.getText(), activeSession.getSession().getName(), stream,
+					jiraInstanceUrl.getText());
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_SUCCESS);
 			close();
 		} catch (JiraExportException e) {
@@ -149,8 +150,10 @@ public class JiraExportDialog extends AbstractDialog {
 		} catch (Throwable e) {
 			log.error("unpredicted", e);
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
+		} finally {
+			hideWaitingCursor();
 		}
-
+		
 	}
-
+	
 }

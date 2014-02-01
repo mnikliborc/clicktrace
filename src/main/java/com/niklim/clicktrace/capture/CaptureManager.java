@@ -18,7 +18,7 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.Click;
-import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
+import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;

@@ -7,11 +7,11 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.model.dao.SessionPropertiesReader;
+import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.model.helper.ScreenShotLoader;
 import com.niklim.clicktrace.model.helper.SessionDeleter;
 import com.niklim.clicktrace.model.helper.SessionMetadataLoader;
-import com.niklim.clicktrace.model.helper.SessionPropertiesReader;
-import com.niklim.clicktrace.model.helper.SessionPropertiesWriter;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 
 @Singleton
