@@ -3,12 +3,15 @@ package com.niklim.clicktrace.view.dialog.description;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 import com.google.inject.Inject;
 import com.niklim.clicktrace.service.MarkdownService;
@@ -46,6 +49,15 @@ public class EditPreviewDescriptionToggle {
 	protected void createPreviewCheckbox() {
 		previewCheckbox = new JCheckBox("preview");
 		previewCheckbox.setToolTipText("show HTML of provided Markdown text");
+		
+		dialog.getRootPane().registerKeyboardAction(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				previewCheckbox.setSelected(!previewCheckbox.isSelected());
+				toggle();
+			}
+		}, KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK),
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 	
 	private void initListener() {
