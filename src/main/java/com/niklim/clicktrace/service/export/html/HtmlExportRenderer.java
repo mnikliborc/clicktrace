@@ -28,6 +28,7 @@ public class HtmlExportRenderer {
 	private String renderMain(Session session, String mainTemplate, String shotsHtml,
 			String linksHtml, int initImageWidth) {
 		String html = mainTemplate
+				.replace("${encoding}", System.getProperty("file.encoding", "UTF-8"))
 				.replace("${init-image-width}", String.valueOf(initImageWidth))
 				.replace("${init-image-width}", String.valueOf(initImageWidth))
 				.replace("${session-name}", session.getName())
