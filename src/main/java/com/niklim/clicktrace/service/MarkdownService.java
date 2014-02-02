@@ -1,8 +1,9 @@
 package com.niklim.clicktrace.service;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
+
+import javax.swing.ScrollPaneConstants;
 
 import org.pegdown.PegDownProcessor;
 import org.xhtmlrenderer.simple.FSScrollPane;
@@ -17,7 +18,7 @@ public class MarkdownService {
 		return new PegDownProcessor().markdownToHtml(markdown);
 	}
 	
-	public Component toHtmlPanel(String markdown, Dimension dim) {
+	public Component toHtmlPanel(String markdown) {
 		return flyingsaucer(markdown);
 	}
 	
@@ -43,6 +44,8 @@ public class MarkdownService {
 		// FSScrollPane is already set up to move the correct
 		// amount when scrolling 1 line or 1 page
 		FSScrollPane scroll = new FSScrollPane(panel);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		return scroll;
 	}
 	

@@ -1,6 +1,5 @@
 package com.niklim.clicktrace.view.dialog.description;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -18,7 +17,6 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.service.MarkdownService;
 import com.niklim.clicktrace.view.TextComponentHistory;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
@@ -29,68 +27,25 @@ import com.niklim.clicktrace.view.dialog.AbstractDialog;
 public class DescriptionDialog extends AbstractDialog {
 	private static final String MAIN_PANEL_CONTENT_LAYOUT = "push, grow, w 600, h 300, wrap";
 	private static final String MAIN_PANEL_LAYOUT = "grow, push,  wrap";
-	private JPanel editPanel;
-	private JPanel previewPanel;
+	private JPanel descriptionPlaceholder;
 	private JPanel controlPanel;
 	
 	private JTextArea description;
 	private TextComponentHistory history;
 	private DescriptionDialogCallback callback;
 	
-	private JCheckBox previewCheckbox;
-	
 	@Inject
-	private MarkdownService markdownParser;
-	
-	private EditPreviewComponentToggle editPreviewToggle = new EditPreviewComponentToggle();
-	
-	/**
-	 * Switches between EDIT and PREVIEW mode.
-	 */
-	private class EditPreviewComponentToggle implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			toggle();
-		}
-		
-		public void toggle() {
-			if (previewCheckbox.isSelected()) {
-				previewPanel.removeAll();
-				Component htmlComponent = markdownParser.toHtmlPanel(description.getText(),
-						editPanel.getSize());
-				previewPanel.add(htmlComponent, MAIN_PANEL_CONTENT_LAYOUT);
-				replacePanels(editPanel, previewPanel);
-			} else {
-				replacePanels(previewPanel, editPanel);
-			}
-		}
-		
-		private void replacePanels(JPanel remove, JPanel add) {
-			dialog.remove(remove);
-			dialog.remove(controlPanel);
-			dialog.add(add, MAIN_PANEL_LAYOUT);
-			dialog.add(controlPanel);
-			dialog.pack();
-			dialog.repaint();
-		}
-		
-	}
+	private EditPreviewDescriptionToggle editPreviewToggle;
 	
 	@Inject
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
 		
-		description = new JTextArea();
-		initTextWrapping(description);
-		history = new TextComponentHistory(description);
+		createPlaceholderPanelWithDescription();
 		
-		createEditPanel();
-		createPreviewPanel();
+		dialog.add(descriptionPlaceholder, MAIN_PANEL_LAYOUT);
 		
-		dialog.add(editPanel, MAIN_PANEL_LAYOUT);
-		
-		JCheckBox previewCheckbox = createPreviewCheckbox();
+		JCheckBox previewCheckbox = createPreviewComponent();
 		controlPanel = createControlPanel("Save", previewCheckbox);
 		dialog.add(controlPanel);
 		
@@ -98,22 +53,19 @@ public class DescriptionDialog extends AbstractDialog {
 		postInit();
 	}
 	
-	private void createPreviewPanel() {
-		previewPanel = new JPanel(new MigLayout("insets 0", "[fill]"));
+	private JCheckBox createPreviewComponent() {
+		editPreviewToggle.init(dialog, descriptionPlaceholder, description,
+				MAIN_PANEL_CONTENT_LAYOUT);
+		return editPreviewToggle.getCheckBox();
 	}
 	
-	private void createEditPanel() {
-		editPanel = new JPanel(new MigLayout("insets 0", "[fill]"));
-		editPanel.add(new JScrollPane(description), MAIN_PANEL_CONTENT_LAYOUT);
-	}
-	
-	private JCheckBox createPreviewCheckbox() {
-		previewCheckbox = new JCheckBox("preview");
-		previewCheckbox.setToolTipText("show provided Markdown text in HTML");
+	private void createPlaceholderPanelWithDescription() {
+		description = new JTextArea();
+		initTextWrapping(description);
+		history = new TextComponentHistory(description);
 		
-		previewCheckbox.addActionListener(editPreviewToggle);
-		
-		return previewCheckbox;
+		descriptionPlaceholder = new JPanel(new MigLayout("insets 0", "[fill]"));
+		descriptionPlaceholder.add(new JScrollPane(description), MAIN_PANEL_CONTENT_LAYOUT);
 	}
 	
 	public void createListeners() {
@@ -162,8 +114,7 @@ public class DescriptionDialog extends AbstractDialog {
 	}
 	
 	private void showEditPanel() {
-		previewCheckbox.setSelected(false);
-		editPreviewToggle.toggle();
+		editPreviewToggle.reset();
 	}
 	
 	private void resetHistory(String initialText) {
