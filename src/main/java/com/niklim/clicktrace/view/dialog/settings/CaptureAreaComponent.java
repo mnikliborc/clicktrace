@@ -119,12 +119,14 @@ public class CaptureAreaComponent {
 			this.action = null;
 		}
 
+		@Override
 		public void nativeMouseMoved(NativeMouseEvent e) {
 			if (action != null) {
 				action.moved(e.getX(), e.getY());
 			}
 		}
 
+		@Override
 		public void nativeMouseDragged(NativeMouseEvent arg0) {
 		}
 	};

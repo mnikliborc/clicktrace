@@ -28,26 +28,26 @@ import com.niklim.clicktrace.view.session.ScreenShotView;
 @Singleton
 public class MainView {
 	private static Logger log = LoggerFactory.getLogger(MainView.class);
-
+	
 	private static final String APP_NAME = "Clicktrace";
 	private JFrame frame;
 	private JScrollPane scrollPane;
-
+	
 	@Inject
 	private ScreenShotView screenShotView;
-
+	
 	@Inject
 	private SplashScreenView splashScreenView;
-
+	
 	@Inject
 	private ControlView controlView;
-
+	
 	@Inject
 	private MenuBar menu;
-
+	
 	@Inject
 	private ToolbarView toolbar;
-
+	
 	public MainView() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -62,68 +62,68 @@ public class MainView {
 		}
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
 	}
-
+	
 	@Inject
 	public void init() {
 		frame = new JFrame(APP_NAME);
 		MainFrameHolder.set(frame);
 		frame.setIconImage(Icons.createIconImage(Icons.APP, ""));
-
+		
 		setInitSize();
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
 		frame.setJMenuBar(menu.getMenuBar());
 	}
-
+	
 	private void setInitSize() {
 		Dimension screenSize = ScreenUtils.getPrimarySize();
 		frame.setBounds((int) (screenSize.getWidth() * 0.1), (int) (screenSize.getHeight() * 0.1),
 				(int) (screenSize.getWidth() * 0.8), (int) (screenSize.getHeight() * 0.8));
 	}
-
+	
 	private JScrollPane createScrollPane(Component top, Component Bottom) {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setEnabled(false);
 		splitPane.setTopComponent(top);
 		splitPane.setBottomComponent(Bottom);
-
+		
 		scrollPane = new JScrollPane(splitPane, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
+		
 		return scrollPane;
 	}
-
+	
 	public void open() {
 		frame.setVisible(true);
 	}
-
+	
 	public void showSplashScreen() {
 		if (scrollPane != null) {
 			frame.remove(scrollPane);
 		}
-
+		
 		createScrollPane(controlView.getComponent(), splashScreenView.getPanel());
 		frame.add(scrollPane);
 	}
-
+	
 	private void showScreenShotView() {
 		if (scrollPane != null) {
 			frame.remove(scrollPane);
 		}
-
+		
 		createScrollPane(controlView.getComponent(), screenShotView.getPanel());
 		frame.add(scrollPane);
 	}
-
+	
 	public void showSession(Session session) {
 		showWaitingCursor();
-
+		
 		showScreenShotView();
-
-		frame.setTitle(APP_NAME + " - " + session.getName());
-
+		
+		changeAppTitle(session);
+		
 		resetControl(session);
 		if (session.getShots().size() > 0) {
 			ScreenShot shot = session.getShots().get(0);
@@ -132,26 +132,30 @@ public class MainView {
 		} else {
 			screenShotView.clear();
 		}
-
+		
 		refresh();
-
+		
 		hideWaitingCursor();
 	}
-
-	private void hideWaitingCursor() {
+	
+	public void changeAppTitle(Session session) {
+		frame.setTitle(APP_NAME + " - " + session.getName());
+	}
+	
+	public void hideWaitingCursor() {
 		frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
-
-	private void showWaitingCursor() {
+	
+	public void showWaitingCursor() {
 		frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 	}
-
+	
 	public void refresh() {
 		frame.getContentPane().invalidate();
 		frame.getContentPane().validate();
 		frame.getContentPane().repaint();
 	}
-
+	
 	public void showScreenShot(ScreenShot screenShot, boolean selected) {
 		if (screenShot != null) {
 			showWaitingCursor();
@@ -163,27 +167,27 @@ public class MainView {
 			screenShotView.clear();
 		}
 	}
-
+	
 	public void hideSession() {
 		controlView.hide();
 		screenShotView.clear();
 		frame.setTitle(APP_NAME);
 		refresh();
 	}
-
+	
 	public void setSelectedActiveScreenShot(boolean selected) {
 		controlView.setActiveScreenShotSelected(selected);
 	}
-
+	
 	public JFrame getFrame() {
 		return frame;
 	}
-
+	
 	public void sessionStateChanged() {
 		menu.sessionStateChanged();
 		toolbar.sessionStateChanged();
 	}
-
+	
 	public void resetControl(Session session) {
 		controlView.showImagesCombobox(session);
 		if (session.getShots().isEmpty()) {
@@ -191,20 +195,20 @@ public class MainView {
 		}
 		refresh();
 	}
-
+	
 	public void hide() {
 		frame.setState(JFrame.ICONIFIED);
 		frame.toFront();
 	}
-
+	
 	public void scrollUp() {
 		JScrollBar vertical = scrollPane.getVerticalScrollBar();
 		vertical.setValue(vertical.getMinimum());
 	}
-
+	
 	public void scrollDown() {
 		JScrollBar vertical = scrollPane.getVerticalScrollBar();
 		vertical.setValue(vertical.getMaximum());
 	}
-
+	
 }

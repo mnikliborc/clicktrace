@@ -1,22 +1,14 @@
 package com.niklim.clicktrace.capture.mouse;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.ErrorNotifier;
-import com.niklim.clicktrace.msg.ErrorMsgs;
-import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.capture.CaptureManager;
+import com.niklim.clicktrace.model.Click;
 
 /**
  * On mouse click takes a screenshot, mark on in the click and saves on disk.
@@ -25,41 +17,18 @@ import com.niklim.clicktrace.service.FileManager;
 @Singleton
 public class ImmediateMouseCapture extends MouseCapture {
 	private static Logger log = LoggerFactory.getLogger(ImmediateMouseCapture.class);
-
+	
 	@Inject
-	private Robot robot;
-
-	@Inject
-	private FileManager fileManager;
-
+	private CaptureManager capture;
+	
 	public ImmediateMouseCapture() {
 		log.info("service instantiated");
 	}
-
+	
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
 		if (activeSession.isRecording()) {
-			capture(e);
+			capture.capture(Optional.<Click> of(new Click(e.getX(), e.getY(), e.getButton())));
 		}
-	}
-
-	private void capture(NativeMouseEvent e) {
-		BufferedImage image = robot.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-
-		drawClick(image, e.getX(), e.getY(), e.getButton());
-		try {
-			fileManager.saveImage(image, activeSession.getSession().getName());
-		} catch (IOException ex) {
-			log.error("Unable to save image", ex);
-			ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_SAVE_ERROR);
-		}
-	}
-
-	private void drawClick(BufferedImage image, int mouseX, int mouseY, int button) {
-		Graphics2D g = image.createGraphics();
-		g.setColor(Color.RED);
-		g.drawOval(mouseX - 15, mouseY - 15, 30, 30);
-		g.drawChars(String.valueOf(button).toCharArray(), 0, 1, mouseX - 15, mouseY - 15);
-		g.dispose();
 	}
 }

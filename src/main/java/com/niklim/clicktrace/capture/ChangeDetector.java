@@ -15,31 +15,30 @@ import com.niklim.clicktrace.capture.voter.Vote;
 class ChangeDetector {
 	@Inject
 	List<ChangeVoter> voters;
-
-	private BufferedImage prevImage;
-
+	
 	/**
 	 * Decides whether change was detected (screenshot should be saved).
 	 * 
-	 * @param currentImage current screenshot
+	 * @param currentImage
+	 *            current screenshot
+	 * @param image
 	 * @return true if given screenshot should be saved
 	 */
-	public synchronized boolean detect(BufferedImage currentImage) {
-		if (prevImage == null) {
-			prevImage = currentImage;
+	public synchronized boolean detect(BufferedImage lastImage, BufferedImage currentImage) {
+		if (lastImage == null) {
 			return true;
 		}
-
-		boolean shouldSave = performVoting(currentImage);
-
-		prevImage = currentImage;
+		long currentTimeMillis = System.currentTimeMillis();
+		boolean shouldSave = performVoting(lastImage, currentImage);
+		System.out.println("detectorTime=" + (System.currentTimeMillis() - currentTimeMillis));
+		
 		return shouldSave;
 	}
-
-	private boolean performVoting(BufferedImage currentImage) {
+	
+	private boolean performVoting(BufferedImage lastImage, BufferedImage currentImage) {
 		boolean shouldSave = false;
 		for (ChangeVoter voter : voters) {
-			Vote vote = voter.vote(prevImage, currentImage);
+			Vote vote = voter.vote(lastImage, currentImage);
 			if (vote == Vote.SAVE) {
 				shouldSave = true;
 				break;
@@ -50,8 +49,5 @@ class ChangeDetector {
 		}
 		return shouldSave;
 	}
-
-	public void reset() {
-		prevImage = null;
-	}
+	
 }

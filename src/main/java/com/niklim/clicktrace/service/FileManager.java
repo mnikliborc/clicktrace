@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.util.concurrent.Futures;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.msg.ErrorMsgs;
@@ -32,7 +34,7 @@ public class FileManager {
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 
-	private static FileCompressor compressor = new FileCompressor("jpg", "png");
+	private static FileCompressor compressor = new FileCompressor("jpg", "png", "jpg", "png");
 
 	public static class TrashFilter implements FilenameFilter {
 		@Override
@@ -53,19 +55,45 @@ public class FileManager {
 		createIfDirNotExists(SESSIONS_DIR);
 	}
 
-	public String saveImage(BufferedImage image, String sessionName) throws IOException {
+	public Future<String> saveImage(BufferedImage image, String sessionName) throws IOException {
+		long currentTimeMillis = System.currentTimeMillis();
 		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image);
+		System.out.println("compressionTime=" + (System.currentTimeMillis() - currentTimeMillis));
 
-		Date date = new Date();
-		String filename = format.format(date) + "." + compressionResult.format;
-		String filePath = createFilePath(sessionName, filename);
-
-		FileOutputStream fop = new FileOutputStream(new File(filePath));
+		currentTimeMillis = System.currentTimeMillis();
+		File file = findFileToSave(sessionName, compressionResult);
+		FileOutputStream fop = new FileOutputStream(file);
 		fop.write(compressionResult.stream.toByteArray());
 		fop.flush();
 		fop.close();
+		System.out.println("saveTime=" + (System.currentTimeMillis() - currentTimeMillis));
 
-		return filename;
+		return Futures.immediateFuture(file.getName());
+	}
+
+	/**
+	 * Creates filepath based on timestamp (sec precision). If file already
+	 * exists, then appends 'x' to the timestamp and checks again if exists, and
+	 * so on.
+	 * 
+	 * @param sessionName
+	 * @param compressionResult
+	 * @return
+	 */
+	private File findFileToSave(String sessionName, FileCompressor.CompressionResult compressionResult) {
+		Date date = new Date();
+		String timeStamp = format.format(date);
+
+		File file;
+		String postfix = "";
+		do {
+			String filename = timeStamp + postfix + "." + compressionResult.format;
+			String filePath = createFilePath(sessionName, filename);
+			file = new File(filePath);
+			postfix += "x";
+		} while (file.exists());
+
+		return file;
 	}
 
 	private String createFilePath(String sessionName, String filename) {
