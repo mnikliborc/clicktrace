@@ -2,7 +2,6 @@ package com.niklim.clicktrace.service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -50,12 +49,7 @@ public class SessionCompressor {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);
 
-		List<String> filenames = fileManager.loadFileNames(source, new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return true;
-			}
-		});
+		List<String> filenames = fileManager.loadFileNames(source, new FileManager.TrashFilter());
 
 		for (String file : filenames) {
 			log.debug("File Added : " + file);

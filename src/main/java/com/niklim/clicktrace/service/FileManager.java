@@ -39,15 +39,14 @@ public class FileManager {
 	public static class TrashFilter implements FilenameFilter {
 		@Override
 		public boolean accept(File file, String name) {
-			return !".".equals(name) && !"..".equals(name) && !".DS_Store".equals(name);
+			return !".".equals(name) && !"..".equals(name) && !".DS_Store".equals(name) && !name.endsWith("~");
 		}
 	}
 
-	public static class ImageFilter implements FilenameFilter {
+	public static class ImageFilter extends TrashFilter {
 		@Override
 		public boolean accept(File file, String name) {
-			return !".".equals(name) && !"..".equals(name) && !".DS_Store".equals(name)
-					&& !SESSION_PROPS_FILENAME.equals(name) && !name.endsWith("~");
+			return super.accept(file, name) && !SESSION_PROPS_FILENAME.equals(name);
 		}
 	}
 
