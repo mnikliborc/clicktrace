@@ -34,7 +34,7 @@ public class FileManager {
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 
-	private static FileCompressor compressor = new FileCompressor("jpg", "png", "jpg", "png");
+	private static FileCompressor compressor = new FileCompressor("jpg", "png");
 
 	public static class TrashFilter implements FilenameFilter {
 		@Override
@@ -55,17 +55,15 @@ public class FileManager {
 	}
 
 	public Future<String> saveImage(BufferedImage image, String sessionName) throws IOException {
-		long currentTimeMillis = System.currentTimeMillis();
+		// TODO create FIFO queue with Shots to save and save them
+		// asynchronously
 		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image);
-		System.out.println("compressionTime=" + (System.currentTimeMillis() - currentTimeMillis));
 
-		currentTimeMillis = System.currentTimeMillis();
 		File file = findFileToSave(sessionName, compressionResult);
 		FileOutputStream fop = new FileOutputStream(file);
 		fop.write(compressionResult.stream.toByteArray());
 		fop.flush();
 		fop.close();
-		System.out.println("saveTime=" + (System.currentTimeMillis() - currentTimeMillis));
 
 		return Futures.immediateFuture(file.getName());
 	}

@@ -1,9 +1,7 @@
 package com.niklim.clicktrace.capture;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.voter.ChangeVoter;
 import com.niklim.clicktrace.capture.voter.Vote;
@@ -13,9 +11,8 @@ import com.niklim.clicktrace.capture.voter.Vote;
  */
 @Singleton
 class ChangeDetector {
-	@Inject
-	List<ChangeVoter> voters;
-	
+	private ChangeVoter voter;
+
 	/**
 	 * Decides whether change was detected (screenshot should be saved).
 	 * 
@@ -28,26 +25,26 @@ class ChangeDetector {
 		if (lastImage == null) {
 			return true;
 		}
-		long currentTimeMillis = System.currentTimeMillis();
 		boolean shouldSave = performVoting(lastImage, currentImage);
-		System.out.println("detectorTime=" + (System.currentTimeMillis() - currentTimeMillis));
-		
+
 		return shouldSave;
 	}
-	
+
 	private boolean performVoting(BufferedImage lastImage, BufferedImage currentImage) {
 		boolean shouldSave = false;
-		for (ChangeVoter voter : voters) {
-			Vote vote = voter.vote(lastImage, currentImage);
-			if (vote == Vote.SAVE) {
-				shouldSave = true;
-				break;
-			} else if (vote == Vote.DISCARD) {
-				shouldSave = false;
-				break;
-			}
+
+		Vote vote = voter.vote(lastImage, currentImage);
+		if (vote == Vote.SAVE) {
+			shouldSave = true;
+		} else if (vote == Vote.DISCARD) {
+			shouldSave = false;
 		}
+
 		return shouldSave;
 	}
-	
+
+	public void setVoter(ChangeVoter voter) {
+		this.voter = voter;
+	}
+
 }

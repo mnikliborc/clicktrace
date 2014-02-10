@@ -26,17 +26,17 @@ import org.slf4j.LoggerFactory;
 public class FileCompressor {
 	private static final Logger log = LoggerFactory.getLogger(FileCompressor.class);
 	ExecutorService executor;
-	
+
 	String[] imageFormats;
-	
+
 	public FileCompressor(String... imageFormats) {
 		executor = Executors.newFixedThreadPool(imageFormats.length);
 		this.imageFormats = imageFormats;
 	}
-	
+
 	public CompressionResult getBestCompressed(BufferedImage image) {
 		List<Future<CompressionResult>> futures = compress(image);
-		
+
 		CompressionResult minSize = null;
 		for (Future<CompressionResult> f : futures) {
 			try {
@@ -50,61 +50,58 @@ public class FileCompressor {
 		}
 		return minSize;
 	}
-	
+
 	private List<Future<CompressionResult>> compress(BufferedImage image) {
 		List<Future<CompressionResult>> futures = new ArrayList<Future<CompressionResult>>(imageFormats.length);
 		for (String format : imageFormats) {
 			futures.add(executor.submit(new Compressing(image, format)));
 		}
-		
+
 		return futures;
 	}
-	
+
 	public static class CompressionResult {
 		public CompressionResult(ByteArrayOutputStream stream, String format) {
 			this.stream = stream;
 			this.streamSize = stream.size();
 			this.format = format;
 		}
-		
+
 		public final ByteArrayOutputStream stream;
 		public final int streamSize;
 		public final String format;
 	}
-	
+
 	private static class Compressing implements Callable<CompressionResult> {
 		private final BufferedImage image;
 		private final String format;
-		
+
 		public Compressing(BufferedImage image, String format) {
 			this.image = image;
 			this.format = format;
 		}
-		
+
 		@Override
 		public CompressionResult call() throws Exception {
-			long currentTimeMillis = System.currentTimeMillis();
 			try {
 				BufferedImage buffi = image;
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
-				
+
 				Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(format);
 				ImageWriter writer = writers.next();
-				
+
 				ImageWriteParam param = writer.getDefaultWriteParam();
-				
+
 				writer.setOutput(ios);
 				writer.write(null, new IIOImage(buffi, null, null), param);
 				writer.dispose();
-				
-				System.out
-						.println("compressionTime-" + format + "=" + (System.currentTimeMillis() - currentTimeMillis));
+
 				return new CompressionResult(baos, format);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 		}
-		
+
 	}
 }

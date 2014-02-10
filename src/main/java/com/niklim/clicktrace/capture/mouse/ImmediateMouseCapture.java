@@ -17,14 +17,14 @@ import com.niklim.clicktrace.model.Click;
 @Singleton
 public class ImmediateMouseCapture extends MouseCapture {
 	private static Logger log = LoggerFactory.getLogger(ImmediateMouseCapture.class);
-	
+
 	@Inject
 	private CaptureManager capture;
-	
+
 	public ImmediateMouseCapture() {
 		log.info("service instantiated");
 	}
-	
+
 	@Override
 	public void nativeMouseReleased(NativeMouseEvent e) {
 		if (activeSession.isRecording()) {
