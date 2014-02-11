@@ -24,6 +24,7 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.OSUtils;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.NavigationController;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
@@ -78,10 +79,7 @@ public class ControlView {
 
 		controlPanel.setVisible(false);
 
-		firstButton = Buttons.create("First screenshot ", Icons.SCREENSHOT_FIRST, OperationsShortcutEnum.SHOT_FIRST);
-		prevButton = Buttons.create("Previous screenshot ", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_PREV);
-		nextButton = Buttons.create("Next screenshot ", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_NEXT);
-		lastButton = Buttons.create("Last screenshot ", Icons.SCREENSHOT_LAST, OperationsShortcutEnum.SHOT_LAST);
+		createNavigationButtons();
 
 		deleteButton = Buttons.create("delete", "Delete screenshot ", Icons.SCREENSHOT_DELETE,
 				OperationsShortcutEnum.SHOT_DELETE);
@@ -109,6 +107,18 @@ public class ControlView {
 		controlPanel.add(deleteButton);
 		controlPanel.add(descriptionButton);
 		controlPanel.add(checkbox);
+	}
+
+	private void createNavigationButtons() {
+		firstButton = Buttons.create("First screenshot ", Icons.SCREENSHOT_FIRST, OperationsShortcutEnum.SHOT_FIRST);
+		lastButton = Buttons.create("Last screenshot ", Icons.SCREENSHOT_LAST, OperationsShortcutEnum.SHOT_LAST);
+
+		OperationsShortcutEnum nextShorcut = OSUtils.isOnMac() ? OperationsShortcutEnum.SHOT_NEXT_MAC
+				: OperationsShortcutEnum.SHOT_NEXT;
+		OperationsShortcutEnum prevShorcut = OSUtils.isOnMac() ? OperationsShortcutEnum.SHOT_PREV_MAC
+				: OperationsShortcutEnum.SHOT_PREV;
+		nextButton = Buttons.create("Next screenshot ", Icons.SCREENSHOT_NEXT, nextShorcut);
+		prevButton = Buttons.create("Previous screenshot ", Icons.SCREENSHOT_PREV, prevShorcut);
 	}
 
 	@Inject

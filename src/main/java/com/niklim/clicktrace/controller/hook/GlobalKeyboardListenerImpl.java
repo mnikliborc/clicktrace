@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
+import com.niklim.clicktrace.OSUtils;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.NavigationController;
 import com.niklim.clicktrace.controller.operation.screenshot.ChangeScreenShotDescriptionOperation;
@@ -164,31 +165,8 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 			}
 		});
 
-		if (!isOnMac()) {
-			registerAction(mainFrame, OperationsShortcutEnum.SHOT_LAST, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					navigationController.showLastScreenShot();
-				}
-			});
-			registerAction(mainFrame, OperationsShortcutEnum.SHOT_FIRST, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					navigationController.showFirstScreenShot();
-				}
-			});
-			registerAction(mainFrame, OperationsShortcutEnum.SHOT_NEXT, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					navigationController.showNextScreenShot();
-				}
-			});
-			registerAction(mainFrame, OperationsShortcutEnum.SHOT_PREV, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					navigationController.showPrevScreenShot();
-				}
-			});
+		if (!OSUtils.isOnMac()) {
+			registerNavigationOnWindowsLinux(mainFrame);
 		} else {
 			registerNavigationOnMac(mainFrame);
 		}
@@ -228,6 +206,33 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 		registerMenuAction(mainFrame);
 	}
 
+	private void registerNavigationOnWindowsLinux(JFrame mainFrame) {
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_LAST, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				navigationController.showLastScreenShot();
+			}
+		});
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_FIRST, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				navigationController.showFirstScreenShot();
+			}
+		});
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_NEXT, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				navigationController.showNextScreenShot();
+			}
+		});
+		registerAction(mainFrame, OperationsShortcutEnum.SHOT_PREV, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				navigationController.showPrevScreenShot();
+			}
+		});
+	}
+
 	private void registerNavigationOnMac(JFrame frame) {
 		// TODO correct shortcut tooltips for prev/next screenshot navigation
 		frame.getRootPane().registerKeyboardAction(new ActionListener() {
@@ -252,10 +257,6 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
-	}
-
-	private boolean isOnMac() {
-		return System.getProperty("os.name").startsWith("Mac");
 	}
 
 	/**
@@ -308,7 +309,7 @@ public class GlobalKeyboardListenerImpl implements GlobalKeyboardListener {
 	 * @return true if Shift+Ctrl was pressed
 	 */
 	private boolean isCrtlShiftOnMac(NativeKeyEvent event) {
-		return isOnMac() && event.getModifiers() == MAC_SHIFT_CTRL_MODIFIER;
+		return OSUtils.isOnMac() && event.getModifiers() == MAC_SHIFT_CTRL_MODIFIER;
 	}
 
 	private boolean keyModifiersMatchText(NativeKeyEvent event, String... texts) {

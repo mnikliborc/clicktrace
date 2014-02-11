@@ -2,6 +2,8 @@ package com.niklim.clicktrace.view;
 
 import java.awt.event.KeyEvent;
 
+import com.niklim.clicktrace.controller.hook.GlobalKeyboardListenerImpl;
+
 public enum OperationsShortcutEnum {
 	// @formatter:off
 	SCROLL_UP("", KeyEvent.VK_UP, KeyEvent.CTRL_DOWN_MASK),
@@ -9,6 +11,14 @@ public enum OperationsShortcutEnum {
 	
 	SHOT_NEXT("[Ctrl+Right Arrow]", KeyEvent.VK_RIGHT, KeyEvent.CTRL_DOWN_MASK),
 	SHOT_PREV("[Ctrl+Left Arrow]", KeyEvent.VK_LEFT, KeyEvent.CTRL_DOWN_MASK),
+	
+	/**
+	 * shortcuts for Mac are use only for tooltips, 
+	 * action registering must be done by hand in {@link GlobalKeyboardListenerImpl}
+	 */
+	SHOT_NEXT_MAC("[Cmd+Right Arrow]", 0, 0),
+	SHOT_PREV_MAC("[Cmd+Left Arrow]", 0, 0),
+	
 	SHOT_FIRST("[Shift+Left Arrow]", KeyEvent.VK_LEFT, KeyEvent.SHIFT_DOWN_MASK),
 	SHOT_LAST("[Shift+Right Arrow]", KeyEvent.VK_RIGHT, KeyEvent.SHIFT_DOWN_MASK),
 	SHOT_REFRESH("[F5]", KeyEvent.VK_F5, 0),
