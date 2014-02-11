@@ -64,10 +64,12 @@ public abstract class AbstractSystemTest {
 		try {
 			File testSessionDir = new File("src/test/resources/" + getSessionsData().getPath());
 			for (File session : testSessionDir.listFiles()) {
-				FileUtils.copyDirectory(session, new File(FileManager.SESSIONS_DIR + session.getName()));
+				if (session.isDirectory()) {
+					FileUtils.copyDirectory(session, new File(FileManager.SESSIONS_DIR + session.getName()));
+				}
 			}
 		} catch (IOException e) {
-			new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -75,8 +77,10 @@ public abstract class AbstractSystemTest {
 		File sessionDir = new File(FileManager.SESSIONS_DIR);
 
 		for (File file : sessionDir.listFiles()) {
-			for (File sub : file.listFiles()) {
-				sub.delete();
+			if (file.isDirectory()) {
+				for (File sub : file.listFiles()) {
+					sub.delete();
+				}
 			}
 			file.delete();
 		}

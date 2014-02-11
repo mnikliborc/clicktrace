@@ -17,22 +17,22 @@ public class Files {
 		File file = new File(path);
 		return file.exists();
 	}
-	
+
 	public static void move(String fromPath, String toPath) throws IOException {
 		com.google.common.io.Files.move(new File(fromPath), new File(toPath));
 	}
-	
+
 	public static void copy(String fromPath, String toPath) throws IOException {
 		com.google.common.io.Files.copy(new File(fromPath), new File(toPath));
 	}
-	
+
 	public static void createDirectory(String dirPath) throws IOException {
 		File file = new File(dirPath);
 		if (!file.mkdir()) {
 			throw new IOException("Cannot create directory " + dirPath);
 		}
 	}
-	
+
 	public static void copy(final InputStream resource, String toPath) throws IOException {
 		ByteSource source = new ByteSource() {
 			@Override
@@ -45,18 +45,29 @@ public class Files {
 		source.copyTo(output);
 		output.close();
 	}
-	
+
+	/**
+	 * Recursively deletes File with given filePath.
+	 * 
+	 * @param filePath
+	 * @throws IOException
+	 */
 	public static void delete(String filePath) throws IOException {
 		File file = new File(filePath);
+		if (file.isDirectory()) {
+			for (File sub : file.listFiles()) {
+				delete(sub.getAbsolutePath());
+			}
+		}
 		if (!file.delete()) {
 			throw new IOException("Cannot delete file " + filePath);
 		}
 	}
-	
+
 	public static String load(File file) throws IOException {
 		return com.google.common.io.Files.toString(file, Charset.defaultCharset());
 	}
-	
+
 	public static void save(File file, String content) throws IOException {
 		com.google.common.io.Files.write(content.getBytes(), file);
 	}
