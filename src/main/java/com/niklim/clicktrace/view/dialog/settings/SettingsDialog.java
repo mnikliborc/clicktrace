@@ -23,15 +23,19 @@ import javax.swing.text.NumberFormatter;
 import net.miginfocom.swing.MigLayout;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.voter.LineVoter.ChangeSensitivity;
 import com.niklim.clicktrace.props.UserProperties;
+import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 @Singleton
 public class SettingsDialog extends AbstractDialog {
+
+	private static final String JIRA_URL_PREFIX = "http://";
 
 	@Inject
 	private UserProperties props;
@@ -42,8 +46,8 @@ public class SettingsDialog extends AbstractDialog {
 	private JTextField imageEditorPath;
 	private JFileChooser imageEditorFileChooser;
 
-	private JTextField jiraUrl;
-	private JTextField jiraUsername;
+	private JTextField jiraUrlTextField;
+	private JTextField jiraUsernameTextField;
 
 	private JCheckBox captureMouseClicks;
 	private JCheckBox captureSelectAll;
@@ -73,19 +77,30 @@ public class SettingsDialog extends AbstractDialog {
 		createCaptureSelectAllPanel();
 		createCaptureChangeDetectionLevelPanel();
 
+		createSpacePanel();
+
 		createSectionLabel("Editing");
 		createImageEditorPathPanel();
 		createScreenshotViewScalingPanel();
 
+		createSpacePanel();
+
 		createSectionLabel("Export");
 		createImageExportWidthPanel();
 
-		// createSectionLabel("JIRA");
-		// createJiraPanel();
+		createSpacePanel();
+
+		createSectionLabel("JIRA");
+		createJiraPanel();
 
 		dialog.add(createControlPanel("Save"), "align r, span 3");
 
 		postInit();
+	}
+
+	private void createSpacePanel() {
+		JPanel panel = new JPanel();
+		dialog.add(panel, "h 10, span 3, wrap");
 	}
 
 	private void createCaptureChangeDetectionLevelPanel() {
@@ -197,15 +212,19 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void createJiraPanel() {
-		jiraUrl = new JTextField();
-		jiraUrl.setName("jiraUrl");
-		jiraUsername = new JTextField();
-		jiraUsername.setName("jiraUsername");
+		jiraUrlTextField = new JTextField();
+		jiraUrlTextField.setName("jiraUrl");
+		jiraUsernameTextField = new JTextField();
+		jiraUsernameTextField.setName("jiraUsername");
 
-		dialog.add(new JLabel("URL"));
-		dialog.add(jiraUrl, "wrap");
+		JPanel urlPanel = new JPanel(new MigLayout("insets 5 0 5 0", "[]push[]"));
+		urlPanel.add(new JLabel("URL"));
+		urlPanel.add(new JLabel(JIRA_URL_PREFIX));
+
+		dialog.add(urlPanel, "grow, h 5");
+		dialog.add(jiraUrlTextField, "wrap");
 		dialog.add(new JLabel("Username"));
-		dialog.add(jiraUsername, "wrap");
+		dialog.add(jiraUsernameTextField, "wrap");
 	}
 
 	public void open() {
@@ -219,9 +238,13 @@ public class SettingsDialog extends AbstractDialog {
 		loadRecordingModel();
 		loadExportModel();
 		loadEditingModel();
+		loadJiraModel();
+	}
 
-		// jiraUrl.setText(props.getJiraConfig().getInstanceUrl());
-		// jiraUsername.setText(props.getJiraConfig().getUsername());
+	private void loadJiraModel() {
+		String url = Strings.nullToEmpty(props.getJiraConfig().getInstanceUrl());
+		jiraUrlTextField.setText(url.replaceFirst(JIRA_URL_PREFIX, ""));
+		jiraUsernameTextField.setText(props.getJiraConfig().getUsername());
 	}
 
 	private void loadExportModel() {
@@ -259,11 +282,14 @@ public class SettingsDialog extends AbstractDialog {
 		saveEditingModel();
 		saveExportModel();
 		saveRecordingModel();
-
-		// props.setJiraConfig(new JiraConfig(jiraUrl.getText(),
-		// jiraUsername.getText()));
+		saveJiraModel();
 
 		props.save();
+	}
+
+	private void saveJiraModel() {
+		props.setJiraConfig(new JiraConfig(JIRA_URL_PREFIX + jiraUrlTextField.getText(), jiraUsernameTextField
+				.getText()));
 	}
 
 	private void saveExportModel() {
