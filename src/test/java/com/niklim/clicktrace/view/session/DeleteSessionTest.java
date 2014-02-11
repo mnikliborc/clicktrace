@@ -38,9 +38,8 @@ public class DeleteSessionTest extends AbstractSystemTest {
 		} catch (ComponentLookupException ex) {
 		}
 
-		for (String item : new String[] { "Stop recording", "Refresh session",
-				"Select all screenshots", "Deselect all screenshots",
-				"Delete selected screenshots", "Delete current session" }) {
+		for (String item : new String[] { "Stop recording", "Refresh session", "Select all screenshots",
+				"Deselect all screenshots", "Delete selected screenshots", "Delete current session" }) {
 			editorFixture.menuItemWithPath("Session", item).requireDisabled();
 		}
 	}
