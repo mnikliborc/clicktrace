@@ -71,25 +71,6 @@ public class UserProperties extends AbstractProperties {
 		props.setProperty(JIRA_USERNAME, conf.getUsername());
 	}
 
-	public static class JiraConfig {
-		private String instanceUrl;
-		private String username;
-
-		public JiraConfig(String url, String username) {
-			this.instanceUrl = url;
-			this.username = username;
-		}
-
-		public String getInstanceUrl() {
-			return instanceUrl;
-		}
-
-		public String getUsername() {
-			return username;
-		}
-
-	}
-
 	public boolean getCaptureMouseClicks() {
 		return props.getBoolean(CAPTURE_CLICKS);
 	}

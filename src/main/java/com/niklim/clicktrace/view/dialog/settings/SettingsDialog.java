@@ -27,8 +27,8 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.voter.LineVoter.ChangeSensitivity;
+import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties;
-import com.niklim.clicktrace.props.UserProperties.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
