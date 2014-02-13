@@ -8,7 +8,9 @@ import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.niklim.clicktrace.props.JiraConfig;
+import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
 import com.niklim.clicktrace.props.UserProperties;
+import com.niklim.clicktrace.service.export.jira.JiraMetadataService;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 public class JiraLoginDialog extends AbstractDialog {
@@ -18,6 +20,9 @@ public class JiraLoginDialog extends AbstractDialog {
 
 	@Inject
 	private UserProperties props;
+
+	@Inject
+	private JiraMetadataService metadataService;
 
 	JTextField jiraInstanceUrl;
 	JTextField username;
@@ -59,7 +64,15 @@ public class JiraLoginDialog extends AbstractDialog {
 
 		JiraConfig jiraConfig = new JiraConfig(jiraInstanceUrl.getText(), username.getText());
 		jiraConfig.setPassword(password.getText());
+
+		try {
+			JiraUserMetadata userMetadata = metadataService.loadUserMetadata(jiraConfig);
+			jiraConfig.setUserMetadata(userMetadata);
+		} catch (Exception e) {
+			// TODO log error, notify user, cancel
+			e.printStackTrace();
+		}
+
 		exportDialog.open(jiraConfig);
 	}
-
 }
