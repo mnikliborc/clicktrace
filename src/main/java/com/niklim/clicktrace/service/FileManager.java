@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.util.concurrent.Futures;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
+import com.niklim.clicktrace.TimeMeter;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 
 /**
@@ -55,6 +56,7 @@ public class FileManager {
 	}
 
 	public Future<String> saveImage(BufferedImage image, String sessionName) throws IOException {
+		TimeMeter tm = TimeMeter.start("FileManager.saveImage", log);
 		// TODO create FIFO queue with Shots to save and save them
 		// asynchronously
 		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image);
@@ -65,6 +67,7 @@ public class FileManager {
 		fop.flush();
 		fop.close();
 
+		tm.stop();
 		return Futures.immediateFuture(file.getName());
 	}
 

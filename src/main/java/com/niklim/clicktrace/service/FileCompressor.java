@@ -19,6 +19,8 @@ import javax.imageio.stream.ImageOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.niklim.clicktrace.TimeMeter;
+
 /**
  * In parallel it compresses an image using given formats (jpg, png, etc.).
  * Returns the image in the format resulting in the smallest file size.
@@ -35,6 +37,8 @@ public class FileCompressor {
 	}
 
 	public CompressionResult getBestCompressed(BufferedImage image) {
+		TimeMeter tm = TimeMeter.start("FileCompressor.getBestCompressed", log);
+
 		List<Future<CompressionResult>> futures = compress(image);
 
 		CompressionResult minSize = null;
@@ -48,6 +52,8 @@ public class FileCompressor {
 				log.error("", e);
 			}
 		}
+
+		tm.stop();
 		return minSize;
 	}
 

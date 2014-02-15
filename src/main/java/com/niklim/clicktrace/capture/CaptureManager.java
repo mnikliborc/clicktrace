@@ -17,6 +17,7 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
+import com.niklim.clicktrace.TimeMeter;
 import com.niklim.clicktrace.capture.voter.LineVoter;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.Click;
@@ -113,8 +114,12 @@ public class CaptureManager {
 	 * save it stores recorded mouse clicks on the last screenshot.
 	 */
 	public synchronized void capture(Optional<Click> clickOpt) {
+		TimeMeter tm = TimeMeter.start("CaptureManager.capture", log);
+
 		Rectangle captureRect = getCaptureRectangle();
+		TimeMeter tmRobot = TimeMeter.start("CaptureManager.robot", log);
 		BufferedImage image = robot.createScreenCapture(captureRect);
+		tmRobot.stop();
 
 		if (detector.detect(lastImage, image)) {
 			log.debug("Screen change detected");
@@ -137,6 +142,8 @@ public class CaptureManager {
 		} else if (clickOpt.isPresent()) {
 			clicks.add(clickOpt.get());
 		}
+
+		tm.stop();
 	}
 
 	private void drawClicks(BufferedImage image) {

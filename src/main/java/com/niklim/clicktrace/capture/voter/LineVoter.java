@@ -3,6 +3,11 @@ package com.niklim.clicktrace.capture.voter;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.niklim.clicktrace.TimeMeter;
+
 /**
  * Samples image horizontally and vertically with lines. Each line shifted by
  * LINE_SHIFT pixels from top to bottom and left to right. Each line is compared
@@ -16,31 +21,38 @@ import java.awt.image.BufferedImage;
  * 
  */
 public class LineVoter implements ChangeVoter {
-	private static final int LINE_SHIFT = 5;
+	private static final Logger log = LoggerFactory.getLogger(LineVoter.class);
 
-	/**
-	 * defines when two pixels differ: put pixels in 3dim RGB space and
-	 * calculate Manhattan distance, if distance is greater than
-	 * PIXEL_DIFF_THRESHOLD, then pixels differ
-	 */
-	private static final int PIXEL_DIFF_THRESHOLD = 10;
+	private static final int LINE_SHIFT = 5;
 
 	/**
 	 * Defines how sensitive {@link LineVoter} is.
 	 */
 	public static enum ChangeSensitivity {
-		HIGH(0, 0.005), NORMAL(0.005, 0.01), LOW(0.05, 0.05);
+		HIGH(0, 0.005, 10), NORMAL(0.005, 0.01, 10), LOW(0.05, 0.05, 30);
 
-		// used to define when two corresponding lines differ
+		/**
+		 * used to define when two corresponding lines differ
+		 */
 		final double lineDiffThresholdCoeff;
 
-		// used to define how many corresponding lines between two shots must
-		// differ to decide that the shots differ
+		/**
+		 * used to define how many corresponding lines between two shots must
+		 * differ to decide that the shots differ
+		 */
 		final double lineCountThresholdCoeff;
 
-		ChangeSensitivity(double lineDiffThresholdCoeff, double lineCountThresholdCoeff) {
+		/**
+		 * defines when two pixels differ: put pixels in 3dim RGB space and
+		 * calculate Manhattan distance, if distance is greater than
+		 * PIXEL_DIFF_THRESHOLD, then pixels differ
+		 */
+		final int pixelDiffThreshold;
+
+		ChangeSensitivity(double lineDiffThresholdCoeff, double lineCountThresholdCoeff, int pixelDiffThreshold) {
 			this.lineDiffThresholdCoeff = lineDiffThresholdCoeff;
 			this.lineCountThresholdCoeff = lineCountThresholdCoeff;
+			this.pixelDiffThreshold = pixelDiffThreshold;
 		}
 	}
 
@@ -71,6 +83,8 @@ public class LineVoter implements ChangeVoter {
 
 	@Override
 	public Vote vote(BufferedImage prev, BufferedImage current) {
+		TimeMeter tm = TimeMeter.start("LineVoter.vote", log);
+
 		if (prev.getWidth() != current.getWidth() || prev.getHeight() != current.getHeight()) {
 			throw new RuntimeException("Prev and current images have different size");
 		}
@@ -87,6 +101,7 @@ public class LineVoter implements ChangeVoter {
 		differingLinesCount += calculateDifferingLinesCount(prev, current, height, width, horizontalLineDiffThreshold,
 				horizontalPixelPicker);
 
+		tm.stop();
 		if (differingLinesCount > (width / LINE_SHIFT + height / LINE_SHIFT) * sensitivity.lineCountThresholdCoeff) {
 			return Vote.SAVE;
 		} else {
@@ -103,7 +118,7 @@ public class LineVoter implements ChangeVoter {
 				Color prevColor = pixelPicker.pick(prev, i, j);
 				Color currentColor = pixelPicker.pick(current, i, j);
 				int pxDiff = calculatePixelDifference(prevColor, currentColor);
-				if (pxDiff > PIXEL_DIFF_THRESHOLD) {
+				if (pxDiff > sensitivity.pixelDiffThreshold) {
 					pixelDiffCount++;
 				}
 			}
