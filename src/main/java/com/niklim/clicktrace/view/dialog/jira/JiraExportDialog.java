@@ -130,7 +130,7 @@ public class JiraExportDialog extends AbstractDialog {
 
 		createIssueCreateControls();
 
-		dialog.add(createControlPanel("Export"), "span 2, h 50, align r");
+		dialog.add(createControlPanel("Export"), "span 2, align r");
 
 		createListeners();
 		postInit();
