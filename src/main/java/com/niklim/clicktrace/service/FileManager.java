@@ -37,14 +37,14 @@ public class FileManager {
 
 	private static FileCompressor compressor = new FileCompressor("jpg", "png");
 
-	public static class TrashFilter implements FilenameFilter {
+	public static class NoTrashFilter implements FilenameFilter {
 		@Override
 		public boolean accept(File file, String name) {
 			return !".".equals(name) && !"..".equals(name) && !".DS_Store".equals(name) && !name.endsWith("~");
 		}
 	}
 
-	public static class ImageFilter extends TrashFilter {
+	public static class ImageFilter extends NoTrashFilter {
 		@Override
 		public boolean accept(File file, String name) {
 			return super.accept(file, name) && !SESSION_PROPS_FILENAME.equals(name);

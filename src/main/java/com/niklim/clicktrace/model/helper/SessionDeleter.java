@@ -24,7 +24,7 @@ public class SessionDeleter {
 
 	public void delete(Session delete) {
 		String dirPath = FileManager.SESSIONS_DIR + delete.getName();
-		for (String filename : fileManager.loadFileNames(dirPath, new FileManager.TrashFilter())) {
+		for (String filename : fileManager.loadFileNames(dirPath, new FileManager.NoTrashFilter())) {
 			try {
 				String filePath = dirPath + File.separator + filename;
 				Files.delete(filePath);

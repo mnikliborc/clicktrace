@@ -1,9 +1,13 @@
 package com.niklim.clicktrace.service;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.model.Session;
@@ -40,7 +44,8 @@ public class SessionManager {
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
-		for (String sessionName : fileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.TrashFilter())) {
+		List<String> filenames = fileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.NoTrashFilter());
+		for (String sessionName : filterSessionNames(filenames)) {
 			Session session = createSessionInstance();
 			session.setName(sessionName);
 
@@ -51,6 +56,15 @@ public class SessionManager {
 		}
 
 		return sessions;
+	}
+
+	private Collection<String> filterSessionNames(List<String> filenames) {
+		return Collections2.filter(filenames, new Predicate<String>() {
+			public boolean apply(String filename) {
+				File sessionDir = new File(FileManager.SESSIONS_DIR + filename);
+				return sessionDir.isDirectory();
+			}
+		});
 	}
 
 	private Session createSessionInstance() {

@@ -49,7 +49,7 @@ public class SessionCompressor {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);
 
-		List<String> filenames = fileManager.loadFileNames(source, new FileManager.TrashFilter());
+		List<String> filenames = fileManager.loadFileNames(source, new FileManager.NoTrashFilter());
 
 		for (String file : filenames) {
 			log.debug("File Added : " + file);
