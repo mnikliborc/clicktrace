@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
@@ -16,14 +15,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.TimeMeter;
 import com.niklim.clicktrace.capture.voter.LineVoter;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.model.Click;
-import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.props.UserProperties;
-import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.service.ImageSaver;
 import com.niklim.clicktrace.service.ScreenShotUtils;
 
 /**
@@ -47,7 +44,7 @@ public class CaptureManager {
 	private UserProperties props;
 
 	@Inject
-	private FileManager fileManager;
+	private ImageSaver imageSaver;
 
 	private List<Click> clicks = new LinkedList<Click>();
 	private BufferedImage lastImage;
@@ -91,13 +88,8 @@ public class CaptureManager {
 		time = null;
 
 		if (lastImage != null) {
-			try {
-				drawClicks(lastImage);
-				fileManager.saveImage(lastImage, activeSession.getSession().getName());
-			} catch (IOException e) {
-				log.error(ErrorMsgs.SCREENSHOT_SAVE_ERROR, e);
-				ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_SAVE_ERROR);
-			}
+			drawClicks(lastImage);
+			imageSaver.save(lastImage, activeSession.getSession().getName());
 			lastImage = null;
 		}
 	}
@@ -124,21 +116,16 @@ public class CaptureManager {
 		if (detector.detect(lastImage, image)) {
 			log.debug("Screen change detected");
 
-			try {
-				if (clickOpt.isPresent()) {
-					clicks.add(clickOpt.get());
-				}
-
-				if (lastImage != null) {
-					drawClicks(lastImage);
-					fileManager.saveImage(lastImage, activeSession.getSession().getName());
-				}
-
-				lastImage = image;
-			} catch (IOException e) {
-				log.error(ErrorMsgs.SCREENSHOT_SAVE_ERROR, e);
-				ErrorNotifier.notify(ErrorMsgs.SCREENSHOT_SAVE_ERROR);
+			if (clickOpt.isPresent()) {
+				clicks.add(clickOpt.get());
 			}
+
+			if (lastImage != null) {
+				drawClicks(lastImage);
+				imageSaver.save(lastImage, activeSession.getSession().getName());
+			}
+
+			lastImage = image;
 		} else if (clickOpt.isPresent()) {
 			clicks.add(clickOpt.get());
 		}

@@ -13,6 +13,7 @@ public interface ErrorMsgs {
 	public static final String SCREENSHOT_DELETE_IMAGE_ERROR = "Unable to delete screenshot image.";
 	public static final String SCREENSHOT_LOAD_IMAGE_ERROR = "Unable to load screenshot image.";
 	public static final String SCREENSHOT_SAVE_ERROR = "Error occured while saving the screenshot.";
+	public static final String SCREENSHOT_SAVE_FATAL_ERROR = "Error occured while saving the screenshot. Clicktrace must be restarted to be able to record screenshots.";
 
 	public static final String PROPS_SAVE_ERROR = "Unable to save properties file.";
 	public static final String PROPS_LOAD_ERROR = "Unable to load properties file.";

@@ -1,25 +1,17 @@
 package com.niklim.clicktrace.service;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.util.concurrent.Futures;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
-import com.niklim.clicktrace.TimeMeter;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 
 /**
@@ -32,10 +24,6 @@ public class FileManager {
 	public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 	public static final String SESSION_PROPS_FILENAME = "session.properties";
-
-	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
-
-	private static FileCompressor compressor = new FileCompressor("jpg", "png");
 
 	public static class NoTrashFilter implements FilenameFilter {
 		@Override
@@ -55,48 +43,7 @@ public class FileManager {
 		createIfDirNotExists(SESSIONS_DIR);
 	}
 
-	public Future<String> saveImage(BufferedImage image, String sessionName) throws IOException {
-		TimeMeter tm = TimeMeter.start("FileManager.saveImage", log);
-		// TODO create FIFO queue with Shots to save and save them
-		// asynchronously
-		FileCompressor.CompressionResult compressionResult = compressor.getBestCompressed(image);
-
-		File file = findFileToSave(sessionName, compressionResult);
-		FileOutputStream fop = new FileOutputStream(file);
-		fop.write(compressionResult.stream.toByteArray());
-		fop.flush();
-		fop.close();
-
-		tm.stop();
-		return Futures.immediateFuture(file.getName());
-	}
-
-	/**
-	 * Creates filepath based on timestamp (sec precision). If file already
-	 * exists, then appends 'x' to the timestamp and checks again if exists, and
-	 * so on.
-	 * 
-	 * @param sessionName
-	 * @param compressionResult
-	 * @return
-	 */
-	private File findFileToSave(String sessionName, FileCompressor.CompressionResult compressionResult) {
-		Date date = new Date();
-		String timeStamp = format.format(date);
-
-		File file;
-		String postfix = "";
-		do {
-			String filename = timeStamp + postfix + "." + compressionResult.format;
-			String filePath = createFilePath(sessionName, filename);
-			file = new File(filePath);
-			postfix += "x";
-		} while (file.exists());
-
-		return file;
-	}
-
-	private String createFilePath(String sessionName, String filename) {
+	public String createFilePath(String sessionName, String filename) {
 		if (sessionName == null || sessionName.trim().equals("")) {
 			createIfDirNotExists(DEFAULT_DIR);
 			return DEFAULT_DIR + filename;
