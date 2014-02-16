@@ -10,6 +10,7 @@ public interface InfoMsgs {
 	public static final String JIRA_EXPORT_WRONG_URL = "Wrong JIRA URL.";
 	public static final String JIRA_EXPORT_CAPTCHA_NEEDED = "It looks like we have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
 	public static final String JIRA_EXPORT_NO_SUMMARY = "Please provide Issue summary.";
+	public static final Object JIRA_UNAVAILABLE = "Unable to connect to JIRA.";
 
 	public static final String JIRA_UNKNOWN_LOGIN_FAILURE = "Unable to log into JIRA.";
 

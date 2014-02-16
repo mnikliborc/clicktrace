@@ -1,5 +1,8 @@
 package com.niklim.clicktrace.view.dialog.jira;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.ConnectException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
@@ -42,6 +45,14 @@ public class JiraLoginDialog extends AbstractDialog {
 	JTextField username;
 	JPasswordField password;
 
+	private KeyAdapter loginAction = new KeyAdapter() {
+		public void keyTyped(KeyEvent e) {
+			if (e.getKeyChar() == '\n') {
+				okAction();
+			}
+		}
+	};
+
 	@Inject
 	public void init() {
 		dialog.setTitle("Log into JIRA Clicktrace Plugin");
@@ -51,6 +62,10 @@ public class JiraLoginDialog extends AbstractDialog {
 		jiraInstanceUrl = new JTextField();
 		username = new JTextField();
 		password = new JPasswordField();
+
+		jiraInstanceUrl.addKeyListener(loginAction);
+		username.addKeyListener(loginAction);
+		password.addKeyListener(loginAction);
 
 		dialog.add(new JLabel("JIRA URL"));
 		dialog.add(jiraInstanceUrl, "w 400, wrap");
@@ -74,6 +89,8 @@ public class JiraLoginDialog extends AbstractDialog {
 
 	@Override
 	protected void okAction() {
+		showWaitingCursor();
+
 		JiraConfig jiraConfig = new JiraConfig(jiraInstanceUrl.getText(), username.getText());
 		jiraConfig.setPassword(password.getText());
 		try {
@@ -87,14 +104,35 @@ public class JiraLoginDialog extends AbstractDialog {
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
 		}
 
+		hideWaitingCursor();
 	}
 
 	private void handleKnownException(ExecutionException e) {
-		if (e.getCause() instanceof RestClientException) {
-			handleRestException((RestClientException) e.getCause());
+		RestClientException restException = getCause(e, RestClientException.class);
+		if (restException != null) {
+			handleRestException(restException);
+			return;
+		}
+
+		ConnectException connectException = getCause(e, ConnectException.class);
+		if (connectException != null) {
+			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_UNAVAILABLE);
 		} else {
 			log.error("Unhandled ExecutionException cause", e.getCause());
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T getCause(Throwable t, Class<T> exceptionClass) {
+		if (t.getClass() == exceptionClass) {
+			return (T) t;
+		}
+
+		if (t.getCause() == null) {
+			return null;
+		} else {
+			return getCause(t.getCause(), exceptionClass);
 		}
 	}
 
