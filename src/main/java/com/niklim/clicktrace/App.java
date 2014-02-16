@@ -32,7 +32,7 @@ public class App {
 
 		ToolTipManager.sharedInstance().setInitialDelay(1000);
 
-		// TimeMeter.init();
+		TimeMeter.init();
 		log.info("app ready to work");
 		controller.init();
 	}

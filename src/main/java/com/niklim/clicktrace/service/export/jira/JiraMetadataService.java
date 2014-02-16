@@ -10,9 +10,11 @@ import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.domain.BasicProject;
 import com.atlassian.jira.rest.client.domain.IssueType;
 import com.atlassian.jira.rest.client.domain.Priority;
+import com.atlassian.jira.rest.client.domain.ServerInfo;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousMetadataRestClient;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousProjectRestClient;
+import com.atlassian.util.concurrent.Promise;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -27,6 +29,8 @@ public class JiraMetadataService {
 		HttpClient httpClient = createHttpClient(jiraConfig, restApiUri);
 
 		AsynchronousMetadataRestClient metadataClient = createMetadataClient(httpClient, restApiUri);
+		Promise<ServerInfo> sip = metadataClient.getServerInfo();
+		System.out.println(sip.get().getBuildDate());
 		Collection<JiraFieldDto> issueTypes = loadIssueTypes(jiraConfig, metadataClient);
 		Collection<JiraFieldDto> priorities = loadPriorities(jiraConfig, metadataClient);
 
@@ -45,9 +49,6 @@ public class JiraMetadataService {
 	private Collection<JiraFieldDto> projectToJiraFieldDtos(Iterable<BasicProject> projects) {
 		return Collections2.transform(Lists.newArrayList(projects), new Function<BasicProject, JiraFieldDto>() {
 			public JiraFieldDto apply(BasicProject input) {
-				String uri = input.getSelf().toString();
-				// return new JiraFieldDto(input.getName(),
-				// Integer.valueOf(uri.substring(uri.lastIndexOf("/") + 1)));
 				return new JiraFieldDto(input.getName(), input.getKey());
 			}
 		});

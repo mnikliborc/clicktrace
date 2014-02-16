@@ -39,7 +39,6 @@ import com.niklim.clicktrace.service.export.jira.JiraFieldDto;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 public class JiraExportDialog extends AbstractDialog {
-
 	private static final Logger log = LoggerFactory.getLogger(JiraExportDialog.class);
 
 	@Inject

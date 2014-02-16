@@ -11,6 +11,8 @@ public interface InfoMsgs {
 	public static final String JIRA_EXPORT_CAPTCHA_NEEDED = "It looks like we have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
 	public static final String JIRA_EXPORT_NO_SUMMARY = "Please provide Issue summary.";
 
+	public static final String JIRA_UNKNOWN_LOGIN_FAILURE = "Unable to log into JIRA.";
+
 	public static final String HTML_EXPORT_SUCCESS = "Session successfully exported to HTML.";
 	public static final String HTML_EXPORT_FOLDER_NOT_EXISTS = "Directory does not exist.";
 
