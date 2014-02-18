@@ -94,7 +94,7 @@ public class ControlView {
 		descriptionButton = Buttons.create("description", "Edit screenshot description ", Icons.SCREENSHOT_DESCRIPTION,
 				OperationsShortcutEnum.SHOT_DESCRIPTION);
 
-		controlPanel.add(new JLabel("Screen shot"));
+		controlPanel.add(new JLabel("Screenshot"));
 		controlPanel.add(imagesComboBox);
 
 		controlPanel.add(firstButton);

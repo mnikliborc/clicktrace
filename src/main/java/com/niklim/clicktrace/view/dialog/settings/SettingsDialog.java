@@ -16,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
@@ -35,14 +34,11 @@ import com.niklim.clicktrace.view.dialog.AbstractDialog;
 @Singleton
 public class SettingsDialog extends AbstractDialog {
 
-	private static final String JIRA_URL_PREFIX = "http://";
-
 	@Inject
 	private UserProperties props;
 
 	private CaptureAreaComponent captureAreaComponent;
 
-	private JSpinner captureFrequency;
 	private JTextField imageEditorPath;
 	private JFileChooser imageEditorFileChooser;
 
@@ -105,11 +101,12 @@ public class SettingsDialog extends AbstractDialog {
 
 	private void createCaptureChangeDetectionLevelPanel() {
 		changeSensitivityHighRadio = new JRadioButton("high");
+		changeSensitivityHighRadio.setToolTipText("detect blinking text cursor");
 		changeSensitivityNormalRadio = new JRadioButton("normal");
+		changeSensitivityNormalRadio.setToolTipText("default sensitivity");
 		changeSensitivityLowRadio = new JRadioButton("low");
 
 		JLabel label = new JLabel("Change sensitivity");
-		label.setToolTipText("How sensitive change detection is.");
 		dialog.add(label);
 		JPanel radioPanel = new JPanel(new MigLayout("fill, insets 0"));
 
