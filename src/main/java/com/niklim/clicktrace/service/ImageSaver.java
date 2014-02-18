@@ -26,8 +26,7 @@ public class ImageSaver implements Runnable {
 
 	private static Format format = new SimpleDateFormat("yyyy.MM.dd-HH.mm.ss");
 
-	private static FileCompressor compressor = new FileCompressor("jpg", "png");
-
+	private final FileCompressor compressor = new FileCompressor("jpg", "png");
 	private final BlockingQueue<SaveTask> queue = new LinkedBlockingDeque<SaveTask>();
 
 	@Inject
@@ -50,7 +49,7 @@ public class ImageSaver implements Runnable {
 	}
 
 	/**
-	 * Enqueues a saving task.
+	 * Enqueues a save task.
 	 * 
 	 * @param image
 	 * @param sessionName

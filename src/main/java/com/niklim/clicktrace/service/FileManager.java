@@ -15,8 +15,7 @@ import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 
 /**
- * Manages creating folders, properties files and saving/deleting screenshot
- * images.
+ * Manages file paths creating folders, properties files.
  */
 public class FileManager {
 	private static final Logger log = LoggerFactory.getLogger(FileManager.class);
