@@ -36,6 +36,7 @@ import com.niklim.clicktrace.service.SessionCompressor;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 import com.niklim.clicktrace.service.export.jira.JiraExportService;
 import com.niklim.clicktrace.service.export.jira.JiraFieldDto;
+import com.niklim.clicktrace.view.control.menu.ToolsMenu;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 public class JiraExportDialog extends AbstractDialog {
@@ -117,7 +118,7 @@ public class JiraExportDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.setTitle("Export to JIRA Clicktrace Plugin");
+		dialog.setTitle("Export to " + ToolsMenu.JIRA_ADDON_NAME);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 		dialog.setResizable(false);
 

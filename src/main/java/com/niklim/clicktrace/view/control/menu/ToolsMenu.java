@@ -19,6 +19,8 @@ import com.niklim.clicktrace.view.dialog.settings.SettingsDialog;
 
 @Singleton
 public class ToolsMenu {
+	public static final String JIRA_ADDON_NAME = "Clicktrace JIRA Add-on";
+
 	@Inject
 	private SettingsDialog settingsDialog;
 
@@ -62,7 +64,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to Clicktrace JIRA Add-on", OperationsShortcutEnum.JIRA_EXPORT,
+		return MenuBar.createMenuItem("Export to " + JIRA_ADDON_NAME, OperationsShortcutEnum.JIRA_EXPORT,
 				jiraExportOperation.action());
 	}
 
