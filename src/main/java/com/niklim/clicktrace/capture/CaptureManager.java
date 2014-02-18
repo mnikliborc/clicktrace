@@ -91,9 +91,8 @@ public class CaptureManager {
 			drawClicks(lastImage);
 			imageSaver.save(lastImage, activeSession.getSession().getName());
 			lastImage = null;
+			waitForImageSaver();
 		}
-
-		waitForImageSaver();
 	}
 
 	/**

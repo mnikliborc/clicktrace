@@ -62,7 +62,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to JIRA Clicktrace Plugin", OperationsShortcutEnum.JIRA_EXPORT,
+		return MenuBar.createMenuItem("Export to Clicktrace JIRA Add-on", OperationsShortcutEnum.JIRA_EXPORT,
 				jiraExportOperation.action());
 	}
 
