@@ -8,7 +8,7 @@ public interface InfoMsgs {
 	public static final String JIRA_EXPORT_ISSUE_KEY_EMPTY = "Issue key must not be empty.";
 	public static final String JIRA_EXPORT_AUTHENTICATION_FAILURE = "Wrong username or password.";
 	public static final String JIRA_EXPORT_WRONG_URL = "Wrong JIRA URL.";
-	public static final String JIRA_EXPORT_CAPTCHA_NEEDED = "It looks like we have to fill CAPTCHA to log in JIRA. Please go to your JIRA and log in.";
+	public static final String JIRA_EXPORT_CAPTCHA_NEEDED = "It looks like we have to fill CAPTCHA to log into JIRA. Please go to your JIRA and log in.";
 	public static final String JIRA_EXPORT_NO_SUMMARY = "Please provide Issue summary.";
 	public static final Object JIRA_UNAVAILABLE = "Unable to connect to JIRA.";
 
@@ -19,6 +19,6 @@ public interface InfoMsgs {
 
 	public static final String SESSION_NO_NAME = "Please provide session name.";
 
-	public static final String EDITOR_APP_ERROR = "An error occured while opening the screenshot image.";
+	public static final String EDITOR_APP_ERROR = "An error occurred while opening the screenshot image.";
 
 }
