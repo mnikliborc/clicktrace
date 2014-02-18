@@ -217,11 +217,7 @@ public class SettingsDialog extends AbstractDialog {
 		jiraUsernameTextField = new JTextField();
 		jiraUsernameTextField.setName("jiraUsername");
 
-		JPanel urlPanel = new JPanel(new MigLayout("insets 5 0 5 0", "[]push[]"));
-		urlPanel.add(new JLabel("URL"));
-		urlPanel.add(new JLabel(JIRA_URL_PREFIX));
-
-		dialog.add(urlPanel, "grow, h 5");
+		dialog.add(new JLabel("URL"));
 		dialog.add(jiraUrlTextField, "wrap");
 		dialog.add(new JLabel("Username"));
 		dialog.add(jiraUsernameTextField, "wrap");
@@ -243,7 +239,7 @@ public class SettingsDialog extends AbstractDialog {
 
 	private void loadJiraModel() {
 		String url = Strings.nullToEmpty(props.getJiraConfig().getInstanceUrl());
-		jiraUrlTextField.setText(url.replaceFirst(JIRA_URL_PREFIX, ""));
+		jiraUrlTextField.setText(url);
 		jiraUsernameTextField.setText(props.getJiraConfig().getUsername());
 	}
 
@@ -288,8 +284,7 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void saveJiraModel() {
-		props.setJiraConfig(new JiraConfig(JIRA_URL_PREFIX + jiraUrlTextField.getText(), jiraUsernameTextField
-				.getText()));
+		props.setJiraConfig(new JiraConfig(jiraUrlTextField.getText(), jiraUsernameTextField.getText()));
 	}
 
 	private void saveExportModel() {

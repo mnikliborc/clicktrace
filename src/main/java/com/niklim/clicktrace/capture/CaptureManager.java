@@ -92,6 +92,20 @@ public class CaptureManager {
 			imageSaver.save(lastImage, activeSession.getSession().getName());
 			lastImage = null;
 		}
+
+		waitForImageSaver();
+	}
+
+	/**
+	 * Wait 1 sec for ImageSaver to save all pending images. Brute solution, but
+	 * effective.
+	 */
+	private void waitForImageSaver() {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			log.error("", e);
+		}
 	}
 
 	private class CaptureTask extends TimerTask {

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -67,7 +68,7 @@ public class JiraExportService {
 				+ "\"key\": \""+project+"\""
 				+ "},"
 				+ "\"summary\": \""+summary+"\","
-				+ "\"description\": \""+description+"\","
+				+ "\"description\": \""+StringEscapeUtils.escapeJava(description)+"\","
 				+ "\"issuetype\": {" + "\"name\": \""+issueType+"\"" + "},"
 				+ "\"priority\": {" + "\"name\": \""+priority+"\"" + "}" + "}" + "}";
 		//@formatter:on
