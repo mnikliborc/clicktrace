@@ -14,12 +14,12 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 import com.google.inject.Inject;
-import com.niklim.clicktrace.service.MarkdownService;
+import com.niklim.clicktrace.service.MarkupService;
 
 /**
  * Switches between EDIT and PREVIEW mode on its {@link JCheckBox} change. In
  * PREVIEW mode takes text from {@link JTextArea} and uses
- * {@link MarkdownService} to render HTML from Markdown. Displays it in
+ * {@link MarkupService} to render HTML from Markdown. Displays it in
  * {@link JPanel} placeholder. In EDIT mode gets back to {@link JTextArea}
  * edition.
  */
@@ -33,7 +33,7 @@ public class EditPreviewDescriptionToggle {
 	private JCheckBox previewCheckbox;
 	
 	@Inject
-	private MarkdownService markdownParser;
+	private MarkupService markupService;
 	
 	public void init(JDialog dialog, JPanel descriptionPlaceholder, JTextArea description,
 			String migLayoutConstraints) {
@@ -71,7 +71,7 @@ public class EditPreviewDescriptionToggle {
 	public void toggle() {
 		if (previewCheckbox.isSelected()) {
 			descriptionPlaceholder.removeAll();
-			Component htmlComponent = markdownParser.toHtmlPanel(textarea.getText());
+			Component htmlComponent = markupService.toHtmlPanel(textarea.getText());
 			descriptionPlaceholder.add(htmlComponent, migLayoutConstraints);
 		} else {
 			descriptionPlaceholder.removeAll();

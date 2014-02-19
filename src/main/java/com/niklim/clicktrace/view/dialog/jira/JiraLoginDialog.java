@@ -23,7 +23,6 @@ import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.export.jira.JiraMetadataService;
-import com.niklim.clicktrace.view.control.menu.ToolsMenu;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 public class JiraLoginDialog extends AbstractDialog {
@@ -56,7 +55,7 @@ public class JiraLoginDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.setTitle("Log into " + ToolsMenu.JIRA_ADDON_NAME);
+		dialog.setTitle("Log into " + InfoMsgs.JIRA_ADDON_NAME);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 		dialog.setResizable(false);
 

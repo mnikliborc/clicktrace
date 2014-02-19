@@ -6,13 +6,13 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.service.MarkdownService;
+import com.niklim.clicktrace.service.MarkupService;
 
 public class HtmlExportRenderer {
 	private static final int DESCRIPTION_LENGTH_LIMIT = 30;
 	
 	@Inject
-	private MarkdownService markdownParser;
+	private MarkupService markupService;
 	
 	public String renderHtml(Session session, String htmlExportFolder, int initImageWidth) {
 		String mainTemplate = loadTemplate("main.tmpl", htmlExportFolder);
@@ -86,6 +86,6 @@ public class HtmlExportRenderer {
 	}
 	
 	private String markdownToHtml(String markdown) {
-		return markdownParser.toHtml(markdown);
+		return markupService.toHtml(markdown);
 	}
 }

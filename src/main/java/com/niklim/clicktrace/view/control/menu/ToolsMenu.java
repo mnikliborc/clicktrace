@@ -14,13 +14,12 @@ import com.niklim.clicktrace.controller.operation.session.HtmlExportOperation;
 import com.niklim.clicktrace.controller.operation.session.JiraExportOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSearchDialogOperation;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 import com.niklim.clicktrace.view.dialog.settings.SettingsDialog;
 
 @Singleton
 public class ToolsMenu {
-	public static final String JIRA_ADDON_NAME = "Clicktrace JIRA Add-on";
-
 	@Inject
 	private SettingsDialog settingsDialog;
 
@@ -64,7 +63,7 @@ public class ToolsMenu {
 	}
 
 	private JMenuItem createToolsExportToJira() {
-		return MenuBar.createMenuItem("Export to " + JIRA_ADDON_NAME, OperationsShortcutEnum.JIRA_EXPORT,
+		return MenuBar.createMenuItem("Export to " + InfoMsgs.JIRA_ADDON_NAME, OperationsShortcutEnum.JIRA_EXPORT,
 				jiraExportOperation.action());
 	}
 

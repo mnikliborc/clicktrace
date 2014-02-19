@@ -33,6 +33,8 @@ public class UserProperties extends AbstractProperties {
 	private static final String HTML_EXPORT_LAST_PATH = "export.html.lastPath";
 	private static final String HTML_EXPORT_IMAGE_WIDTH = "export.html.imageWidth";
 
+	private static final String MARKUP_SYNTAX = "markup.syntax";
+
 	static {
 		defaults.put(CAPTURE_CLICKS, true);
 		defaults.put(CAPTURE_FULLSCREEN, true);
@@ -40,6 +42,7 @@ public class UserProperties extends AbstractProperties {
 		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.VERTICAL.name());
 		defaults.put(HTML_EXPORT_IMAGE_WIDTH, 800);
 		defaults.put(CAPTURE_SENSITIVITY, ChangeSensitivity.NORMAL.name());
+		defaults.put(MARKUP_SYNTAX, MarkupSyntax.CONFLUENCE.name());
 	}
 
 	public UserProperties() {
@@ -48,6 +51,10 @@ public class UserProperties extends AbstractProperties {
 
 	public static enum ViewScaling {
 		HORIZONTAL, VERTICAL;
+	}
+
+	public static enum MarkupSyntax {
+		CONFLUENCE, MARKDOWN;
 	}
 
 	protected File getPropertiesFilePath() {
@@ -93,6 +100,14 @@ public class UserProperties extends AbstractProperties {
 
 	public void setScreenshotViewScaling(ViewScaling scaling) {
 		props.setProperty(SCREENSHOT_VIEW_SCALING, scaling.name());
+	}
+
+	public MarkupSyntax getMarkupSyntax() {
+		return MarkupSyntax.valueOf(props.getString(MARKUP_SYNTAX));
+	}
+
+	public void setMarkupSyntax(MarkupSyntax syntax) {
+		props.setProperty(MARKUP_SYNTAX, syntax.name());
 	}
 
 	public boolean getCaptureFullScreen() {

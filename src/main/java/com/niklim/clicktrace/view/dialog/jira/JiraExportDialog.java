@@ -36,7 +36,6 @@ import com.niklim.clicktrace.service.SessionCompressor;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 import com.niklim.clicktrace.service.export.jira.JiraExportService;
 import com.niklim.clicktrace.service.export.jira.JiraFieldDto;
-import com.niklim.clicktrace.view.control.menu.ToolsMenu;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
 public class JiraExportDialog extends AbstractDialog {
@@ -118,7 +117,7 @@ public class JiraExportDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.setTitle("Export to " + ToolsMenu.JIRA_ADDON_NAME);
+		dialog.setTitle("Export to " + InfoMsgs.JIRA_ADDON_NAME);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 		dialog.setResizable(false);
 
@@ -226,12 +225,22 @@ public class JiraExportDialog extends AbstractDialog {
 		}
 
 		try {
-			String issueKey = createIssue();
-			exportSession(issueKey);
+			if (validateCreateIssue()) {
+				String issueKey = createIssue();
+				exportSession(issueKey);
+			}
 		} catch (Exception e) {
 			log.error("Issue create error", e);
 			JOptionPane.showMessageDialog(dialog, e.getLocalizedMessage());
 		}
+	}
+
+	private boolean validateCreateIssue() {
+		if (project.getSelectedItem() == null) {
+			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_NO_PROJECT);
+			return false;
+		}
+		return true;
 	}
 
 	private void exportToExistingIssue() {

@@ -25,7 +25,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.niklim.clicktrace.capture.voter.LineVoter.ChangeSensitivity;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.props.UserProperties.ViewScaling;
@@ -38,6 +37,7 @@ public class SettingsDialog extends AbstractDialog {
 	private UserProperties props;
 
 	private CaptureAreaComponent captureAreaComponent;
+	private AdvancedSettingsComponent advancedSettingsComponent;
 
 	private JTextField imageEditorPath;
 	private JFileChooser imageEditorFileChooser;
@@ -54,11 +54,6 @@ public class SettingsDialog extends AbstractDialog {
 
 	private JFormattedTextField imageExportWidth;
 
-	private JRadioButton changeSensitivityHighRadio;
-	private JRadioButton changeSensitivityNormalRadio;
-	private JRadioButton changeSensitivityLowRadio;
-	private ButtonGroup changeSensitivityRadioGroup;
-
 	@Inject
 	public void init() {
 		dialog.getContentPane().setLayout(new MigLayout("hidemode 1", "[]rel[fill]rel[]"));
@@ -71,7 +66,6 @@ public class SettingsDialog extends AbstractDialog {
 		createCaptureMouseClicksPanel();
 		createCaptureAreaComponent();
 		createCaptureSelectAllPanel();
-		createCaptureChangeDetectionLevelPanel();
 
 		createSpacePanel();
 
@@ -89,36 +83,22 @@ public class SettingsDialog extends AbstractDialog {
 		createSectionLabel("JIRA");
 		createJiraPanel();
 
+		createSpacePanel();
+
+		createAdvancedPanel();
+
 		dialog.add(createControlPanel("Save"), "align r, span 3");
 
 		postInit();
 	}
 
+	private void createAdvancedPanel() {
+		advancedSettingsComponent = new AdvancedSettingsComponent(dialog);
+	}
+
 	private void createSpacePanel() {
 		JPanel panel = new JPanel();
 		dialog.add(panel, "h 10, span 3, wrap");
-	}
-
-	private void createCaptureChangeDetectionLevelPanel() {
-		changeSensitivityHighRadio = new JRadioButton("high");
-		changeSensitivityHighRadio.setToolTipText("detect blinking text cursor");
-		changeSensitivityNormalRadio = new JRadioButton("normal");
-		changeSensitivityNormalRadio.setToolTipText("default sensitivity");
-		changeSensitivityLowRadio = new JRadioButton("low");
-
-		JLabel label = new JLabel("Change sensitivity");
-		dialog.add(label);
-		JPanel radioPanel = new JPanel(new MigLayout("fill, insets 0"));
-
-		radioPanel.add(changeSensitivityHighRadio);
-		radioPanel.add(changeSensitivityNormalRadio);
-		radioPanel.add(changeSensitivityLowRadio);
-		dialog.add(radioPanel, "grow, wrap");
-
-		changeSensitivityRadioGroup = new ButtonGroup();
-		changeSensitivityRadioGroup.add(changeSensitivityHighRadio);
-		changeSensitivityRadioGroup.add(changeSensitivityNormalRadio);
-		changeSensitivityRadioGroup.add(changeSensitivityLowRadio);
 	}
 
 	private void createImageExportWidthPanel() {
@@ -232,6 +212,11 @@ public class SettingsDialog extends AbstractDialog {
 		loadExportModel();
 		loadEditingModel();
 		loadJiraModel();
+		loadAdvancedModel();
+	}
+
+	private void loadAdvancedModel() {
+		advancedSettingsComponent.init(props.getCaptureSensitivity(), props.getMarkupSyntax());
 	}
 
 	private void loadJiraModel() {
@@ -261,14 +246,6 @@ public class SettingsDialog extends AbstractDialog {
 		captureMouseClicks.setSelected(props.getCaptureMouseClicks());
 		captureAreaComponent.init(props.getCaptureFullScreen(), props.getCaptureRectangle());
 		captureSelectAll.setSelected(props.getCaptureSelectAll());
-
-		if (props.getCaptureSensitivity() == ChangeSensitivity.HIGH) {
-			changeSensitivityRadioGroup.setSelected(changeSensitivityHighRadio.getModel(), true);
-		} else if (props.getCaptureSensitivity() == ChangeSensitivity.NORMAL) {
-			changeSensitivityRadioGroup.setSelected(changeSensitivityNormalRadio.getModel(), true);
-		} else if (props.getCaptureSensitivity() == ChangeSensitivity.LOW) {
-			changeSensitivityRadioGroup.setSelected(changeSensitivityLowRadio.getModel(), true);
-		}
 	}
 
 	private void saveModel() {
@@ -276,8 +253,14 @@ public class SettingsDialog extends AbstractDialog {
 		saveExportModel();
 		saveRecordingModel();
 		saveJiraModel();
+		saveAdvancedModel();
 
 		props.save();
+	}
+
+	private void saveAdvancedModel() {
+		props.setCaptureSensitivity(advancedSettingsComponent.getChangeSensitivity());
+		props.setMarkupSyntax(advancedSettingsComponent.getMarkupSyntax());
 	}
 
 	private void saveJiraModel() {
@@ -298,14 +281,6 @@ public class SettingsDialog extends AbstractDialog {
 			props.setCaptureFullScreen(false);
 		} else {
 			props.setCaptureFullScreen(true);
-		}
-
-		if (changeSensitivityRadioGroup.isSelected(changeSensitivityHighRadio.getModel())) {
-			props.setCaptureSensitivity(ChangeSensitivity.HIGH);
-		} else if (changeSensitivityRadioGroup.isSelected(changeSensitivityNormalRadio.getModel())) {
-			props.setCaptureSensitivity(ChangeSensitivity.NORMAL);
-		} else if (changeSensitivityRadioGroup.isSelected(changeSensitivityLowRadio.getModel())) {
-			props.setCaptureSensitivity(ChangeSensitivity.LOW);
 		}
 	}
 
