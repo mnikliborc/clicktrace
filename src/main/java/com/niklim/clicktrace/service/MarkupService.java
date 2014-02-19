@@ -24,6 +24,7 @@ import com.niklim.clicktrace.props.UserProperties.MarkupSyntax;
  * Transforms Markup to HTML. See {@link MarkupSyntax} for supported syntax.
  */
 public class MarkupService {
+	private static final String XML_DOC_TYPE = "<?xml version=\"1.0\"?><!DOCTYPE some_name [<!ENTITY nbsp \"&#160;\">]> ";
 	private static final Logger log = LoggerFactory.getLogger(MarkupService.class);
 	@Inject
 	private UserProperties userProperties;
@@ -59,13 +60,11 @@ public class MarkupService {
 	}
 
 	public Component toHtmlPanel(String markup) {
-		return flyingsaucer(markup);
+		return flyingsaucer(toHtml(markup));
 	}
 
-	private Component flyingsaucer(String markup) {
-		String html = toHtml(markup);
-
-		html = wrapWithRootElement(html);
+	private Component flyingsaucer(String html) {
+		html = XML_DOC_TYPE + wrapWithRootElement(html);
 
 		// Create a JPanel subclass to render the page
 		XHTMLPanel panel = new XHTMLPanel();
