@@ -58,7 +58,7 @@ public abstract class AbstractDialog {
 		dialog.setBounds(x, y, dialog.getWidth(), dialog.getHeight());
 	}
 
-	protected JPanel createControlPanel(String okText, JComponent... components) {
+	public JPanel createControlPanel(String okText, JComponent... components) {
 		okButton = new JButton(okText);
 		cancelButton = new JButton("Cancel");
 		cancelButton.setToolTipText("[Esc]");

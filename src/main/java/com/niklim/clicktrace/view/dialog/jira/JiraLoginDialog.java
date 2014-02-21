@@ -6,12 +6,7 @@ import java.net.ConnectException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import net.miginfocom.swing.MigLayout;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +36,7 @@ public class JiraLoginDialog extends AbstractDialog {
 	@Inject
 	private JiraMetadataService metadataService;
 
-	JTextField jiraInstanceUrl;
-	JTextField username;
-	JPasswordField password;
+	private JiraLoginView view;
 
 	private KeyAdapter loginAction = new KeyAdapter() {
 		public void keyTyped(KeyEvent e) {
@@ -55,44 +48,37 @@ public class JiraLoginDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.setTitle("Log into " + InfoMsgs.JIRA_ADDON_NAME);
-		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
-		dialog.setResizable(false);
-
-		jiraInstanceUrl = new JTextField();
-		username = new JTextField();
-		password = new JPasswordField();
-
-		jiraInstanceUrl.addKeyListener(loginAction);
-		username.addKeyListener(loginAction);
-		password.addKeyListener(loginAction);
-
-		dialog.add(new JLabel("JIRA URL"));
-		dialog.add(jiraInstanceUrl, "w 400, wrap");
-		dialog.add(new JLabel("Username"));
-		dialog.add(username, "w 400, wrap");
-		dialog.add(new JLabel("Password"));
-		dialog.add(password, "w 400, wrap");
-
-		dialog.add(createControlPanel("Log in"), "span 2, h 50, align r");
+		view = new JiraLoginView(dialog);
+		view.init(this);
+		createListeners();
 		postInit();
 	}
 
+	private void createListeners() {
+		view.jiraInstanceUrl.addKeyListener(loginAction);
+		view.username.addKeyListener(loginAction);
+		view.password.addKeyListener(loginAction);
+	}
+
 	public void open() {
-		JiraConfig jiraConfig = props.getJiraConfig();
-		jiraInstanceUrl.setText(jiraConfig.getInstanceUrl());
-		username.setText(jiraConfig.getUsername());
+		initModel();
 
 		center();
 		dialog.setVisible(true);
+	}
+
+	private void initModel() {
+		JiraConfig jiraConfig = props.getJiraConfig();
+		view.jiraInstanceUrl.setText(jiraConfig.getInstanceUrl());
+		view.username.setText(jiraConfig.getUsername());
 	}
 
 	@Override
 	protected void okAction() {
 		showWaitingCursor();
 
-		JiraConfig jiraConfig = new JiraConfig(jiraInstanceUrl.getText(), username.getText());
-		jiraConfig.setPassword(password.getText());
+		JiraConfig jiraConfig = new JiraConfig(view.jiraInstanceUrl.getText(), view.username.getText());
+		jiraConfig.setPassword(view.password.getText());
 		try {
 			JiraUserMetadata userMetadata = metadataService.loadUserMetadata(jiraConfig);
 			jiraConfig.setUserMetadata(userMetadata);

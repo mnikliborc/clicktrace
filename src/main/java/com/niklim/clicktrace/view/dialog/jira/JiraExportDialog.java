@@ -5,20 +5,10 @@ import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.text.NumberFormatter;
-
-import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -53,23 +43,9 @@ public class JiraExportDialog extends AbstractDialog {
 	@Inject
 	private JiraExporter jiraExporter;
 
+	private JiraExportView view;
+
 	private JiraConfig jiraConfig;
-
-	private JLabel issueKeyLabel;
-	private JTextField issueKeyTextField;
-
-	private JLabel issueSummaryLabel;
-	private JTextField issueSummary;
-	private JCheckBox createIssueCheckBox;
-
-	private JLabel issueTypeLabel;
-	private JComboBox issueType;
-	private JLabel priorityLabel;
-	private JComboBox priority;
-	private JLabel projectLabel;
-	private JComboBox project;
-	private JCheckBox useDescription;
-	private JFormattedTextField initImageWidthTextField;
 
 	public void open(JiraConfig jiraConfig) {
 		this.jiraConfig = jiraConfig;
@@ -84,10 +60,9 @@ public class JiraExportDialog extends AbstractDialog {
 	private void initModel() {
 		JiraUserMetadata userMetadata = jiraConfig.getUserMetadata().get();
 		JiraFieldDto[] issueTypes = userMetadata.issueTypes.toArray(new JiraFieldDto[] {});
-		issueType.setModel(new DefaultComboBoxModel(issueTypes));
-		priority.setModel(new DefaultComboBoxModel(userMetadata.priorities.toArray()));
-		project.setModel(new DefaultComboBoxModel(userMetadata.projects.toArray()));
-		initImageWidthTextField.setText(String.valueOf(props.getExportImageWidth()));
+		view.issueType.setModel(new DefaultComboBoxModel(issueTypes));
+		view.priority.setModel(new DefaultComboBoxModel(userMetadata.priorities.toArray()));
+		view.project.setModel(new DefaultComboBoxModel(userMetadata.projects.toArray()));
 
 		selectBugIssueType(issueTypes);
 	}
@@ -95,7 +70,7 @@ public class JiraExportDialog extends AbstractDialog {
 	private void selectBugIssueType(JiraFieldDto[] issueTypes) {
 		for (JiraFieldDto field : issueTypes) {
 			if ("Bug".equals(field.label)) {
-				issueType.getModel().setSelectedItem(field);
+				view.issueType.getModel().setSelectedItem(field);
 				break;
 			}
 		}
@@ -109,117 +84,29 @@ public class JiraExportDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.setTitle("Export to " + InfoMsgs.JIRA_ADDON_NAME);
-		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
-		dialog.setResizable(false);
-
-		issueKeyLabel = new JLabel("Issue key");
-		issueKeyTextField = new JTextField();
-
-		dialog.add(issueKeyLabel);
-		dialog.add(issueKeyTextField, "w 400, wrap");
-
-		createIssueCreateControls();
-
-		dialog.add(createControlPanel("Export"), "span 2, align r");
+		view = new JiraExportView(dialog);
+		view.init(this);
 
 		createListeners();
 		postInit();
 	}
 
-	private void createIssueCreateControls() {
-		createIssueCheckBox = new JCheckBox("create Issue");
-
-		issueSummaryLabel = new JLabel("Summary");
-		issueSummary = new JTextField();
-
-		issueTypeLabel = new JLabel("Type");
-		issueType = new JComboBox();
-
-		priorityLabel = new JLabel("Priority");
-		priority = new JComboBox();
-
-		projectLabel = new JLabel("Project");
-		project = new JComboBox();
-
-		useDescription = new JCheckBox("use Session description as Issue descripiton");
-
-		dialog.add(new JPanel());
-		dialog.add(createIssueCheckBox, "wrap");
-		dialog.add(new JPanel(), "wrap");
-
-		dialog.add(issueSummaryLabel);
-		dialog.add(issueSummary, "wrap");
-
-		dialog.add(projectLabel);
-		dialog.add(project, "w 100, wrap");
-
-		dialog.add(issueTypeLabel);
-		dialog.add(issueType, "w 100, wrap");
-
-		dialog.add(priorityLabel);
-		dialog.add(priority, "w 100, wrap");
-
-		dialog.add(new JPanel());
-		dialog.add(useDescription, "wrap");
-
-		createInitImageWidthPanel();
-
-		enableCreateControls(false);
-	}
-
-	private void createInitImageWidthPanel() {
-		initImageWidthTextField = new JFormattedTextField();
-		NumberFormat longFormat = NumberFormat.getIntegerInstance();
-		longFormat.setGroupingUsed(false);
-
-		NumberFormatter numberFormatter = new NumberFormatter(longFormat);
-		numberFormatter.setAllowsInvalid(false);
-		numberFormatter.setMinimum(0);
-		numberFormatter.setMaximum(9999);
-
-		initImageWidthTextField = new JFormattedTextField(numberFormatter);
-		dialog.add(new JLabel("Image initial width [px]"));
-		dialog.add(initImageWidthTextField, "wrap");
-	}
-
 	private void createListeners() {
-		createIssueCheckBox.addActionListener(new ActionListener() {
+		view.createIssueCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (createIssueCheckBox.isSelected()) {
-					issueKeyLabel.setEnabled(false);
-					issueKeyTextField.setEnabled(false);
-
-					enableCreateControls(true);
+				if (view.createIssueCheckBox.isSelected()) {
+					view.enableCreateControls(true);
 				} else {
-					issueKeyLabel.setEnabled(true);
-					issueKeyTextField.setEnabled(true);
-
-					enableCreateControls(false);
+					view.setExistingIssueComponentEnabled(true);
+					view.enableCreateControls(false);
 				}
 			}
 		});
 	}
 
-	private void enableCreateControls(boolean show) {
-		issueSummaryLabel.setEnabled(show);
-		issueSummary.setEnabled(show);
-
-		issueTypeLabel.setEnabled(show);
-		issueType.setEnabled(show);
-
-		priorityLabel.setEnabled(show);
-		priority.setEnabled(show);
-
-		projectLabel.setEnabled(show);
-		project.setEnabled(show);
-
-		useDescription.setEnabled(show);
-	}
-
 	@Override
 	public void okAction() {
-		if (createIssueCheckBox.isSelected()) {
+		if (view.createIssueCheckBox.isSelected()) {
 			createIssueAndExport();
 		} else {
 			exportToExistingIssue();
@@ -245,7 +132,7 @@ public class JiraExportDialog extends AbstractDialog {
 	}
 
 	private boolean validateCreateIssue() {
-		if (project.getSelectedItem() == null) {
+		if (view.project.getSelectedItem() == null) {
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_NO_PROJECT);
 			return false;
 		}
@@ -253,21 +140,21 @@ public class JiraExportDialog extends AbstractDialog {
 	}
 
 	private void exportToExistingIssue() {
-		if (StringUtils.isEmpty(issueKeyTextField.getText())) {
+		if (StringUtils.isEmpty(view.issueKeyTextField.getText())) {
 			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_ISSUE_KEY_EMPTY);
-			issueKeyTextField.requestFocus();
+			view.issueKeyTextField.requestFocus();
 			return;
 		}
 
-		String issueKey = issueKeyTextField.getText();
+		String issueKey = view.issueKeyTextField.getText();
 		if (confirmSessionExport(issueKey)) {
 			exportSession(issueKey);
 		}
 	}
 
 	private Optional<String> validateIssueCreate() {
-		if (StringUtils.isEmpty(issueSummary.getText().trim())) {
-			issueSummary.requestFocus();
+		if (StringUtils.isEmpty(view.issueSummary.getText().trim())) {
+			view.issueSummary.requestFocus();
 			return Optional.of(InfoMsgs.JIRA_EXPORT_NO_SUMMARY);
 		}
 
@@ -278,22 +165,29 @@ public class JiraExportDialog extends AbstractDialog {
 			UnsupportedEncodingException, IllegalStateException, IllegalArgumentException, JiraExportException,
 			JSONException {
 		String description;
-		if (useDescription.isSelected()) {
+		if (view.useDescription.isSelected()) {
 			description = activeSession.getSession().getDescription();
 		} else {
 			description = "";
 		}
 
-		return jiraExportService.createIssue(jiraConfig, ((JiraFieldDto) project.getSelectedItem()).value,
-				((JiraFieldDto) issueType.getSelectedItem()).value, ((JiraFieldDto) priority.getSelectedItem()).value,
-				issueSummary.getText(), description);
+		return callCreateIssue(description);
+	}
+
+	private String callCreateIssue(String description) throws URISyntaxException, InterruptedException,
+			ExecutionException, JiraExportException, JSONException {
+		String project = ((JiraFieldDto) view.project.getSelectedItem()).value;
+		String issueType = ((JiraFieldDto) view.issueType.getSelectedItem()).value;
+		String priority = ((JiraFieldDto) view.priority.getSelectedItem()).value;
+		String summary = view.issueSummary.getText();
+
+		return jiraExportService.createIssue(jiraConfig, project, issueType, priority, summary, description);
 	}
 
 	private boolean confirmSessionExport(String issueKey) {
 		try {
-			boolean sessionExist = jiraExporter.checkSessionExists(jiraConfig.getUsername(), jiraConfig.getPassword()
-					.get(), issueKey, jiraConfig.getInstanceUrl());
-			if (sessionExist) {
+			boolean sessionExists = callCheckSessionExists(issueKey);
+			if (sessionExists) {
 				return askUserForExportConfirmation();
 			} else {
 				return true;
@@ -302,6 +196,14 @@ public class JiraExportDialog extends AbstractDialog {
 			JOptionPane.showMessageDialog(dialog, e.getMessage());
 			return false;
 		}
+	}
+
+	private boolean callCheckSessionExists(String issueKey) throws JiraExportException {
+		String username = jiraConfig.getUsername();
+		String password = jiraConfig.getPassword().get();
+		String jiraUrl = jiraConfig.getInstanceUrl();
+
+		return jiraExporter.checkSessionExists(username, password, issueKey, jiraUrl);
 	}
 
 	private boolean askUserForExportConfirmation() {
@@ -314,9 +216,8 @@ public class JiraExportDialog extends AbstractDialog {
 		try {
 			showWaitingCursor();
 
-			Integer initImageWidth = Integer.valueOf(initImageWidthTextField.getText());
-			jiraExporter.export(jiraConfig.getUsername(), jiraConfig.getPassword().get(), issueKey,
-					jiraConfig.getInstanceUrl(), initImageWidth);
+			callExport(issueKey);
+
 			JOptionPane.showMessageDialog(dialog, MessageFormat.format(InfoMsgs.JIRA_EXPORT_SUCCESS, issueKey));
 			close();
 		} catch (JiraExportException e) {
@@ -328,5 +229,14 @@ public class JiraExportDialog extends AbstractDialog {
 			hideWaitingCursor();
 		}
 
+	}
+
+	private void callExport(String issueKey) throws JiraExportException, InterruptedException, ExecutionException {
+		String username = jiraConfig.getUsername();
+		String password = jiraConfig.getPassword().get();
+		String jiraUrl = jiraConfig.getInstanceUrl();
+		Integer exportImageWidth = props.getExportImageWidth();
+
+		jiraExporter.export(username, password, issueKey, jiraUrl, exportImageWidth);
 	}
 }

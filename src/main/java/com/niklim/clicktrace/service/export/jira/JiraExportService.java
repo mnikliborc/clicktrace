@@ -80,7 +80,7 @@ public class JiraExportService {
 		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
 
 		try {
-			JiraRestClicktraceClient client = createClient(username, password, jiraInstanceUrl);
+			JiraRestClicktraceClient client = createClicktraceClient(username, password, jiraInstanceUrl);
 			Result res = client.checkSession(issueKey, sessionName);
 
 			return handleCheckSessionExistsResult(res);
@@ -104,7 +104,7 @@ public class JiraExportService {
 		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
 
 		try {
-			JiraRestClicktraceClient client = createClient(username, password, jiraInstanceUrl);
+			JiraRestClicktraceClient client = createClicktraceClient(username, password, jiraInstanceUrl);
 			Result res = client.exportSession(issueKey, sessionName, stream);
 
 			if (res.status == Result.Status.ERROR) {
@@ -115,7 +115,7 @@ public class JiraExportService {
 		}
 	}
 
-	private JiraRestClicktraceClient createClient(String username, String password, String jiraInstanceUrl)
+	private JiraRestClicktraceClient createClicktraceClient(String username, String password, String jiraInstanceUrl)
 			throws URISyntaxException {
 		HttpClient httpClient = createHttpClient(username, password, jiraInstanceUrl);
 		return new JiraRestClicktraceClient(httpClient, jiraInstanceUrl, appProps.getJiraRestClicktraceImportPath());
