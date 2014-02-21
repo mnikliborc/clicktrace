@@ -91,8 +91,8 @@ public class JiraExportView {
 		dialog.add(new JPanel());
 		dialog.add(useDescription, "wrap");
 
-		createControls = Lists.<JComponent> newArrayList(issueSummaryLabel, issueSummary, issueTypeLabel,
-				issueType, priorityLabel, priority, projectLabel, project, useDescription);
+		createControls = Lists.<JComponent> newArrayList(issueSummaryLabel, issueSummary, issueTypeLabel, issueType,
+				priorityLabel, priority, projectLabel, project, useDescription);
 		enableCreateControls(false);
 	}
 
@@ -102,8 +102,8 @@ public class JiraExportView {
 		}
 	}
 
-	public void setExistingIssueComponentEnabled(boolean b) {
-		issueKeyLabel.setEnabled(false);
-		issueKeyTextField.setEnabled(false);
+	public void setExistingIssueComponentEnabled(boolean show) {
+		issueKeyLabel.setEnabled(show);
+		issueKeyTextField.setEnabled(show);
 	}
 }

@@ -95,6 +95,7 @@ public class JiraExportDialog extends AbstractDialog {
 		view.createIssueCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (view.createIssueCheckBox.isSelected()) {
+					view.setExistingIssueComponentEnabled(false);
 					view.enableCreateControls(true);
 				} else {
 					view.setExistingIssueComponentEnabled(true);
