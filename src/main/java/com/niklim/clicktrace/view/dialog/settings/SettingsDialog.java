@@ -226,7 +226,7 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void loadExportModel() {
-		imageExportWidth.setText(String.valueOf(props.getHtmlExportImageWidth()));
+		imageExportWidth.setText(String.valueOf(props.getExportImageWidth()));
 	}
 
 	private void loadEditingModel() {
@@ -268,7 +268,7 @@ public class SettingsDialog extends AbstractDialog {
 	}
 
 	private void saveExportModel() {
-		props.setHtmlExportImageWidth(Integer.valueOf(imageExportWidth.getText()));
+		props.setExportImageWidth(Integer.valueOf(imageExportWidth.getText()));
 	}
 
 	private void saveRecordingModel() {

@@ -5,19 +5,18 @@ import java.awt.event.ActionListener;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
-import java.util.concurrent.Callable;
+import java.text.NumberFormat;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.NumberFormatter;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -32,9 +31,10 @@ import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
-import com.niklim.clicktrace.service.SessionCompressor;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 import com.niklim.clicktrace.service.export.jira.JiraExportService;
+import com.niklim.clicktrace.service.export.jira.JiraExporter;
 import com.niklim.clicktrace.service.export.jira.JiraFieldDto;
 import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
@@ -42,49 +42,40 @@ public class JiraExportDialog extends AbstractDialog {
 	private static final Logger log = LoggerFactory.getLogger(JiraExportDialog.class);
 
 	@Inject
-	private JiraExportService jiraExportService;
+	private UserProperties props;
 
 	@Inject
 	private ActiveSession activeSession;
 
 	@Inject
-	private SessionCompressor sessionCompressor;
+	private JiraExportService jiraExportService;
+
+	@Inject
+	private JiraExporter jiraExporter;
 
 	private JiraConfig jiraConfig;
 
-	ExecutorService executor;
-	Future<String> compressedSession;
+	private JLabel issueKeyLabel;
+	private JTextField issueKeyTextField;
 
-	public JiraExportDialog() {
-		executor = Executors.newFixedThreadPool(1);
-	}
+	private JLabel issueSummaryLabel;
+	private JTextField issueSummary;
+	private JCheckBox createIssueCheckBox;
 
-	JLabel issueKeyLabel;
-	JTextField issueKeyTextField;
-
-	JLabel issueSummaryLabel;
-	JTextField issueSummary;
-	JCheckBox createIssueCheckBox;
-
-	JLabel issueTypeLabel;
-	JComboBox issueType;
-	JLabel priorityLabel;
-	JComboBox priority;
-	JLabel projectLabel;
-	JComboBox project;
-	JCheckBox useDescription;
+	private JLabel issueTypeLabel;
+	private JComboBox issueType;
+	private JLabel priorityLabel;
+	private JComboBox priority;
+	private JLabel projectLabel;
+	private JComboBox project;
+	private JCheckBox useDescription;
+	private JFormattedTextField initImageWidthTextField;
 
 	public void open(JiraConfig jiraConfig) {
 		this.jiraConfig = jiraConfig;
 
 		initModel();
-
-		compressedSession = executor.submit(new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return sessionCompressor.compress(activeSession.getSession());
-			}
-		});
+		jiraExporter.initExport(activeSession.getSession());
 
 		center();
 		dialog.setVisible(true);
@@ -96,6 +87,7 @@ public class JiraExportDialog extends AbstractDialog {
 		issueType.setModel(new DefaultComboBoxModel(issueTypes));
 		priority.setModel(new DefaultComboBoxModel(userMetadata.priorities.toArray()));
 		project.setModel(new DefaultComboBoxModel(userMetadata.projects.toArray()));
+		initImageWidthTextField.setText(String.valueOf(props.getExportImageWidth()));
 
 		selectBugIssueType(issueTypes);
 	}
@@ -111,7 +103,7 @@ public class JiraExportDialog extends AbstractDialog {
 
 	@Override
 	public void close() {
-		compressedSession = null;
+		jiraExporter.cleanup();
 		dialog.setVisible(false);
 	}
 
@@ -171,7 +163,24 @@ public class JiraExportDialog extends AbstractDialog {
 		dialog.add(new JPanel());
 		dialog.add(useDescription, "wrap");
 
+		createInitImageWidthPanel();
+
 		enableCreateControls(false);
+	}
+
+	private void createInitImageWidthPanel() {
+		initImageWidthTextField = new JFormattedTextField();
+		NumberFormat longFormat = NumberFormat.getIntegerInstance();
+		longFormat.setGroupingUsed(false);
+
+		NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+		numberFormatter.setAllowsInvalid(false);
+		numberFormatter.setMinimum(0);
+		numberFormatter.setMaximum(9999);
+
+		initImageWidthTextField = new JFormattedTextField(numberFormatter);
+		dialog.add(new JLabel("Image initial width [px]"));
+		dialog.add(initImageWidthTextField, "wrap");
 	}
 
 	private void createListeners() {
@@ -282,8 +291,8 @@ public class JiraExportDialog extends AbstractDialog {
 
 	private boolean confirmSessionExport(String issueKey) {
 		try {
-			boolean sessionExist = jiraExportService.checkSessionExist(jiraConfig.getUsername(), jiraConfig
-					.getPassword().get(), issueKey, activeSession.getSession().getName(), jiraConfig.getInstanceUrl());
+			boolean sessionExist = jiraExporter.checkSessionExists(jiraConfig.getUsername(), jiraConfig.getPassword()
+					.get(), issueKey, jiraConfig.getInstanceUrl());
 			if (sessionExist) {
 				return askUserForExportConfirmation();
 			} else {
@@ -304,10 +313,10 @@ public class JiraExportDialog extends AbstractDialog {
 	private void exportSession(String issueKey) {
 		try {
 			showWaitingCursor();
-			String stream = compressedSession.get();
 
-			jiraExportService.exportSession(jiraConfig.getUsername(), jiraConfig.getPassword().get(), issueKey,
-					activeSession.getSession().getName(), stream, jiraConfig.getInstanceUrl());
+			Integer initImageWidth = Integer.valueOf(initImageWidthTextField.getText());
+			jiraExporter.export(jiraConfig.getUsername(), jiraConfig.getPassword().get(), issueKey,
+					jiraConfig.getInstanceUrl(), initImageWidth);
 			JOptionPane.showMessageDialog(dialog, MessageFormat.format(InfoMsgs.JIRA_EXPORT_SUCCESS, issueKey));
 			close();
 		} catch (JiraExportException e) {
@@ -320,5 +329,4 @@ public class JiraExportDialog extends AbstractDialog {
 		}
 
 	}
-
 }

@@ -31,7 +31,7 @@ public class UserProperties extends AbstractProperties {
 	private static final String CAPTURE_RECTANGLE_X = "capture.dimension.x";
 
 	private static final String HTML_EXPORT_LAST_PATH = "export.html.lastPath";
-	private static final String HTML_EXPORT_IMAGE_WIDTH = "export.html.imageWidth";
+	private static final String EXPORT_IMAGE_WIDTH = "export.imageWidth";
 
 	private static final String MARKUP_SYNTAX = "markup.syntax";
 
@@ -40,7 +40,7 @@ public class UserProperties extends AbstractProperties {
 		defaults.put(CAPTURE_FULLSCREEN, true);
 		defaults.put(CAPTURE_SELECT_ALL, false);
 		defaults.put(SCREENSHOT_VIEW_SCALING, ViewScaling.VERTICAL.name());
-		defaults.put(HTML_EXPORT_IMAGE_WIDTH, 800);
+		defaults.put(EXPORT_IMAGE_WIDTH, 800);
 		defaults.put(CAPTURE_SENSITIVITY, ChangeSensitivity.NORMAL.name());
 		defaults.put(MARKUP_SYNTAX, MarkupSyntax.CONFLUENCE.name());
 	}
@@ -134,12 +134,12 @@ public class UserProperties extends AbstractProperties {
 		props.setProperty(HTML_EXPORT_LAST_PATH, path);
 	}
 
-	public Integer getHtmlExportImageWidth() {
-		return props.getInt(HTML_EXPORT_IMAGE_WIDTH);
+	public Integer getExportImageWidth() {
+		return props.getInt(EXPORT_IMAGE_WIDTH);
 	}
 
-	public void setHtmlExportImageWidth(Integer w) {
-		props.setProperty(HTML_EXPORT_IMAGE_WIDTH, w);
+	public void setExportImageWidth(Integer w) {
+		props.setProperty(EXPORT_IMAGE_WIDTH, w);
 	}
 
 	public LineVoter.ChangeSensitivity getCaptureSensitivity() {

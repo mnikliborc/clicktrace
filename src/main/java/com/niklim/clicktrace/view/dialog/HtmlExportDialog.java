@@ -135,7 +135,7 @@ public class HtmlExportDialog extends AbstractDialog {
 	}
 	
 	private void loadInitImageWidth() {
-		initImageWidth.setText(String.valueOf(props.getHtmlExportImageWidth()));
+		initImageWidth.setText(String.valueOf(props.getExportImageWidth()));
 	}
 	
 	private void loadLastPath() {
