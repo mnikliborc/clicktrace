@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import com.google.common.collect.Lists;
 import com.niklim.clicktrace.dialog.AbstractDialogView;
 import com.niklim.clicktrace.msg.InfoMsgs;
@@ -58,12 +60,15 @@ public class JiraExportView extends AbstractDialogView {
 
 		issueTypeLabel = new JLabel("Type");
 		issueType = new JComboBox();
+		AutoCompleteDecorator.decorate(issueType);
 
 		priorityLabel = new JLabel("Priority");
 		priority = new JComboBox();
+		AutoCompleteDecorator.decorate(priority);
 
 		projectLabel = new JLabel("Project");
 		project = new JComboBox();
+		AutoCompleteDecorator.decorate(project);
 
 		useDescription = new JCheckBox("use Session description as Issue descripiton");
 

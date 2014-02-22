@@ -152,6 +152,12 @@
 			<artifactId>xwiki-rendering-syntax-markdown10</artifactId>
 			<version>5.4.1</version>
 		</dependency>
+		
+		<dependency>
+		  <groupId>org.swinglabs</groupId>
+		  <artifactId>swingx</artifactId>
+		  <version>0.9</version>
+		</dependency>
 
 	<dependency>
 		<groupId>com.google.inject.extensions</groupId>

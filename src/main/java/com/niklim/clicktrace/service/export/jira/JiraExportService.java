@@ -2,6 +2,7 @@ package com.niklim.clicktrace.service.export.jira;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -44,7 +45,9 @@ public class JiraExportService {
 
 		Response response = r.post().get();
 		if (!StringUtils.equals(CREATE_SUCCESS, response.getStatusText())) {
-			throw new JiraExportException("Unable to create the Issue: " + response.getStatusText());
+			throw new JiraExportException(MessageFormat.format(
+					"Unable to create the Issue. Response text: {0}.\nProbably not all required fields were set.",
+					response.getStatusText()));
 		}
 
 		JSONObject jsonObject = new JSONObject(response.getEntity());
