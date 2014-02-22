@@ -1,11 +1,10 @@
-package com.niklim.clicktrace.view.dialog.jira;
+package com.niklim.clicktrace.dialog.jira;
 
 import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -13,10 +12,10 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import com.google.common.collect.Lists;
+import com.niklim.clicktrace.dialog.AbstractDialogView;
 import com.niklim.clicktrace.msg.InfoMsgs;
 
-public class JiraExportView {
-	JDialog dialog;
+public class JiraExportView extends AbstractDialogView {
 
 	JLabel issueKeyLabel;
 	JTextField issueKeyTextField;
@@ -35,11 +34,7 @@ public class JiraExportView {
 
 	List<JComponent> createControls;
 
-	public JiraExportView(JDialog dialog) {
-		this.dialog = dialog;
-	}
-
-	public void init(JiraExportDialog exportDialog) {
+	public JiraExportView() {
 		dialog.setTitle("Export to " + InfoMsgs.JIRA_ADDON_NAME);
 		dialog.getContentPane().setLayout(new MigLayout("", "[]rel[fill]"));
 		dialog.setResizable(false);
@@ -52,7 +47,7 @@ public class JiraExportView {
 
 		createIssueCreateControls();
 
-		dialog.add(exportDialog.createControlPanel("Export"), "span 2, align r");
+		dialog.add(createControlPanel("Export"), "span 2, align r");
 	}
 
 	private void createIssueCreateControls() {

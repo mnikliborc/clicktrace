@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.dialog.settings;
+package com.niklim.clicktrace.dialog.settings;
 
 import java.awt.Component;
 import java.awt.Font;

@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.dialog;
+package com.niklim.clicktrace.dialog;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -6,16 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
-import net.miginfocom.swing.MigLayout;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -25,7 +18,7 @@ import com.niklim.clicktrace.model.SessionMetadata;
 import com.niklim.clicktrace.service.SessionManager;
 
 @Singleton
-public class OpenSessionDialog extends AbstractDialog {
+public class OpenSessionDialog extends AbstractDialog<OpenSessionView> {
 
 	@Inject
 	private MainController controller;
@@ -33,53 +26,35 @@ public class OpenSessionDialog extends AbstractDialog {
 	@Inject
 	private SessionManager sessionManager;
 
-	JTable table;
-	JTextArea sessionDescription;
 	List<Session> sessions;
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
-		dialog.setTitle("Open session");
-
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		sessionDescription = new JTextArea();
-		sessionDescription.setEditable(false);
-		initTextWrapping(sessionDescription);
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setTopComponent(new JScrollPane(table));
-		splitPane.setBottomComponent(new JScrollPane(sessionDescription));
-		splitPane.setResizeWeight(0.4);
-
-		dialog.add(splitPane, "push, grow, wrap, w 600");
-		dialog.add(createControlPanel("Open"), "align r");
+		initTextWrapping(view.sessionDescription);
 		createListeners();
 
 		postInit();
 	}
 
 	private void createListeners() {
-		table.addMouseListener(new MouseAdapter() {
+		view.table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-					dialog.setVisible(false);
-					controller.showSession(sessionManager.loadAll().get(table.getSelectedRow()));
+					view.dialog.setVisible(false);
+					controller.showSession(sessionManager.loadAll().get(view.table.getSelectedRow()));
 				}
 			}
 		});
-		table.addKeyListener(new KeyAdapter() {
+		view.table.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					dialog.setVisible(false);
-					controller.showSession(sessionManager.loadAll().get(table.getSelectedRow()));
+					view.dialog.setVisible(false);
+					controller.showSession(sessionManager.loadAll().get(view.table.getSelectedRow()));
 				}
 			}
 		});
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		view.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				refreshDescription();
@@ -98,11 +73,11 @@ public class OpenSessionDialog extends AbstractDialog {
 	}
 
 	private void refreshDescription() {
-		int selectedRow = table.getSelectedRow();
+		int selectedRow = view.table.getSelectedRow();
 		if (selectedRow == -1 || sessions.isEmpty()) {
-			sessionDescription.setText("");
+			view.sessionDescription.setText("");
 		} else {
-			sessionDescription.setText(sessions.get(selectedRow).getDescription());
+			view.sessionDescription.setText(sessions.get(selectedRow).getDescription());
 		}
 	}
 
@@ -110,13 +85,13 @@ public class OpenSessionDialog extends AbstractDialog {
 		loadSessions();
 
 		center();
-		dialog.setVisible(true);
+		view.dialog.setVisible(true);
 	}
 
 	private void close(boolean openSession) {
-		dialog.setVisible(false);
+		view.dialog.setVisible(false);
 		if (openSession) {
-			controller.showSession(sessionManager.loadAll().get(table.getSelectedRow()));
+			controller.showSession(sessionManager.loadAll().get(view.table.getSelectedRow()));
 		}
 	}
 
@@ -131,16 +106,21 @@ public class OpenSessionDialog extends AbstractDialog {
 				return false;
 			}
 		};
-		table.setModel(dataModel);
-		table.getSelectionModel().setSelectionInterval(0, 0);
+		view.table.setModel(dataModel);
+		view.table.getSelectionModel().setSelectionInterval(0, 0);
 
 		int i = 0;
 		for (Session session : sessions) {
 			SessionMetadata metadata = session.loadMetadata();
-			table.getModel().setValueAt(session, i, 0);
-			table.getModel().setValueAt(metadata.getSize(), i, 1);
-			table.getModel().setValueAt(metadata.getModified(), i, 2);
+			view.table.getModel().setValueAt(session, i, 0);
+			view.table.getModel().setValueAt(metadata.getSize(), i, 1);
+			view.table.getModel().setValueAt(metadata.getModified(), i, 2);
 			i++;
 		}
+	}
+
+	@Override
+	protected OpenSessionView createView() {
+		return new OpenSessionView();
 	}
 }

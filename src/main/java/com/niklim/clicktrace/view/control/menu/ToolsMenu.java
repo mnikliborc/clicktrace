@@ -13,10 +13,10 @@ import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.session.HtmlExportOperation;
 import com.niklim.clicktrace.controller.operation.session.JiraExportOperation;
 import com.niklim.clicktrace.controller.operation.session.OpenSearchDialogOperation;
+import com.niklim.clicktrace.dialog.settings.SettingsDialog;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
-import com.niklim.clicktrace.view.dialog.settings.SettingsDialog;
 
 @Singleton
 public class ToolsMenu {

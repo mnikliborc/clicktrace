@@ -3,7 +3,7 @@ package com.niklim.clicktrace.controller.operation.session;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
-import com.niklim.clicktrace.view.dialog.jira.JiraLoginDialog;
+import com.niklim.clicktrace.dialog.jira.JiraLoginDialog;
 
 public class JiraExportOperation extends AbstractOperation {
 

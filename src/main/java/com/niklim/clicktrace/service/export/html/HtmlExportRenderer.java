@@ -6,41 +6,44 @@ import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.service.MarkupService;
+import com.niklim.clicktrace.props.UserProperties;
+import com.niklim.clicktrace.service.MarkupParser;
 
 public class HtmlExportRenderer {
+
 	@Inject
-	private MarkupService markupService;
+	private UserProperties props;
 
 	public String renderHtml(Session session, String htmlExportFolder, int initImageWidth) {
 		String mainTemplate = loadTemplate("main.tmpl", htmlExportFolder);
 		String shotTemplate = loadTemplate("shot.tmpl", htmlExportFolder);
 		String linksTemplate = loadTemplate("links.tmpl", htmlExportFolder);
 
-		String shotsHtml = renderShots(session, shotTemplate);
+		MarkupParser markupParser = new MarkupParser(props.getMarkupSyntax());
+		String shotsHtml = renderShots(session, shotTemplate, markupParser);
 		String linksHtml = renderLinks(session, linksTemplate);
-		String html = renderMain(session, mainTemplate, shotsHtml, linksHtml, initImageWidth);
+		String html = renderMain(session, mainTemplate, shotsHtml, linksHtml, initImageWidth, markupParser);
 		return html;
 	}
 
 	private String renderMain(Session session, String mainTemplate, String shotsHtml, String linksHtml,
-			int initImageWidth) {
+			int initImageWidth, MarkupParser markupParser) {
 		String html = mainTemplate.replace("${encoding}", System.getProperty("file.encoding", "UTF-8"))
 				.replace("${init-image-width}", String.valueOf(initImageWidth))
 				.replace("${init-image-width}", String.valueOf(initImageWidth))
 				.replace("${session-name}", session.getName())
-				.replace("${session-description}", markdownToHtml(Strings.nullToEmpty(session.getDescription())))
+				.replace("${session-description}", markupParser.toHtml(Strings.nullToEmpty(session.getDescription())))
 				.replace("${shots}", shotsHtml).replace("${links}", linksHtml);
 		return html;
 	}
 
-	private String renderShots(Session session, String shotTemplate) {
+	private String renderShots(Session session, String shotTemplate, MarkupParser markupParser) {
 		StringBuffer buffer = new StringBuffer();
 		int index = 1;
 		for (ScreenShot shot : session.getShots()) {
 			String label = String.valueOf(index) + ". " + Strings.nullToEmpty(shot.getLabel());
 			String shotString = shotTemplate.replace("${shot-label}", label)
-					.replace("${shot-description}", markdownToHtml(Strings.nullToEmpty(shot.getDescription())))
+					.replace("${shot-description}", markupParser.toHtml(Strings.nullToEmpty(shot.getDescription())))
 					.replaceAll("\\$\\{shot-filename\\}", shot.getFilename());
 
 			buffer.append(shotString);
@@ -79,7 +82,4 @@ public class HtmlExportRenderer {
 		return template;
 	}
 
-	private String markdownToHtml(String markdown) {
-		return markupService.toHtml(markdown);
-	}
 }

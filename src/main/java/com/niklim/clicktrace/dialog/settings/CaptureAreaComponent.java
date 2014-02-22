@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.dialog.settings;
+package com.niklim.clicktrace.dialog.settings;
 
 import java.awt.Dimension;
 import java.awt.Point;

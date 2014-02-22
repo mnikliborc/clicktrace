@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.dialog.settings;
+package com.niklim.clicktrace.dialog.settings;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -16,8 +16,9 @@ import org.junit.Test;
 import com.niklim.clicktrace.AbstractSystemTest;
 import com.niklim.clicktrace.TestSessionsData;
 import com.niklim.clicktrace.capture.ScreenUtils;
+import com.niklim.clicktrace.dialog.settings.CaptureAreaComponent;
+import com.niklim.clicktrace.dialog.settings.CaptureAreaComponent.PointWidget;
 import com.niklim.clicktrace.props.UserProperties;
-import com.niklim.clicktrace.view.dialog.settings.CaptureAreaComponent.PointWidget;
 
 public class CaptureAreaComponentTest extends AbstractSystemTest {
 	@Override

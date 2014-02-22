@@ -17,6 +17,8 @@ import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
+import com.niklim.clicktrace.dialog.NewSessionDialog.NewSessionCallback;
+import com.niklim.clicktrace.dialog.settings.SettingsDialog;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
@@ -26,8 +28,6 @@ import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.SessionManager;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 import com.niklim.clicktrace.view.MainView;
-import com.niklim.clicktrace.view.dialog.NewSessionDialog.NewSessionCallback;
-import com.niklim.clicktrace.view.dialog.settings.SettingsDialog;
 
 /**
  * Main controller.

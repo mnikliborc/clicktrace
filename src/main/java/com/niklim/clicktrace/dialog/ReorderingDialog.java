@@ -1,42 +1,29 @@
-package com.niklim.clicktrace.view.dialog;
+package com.niklim.clicktrace.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import net.miginfocom.swing.MigLayout;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.niklim.clicktrace.Icons;
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.controller.operation.session.RefreshSessionOperation;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.service.SessionManager;
-import com.niklim.clicktrace.view.Buttons;
 import com.niklim.clicktrace.view.OperationsShortcutEnum;
 
-public class ReorderingDialog extends AbstractDialog {
-	private JTable table;
-	private JTextArea sessionDescription;
-
-	private JButton prev;
-	private JButton next;
-
+@Singleton
+public class ReorderingDialog extends AbstractDialog<ReorderingView> {
 	@Inject
 	private ActiveSession activeSession;
 
@@ -48,37 +35,14 @@ public class ReorderingDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		dialog.getContentPane().setLayout(new MigLayout("", "[fill]"));
-		dialog.setTitle("Reorder screenshots");
-
-		table = new JTable();
-		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
-		sessionDescription = new JTextArea();
-		sessionDescription.setEditable(false);
-		initTextWrapping(sessionDescription);
-
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setTopComponent(new JScrollPane(table));
-		splitPane.setBottomComponent(new JScrollPane(sessionDescription));
-		splitPane.setResizeWeight(0.4);
-
-		dialog.add(splitPane, "push, grow, wrap, w 600");
-
-		prev = Buttons.create("Move one before", Icons.SCREENSHOT_PREV, OperationsShortcutEnum.SHOT_MOVE_PREV);
-		prev.setName("prev");
-		next = Buttons.create("Move one next", Icons.SCREENSHOT_NEXT, OperationsShortcutEnum.SHOT_MOVE_NEXT);
-		next.setName("next");
-
-		dialog.add(createControlPanel("Save", prev, next), "push, grow, wrap");
-
+		initTextWrapping(view.sessionDescription);
 		createListeners();
 
 		postInit();
 	}
 
 	private void createListeners() {
-		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		view.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				refreshDescription();
@@ -87,20 +51,20 @@ public class ReorderingDialog extends AbstractDialog {
 
 			private void recalculateNavigationState() {
 				int shotsCount = activeSession.getSession().getShots().size();
-				if (table.getSelectionModel().getMaxSelectionIndex() >= shotsCount - 1) {
-					next.setEnabled(false);
-				} else if (table.getSelectedRowCount() > 0) {
-					next.setEnabled(true);
+				if (view.table.getSelectionModel().getMaxSelectionIndex() >= shotsCount - 1) {
+					view.next.setEnabled(false);
+				} else if (view.table.getSelectedRowCount() > 0) {
+					view.next.setEnabled(true);
 				} else {
-					next.setEnabled(false);
+					view.next.setEnabled(false);
 				}
 
-				if (table.getSelectionModel().getMinSelectionIndex() == 0) {
-					prev.setEnabled(false);
-				} else if (table.getSelectedRowCount() > 0) {
-					prev.setEnabled(true);
+				if (view.table.getSelectionModel().getMinSelectionIndex() == 0) {
+					view.prev.setEnabled(false);
+				} else if (view.table.getSelectedRowCount() > 0) {
+					view.prev.setEnabled(true);
 				} else {
-					prev.setEnabled(false);
+					view.prev.setEnabled(false);
 				}
 			}
 		});
@@ -108,63 +72,67 @@ public class ReorderingDialog extends AbstractDialog {
 		final ActionListener movePrev = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ListSelectionModel selection = table.getSelectionModel();
+				ListSelectionModel selection = view.table.getSelectionModel();
 
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				DefaultTableModel model = (DefaultTableModel) view.table.getModel();
 				model.moveRow(selection.getMinSelectionIndex(), selection.getMaxSelectionIndex(),
 						selection.getMinSelectionIndex() - 1);
 
-				table.setRowSelectionInterval(selection.getMinSelectionIndex() - 1,
+				view.table.setRowSelectionInterval(selection.getMinSelectionIndex() - 1,
 						selection.getMaxSelectionIndex() - 1);
 			}
 		};
-		prev.addActionListener(movePrev);
+		view.prev.addActionListener(movePrev);
 
 		final ActionListener moveNext = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ListSelectionModel selection = table.getSelectionModel();
+				ListSelectionModel selection = view.table.getSelectionModel();
 
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				DefaultTableModel model = (DefaultTableModel) view.table.getModel();
 				model.moveRow(selection.getMinSelectionIndex(), selection.getMaxSelectionIndex(),
 						selection.getMinSelectionIndex() + 1);
 
-				table.setRowSelectionInterval(selection.getMinSelectionIndex() + 1,
+				view.table.setRowSelectionInterval(selection.getMinSelectionIndex() + 1,
 						selection.getMaxSelectionIndex() + 1);
 			}
 		};
-		next.addActionListener(moveNext);
+		view.next.addActionListener(moveNext);
 
-		dialog.getRootPane().registerKeyboardAction(
+		view.dialog.getRootPane().registerKeyboardAction(
 				movePrev,
 				KeyStroke.getKeyStroke(OperationsShortcutEnum.SHOT_MOVE_PREV.code,
 						OperationsShortcutEnum.SHOT_MOVE_PREV.modifier), JComponent.WHEN_IN_FOCUSED_WINDOW);
-		dialog.getRootPane().registerKeyboardAction(
+		view.dialog.getRootPane().registerKeyboardAction(
 				moveNext,
 				KeyStroke.getKeyStroke(OperationsShortcutEnum.SHOT_MOVE_NEXT.code,
 						OperationsShortcutEnum.SHOT_MOVE_NEXT.modifier), JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 
 	private void refreshDescription() {
-		if (table.getSelectedRowCount() == 1) {
-			sessionDescription.setEnabled(true);
-			int selectedRow = table.getSelectedRow();
-			ScreenShot shot = (ScreenShot) table.getModel().getValueAt(selectedRow, 0);
+		if (view.table.getSelectedRowCount() == 1) {
+			view.sessionDescription.setEnabled(true);
+			int selectedRow = view.table.getSelectedRow();
+			ScreenShot shot = (ScreenShot) view.table.getModel().getValueAt(selectedRow, 0);
 			if (shot != null) {
-				sessionDescription.setText(shot.getDescription());
+				view.sessionDescription.setText(shot.getDescription());
 			}
 		} else {
-			sessionDescription.setEnabled(false);
-			sessionDescription.setText("");
+			view.sessionDescription.setEnabled(false);
+			view.sessionDescription.setText("");
 		}
 	}
 
 	public void open() {
-		loadShots();
-		refreshDescription();
+		initModel();
 
 		center();
-		dialog.setVisible(true);
+		view.dialog.setVisible(true);
+	}
+
+	private void initModel() {
+		loadShots();
+		refreshDescription();
 	}
 
 	@Override
@@ -178,7 +146,7 @@ public class ReorderingDialog extends AbstractDialog {
 		SessionPropertiesWriter writer = sessionManager.createSessionPropertiesWriter(activeSession.getSession());
 
 		List<ScreenShot> shots = Lists.newArrayList();
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		DefaultTableModel model = (DefaultTableModel) view.table.getModel();
 		for (int i = 0; i < model.getRowCount(); i++) {
 			shots.add((ScreenShot) model.getValueAt(i, 0));
 		}
@@ -199,13 +167,18 @@ public class ReorderingDialog extends AbstractDialog {
 				return false;
 			}
 		};
-		table.setModel(dataModel);
-		table.getSelectionModel().setSelectionInterval(0, 0);
+		view.table.setModel(dataModel);
+		view.table.getSelectionModel().setSelectionInterval(0, 0);
 
 		int i = 0;
 		for (ScreenShot shot : shots) {
-			table.getModel().setValueAt(shot, i, 0);
+			view.table.getModel().setValueAt(shot, i, 0);
 			i++;
 		}
+	}
+
+	@Override
+	protected ReorderingView createView() {
+		return new ReorderingView();
 	}
 }

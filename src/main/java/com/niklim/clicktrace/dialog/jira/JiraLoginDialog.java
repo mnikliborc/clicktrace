@@ -1,4 +1,4 @@
-package com.niklim.clicktrace.view.dialog.jira;
+package com.niklim.clicktrace.dialog.jira;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -13,14 +13,16 @@ import org.slf4j.LoggerFactory;
 
 import com.atlassian.jira.rest.client.RestClientException;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.niklim.clicktrace.dialog.AbstractDialog;
 import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.export.jira.JiraMetadataService;
-import com.niklim.clicktrace.view.dialog.AbstractDialog;
 
-public class JiraLoginDialog extends AbstractDialog {
+@Singleton
+public class JiraLoginDialog extends AbstractDialog<JiraLoginView> {
 	private static final Logger log = LoggerFactory.getLogger(JiraLoginDialog.class);
 
 	private static final int HTTP_UNAUTHORIZED = 401;
@@ -36,8 +38,6 @@ public class JiraLoginDialog extends AbstractDialog {
 	@Inject
 	private JiraMetadataService metadataService;
 
-	private JiraLoginView view;
-
 	private KeyAdapter loginAction = new KeyAdapter() {
 		public void keyTyped(KeyEvent e) {
 			if (e.getKeyChar() == '\n') {
@@ -48,8 +48,6 @@ public class JiraLoginDialog extends AbstractDialog {
 
 	@Inject
 	public void init() {
-		view = new JiraLoginView(dialog);
-		view.init(this);
 		createListeners();
 		postInit();
 	}
@@ -64,7 +62,7 @@ public class JiraLoginDialog extends AbstractDialog {
 		initModel();
 
 		center();
-		dialog.setVisible(true);
+		view.dialog().setVisible(true);
 	}
 
 	private void initModel() {
@@ -87,7 +85,7 @@ public class JiraLoginDialog extends AbstractDialog {
 		} catch (ExecutionException e) {
 			handleKnownException(e);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
+			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
 		}
 
 		hideWaitingCursor();
@@ -102,10 +100,10 @@ public class JiraLoginDialog extends AbstractDialog {
 
 		ConnectException connectException = getCause(e, ConnectException.class);
 		if (connectException != null) {
-			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_UNAVAILABLE);
+			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_UNAVAILABLE);
 		} else {
 			log.error("Unhandled ExecutionException cause", e.getCause());
-			JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
+			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
 		}
 	}
 
@@ -126,13 +124,13 @@ public class JiraLoginDialog extends AbstractDialog {
 		if (re.getStatusCode().isPresent()) {
 			int statusCode = re.getStatusCode().get();
 			if (statusCode == HTTP_UNAUTHORIZED) {
-				JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_AUTHENTICATION_FAILURE);
+				JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_EXPORT_AUTHENTICATION_FAILURE);
 				return;
 			} else if (statusCode == HTTP_FORBIDDEN) {
-				JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_CAPTCHA_NEEDED);
+				JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_EXPORT_CAPTCHA_NEEDED);
 				return;
 			} else if (statusCode == HTTP_NOT_FOUND) {
-				JOptionPane.showMessageDialog(dialog, InfoMsgs.JIRA_EXPORT_WRONG_URL);
+				JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_EXPORT_WRONG_URL);
 				return;
 			} else {
 				log.error(MessageFormat.format("Unhandled HTTP Code {0}", statusCode));
@@ -140,5 +138,10 @@ public class JiraLoginDialog extends AbstractDialog {
 		} else {
 			log.error("HTTP Code not present.");
 		}
+	}
+
+	@Override
+	protected JiraLoginView createView() {
+		return new JiraLoginView();
 	}
 }

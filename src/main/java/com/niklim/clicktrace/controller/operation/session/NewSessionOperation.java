@@ -3,8 +3,8 @@ package com.niklim.clicktrace.controller.operation.session;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.controller.operation.AbstractOperation;
-import com.niklim.clicktrace.view.dialog.NewSessionDialog;
-import com.niklim.clicktrace.view.dialog.NewSessionDialog.NewSessionCallback;
+import com.niklim.clicktrace.dialog.NewSessionDialog;
+import com.niklim.clicktrace.dialog.NewSessionDialog.NewSessionCallback;
 
 public class NewSessionOperation extends AbstractOperation {
 	@Inject
