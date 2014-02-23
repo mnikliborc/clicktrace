@@ -1,31 +1,47 @@
 package com.niklim.clicktrace.service.export.jira;
 
+import java.net.URISyntaxException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.atlassian.util.concurrent.Effect;
+import com.atlassian.util.concurrent.Promise;
+import com.google.common.net.UrlEscapers;
 import com.google.inject.Inject;
+import com.niklim.clicktrace.jira.client.ExportResult;
+import com.niklim.clicktrace.jira.client.ExportStatus;
+import com.niklim.clicktrace.jira.client.JiraClientFactory;
+import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.props.AppProperties;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.SessionCompressor;
-import com.niklim.clicktrace.service.exception.JiraExportException;
 
 public class JiraExporter {
-	@Inject
-	private JiraExportService jiraExportService;
-
 	@Inject
 	private SessionCompressor sessionCompressor;
 
 	@Inject
 	private UserProperties props;
 
+	@Inject
+	private AppProperties appProps;
+
 	private Session session;
 
-	ExecutorService executor;
-	Future<String> compressedSession;
+	private ExecutorService executor;
+	private Future<String> compressedSession;
+
+	private Promise<ExportResult> resultPromise;
+
+	public static interface JiraExportCallback {
+		void success();
+
+		void failure(String msg);
+	}
 
 	public JiraExporter() {
 		executor = Executors.newFixedThreadPool(1);
@@ -45,27 +61,52 @@ public class JiraExporter {
 		});
 	}
 
-	public boolean checkSessionExists(String username, String password, String issueKey, String jiraUrl)
-			throws JiraExportException {
-		return jiraExportService.checkSessionExist(username, password, issueKey, session.getName(), jiraUrl);
+	public void export(String username, String password, String issueKey, String jiraUrl,
+			final JiraExportCallback callback) throws InterruptedException, ExecutionException {
+		try {
+			String stream = compressedSession.get();
+			resultPromise = exportSession(username, password, issueKey, session.getName(), stream, jiraUrl);
+			resultPromise.done(new Effect<ExportResult>() {
+				public void apply(ExportResult res) {
+					handleExportResult(res, callback);
+				}
+			}).fail(new Effect<Throwable>() {
+				public void apply(Throwable arg0) {
+					callback.failure(arg0.getLocalizedMessage());
+				}
+			});
+
+			resultPromise.claim();
+		} catch (URISyntaxException e) {
+			callback.failure(e.getLocalizedMessage());
+		}
 	}
 
-	public void export(String username, String password, String issueKey, String jiraUrl, Integer initImageWidth)
-			throws JiraExportException, InterruptedException, ExecutionException {
-		String stream = getCompressedSession(initImageWidth);
+	private Promise<ExportResult> exportSession(String username, String password, String issueKey, String sessionName,
+			String stream, String jiraInstanceUrl) throws URISyntaxException {
+		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
 
-		jiraExportService.exportSession(username, password, issueKey, session.getName(), stream, jiraUrl);
+		JiraRestClicktraceClient client = JiraClientFactory.create(username, password, jiraInstanceUrl,
+				appProps.getJiraRestClicktraceImportPath());
+		return client.exportSession(issueKey, sessionName, stream);
 	}
 
-	private String getCompressedSession(Integer initImageWidth) throws InterruptedException, ExecutionException {
-		if (props.getExportImageWidth().equals(initImageWidth)) {
-			return compressedSession.get();
+	private void handleExportResult(ExportResult result, JiraExportCallback callback) {
+		if (result.status == ExportStatus.ERROR) {
+			callback.failure(result.msg);
 		} else {
-			return compressFuture(session, initImageWidth).get();
+			callback.success();
+		}
+	}
+
+	public void cancelExport() {
+		if (resultPromise != null && !resultPromise.isDone() && !resultPromise.isCancelled()) {
+			resultPromise.cancel(true);
 		}
 	}
 
 	public void cleanup() {
 		compressedSession = null;
+		resultPromise = null;
 	}
 }

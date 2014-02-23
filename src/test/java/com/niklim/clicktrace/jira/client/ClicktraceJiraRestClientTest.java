@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
-import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
+import com.atlassian.util.concurrent.Promise;
 
 public class ClicktraceJiraRestClientTest {
 	private static final String JIRA_URL = "http://localhost:9998";
@@ -39,18 +39,17 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(issueKey, sessionName);
 
 		// then
-		assertThat(res.status).isEqualTo(Result.Status.ERROR);
+		assertThat(res.status).isEqualTo(ExportStatus.ERROR);
 	}
 
 	private JiraRestClicktraceClient createClient() throws URISyntaxException {
 		String user = "admin";
 		String password = "admin";
-		JiraRestClicktraceClient cl = new JiraRestClicktraceClient(
-				new AsynchronousHttpClientFactory().createClient(new URI(JIRA_URL),
-						new BasicHttpAuthenticationHandler(user, password)), JIRA_URL,
+		JiraRestClicktraceClient cl = new JiraRestClicktraceClient(new AsynchronousHttpClientFactory().createClient(
+				new URI(JIRA_URL), new BasicHttpAuthenticationHandler(user, password)), JIRA_URL,
 				JIRA_REST_CLICKTRACE_IMPORT_PATH);
 		return cl;
 	}
@@ -64,10 +63,10 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(issueKey, sessionName);
 
 		// then
-		assertThat(res.status).isEqualTo(Result.Status.SESSION_EXISTS);
+		assertThat(res.status).isEqualTo(ExportStatus.SESSION_EXISTS);
 	}
 
 	@Test
@@ -79,10 +78,10 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(issueKey, sessionName);
 
 		// then
-		assertThat(res.status).isEqualTo(Result.Status.NO_SESSION);
+		assertThat(res.status).isEqualTo(ExportStatus.NO_SESSION);
 	}
 
 	@Test
@@ -94,10 +93,10 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(issueKey, sessionName);
 
 		// then
-		assertThat(res.status).isEqualTo(Result.Status.ERROR);
+		assertThat(res.status).isEqualTo(ExportStatus.ERROR);
 		assertThat(res.msg).isEqualTo(JiraRestClicktraceImportMock.ERROR_MSG);
 	}
 
@@ -111,9 +110,9 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Result res = cl.exportSession(issueKey, sessionName, stream);
+		Promise<ExportResult> resPromise = cl.exportSession(issueKey, sessionName, stream);
 
 		// then
-		assertThat(res.status).isEqualTo(Result.Status.OK);
+		assertThat(resPromise.claim().status).isEqualTo(ExportStatus.OK);
 	}
 }

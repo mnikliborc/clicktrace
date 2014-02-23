@@ -1,6 +1,5 @@
 package com.niklim.clicktrace.service.export.jira;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
@@ -13,20 +12,19 @@ import org.codehaus.jettison.json.JSONObject;
 import com.atlassian.httpclient.api.HttpClient;
 import com.atlassian.httpclient.api.Request;
 import com.atlassian.httpclient.api.Response;
-import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
-import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
 import com.google.common.net.UrlEscapers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.jira.client.ExportResult;
+import com.niklim.clicktrace.jira.client.ExportStatus;
+import com.niklim.clicktrace.jira.client.JiraClientFactory;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient;
-import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
-import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result.Status;
 import com.niklim.clicktrace.props.AppProperties;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 
 @Singleton
-public class JiraExportService {
+public class JiraService {
 	@Inject
 	private AppProperties appProps;
 
@@ -39,11 +37,11 @@ public class JiraExportService {
 		String username = jiraConfig.getUsername();
 		String password = jiraConfig.getPassword().get();
 
-		HttpClient httpClient = createHttpClient(username, password, jiraInstanceUrl);
+		HttpClient httpClient = JiraClientFactory.createHttpClient(username, password, jiraInstanceUrl);
 		String jsonObj = createRequestEntity(project, issueType, priority, summary, description);
-		Request r = createRequest(jiraInstanceUrl, httpClient, jsonObj);
+		Request request = createRequest(jiraInstanceUrl, httpClient, jsonObj);
 
-		Response response = r.post().get();
+		Response response = request.post().get();
 		if (!StringUtils.equals(CREATE_SUCCESS, response.getStatusText())) {
 			throw new JiraExportException(MessageFormat.format(
 					"Unable to create the Issue. Response text: {0}.\nProbably not all required fields were set.",
@@ -78,13 +76,14 @@ public class JiraExportService {
 		return jsonObj;
 	}
 
-	public boolean checkSessionExist(String username, String password, String issueKey, String sessionName,
+	public boolean checkSessionExists(String username, String password, String issueKey, String sessionName,
 			String jiraInstanceUrl) throws JiraExportException {
 		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
 
 		try {
-			JiraRestClicktraceClient client = createClicktraceClient(username, password, jiraInstanceUrl);
-			Result res = client.checkSession(issueKey, sessionName);
+			JiraRestClicktraceClient client = JiraClientFactory.create(username, password, jiraInstanceUrl,
+					appProps.getJiraRestClicktraceImportPath());
+			ExportResult res = client.checkSession(issueKey, sessionName);
 
 			return handleCheckSessionExistsResult(res);
 		} catch (URISyntaxException e) {
@@ -92,44 +91,14 @@ public class JiraExportService {
 		}
 	}
 
-	private boolean handleCheckSessionExistsResult(Result res) throws JiraExportException {
-		if (res.status == Status.NO_SESSION) {
+	private boolean handleCheckSessionExistsResult(ExportResult res) throws JiraExportException {
+		if (res.status == ExportStatus.NO_SESSION) {
 			return false;
-		} else if (res.status == Status.SESSION_EXISTS) {
+		} else if (res.status == ExportStatus.SESSION_EXISTS) {
 			return true;
 		} else {
 			throw new JiraExportException(res.msg);
 		}
-	}
-
-	public void exportSession(String username, String password, String issueKey, String sessionName, String stream,
-			String jiraInstanceUrl) throws JiraExportException {
-		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
-
-		try {
-			JiraRestClicktraceClient client = createClicktraceClient(username, password, jiraInstanceUrl);
-			Result res = client.exportSession(issueKey, sessionName, stream);
-
-			if (res.status == Result.Status.ERROR) {
-				throw new JiraExportException(res.msg);
-			}
-		} catch (URISyntaxException e) {
-			throw new JiraExportException(e.getMessage());
-		}
-	}
-
-	private JiraRestClicktraceClient createClicktraceClient(String username, String password, String jiraInstanceUrl)
-			throws URISyntaxException {
-		HttpClient httpClient = createHttpClient(username, password, jiraInstanceUrl);
-		return new JiraRestClicktraceClient(httpClient, jiraInstanceUrl, appProps.getJiraRestClicktraceImportPath());
-	}
-
-	private HttpClient createHttpClient(String username, String password, String jiraInstanceUrl)
-			throws URISyntaxException {
-		URI serverUri = new URI(jiraInstanceUrl);
-		BasicHttpAuthenticationHandler authenticationHandler = new BasicHttpAuthenticationHandler(username, password);
-		HttpClient httpClient = new AsynchronousHttpClientFactory().createClient(serverUri, authenticationHandler);
-		return httpClient;
 	}
 
 }

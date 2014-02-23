@@ -52,7 +52,7 @@ public class JiraMetadataService {
 	private Collection<JiraFieldDto> projectToJiraFieldDtos(Iterable<BasicProject> projects) {
 		return Collections2.transform(Lists.newArrayList(projects), new Function<BasicProject, JiraFieldDto>() {
 			public JiraFieldDto apply(BasicProject input) {
-				return new JiraFieldDto(input.getName(), input.getKey());
+				return new JiraFieldDto(input.getKey(), input.getKey());
 			}
 		});
 	}

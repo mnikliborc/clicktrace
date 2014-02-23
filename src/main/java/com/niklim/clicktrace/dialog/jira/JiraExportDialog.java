@@ -23,24 +23,21 @@ import com.niklim.clicktrace.dialog.AbstractDialog;
 import com.niklim.clicktrace.msg.InfoMsgs;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
-import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.exception.JiraExportException;
-import com.niklim.clicktrace.service.export.jira.JiraExportService;
 import com.niklim.clicktrace.service.export.jira.JiraExporter;
+import com.niklim.clicktrace.service.export.jira.JiraExporter.JiraExportCallback;
 import com.niklim.clicktrace.service.export.jira.JiraFieldDto;
+import com.niklim.clicktrace.service.export.jira.JiraService;
 
 @Singleton
 public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 	private static final Logger log = LoggerFactory.getLogger(JiraExportDialog.class);
 
 	@Inject
-	private UserProperties props;
-
-	@Inject
 	private ActiveSession activeSession;
 
 	@Inject
-	private JiraExportService jiraExportService;
+	private JiraService jiraService;
 
 	@Inject
 	private JiraExporter jiraExporter;
@@ -123,6 +120,8 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 				String issueKey = createIssue();
 				exportSession(issueKey);
 			}
+		} catch (JiraExportException e) {
+			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
 		} catch (Exception e) {
 			log.error("Issue create error", e);
 			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
@@ -179,7 +178,7 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		String priority = ((JiraFieldDto) view.priority.getSelectedItem()).value;
 		String summary = view.issueSummary.getText();
 
-		return jiraExportService.createIssue(jiraConfig, project, issueType, priority, summary, description);
+		return jiraService.createIssue(jiraConfig, project, issueType, priority, summary, description);
 	}
 
 	private boolean confirmSessionExport(String issueKey) {
@@ -199,9 +198,10 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 	private boolean callCheckSessionExists(String issueKey) throws JiraExportException {
 		String username = jiraConfig.getUsername();
 		String password = jiraConfig.getPassword().get();
+		String sessionName = activeSession.getSession().getName();
 		String jiraUrl = jiraConfig.getInstanceUrl();
 
-		return jiraExporter.checkSessionExists(username, password, issueKey, jiraUrl);
+		return jiraService.checkSessionExists(username, password, issueKey, sessionName, jiraUrl);
 	}
 
 	private boolean askUserForExportConfirmation() {
@@ -210,32 +210,35 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		return res == JOptionPane.OK_OPTION;
 	}
 
-	private void exportSession(String issueKey) {
-		try {
-			showWaitingCursor();
-
-			callExport(issueKey);
-
-			JOptionPane.showMessageDialog(view.dialog(), MessageFormat.format(InfoMsgs.JIRA_EXPORT_SUCCESS, issueKey));
-			close();
-		} catch (JiraExportException e) {
-			JOptionPane.showMessageDialog(view.dialog(), e.getMessage());
-		} catch (Throwable e) {
-			log.error("unpredicted", e);
-			JOptionPane.showMessageDialog(view.dialog(), e.getMessage());
-		} finally {
-			hideWaitingCursor();
-		}
-
-	}
-
-	private void callExport(String issueKey) throws JiraExportException, InterruptedException, ExecutionException {
+	private void exportSession(final String issueKey) {
 		String username = jiraConfig.getUsername();
 		String password = jiraConfig.getPassword().get();
 		String jiraUrl = jiraConfig.getInstanceUrl();
-		Integer exportImageWidth = props.getExportImageWidth();
 
-		jiraExporter.export(username, password, issueKey, jiraUrl, exportImageWidth);
+		try {
+			showWaitingCursor();
+			jiraExporter.export(username, password, issueKey, jiraUrl, new JiraExportCallback() {
+				public void success() {
+					hideWaitingCursor();
+					JOptionPane.showMessageDialog(view.dialog(),
+							MessageFormat.format(InfoMsgs.JIRA_EXPORT_SUCCESS, issueKey));
+					close();
+				}
+
+				@Override
+				public void failure(String msg) {
+					System.out.println("fail");
+					hideWaitingCursor();
+					JOptionPane.showMessageDialog(view.dialog(), msg);
+				}
+			});
+		} catch (InterruptedException e) {
+			hideWaitingCursor();
+			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
+		} catch (ExecutionException e) {
+			hideWaitingCursor();
+			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
+		}
 	}
 
 	@Override

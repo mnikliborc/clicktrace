@@ -17,8 +17,6 @@ import org.apache.xml.security.utils.Base64;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient.Result;
-
 @Path("/clicktrace")
 public class JiraRestClicktraceImportMock {
 	static final String FAKE_STREAM = "FAKE_STREAM";
@@ -36,14 +34,13 @@ public class JiraRestClicktraceImportMock {
 	public Response checkSessionExist(@PathParam("issueKey") String issueKey,
 			@PathParam("sessionName") String sessionName) {
 		if ("error".equals(sessionName)) {
-			return Response.ok(
-					"{status=\"" + Result.Status.ERROR + "\", msg=\"" + ERROR_MSG + "\"}").build();
+			return Response.ok("{status=\"" + ExportStatus.ERROR + "\", msg=\"" + ERROR_MSG + "\"}").build();
 		} else if ("notlogged".equals(sessionName)) {
 			return Response.status(Status.UNAUTHORIZED).entity("{}").build();
 		} else if ("existing".equals(sessionName)) {
-			return Response.ok("{status=\"" + Result.Status.SESSION_EXISTS + "\"}").build();
+			return Response.ok("{status=\"" + ExportStatus.SESSION_EXISTS + "\"}").build();
 		} else {
-			return Response.ok("{status=\"" + Result.Status.NO_SESSION + "\"}").build();
+			return Response.ok("{status=\"" + ExportStatus.NO_SESSION + "\"}").build();
 		}
 	}
 
@@ -51,31 +48,25 @@ public class JiraRestClicktraceImportMock {
 	@Path("/import/{issueKey}/{sessionName}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response importSession(@PathParam("issueKey") String issueKey,
-			@PathParam("sessionName") String sessionName, String json) {
+	public Response importSession(@PathParam("issueKey") String issueKey, @PathParam("sessionName") String sessionName,
+			String json) {
 		if ("error".equals(sessionName)) {
-			return Response.ok(
-					"{status=\"" + Result.Status.ERROR + "\", msg=\"" + ERROR_MSG + "\"}").build();
+			return Response.ok("{status=\"" + ExportStatus.ERROR + "\", msg=\"" + ERROR_MSG + "\"}").build();
 		} else {
 			JSONObject jsonObject;
 			try {
 				jsonObject = new JSONObject(json);
-				String stream = jsonObject
-						.getString(JiraRestClicktraceClient.JSON_CLICKTRACE_STREAM_FIELD_NAME);
+				String stream = jsonObject.getString(JiraRestClicktraceClient.JSON_CLICKTRACE_STREAM_FIELD_NAME);
 				if (!FAKE_STREAM.equals(stream)) {
 					decompress(sessionName, stream);
 				}
-				return Response.ok("{status=\"" + Result.Status.OK + "\"}").build();
+				return Response.ok("{status=\"" + ExportStatus.OK + "\"}").build();
 			} catch (JSONException e) {
 				e.printStackTrace();
-				return Response.ok(
-						"{status=\"" + Result.Status.ERROR + "\", msg=\"" + e.getMessage() + "\"}")
-						.build();
+				return Response.ok("{status=\"" + ExportStatus.ERROR + "\", msg=\"" + e.getMessage() + "\"}").build();
 			} catch (IOException e) {
 				e.printStackTrace();
-				return Response.ok(
-						"{status=\"" + Result.Status.ERROR + "\", msg=\"" + e.getMessage() + "\"}")
-						.build();
+				return Response.ok("{status=\"" + ExportStatus.ERROR + "\", msg=\"" + e.getMessage() + "\"}").build();
 			}
 		}
 	}

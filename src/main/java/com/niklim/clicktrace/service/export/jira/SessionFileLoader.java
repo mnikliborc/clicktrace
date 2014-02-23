@@ -14,9 +14,9 @@ import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionCompressor;
 
 /**
- * Loads session files. Additionally adds one line to {@linkg
- * FileManager#SESSION_PROPS_FILENAME} file with initial image width (TODO
- * improve design).
+ * Loads session files. Additionally adds one line to
+ * {@link FileManager#SESSION_PROPS_FILENAME} file with initial image width
+ * (TODO improve design).
  */
 public class SessionFileLoader implements SessionCompressor.FileLoader {
 	private Integer imageWidth;

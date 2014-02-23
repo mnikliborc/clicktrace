@@ -14,7 +14,7 @@ import com.niklim.clicktrace.service.exception.JiraExportException;
 
 @Ignore("Integration test. Use as a smoke test.")
 public class JiraExportServiceTest {
-	JiraExportService service = new JiraExportService();
+	JiraService service = new JiraService();
 
 	@Test
 	public void createIssueTest() throws UnsupportedEncodingException, URISyntaxException, InterruptedException,
