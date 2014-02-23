@@ -1,7 +1,6 @@
 package com.niklim.clicktrace.jira.client;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,14 +12,9 @@ import com.atlassian.jira.rest.client.RestClientException;
 import com.atlassian.jira.rest.client.internal.async.AbstractAsynchronousRestClient;
 import com.atlassian.jira.rest.client.internal.json.JsonObjectParser;
 import com.atlassian.util.concurrent.Promise;
-import com.atlassian.util.concurrent.Promises;
-import com.google.common.base.Function;
 import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.msg.InfoMsgs;
 
-/**
- * Client of Clicktrace JIRA Add-on. {@see JiraClientFactory} creates it.
- */
 public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 	private static final String UNEXPECTED_ERROR_MSG = "Unexpected error while checking session in JIRA";
 
@@ -42,8 +36,8 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 			log.debug("Check session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName,
 					jiraInstanceUrl + jiraRestClicktraceImportPath);
 
-			URI uri = createUri(issueKey, sessionName);
-			Promise<ExportResult> p = getAndParse(uri, new JsonResponseParser());
+			String uri = createUriString(issueKey, sessionName);
+			Promise<ExportResult> p = getAndParse(new URI(uri), new JsonResponseParser());
 			return p.claim();
 		} catch (RestClientException e) {
 			return handleRestClientException(e);
@@ -53,8 +47,8 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 		}
 	}
 
-	private URI createUri(String issueKey, String sessionName) throws URISyntaxException {
-		return new URI(jiraInstanceUrl + jiraRestClicktraceImportPath + "/" + issueKey + "/" + sessionName);
+	private String createUriString(String issueKey, String sessionName) {
+		return jiraInstanceUrl + jiraRestClicktraceImportPath + "/" + issueKey + "/" + sessionName;
 	}
 
 	private ExportResult handleRestClientException(RestClientException e) {
@@ -70,39 +64,24 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 		}
 	}
 
-	public Promise<ExportResult> exportSession(String issueKey, String sessionName, String stream) {
-		log.debug("Export session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName, jiraInstanceUrl
-				+ jiraRestClicktraceImportPath);
+	public ExportResult exportSession(String issueKey, String sessionName, String stream) {
 
-		JSONObject json = new JSONObject();
-		URI uri = null;
 		try {
+			log.debug("Export session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName,
+					jiraInstanceUrl + jiraRestClicktraceImportPath);
+
+			JSONObject json = new JSONObject();
 			json.put(JSON_CLICKTRACE_STREAM_FIELD_NAME, stream);
-			uri = createUri(issueKey, sessionName);
-		} catch (JSONException e) {
-			return Promises.promise(new ExportResult(ExportStatus.ERROR, e.getLocalizedMessage()));
-		} catch (URISyntaxException e) {
-			return Promises.promise(new ExportResult(ExportStatus.ERROR, e.getLocalizedMessage()));
+
+			String uri = createUriString(issueKey, sessionName);
+			Promise<ExportResult> p = postAndParse(new URI(uri), json, new JsonResponseParser());
+			return p.claim();
+		} catch (RestClientException e) {
+			return handleRestClientException(e);
+		} catch (Throwable e) {
+			log.error(UNEXPECTED_ERROR_MSG, e);
+			return new ExportResult(ExportStatus.ERROR, e.getMessage());
 		}
-
-		return createExportPromise(json, uri);
-	}
-
-	private Promise<ExportResult> createExportPromise(JSONObject json, URI uri) {
-		Promise<ExportResult> promise = postAndParse(uri, json, new JsonResponseParser());
-
-		promise.recover(new Function<Throwable, ExportResult>() {
-			public ExportResult apply(Throwable e) {
-				if (e instanceof RestClientException) {
-					return handleRestClientException((RestClientException) e);
-				} else {
-					log.error(UNEXPECTED_ERROR_MSG, e);
-					return new ExportResult(ExportStatus.ERROR, e.getMessage());
-				}
-			}
-		});
-
-		return promise;
 	}
 
 	public class JsonResponseParser implements JsonObjectParser<ExportResult> {
@@ -116,5 +95,4 @@ public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
 			return new ExportResult(status, msg);
 		}
 	}
-
 }

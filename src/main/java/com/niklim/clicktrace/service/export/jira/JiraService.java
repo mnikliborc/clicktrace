@@ -39,12 +39,12 @@ public class JiraService {
 
 		HttpClient httpClient = JiraClientFactory.createHttpClient(username, password, jiraInstanceUrl);
 		String jsonObj = createRequestEntity(project, issueType, priority, summary, description);
-		Request request = createRequest(jiraInstanceUrl, httpClient, jsonObj);
+		Request r = createRequest(jiraInstanceUrl, httpClient, jsonObj);
 
-		Response response = request.post().get();
+		Response response = r.post().get();
 		if (!StringUtils.equals(CREATE_SUCCESS, response.getStatusText())) {
 			throw new JiraExportException(MessageFormat.format(
-					"Unable to create the Issue. Response text: {0}.\nProbably not all required fields were set.",
+					"Unable to create the Issue: {0}.\nProbably not all required fields were set.",
 					response.getStatusText()));
 		}
 
@@ -53,10 +53,10 @@ public class JiraService {
 	}
 
 	private Request createRequest(String jiraInstanceUrl, HttpClient httpClient, String jsonObj) {
-		Request r = httpClient.newRequest(jiraInstanceUrl + "/rest/api/2/issue");
-		r.setContentType("application/json");
-		r.setEntity(jsonObj);
-		return r;
+		Request request = httpClient.newRequest(jiraInstanceUrl + "/rest/api/2/issue");
+		request.setContentType("application/json");
+		request.setEntity(jsonObj);
+		return request;
 	}
 
 	private String createRequestEntity(String project, String issueType, String priority, String summary,
@@ -76,13 +76,13 @@ public class JiraService {
 		return jsonObj;
 	}
 
-	public boolean checkSessionExists(String username, String password, String issueKey, String sessionName,
+	public boolean checkSessionExist(String username, String password, String issueKey, String sessionName,
 			String jiraInstanceUrl) throws JiraExportException {
 		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
 
 		try {
-			JiraRestClicktraceClient client = JiraClientFactory.create(username, password, jiraInstanceUrl,
-					appProps.getJiraRestClicktraceImportPath());
+			JiraRestClicktraceClient client = JiraClientFactory.createClicktraceClient(username, password,
+					jiraInstanceUrl, appProps.getJiraRestClicktraceImportPath());
 			ExportResult res = client.checkSession(issueKey, sessionName);
 
 			return handleCheckSessionExistsResult(res);

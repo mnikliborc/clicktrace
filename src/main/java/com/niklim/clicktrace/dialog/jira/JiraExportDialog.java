@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.niklim.clicktrace.controller.ActiveSession;
 import com.niklim.clicktrace.dialog.AbstractDialog;
 import com.niklim.clicktrace.msg.InfoMsgs;
@@ -25,19 +25,17 @@ import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 import com.niklim.clicktrace.service.export.jira.JiraExporter;
-import com.niklim.clicktrace.service.export.jira.JiraExporter.JiraExportCallback;
 import com.niklim.clicktrace.service.export.jira.JiraFieldDto;
 import com.niklim.clicktrace.service.export.jira.JiraService;
 
-@Singleton
 public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 	private static final Logger log = LoggerFactory.getLogger(JiraExportDialog.class);
 
 	@Inject
-	private ActiveSession activeSession;
+	private JiraService jiraExportService;
 
 	@Inject
-	private JiraService jiraService;
+	private ActiveSession activeSession;
 
 	@Inject
 	private JiraExporter jiraExporter;
@@ -89,10 +87,14 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		view.createIssueCheckBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (view.createIssueCheckBox.isSelected()) {
-					view.setExistingIssueComponentEnabled(false);
+					view.issueKeyLabel.setEnabled(false);
+					view.issueKeyTextField.setEnabled(false);
+
 					view.enableCreateControls(true);
 				} else {
-					view.setExistingIssueComponentEnabled(true);
+					view.issueKeyLabel.setEnabled(true);
+					view.issueKeyTextField.setEnabled(true);
+
 					view.enableCreateControls(false);
 				}
 			}
@@ -116,24 +118,12 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		}
 
 		try {
-			if (validateCreateIssue()) {
-				String issueKey = createIssue();
-				exportSession(issueKey);
-			}
-		} catch (JiraExportException e) {
-			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
+			String issueKey = createIssue();
+			exportSession(issueKey);
 		} catch (Exception e) {
 			log.error("Issue create error", e);
 			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
 		}
-	}
-
-	private boolean validateCreateIssue() {
-		if (view.project.getSelectedItem() == null) {
-			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_EXPORT_NO_PROJECT);
-			return false;
-		}
-		return true;
 	}
 
 	private void exportToExistingIssue() {
@@ -161,30 +151,26 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 	private String createIssue() throws URISyntaxException, InterruptedException, ExecutionException,
 			UnsupportedEncodingException, IllegalStateException, IllegalArgumentException, JiraExportException,
 			JSONException {
+		String project = ((JiraFieldDto) view.project.getSelectedItem()).value;
+		String issueType = ((JiraFieldDto) view.issueType.getSelectedItem()).value;
+		String priority = ((JiraFieldDto) view.priority.getSelectedItem()).value;
+		String issueSummary = view.issueSummary.getText();
+
 		String description;
 		if (view.useDescription.isSelected()) {
-			description = activeSession.getSession().getDescription();
+			description = Strings.nullToEmpty(activeSession.getSession().getDescription());
 		} else {
 			description = "";
 		}
 
-		return callCreateIssue(description);
-	}
-
-	private String callCreateIssue(String description) throws URISyntaxException, InterruptedException,
-			ExecutionException, JiraExportException, JSONException {
-		String project = ((JiraFieldDto) view.project.getSelectedItem()).value;
-		String issueType = ((JiraFieldDto) view.issueType.getSelectedItem()).value;
-		String priority = ((JiraFieldDto) view.priority.getSelectedItem()).value;
-		String summary = view.issueSummary.getText();
-
-		return jiraService.createIssue(jiraConfig, project, issueType, priority, summary, description);
+		return jiraExportService.createIssue(jiraConfig, project, issueType, priority, issueSummary, description);
 	}
 
 	private boolean confirmSessionExport(String issueKey) {
 		try {
-			boolean sessionExists = callCheckSessionExists(issueKey);
-			if (sessionExists) {
+			boolean sessionExist = jiraExportService.checkSessionExist(jiraConfig.getUsername(), jiraConfig
+					.getPassword().get(), issueKey, activeSession.getSession().getName(), jiraConfig.getInstanceUrl());
+			if (sessionExist) {
 				return askUserForExportConfirmation();
 			} else {
 				return true;
@@ -195,49 +181,29 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		}
 	}
 
-	private boolean callCheckSessionExists(String issueKey) throws JiraExportException {
-		String username = jiraConfig.getUsername();
-		String password = jiraConfig.getPassword().get();
-		String sessionName = activeSession.getSession().getName();
-		String jiraUrl = jiraConfig.getInstanceUrl();
-
-		return jiraService.checkSessionExists(username, password, issueKey, sessionName, jiraUrl);
-	}
-
 	private boolean askUserForExportConfirmation() {
 		int res = JOptionPane.showConfirmDialog(view.dialog(), "Session exists. Overwrite?", "Overwrite?",
 				JOptionPane.OK_CANCEL_OPTION);
 		return res == JOptionPane.OK_OPTION;
 	}
 
-	private void exportSession(final String issueKey) {
-		String username = jiraConfig.getUsername();
-		String password = jiraConfig.getPassword().get();
-		String jiraUrl = jiraConfig.getInstanceUrl();
-
+	private void exportSession(String issueKey) {
 		try {
 			showWaitingCursor();
-			jiraExporter.export(username, password, issueKey, jiraUrl, new JiraExportCallback() {
-				public void success() {
-					hideWaitingCursor();
-					JOptionPane.showMessageDialog(view.dialog(),
-							MessageFormat.format(InfoMsgs.JIRA_EXPORT_SUCCESS, issueKey));
-					close();
-				}
 
-				@Override
-				public void failure(String msg) {
-					System.out.println("fail");
-					hideWaitingCursor();
-					JOptionPane.showMessageDialog(view.dialog(), msg);
-				}
-			});
-		} catch (InterruptedException e) {
+			jiraExporter.exportSession(jiraConfig.getUsername(), jiraConfig.getPassword().get(), issueKey,
+					activeSession.getSession().getName(), jiraConfig.getInstanceUrl());
+
 			hideWaitingCursor();
-			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
-		} catch (ExecutionException e) {
+			JOptionPane.showMessageDialog(view.dialog(), MessageFormat.format(InfoMsgs.JIRA_EXPORT_SUCCESS, issueKey));
+			close();
+		} catch (JiraExportException e) {
 			hideWaitingCursor();
-			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
+			JOptionPane.showMessageDialog(view.dialog(), e.getMessage());
+		} catch (Throwable e) {
+			hideWaitingCursor();
+			log.error("unpredicted", e);
+			JOptionPane.showMessageDialog(view.dialog(), e.getMessage());
 		}
 	}
 

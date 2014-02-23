@@ -27,7 +27,7 @@ public class SessionFileLoader implements SessionCompressor.FileLoader {
 
 	@Override
 	public Optional<InputStream> load(String filename, String filepath) throws IOException {
-		if (filename.endsWith("~")) {
+		if (filename.endsWith("~") || filename.equals(".DS_Store")) {
 			return Optional.<InputStream> absent();
 		}
 		InputStream in = new FileInputStream(filepath);

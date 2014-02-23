@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
 import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
-import com.atlassian.util.concurrent.Promise;
 
 public class ClicktraceJiraRestClientTest {
 	private static final String JIRA_URL = "http://localhost:9998";
@@ -110,9 +109,9 @@ public class ClicktraceJiraRestClientTest {
 		JiraRestClicktraceClient cl = createClient();
 
 		// when
-		Promise<ExportResult> resPromise = cl.exportSession(issueKey, sessionName, stream);
+		ExportResult result = cl.exportSession(issueKey, sessionName, stream);
 
 		// then
-		assertThat(resPromise.claim().status).isEqualTo(ExportStatus.OK);
+		assertThat(result.status).isEqualTo(ExportStatus.OK);
 	}
 }
