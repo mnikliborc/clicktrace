@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.Session;
+import com.niklim.clicktrace.props.UserProperties;
 
 /**
  * Compresses Clicktrace session folder using zip.
@@ -24,6 +25,9 @@ public class SessionCompressor {
 	private static final Logger log = LoggerFactory.getLogger(SessionCompressor.class);
 	@Inject
 	private FileManager fileManager;
+
+	@Inject
+	private UserProperties props;
 
 	public static interface FileLoader {
 		Optional<InputStream> load(String filename, String filepath) throws IOException;
@@ -53,7 +57,7 @@ public class SessionCompressor {
 		log.debug("Zip compression started");
 
 		byte[] buffer = new byte[1024];
-		String source = FileManager.SESSIONS_DIR + sessionName;
+		String source = props.getSessionsDirPath() + sessionName;
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(bos);

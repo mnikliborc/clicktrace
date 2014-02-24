@@ -16,6 +16,7 @@ import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.model.helper.ScreenShotLoader;
 import com.niklim.clicktrace.model.helper.SessionDeleter;
 import com.niklim.clicktrace.model.helper.SessionMetadataLoader;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.exception.SessionAlreadyExistsException;
 
 @Singleton
@@ -36,6 +37,9 @@ public class SessionManager {
 	@Inject
 	private SessionMetadataLoader sessionMetadataHelper;
 
+	@Inject
+	private UserProperties props;
+
 	/**
 	 * Loads all the {@link Session}s found in the default session folder.
 	 * 
@@ -44,7 +48,7 @@ public class SessionManager {
 	public List<Session> loadAll() {
 		List<Session> sessions = new LinkedList<Session>();
 
-		List<String> filenames = fileManager.loadFileNames(FileManager.SESSIONS_DIR, new FileManager.NoTrashFilter());
+		List<String> filenames = fileManager.loadFileNames(props.getSessionsDirPath(), new FileManager.NoTrashFilter());
 		for (String sessionName : filterSessionNames(filenames)) {
 			Session session = createSessionInstance();
 			session.setName(sessionName);
@@ -61,7 +65,7 @@ public class SessionManager {
 	private Collection<String> filterSessionNames(List<String> filenames) {
 		return Collections2.filter(filenames, new Predicate<String>() {
 			public boolean apply(String filename) {
-				File sessionDir = new File(FileManager.SESSIONS_DIR + filename);
+				File sessionDir = new File(props.getSessionsDirPath() + filename);
 				return sessionDir.isDirectory();
 			}
 		});
@@ -87,11 +91,11 @@ public class SessionManager {
 	}
 
 	public SessionPropertiesReader createSessionPropertiesReader(Session session) {
-		return new SessionPropertiesReader(session);
+		return new SessionPropertiesReader(session, props);
 	}
 
 	public SessionPropertiesWriter createSessionPropertiesWriter(Session session) {
-		return new SessionPropertiesWriter(session);
+		return new SessionPropertiesWriter(session, props);
 	}
 
 	public void changeSessionName(Session session, String newName) throws SessionAlreadyExistsException, IOException {

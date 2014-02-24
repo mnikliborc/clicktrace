@@ -11,6 +11,7 @@ import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.msg.ErrorMsgs;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 
 /**
@@ -22,8 +23,11 @@ public class SessionDeleter {
 	@Inject
 	private FileManager fileManager;
 
+	@Inject
+	private UserProperties props;
+
 	public void delete(Session delete) {
-		String dirPath = FileManager.SESSIONS_DIR + delete.getName();
+		String dirPath = props.getSessionsDirPath() + delete.getName();
 		for (String filename : fileManager.loadFileNames(dirPath, new FileManager.NoTrashFilter())) {
 			try {
 				String filePath = dirPath + File.separator + filename;

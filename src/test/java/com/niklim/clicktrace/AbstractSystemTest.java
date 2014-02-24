@@ -10,13 +10,14 @@ import org.junit.Before;
 
 import com.google.inject.Injector;
 import com.niklim.clicktrace.controller.ActiveSession;
-import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.view.MainView;
 
 public abstract class AbstractSystemTest {
 	protected FrameFixture editorFixture;
 	protected ActiveSession activeSession;
 	protected MainView mainView;
+	protected UserProperties props;
 
 	protected Injector injector;
 
@@ -24,9 +25,6 @@ public abstract class AbstractSystemTest {
 
 	@Before
 	public void setUp() {
-		prepareTestDir();
-		deleteUserProperties();
-
 		injector = loadInjector();
 		mainView = injector.getInstance(MainView.class);
 		editorFixture = new FrameFixture(mainView.getFrame());
@@ -34,6 +32,10 @@ public abstract class AbstractSystemTest {
 		editorFixture.maximize();
 
 		activeSession = injector.getInstance(ActiveSession.class);
+		props = injector.getInstance(UserProperties.class);
+
+		prepareTestDir();
+		deleteUserProperties();
 	}
 
 	private void deleteUserProperties() {
@@ -48,8 +50,8 @@ public abstract class AbstractSystemTest {
 	}
 
 	private void prepareTestDir() {
-		FileManager.SESSIONS_DIR = "target/testsessions/";
-		File sessionDir = new File(FileManager.SESSIONS_DIR);
+		props.setSessionsDirPath("target/testsessions/");
+		File sessionDir = new File(props.getSessionsDirPath());
 
 		if (!sessionDir.exists()) {
 			sessionDir.mkdir();
@@ -65,7 +67,7 @@ public abstract class AbstractSystemTest {
 			File testSessionDir = new File("src/test/resources/" + getSessionsData().getPath());
 			for (File session : testSessionDir.listFiles()) {
 				if (session.isDirectory()) {
-					FileUtils.copyDirectory(session, new File(FileManager.SESSIONS_DIR + session.getName()));
+					FileUtils.copyDirectory(session, new File(props.getSessionsDirPath() + session.getName()));
 				}
 			}
 		} catch (IOException e) {
@@ -74,7 +76,7 @@ public abstract class AbstractSystemTest {
 	}
 
 	public void fileCleanup() {
-		File sessionDir = new File(FileManager.SESSIONS_DIR);
+		File sessionDir = new File(props.getSessionsDirPath());
 
 		for (File file : sessionDir.listFiles()) {
 			if (file.isDirectory()) {

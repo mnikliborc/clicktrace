@@ -9,10 +9,11 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.msg.ErrorMsgs;
-import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.props.UserProperties;
 
 /**
  * Loads {@link ScreenShot}'s image from the disk.
@@ -20,9 +21,12 @@ import com.niklim.clicktrace.service.FileManager;
 public class ImageLoader {
 	private static final Logger log = LoggerFactory.getLogger(ImageLoader.class);
 
+	@Inject
+	private UserProperties props;
+
 	public BufferedImage load(ScreenShot shot) {
 		try {
-			File file = new File(FileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
+			File file = new File(props.getSessionsDirPath() + shot.getSession().getName() + File.separator
 					+ shot.getFilename());
 			return ImageIO.read(file);
 		} catch (IOException e) {

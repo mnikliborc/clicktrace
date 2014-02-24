@@ -12,7 +12,7 @@ import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
 import com.niklim.clicktrace.msg.ErrorMsgs;
-import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.SessionManager;
 
 /**
@@ -24,6 +24,9 @@ public class ScreenShotDeleter {
 	@Inject
 	private SessionManager sessionManager;
 
+	@Inject
+	private UserProperties props;
+
 	public void delete(ScreenShot shot) {
 		deleteImage(shot);
 		deleteProperties(shot);
@@ -31,7 +34,7 @@ public class ScreenShotDeleter {
 
 	private void deleteImage(ScreenShot shot) {
 		try {
-			String filePath = FileManager.SESSIONS_DIR + shot.getSession().getName() + File.separator
+			String filePath = props.getSessionsDirPath() + shot.getSession().getName() + File.separator
 					+ shot.getFilename();
 			Files.delete(filePath);
 		} catch (IOException e) {

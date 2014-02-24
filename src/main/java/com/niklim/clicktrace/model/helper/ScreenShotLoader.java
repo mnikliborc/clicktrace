@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.dao.SessionPropertiesReader;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 import com.niklim.clicktrace.service.SessionManager;
 
@@ -21,17 +22,23 @@ import com.niklim.clicktrace.service.SessionManager;
 public class ScreenShotLoader {
 	@Inject
 	private FileManager fileManager;
+
 	@Inject
 	private SessionManager sessionManager;
+
 	@Inject
 	private ImageLoader imageLoader;
+
 	@Inject
 	private ScreenShotDeleter deleter;
+
+	@Inject
+	private UserProperties props;
 
 	public List<ScreenShot> load(Session session) {
 		SessionPropertiesReader reader = sessionManager.createSessionPropertiesReader(session);
 
-		List<String> filenames = fileManager.loadFileNames(FileManager.SESSIONS_DIR + session.getName(),
+		List<String> filenames = fileManager.loadFileNames(props.getSessionsDirPath() + session.getName(),
 				new FileManager.ImageFilter());
 
 		Optional<Map<String, Integer>> ordering = reader.getOrdering();

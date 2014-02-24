@@ -10,17 +10,24 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.niklim.clicktrace.ErrorNotifier;
 import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.msg.ErrorMsgs;
+import com.niklim.clicktrace.props.UserProperties;
 
 /**
  * Manages file paths creating folders, properties files.
  */
+@Singleton
 public class FileManager {
 	private static final Logger log = LoggerFactory.getLogger(FileManager.class);
 
-	public static String SESSIONS_DIR = "sessions/";
+	@Inject
+	private UserProperties props;
+
+	// public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 	public static final String SESSION_PROPS_FILENAME = "session.properties";
 
@@ -38,8 +45,9 @@ public class FileManager {
 		}
 	}
 
-	static {
-		createIfDirNotExists(SESSIONS_DIR);
+	@Inject
+	public void init() {
+		createIfDirNotExists(props.getSessionsDirPath());
 	}
 
 	public String createFilePath(String sessionName, String filename) {
@@ -47,12 +55,12 @@ public class FileManager {
 			createIfDirNotExists(DEFAULT_DIR);
 			return DEFAULT_DIR + filename;
 		} else {
-			createIfDirNotExists(SESSIONS_DIR + sessionName);
-			return SESSIONS_DIR + sessionName + "/" + filename;
+			createIfDirNotExists(props.getSessionsDirPath() + sessionName);
+			return props.getSessionsDirPath() + sessionName + "/" + filename;
 		}
 	}
 
-	private static boolean createIfDirNotExists(String dirName) {
+	private boolean createIfDirNotExists(String dirName) {
 		File dir = new File(dirName);
 		if (!dir.exists()) {
 			dir.mkdir();
@@ -82,11 +90,11 @@ public class FileManager {
 	}
 
 	public boolean createSessionDir(String sessionName) {
-		return createIfDirNotExists(SESSIONS_DIR + sessionName);
+		return createIfDirNotExists(props.getSessionsDirPath() + sessionName);
 	}
 
 	public void createSessionPropsFile(String sessionName) {
-		File f = new File(SESSIONS_DIR + sessionName + File.separator + SESSION_PROPS_FILENAME);
+		File f = new File(props.getSessionsDirPath() + sessionName + File.separator + SESSION_PROPS_FILENAME);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -96,22 +104,22 @@ public class FileManager {
 	}
 
 	public boolean sessionExists(String sessionName) {
-		return Files.exists(FileManager.SESSIONS_DIR + sessionName);
+		return Files.exists(props.getSessionsDirPath() + sessionName);
 	}
 
 	public void renameSession(String oldName, String newName) throws IOException {
-		Files.move(FileManager.SESSIONS_DIR + oldName, FileManager.SESSIONS_DIR + newName);
+		Files.move(props.getSessionsDirPath() + oldName, props.getSessionsDirPath() + newName);
 	}
 
 	public void createSessionFolder(String sessionName) throws IOException {
-		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
+		File newDir = new File(props.getSessionsDirPath() + sessionName);
 		if (!newDir.mkdir()) {
-			throw new IOException(FileManager.SESSIONS_DIR + sessionName);
+			throw new IOException(props.getSessionsDirPath() + sessionName);
 		}
 	}
 
 	public boolean canCreateSession(String sessionName) {
-		File newDir = new File(FileManager.SESSIONS_DIR + sessionName);
+		File newDir = new File(props.getSessionsDirPath() + sessionName);
 		boolean canCreate = newDir.mkdir();
 		if (canCreate) {
 			newDir.delete();

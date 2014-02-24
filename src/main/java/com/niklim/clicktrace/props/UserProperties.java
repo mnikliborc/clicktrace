@@ -12,7 +12,8 @@ import com.niklim.clicktrace.capture.voter.LineVoter.ChangeSensitivity;
 public class UserProperties extends AbstractProperties {
 	private static final String USER_PROPERTIES_PATH = "user.properties";
 
-	private static final String LAST_SESSION = "lastSession";
+	private static final String LAST_SESSION = "sessions.last";
+	private static final String SESSIONS_DIR_PATH = "sessions.dirPath";
 
 	private static final String JIRA_USERNAME = "jira.username";
 	private static final String JIRA_INSTANCE_URL = "jira.instanceUrl";
@@ -43,6 +44,7 @@ public class UserProperties extends AbstractProperties {
 		defaults.put(EXPORT_IMAGE_WIDTH, 800);
 		defaults.put(CAPTURE_SENSITIVITY, ChangeSensitivity.NORMAL.name());
 		defaults.put(MARKUP_SYNTAX, MarkupSyntax.CONFLUENCE.name());
+		defaults.put(SESSIONS_DIR_PATH, "sessions");
 	}
 
 	public UserProperties() {
@@ -132,6 +134,19 @@ public class UserProperties extends AbstractProperties {
 
 	public void setHtmlExportLastPath(String path) {
 		props.setProperty(HTML_EXPORT_LAST_PATH, path);
+	}
+
+	public String getSessionsDirPath() {
+		String rawSessionsPath = props.getString(SESSIONS_DIR_PATH);
+		if (rawSessionsPath.endsWith(File.separator)) {
+			return rawSessionsPath;
+		} else {
+			return rawSessionsPath + File.separator;
+		}
+	}
+
+	public void setSessionsDirPath(String path) {
+		props.setProperty(SESSIONS_DIR_PATH, path);
 	}
 
 	public Integer getExportImageWidth() {

@@ -41,6 +41,9 @@ public class SettingsView extends AbstractDialogView {
 
 	JFormattedTextField imageExportWidth;
 
+	JTextField sessionsDirPath;
+	JFileChooser sessionsDirPathChooser;
+
 	public SettingsView() {
 		dialog.getContentPane().setLayout(new MigLayout("hidemode 1", "[]rel[fill]rel[]"));
 		dialog.setResizable(false);
@@ -49,8 +52,9 @@ public class SettingsView extends AbstractDialogView {
 		imageEditorFileChooser = new JFileChooser();
 
 		createSectionLabel("Recording");
-		createCaptureMouseClicksPanel();
+		createSessionsDirPath();
 		createCaptureAreaComponent();
+		createCaptureMouseClicksPanel();
 		createCaptureSelectAllPanel();
 
 		createSpacePanel();
@@ -74,6 +78,32 @@ public class SettingsView extends AbstractDialogView {
 		createAdvancedPanel();
 
 		dialog.add(createControlPanel("Save"), "align r, span 3");
+	}
+
+	private void createSessionsDirPath() {
+		sessionsDirPath = new JTextField();
+		sessionsDirPathChooser = new JFileChooser();
+		sessionsDirPathChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		JLabel label = new JLabel("Sessions directory path");
+		label.setToolTipText("Path to directory where screenshot sessions are saved.");
+
+		JButton setSessionsPathButton = new JButton("set path");
+		setSessionsPathButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int returnVal = sessionsDirPathChooser.showOpenDialog(dialog);
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = sessionsDirPathChooser.getSelectedFile();
+					sessionsDirPath.setText(file.getAbsolutePath());
+				}
+			}
+		});
+
+		dialog.add(label);
+		dialog.add(sessionsDirPath);
+		dialog.add(setSessionsPathButton, "wrap");
 	}
 
 	private void createAdvancedPanel() {

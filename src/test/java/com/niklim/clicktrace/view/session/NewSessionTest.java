@@ -74,10 +74,10 @@ public class NewSessionTest extends AbstractSystemTest {
 	}
 
 	private void assertDataPersisted(String sessionName, String sessionDescription) throws ConfigurationException {
-		boolean sessionDirExists = Files.exists(FileManager.SESSIONS_DIR + sessionName);
+		boolean sessionDirExists = Files.exists(props.getSessionsDirPath() + sessionName);
 		assertThat(sessionDirExists).isTrue();
 
-		String propsPath = FileManager.SESSIONS_DIR + sessionName + File.separator + FileManager.SESSION_PROPS_FILENAME;
+		String propsPath = props.getSessionsDirPath() + sessionName + File.separator + FileManager.SESSION_PROPS_FILENAME;
 		boolean propsFileExists = Files.exists(propsPath);
 
 		assertThat(propsFileExists).isTrue();
@@ -114,7 +114,7 @@ public class NewSessionTest extends AbstractSystemTest {
 		assertThat(optionPane).isNotNull();
 		optionPane.button().click();
 
-		boolean sessionDirExists = Files.exists(FileManager.SESSIONS_DIR + sessionName);
+		boolean sessionDirExists = Files.exists(props.getSessionsDirPath() + sessionName);
 		assertThat(sessionDirExists).isTrue();
 	}
 

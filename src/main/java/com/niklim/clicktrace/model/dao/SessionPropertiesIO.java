@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.msg.ErrorMsgs;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 
 /**
@@ -17,10 +18,11 @@ public abstract class SessionPropertiesIO {
 	protected static final Logger log = LoggerFactory.getLogger(SessionPropertiesIO.class);
 	protected PropertiesStore props;
 	protected final Session session;
-	
-	public SessionPropertiesIO(Session session) {
+
+	public SessionPropertiesIO(Session session, UserProperties userProps) {
 		this.session = session;
-		File file = new File(FileManager.SESSIONS_DIR + session.getName() + File.separator
+
+		File file = new File(userProps.getSessionsDirPath() + session.getName() + File.separator
 				+ FileManager.SESSION_PROPS_FILENAME);
 		try {
 			props = new PropertiesStore();
@@ -31,7 +33,7 @@ public abstract class SessionPropertiesIO {
 			createPropertiesFile(file);
 		}
 	}
-	
+
 	private void createPropertiesFile(File file) {
 		try {
 			props = new PropertiesStore(file);

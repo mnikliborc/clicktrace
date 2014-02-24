@@ -69,6 +69,9 @@ public class SettingsDialog extends AbstractDialog<SettingsView> {
 		view.captureMouseClicks.setSelected(props.getCaptureMouseClicks());
 		view.captureAreaComponent.init(props.getCaptureFullScreen(), props.getCaptureRectangle());
 		view.captureSelectAll.setSelected(props.getCaptureSelectAll());
+
+		view.sessionsDirPath.setText(props.getSessionsDirPath());
+		view.sessionsDirPathChooser.setSelectedFile(new File(props.getSessionsDirPath()));
 	}
 
 	private void saveModel() {
@@ -97,6 +100,7 @@ public class SettingsDialog extends AbstractDialog<SettingsView> {
 	private void saveRecordingModel() {
 		props.setCaptureMouseClicks(view.captureMouseClicks.isSelected());
 		props.setCaptureSelectAll(view.captureSelectAll.isSelected());
+		props.setSessionsDirPath(view.sessionsDirPath.getText());
 
 		Optional<Rectangle> captureRectangleOpt = view.captureAreaComponent.getCaptureRectangleOpt();
 		if (captureRectangleOpt.isPresent()) {

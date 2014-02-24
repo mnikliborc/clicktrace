@@ -15,7 +15,7 @@ import com.niklim.clicktrace.Files;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.msg.InfoMsgs;
-import com.niklim.clicktrace.service.FileManager;
+import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.ScreenShotUtils;
 import com.niklim.clicktrace.service.exception.HtmlExportException;
 
@@ -25,7 +25,10 @@ public class HtmlExportService {
 	private static final String HTML_EXPORT_FOLDER = "html-export/";
 
 	@Inject
-	public HtmlExportRenderer renderer;
+	private HtmlExportRenderer renderer;
+
+	@Inject
+	private UserProperties props;
 
 	public void export(Session session, String outputDirPath, int initImageWidth) throws HtmlExportException,
 			IOException {
@@ -67,7 +70,7 @@ public class HtmlExportService {
 
 	private void copyShots(Session session, String outputDirPath) throws IOException {
 		for (ScreenShot shot : session.getShots()) {
-			String fromPath = FileManager.SESSIONS_DIR + session.getName() + File.separator + shot.getFilename();
+			String fromPath = props.getSessionsDirPath() + session.getName() + File.separator + shot.getFilename();
 			String toPath = outputDirPath + session.getName() + File.separator + "shots" + File.separator
 					+ shot.getFilename();
 			Files.copy(fromPath, toPath);
