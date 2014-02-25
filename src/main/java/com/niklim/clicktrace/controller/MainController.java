@@ -325,4 +325,9 @@ public class MainController {
 		mainView.showScreenShot(selectedShot, false);
 	}
 
+	public void closeActiveSession() {
+		activeSession.close();
+		mainView.hideSession();
+	}
+
 }

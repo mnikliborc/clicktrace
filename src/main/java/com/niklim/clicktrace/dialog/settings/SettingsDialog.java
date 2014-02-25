@@ -3,10 +3,13 @@ package com.niklim.clicktrace.dialog.settings;
 import java.awt.Rectangle;
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.controller.MainController;
 import com.niklim.clicktrace.dialog.AbstractDialog;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.UserProperties;
@@ -19,11 +22,20 @@ public class SettingsDialog extends AbstractDialog<SettingsView> {
 	private UserProperties props;
 
 	@Inject
+	private MainController controller;
+
+	/**
+	 * value of {@link UserProperties#getSessionsDirPath()} before change
+	 */
+	private String sessionDirPath;
+
+	@Inject
 	public void init() {
 		postInit();
 	}
 
 	public void open() {
+		sessionDirPath = props.getSessionsDirPath();
 		loadModel();
 
 		center();
@@ -124,7 +136,14 @@ public class SettingsDialog extends AbstractDialog<SettingsView> {
 	@Override
 	protected void okAction() {
 		saveModel();
+		clearActiveSessionOnSessionsPathChange();
 		close();
+	}
+
+	private void clearActiveSessionOnSessionsPathChange() {
+		if (!StringUtils.equals(sessionDirPath, props.getSessionsDirPath())) {
+			controller.closeActiveSession();
+		}
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.niklim.clicktrace.dialog.jira;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.concurrent.ExecutionException;
 
@@ -86,6 +87,8 @@ public class JiraLoginDialog extends AbstractDialog<JiraLoginView> {
 			handleKnownException(e);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 
 		hideWaitingCursor();
@@ -98,9 +101,10 @@ public class JiraLoginDialog extends AbstractDialog<JiraLoginView> {
 			return;
 		}
 
-		ConnectException connectException = getCause(e, ConnectException.class);
-		if (connectException != null) {
+		if (getCause(e, ConnectException.class) != null) {
 			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_UNAVAILABLE);
+		} else if (getCause(e, UnknownHostException.class) != null) {
+			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_EXPORT_WRONG_URL);
 		} else {
 			log.error("Unhandled ExecutionException cause", e.getCause());
 			JOptionPane.showMessageDialog(view.dialog(), InfoMsgs.JIRA_UNKNOWN_LOGIN_FAILURE);

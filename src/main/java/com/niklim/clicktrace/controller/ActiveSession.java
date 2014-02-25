@@ -110,4 +110,10 @@ public class ActiveSession {
 		return session.getShots().indexOf(activeShot);
 	}
 
+	public void close() {
+		session = null;
+		activeShot = null;
+		selectedShots.clear();
+	}
+
 }
