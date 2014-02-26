@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.niklim.clicktrace.model.Session;
-import com.niklim.clicktrace.msg.ErrorMsgs;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 
@@ -29,7 +28,8 @@ public abstract class SessionPropertiesIO {
 			props.setFile(file);
 			props.load();
 		} catch (IOException e) {
-			log.error(ErrorMsgs.SESSION_DELETE_PROPS_ERROR, e);
+			// no need to log anything
+			// log.error(ErrorMsgs.SESSION_DELETE_PROPS_ERROR, e);
 			createPropertiesFile(file);
 		}
 	}
