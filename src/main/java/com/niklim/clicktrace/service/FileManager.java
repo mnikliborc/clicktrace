@@ -45,7 +45,6 @@ public class FileManager {
 		}
 	}
 
-	@Inject
 	public void init() {
 		createIfDirNotExists(props.getSessionsDirPath());
 	}

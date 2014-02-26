@@ -4,13 +4,15 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.util.NoSuchElementException;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.capture.voter.LineVoter;
 import com.niklim.clicktrace.capture.voter.LineVoter.ChangeSensitivity;
 
 @Singleton
 public class UserProperties extends AbstractProperties {
-	private static final String USER_PROPERTIES_PATH = "user.properties";
+	@Inject
+	private AppProperties appProps;
 
 	private static final String LAST_SESSION = "sessions.last";
 	private static final String SESSIONS_DIR_PATH = "sessions.dirPath";
@@ -47,8 +49,9 @@ public class UserProperties extends AbstractProperties {
 		defaults.put(SESSIONS_DIR_PATH, "sessions");
 	}
 
-	public UserProperties() {
-		super();
+	@Inject
+	protected void init() {
+		super.init();
 	}
 
 	public static enum ViewScaling {
@@ -60,7 +63,7 @@ public class UserProperties extends AbstractProperties {
 	}
 
 	protected File getPropertiesFilePath() {
-		return new File(USER_PROPERTIES_PATH);
+		return new File(appProps.getUserPropertiesPath());
 	}
 
 	public String getImageEditorPath() {

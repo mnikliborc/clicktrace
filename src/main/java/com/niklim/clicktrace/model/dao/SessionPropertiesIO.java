@@ -39,7 +39,7 @@ public abstract class SessionPropertiesIO {
 			props = new PropertiesStore(file);
 			props.save();
 		} catch (IOException e) {
-			log.error(ErrorMsgs.SESSION_SAVE_PROPS_ERROR, e);
+			// no need to log anything
 		}
 	}
 }

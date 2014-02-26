@@ -20,7 +20,7 @@ public abstract class AbstractProperties {
 	protected PropertiesConfiguration props;
 	protected static final Map<String, Object> defaults = new HashMap<String, Object>();
 
-	public AbstractProperties() {
+	protected void init() {
 		try {
 			props = new PropertiesConfiguration(getPropertiesFilePath());
 		} catch (ConfigurationException e) {
