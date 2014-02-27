@@ -1,7 +1,7 @@
 package com.niklim.clicktrace.msg;
 
 public interface InfoMsgs {
-	public static final String JIRA_ADDON_NAME = "Clicktrace JIRA Add-on";
+	public static final String JIRA_ADDON_NAME = "Clicktrace Link for JIRA";
 
 	public static final String CONFIG_NO_EDITOR_PATH = "What image editing program do you want to use? Please set its path and try again.";
 
