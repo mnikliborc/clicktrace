@@ -199,11 +199,11 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 			close();
 		} catch (JiraExportException e) {
 			hideWaitingCursor();
-			JOptionPane.showMessageDialog(view.dialog(), e.getMessage());
+			JOptionPane.showMessageDialog(view.dialog(), e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 		} catch (Throwable e) {
 			hideWaitingCursor();
 			log.error("unpredicted", e);
-			JOptionPane.showMessageDialog(view.dialog(), e.getMessage());
+			JOptionPane.showMessageDialog(view.dialog(), e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 

@@ -23,13 +23,11 @@ import com.niklim.clicktrace.TimeMeter;
 public class LineVoter implements ChangeVoter {
 	private static final Logger log = LoggerFactory.getLogger(LineVoter.class);
 
-	private static final int LINE_SHIFT = 5;
-
 	/**
 	 * Defines how sensitive {@link LineVoter} is.
 	 */
 	public static enum ChangeSensitivity {
-		HIGH(0, 0.005, 10), NORMAL(0.005, 0.01, 10), LOW(0.05, 0.05, 30);
+		HIGH(0, 0.005, 10, 3), NORMAL(0.005, 0.01, 10, 5), LOW(0.05, 0.05, 30, 5);
 
 		/**
 		 * used to define when two corresponding lines differ
@@ -49,10 +47,18 @@ public class LineVoter implements ChangeVoter {
 		 */
 		final int pixelDiffThreshold;
 
-		ChangeSensitivity(double lineDiffThresholdCoeff, double lineCountThresholdCoeff, int pixelDiffThreshold) {
+		/**
+		 * defines line sampling rate in pixels. i.e. if lineShift = 5, then we
+		 * take lines at 1st pixel, 6th pixel, 11th pixel...
+		 */
+		final int lineShift;
+
+		ChangeSensitivity(double lineDiffThresholdCoeff, double lineCountThresholdCoeff, int pixelDiffThreshold,
+				int lineShift) {
 			this.lineDiffThresholdCoeff = lineDiffThresholdCoeff;
 			this.lineCountThresholdCoeff = lineCountThresholdCoeff;
 			this.pixelDiffThreshold = pixelDiffThreshold;
+			this.lineShift = lineShift;
 		}
 	}
 
@@ -102,7 +108,8 @@ public class LineVoter implements ChangeVoter {
 				horizontalPixelPicker);
 
 		tm.stop();
-		if (differingLinesCount > (width / LINE_SHIFT + height / LINE_SHIFT) * sensitivity.lineCountThresholdCoeff) {
+		if (differingLinesCount > (width / sensitivity.lineShift + height / sensitivity.lineShift)
+				* sensitivity.lineCountThresholdCoeff) {
 			return Vote.SAVE;
 		} else {
 			return Vote.ABSTAIN;
@@ -112,7 +119,7 @@ public class LineVoter implements ChangeVoter {
 	private int calculateDifferingLinesCount(BufferedImage prev, BufferedImage current, int lengthDiscrete,
 			int lengthContinuous, double lineDiffThreshold, PixelPicker pixelPicker) {
 		int differingLinesCounter = 0;
-		for (int i = 0; i < lengthDiscrete; i += LINE_SHIFT) {
+		for (int i = 0; i < lengthDiscrete; i += sensitivity.lineShift) {
 			int pixelDiffCount = 0;
 			for (int j = 0; j < lengthContinuous; j++) {
 				Color prevColor = pixelPicker.pick(prev, i, j);
