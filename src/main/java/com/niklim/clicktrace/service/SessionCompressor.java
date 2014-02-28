@@ -94,7 +94,9 @@ public class SessionCompressor {
 		zos.close();
 
 		log.debug("Zip compression finished");
-		return bos.toByteArray();
+		byte[] byteArray = bos.toByteArray();
+		bos.close();
+		return byteArray;
 	}
 
 }
