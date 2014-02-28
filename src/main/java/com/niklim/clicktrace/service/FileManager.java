@@ -27,7 +27,6 @@ public class FileManager {
 	@Inject
 	private UserProperties props;
 
-	// public static String SESSIONS_DIR = "sessions/";
 	public static final String DEFAULT_DIR = "sessions/default/";
 	public static final String SESSION_PROPS_FILENAME = "session.properties";
 
@@ -80,8 +79,10 @@ public class FileManager {
 
 		File[] files = new File(dirName).listFiles(filter);
 
-		for (File sessionDir : files) {
-			fileNames.add(sessionDir.getName());
+		if (files != null) {
+			for (File sessionDir : files) {
+				fileNames.add(sessionDir.getName());
+			}
 		}
 
 		Collections.sort(fileNames);
