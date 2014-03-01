@@ -1,9 +1,9 @@
 package com.niklim.clicktrace.service;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -13,7 +13,6 @@ import org.apache.xml.security.utils.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.props.UserProperties;
@@ -29,31 +28,24 @@ public class SessionCompressor {
 	@Inject
 	private UserProperties props;
 
-	public static interface FileLoader {
-		Optional<InputStream> load(String filename, String filepath) throws IOException;
-	}
-
 	/**
-	 * Compresses given Clicktrace session and encodes it as String. Uses
-	 * {@link FileLoader} to load session files and perform arbitrary
-	 * modifications.
+	 * Compresses given Clicktrace session and encodes it as String.
 	 * 
 	 * @param session
-	 * @param fileLoader
 	 * @return encoded and compressed Clicktrace session
 	 * @throws IOException
 	 */
-	public String compressWithImageWidth(Session session, FileLoader fileLoader) throws IOException {
+	public String compress(Session session) throws IOException {
 		String sessionName = session.getName();
 
-		byte[] zipBytes = zip(sessionName, fileLoader);
+		byte[] zipBytes = zip(sessionName);
 		log.debug("Zipped size={}", zipBytes.length);
 
 		String content = Base64.encode(zipBytes);
 		return content;
 	}
 
-	private byte[] zip(String sessionName, FileLoader fileLoader) throws IOException {
+	private byte[] zip(String sessionName) throws IOException {
 		log.debug("Zip compression started");
 
 		byte[] buffer = new byte[1024];
@@ -69,34 +61,26 @@ public class SessionCompressor {
 			}
 		});
 
-		for (String filename : filenames) {
-
-			String filepath = source + File.separator + filename;
-			Optional<InputStream> inOpt = fileLoader.load(filename, filepath);
-
-			if (!inOpt.isPresent()) {
-				continue;
-			}
-
-			ZipEntry ze = new ZipEntry(sessionName + File.separator + filename);
+		for (String file : filenames) {
+			log.debug("File Added : " + file);
+			ZipEntry ze = new ZipEntry(sessionName + File.separator + file);
 			zos.putNextEntry(ze);
 
+			FileInputStream in = new FileInputStream(source + File.separator + file);
+
 			int len;
-			while ((len = inOpt.get().read(buffer)) > 0) {
+			while ((len = in.read(buffer)) > 0) {
 				zos.write(buffer, 0, len);
 			}
 
-			inOpt.get().close();
-			log.debug("File Added : " + filename);
+			in.close();
 		}
 
 		zos.closeEntry();
 		zos.close();
 
 		log.debug("Zip compression finished");
-		byte[] byteArray = bos.toByteArray();
-		bos.close();
-		return byteArray;
+		return bos.toByteArray();
 	}
 
 }

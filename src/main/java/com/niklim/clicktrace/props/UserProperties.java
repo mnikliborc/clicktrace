@@ -34,7 +34,7 @@ public class UserProperties extends AbstractProperties {
 	private static final String CAPTURE_RECTANGLE_X = "capture.dimension.x";
 
 	private static final String HTML_EXPORT_LAST_PATH = "export.html.lastPath";
-	private static final String EXPORT_IMAGE_WIDTH = "export.imageWidth";
+	public static final String EXPORT_IMAGE_WIDTH = "export.imageWidth";
 
 	private static final String MARKUP_SYNTAX = "markup.syntax";
 

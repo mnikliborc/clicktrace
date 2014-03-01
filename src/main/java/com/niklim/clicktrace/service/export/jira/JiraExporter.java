@@ -51,7 +51,9 @@ public class JiraExporter {
 		return executor.submit(new Callable<String>() {
 			@Override
 			public String call() throws Exception {
-				return sessionCompressor.compressWithImageWidth(session, new SessionFileLoader(imageWidth));
+				InitImageWidthPropertyExportHandler.handle(props.getSessionsDirPath(), session,
+						imageWidth);
+				return sessionCompressor.compress(session);
 			}
 		});
 	}
