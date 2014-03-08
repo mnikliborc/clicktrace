@@ -92,6 +92,11 @@
         <version>1.8</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-client</artifactId>
+        <version>1.8</version>
+	</dependency>
 	<dependency>
          <!-- JRJC is distributed under the Apache 2.0 license. -->
          <groupId>com.atlassian.jira</groupId>

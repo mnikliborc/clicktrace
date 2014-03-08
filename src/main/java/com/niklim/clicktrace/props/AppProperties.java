@@ -22,9 +22,11 @@ public class AppProperties extends AbstractProperties {
 	private static final String JIRA_REST_CLICKTRACE_IMPORT_PATH = "jira.rest.clicktrace.import.path";
 	private static final String USER_PROPERTIES_PATH = "user.properties.path";
 	private static final String LOG_FILE_PATH = "log.file.path";
+	private static final String JIRA_CLIENT_CONNECT_TIMEOUT = "jira.client.connect.timeout";
+	private static final String JIRA_CLIENT_READ_TIMEOUT = "jira.client.read.timeout";
 
 	@Inject
-	protected void init() {
+	public void init() {
 		super.init();
 
 		initLog4j();
@@ -46,6 +48,8 @@ public class AppProperties extends AbstractProperties {
 		defaults.put(JIRA_REST_CLICKTRACE_IMPORT_PATH, "/rest/clicktrace/1.0/clicktrace/import");
 		defaults.put(USER_PROPERTIES_PATH, "user.properties");
 		defaults.put(LOG_FILE_PATH, "clicktrace.log");
+		defaults.put(JIRA_CLIENT_CONNECT_TIMEOUT, new Integer(180000));
+		defaults.put(JIRA_CLIENT_READ_TIMEOUT, new Integer(5000));
 	}
 
 	@Override
@@ -57,6 +61,10 @@ public class AppProperties extends AbstractProperties {
 		return props.getString(JIRA_REST_CLICKTRACE_IMPORT_PATH);
 	}
 
+	public void setJiraRestClicktraceImportPath(String jiraClicktraceImportPath) {
+		props.setProperty(JIRA_REST_CLICKTRACE_IMPORT_PATH, jiraClicktraceImportPath);
+	}
+
 	public String getUserPropertiesPath() {
 		return props.getString(USER_PROPERTIES_PATH);
 	}
@@ -64,4 +72,13 @@ public class AppProperties extends AbstractProperties {
 	public String getLogPath() {
 		return props.getString(LOG_FILE_PATH);
 	}
+
+	public int getJiraClientConnectTimeout() {
+		return props.getInt(JIRA_CLIENT_CONNECT_TIMEOUT);
+	}
+
+	public int getJiraClientReadTimeout() {
+		return props.getInt(JIRA_CLIENT_READ_TIMEOUT);
+	}
+
 }

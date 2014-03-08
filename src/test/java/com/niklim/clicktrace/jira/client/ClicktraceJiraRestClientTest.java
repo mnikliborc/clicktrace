@@ -2,15 +2,11 @@ package com.niklim.clicktrace.jira.client;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.atlassian.jira.rest.client.auth.BasicHttpAuthenticationHandler;
-import com.atlassian.jira.rest.client.internal.async.AsynchronousHttpClientFactory;
+import com.niklim.clicktrace.props.AppProperties;
 
 public class ClicktraceJiraRestClientTest {
 	private static final String JIRA_URL = "http://localhost:9998";
@@ -18,9 +14,20 @@ public class ClicktraceJiraRestClientTest {
 
 	private static ExternalJerseyTestInstance jersey = new ExternalJerseyTestInstance();
 
+	private static JiraRestClicktraceClient cl = new JiraRestClicktraceClient();
+
 	@BeforeClass
 	public static void setupJiraMock() throws Exception {
 		jersey.setUp();
+		setupAppProps();
+		cl.init();
+	}
+
+	private static void setupAppProps() {
+		AppProperties props = new AppProperties();
+		props.init();
+		props.setJiraRestClicktraceImportPath(JIRA_REST_CLICKTRACE_IMPORT_PATH);
+		cl.setProps(props);
 	}
 
 	@AfterClass
@@ -31,26 +38,18 @@ public class ClicktraceJiraRestClientTest {
 	@Test
 	public void testCheckNotLogged() throws Exception {
 		// given
-
 		String issueKey = "ABC-1";
 		String sessionName = "notlogged";
 
-		JiraRestClicktraceClient cl = createClient();
-
 		// when
-		ExportResult res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(createExportParams(issueKey, sessionName));
 
 		// then
 		assertThat(res.status).isEqualTo(ExportStatus.ERROR);
 	}
 
-	private JiraRestClicktraceClient createClient() throws URISyntaxException {
-		String user = "admin";
-		String password = "admin";
-		JiraRestClicktraceClient cl = new JiraRestClicktraceClient(new AsynchronousHttpClientFactory().createClient(
-				new URI(JIRA_URL), new BasicHttpAuthenticationHandler(user, password)), JIRA_URL,
-				JIRA_REST_CLICKTRACE_IMPORT_PATH);
-		return cl;
+	private ExportParams createExportParams(String issueKey, String sessionName) {
+		return new ExportParams("admin", "admin", JIRA_URL, issueKey, sessionName);
 	}
 
 	@Test
@@ -59,10 +58,8 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "existing";
 
-		JiraRestClicktraceClient cl = createClient();
-
 		// when
-		ExportResult res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(createExportParams(issueKey, sessionName));
 
 		// then
 		assertThat(res.status).isEqualTo(ExportStatus.SESSION_EXISTS);
@@ -74,10 +71,8 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "nonExisting";
 
-		JiraRestClicktraceClient cl = createClient();
-
 		// when
-		ExportResult res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(createExportParams(issueKey, sessionName));
 
 		// then
 		assertThat(res.status).isEqualTo(ExportStatus.NO_SESSION);
@@ -89,10 +84,8 @@ public class ClicktraceJiraRestClientTest {
 		String issueKey = "ABC-1";
 		String sessionName = "error";
 
-		JiraRestClicktraceClient cl = createClient();
-
 		// when
-		ExportResult res = cl.checkSession(issueKey, sessionName);
+		ExportResult res = cl.checkSession(createExportParams(issueKey, sessionName));
 
 		// then
 		assertThat(res.status).isEqualTo(ExportStatus.ERROR);
@@ -106,10 +99,8 @@ public class ClicktraceJiraRestClientTest {
 		String sessionName = "name";
 		String stream = JiraRestClicktraceImportMock.FAKE_STREAM;
 
-		JiraRestClicktraceClient cl = createClient();
-
 		// when
-		ExportResult result = cl.exportSession(issueKey, sessionName, stream);
+		ExportResult result = cl.exportSession(createExportParams(issueKey, sessionName), stream);
 
 		// then
 		assertThat(result.status).isEqualTo(ExportStatus.OK);

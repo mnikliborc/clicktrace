@@ -57,7 +57,7 @@ public class SessionCompressor {
 		List<String> filenames = fileManager.loadFileNames(source, new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return true;
+				return !".DS_Store".equals(name) && !name.endsWith("~");
 			}
 		});
 

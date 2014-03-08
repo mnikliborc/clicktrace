@@ -11,9 +11,12 @@ import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.props.UserProperties;
 import com.niklim.clicktrace.service.FileManager;
 
+/**
+ * Updates {@link UserProperties#EXPORT_IMAGE_WIDTH} session's property on
+ * export to JIRA.
+ */
 public class InitImageWidthPropertyExportHandler {
-	public static void handle(String sessionsDirPath, Session session, Integer imageWidth)
-			throws IOException {
+	public static void handle(String sessionsDirPath, Session session, Integer imageWidth) throws IOException {
 		String sessionPropsFilePath = sessionsDirPath + session.getName() + File.separator
 				+ FileManager.SESSION_PROPS_FILENAME;
 		File sessionPropsFile = new File(sessionPropsFilePath);

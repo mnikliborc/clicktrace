@@ -23,4 +23,6 @@ public interface InfoMsgs {
 
 	public static final String EDITOR_APP_ERROR = "An error occurred while opening the screenshot image.";
 
+	public static final String JIRA_ISSUE_CREATED = "Issue {0} has been created.";
+
 }

@@ -1,98 +1,108 @@
 package com.niklim.clicktrace.jira.client;
 
-import java.net.URI;
-
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.atlassian.httpclient.api.HttpClient;
-import com.atlassian.jira.rest.client.RestClientException;
-import com.atlassian.jira.rest.client.internal.async.AbstractAsynchronousRestClient;
-import com.atlassian.jira.rest.client.internal.json.JsonObjectParser;
-import com.atlassian.util.concurrent.Promise;
-import com.niklim.clicktrace.msg.ErrorMsgs;
-import com.niklim.clicktrace.msg.InfoMsgs;
+import com.google.inject.Inject;
+import com.niklim.clicktrace.props.AppProperties;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.core.util.Base64;
 
-public class JiraRestClicktraceClient extends AbstractAsynchronousRestClient {
-	private static final String UNEXPECTED_ERROR_MSG = "Unexpected error while checking session in JIRA";
-
+/**
+ * Client of Clicktrace Link for JIRA REST service. Based on jersey rest-client
+ * for increasing connection timeout (Atlassian's rest client didn't work as
+ * predicted).
+ */
+public class JiraRestClicktraceClient {
 	private static final Logger log = LoggerFactory.getLogger(JiraRestClicktraceClient.class);
 
 	static final String JSON_CLICKTRACE_STREAM_FIELD_NAME = "stream";
+	private static final String UNEXPECTED_ERROR_MSG = "Unexpected error while checking session in JIRA";
 
-	private final String jiraInstanceUrl;
-	private final String jiraRestClicktraceImportPath;
+	private static final String JIRA_RESPONSE_MSG_FIELD = "msg";
+	private static final String JIRA_RESPONSE_STATUS_FIELD = "status";
 
-	JiraRestClicktraceClient(HttpClient client, String jiraInstanceUrl, String jiraRestClicktraceImportPath) {
-		super(client);
-		this.jiraInstanceUrl = jiraInstanceUrl;
-		this.jiraRestClicktraceImportPath = jiraRestClicktraceImportPath;
+	private Client client;
+
+	@Inject
+	private AppProperties props;
+
+	void setProps(AppProperties props) {
+		this.props = props;
 	}
 
-	public ExportResult checkSession(String issueKey, String sessionName) {
-		try {
-			log.debug("Check session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName,
-					jiraInstanceUrl + jiraRestClicktraceImportPath);
+	@Inject
+	public void init() {
+		client = Client.create();
+		client.setConnectTimeout(props.getJiraClientConnectTimeout());
+		client.setReadTimeout(props.getJiraClientReadTimeout());
+	}
 
-			String uri = createUriString(issueKey, sessionName);
-			Promise<ExportResult> p = getAndParse(new URI(uri), new JsonResponseParser());
-			return p.claim();
-		} catch (RestClientException e) {
-			return handleRestClientException(e);
+	public ExportResult checkSession(ExportParams params) {
+		try {
+			String uri = createUriString(params);
+			log.debug("Check session: URI='{}'", uri);
+
+			return getAndParse(uri, params.username, params.password);
 		} catch (Throwable e) {
 			log.error(UNEXPECTED_ERROR_MSG, e);
 			return new ExportResult(ExportStatus.ERROR, e.getMessage());
 		}
 	}
 
-	private String createUriString(String issueKey, String sessionName) {
-		return jiraInstanceUrl + jiraRestClicktraceImportPath + "/" + issueKey + "/" + sessionName;
+	private ExportResult getAndParse(String uri, String username, String password) throws JSONException {
+		String auth = createAuthToken(username, password);
+		WebResource webResource = client.resource(uri);
+		ClientResponse response = webResource.header("Authorization", "Basic " + auth).get(ClientResponse.class);
+		String responseString = response.getEntity(String.class);
+
+		return parse(new JSONObject(responseString));
 	}
 
-	private ExportResult handleRestClientException(RestClientException e) {
-		if (e.getStatusCode().or(0) == 401) {
-			return new ExportResult(ExportStatus.ERROR, InfoMsgs.JIRA_EXPORT_AUTHENTICATION_FAILURE);
-		} else if (e.getStatusCode().or(0) == 404) {
-			return new ExportResult(ExportStatus.ERROR, InfoMsgs.JIRA_EXPORT_WRONG_URL);
-		} else if (e.getStatusCode().or(0) == 403) {
-			return new ExportResult(ExportStatus.ERROR, InfoMsgs.JIRA_EXPORT_CAPTCHA_NEEDED);
-		} else {
-			log.error(UNEXPECTED_ERROR_MSG, e);
-			return new ExportResult(ExportStatus.ERROR, ErrorMsgs.JIRA_EXPORT_UNKNOWN_SERVER_ERROR);
-		}
+	private String createUriString(ExportParams params) {
+		return params.jiraUrl + props.getJiraRestClicktraceImportPath() + "/" + params.issueKey + "/"
+				+ params.sessionName;
 	}
 
-	public ExportResult exportSession(String issueKey, String sessionName, String stream) {
-
+	public ExportResult exportSession(ExportParams params, String stream) {
 		try {
-			log.debug("Export session: issueKey='{}', sessionName='{}', URL='{}'", issueKey, sessionName,
-					jiraInstanceUrl + jiraRestClicktraceImportPath);
+			String uri = createUriString(params);
+			log.debug("Export session: URI='{}'", uri);
 
 			JSONObject json = new JSONObject();
 			json.put(JSON_CLICKTRACE_STREAM_FIELD_NAME, stream);
 
-			String uri = createUriString(issueKey, sessionName);
-			Promise<ExportResult> p = postAndParse(new URI(uri), json, new JsonResponseParser());
-			return p.claim();
-		} catch (RestClientException e) {
-			return handleRestClientException(e);
+			return postAndParse(uri, params.username, params.password, json);
 		} catch (Throwable e) {
 			log.error(UNEXPECTED_ERROR_MSG, e);
 			return new ExportResult(ExportStatus.ERROR, e.getMessage());
 		}
 	}
 
-	public class JsonResponseParser implements JsonObjectParser<ExportResult> {
-		private static final String JIRA_RESPONSE_MSG_FIELD = "msg";
-		private static final String JIRA_RESPONSE_STATUS_FIELD = "status";
+	private ExportResult postAndParse(String uri, String username, String password, JSONObject json)
+			throws JSONException {
+		String auth = createAuthToken(username, password);
+		WebResource webResource = client.resource(uri);
 
-		@Override
-		public ExportResult parse(JSONObject json) throws JSONException {
-			ExportStatus status = ExportStatus.valueOf(json.getString(JIRA_RESPONSE_STATUS_FIELD));
-			String msg = json.optString(JIRA_RESPONSE_MSG_FIELD);
-			return new ExportResult(status, msg);
-		}
+		ClientResponse response = webResource.header("Authorization", "Basic " + auth).type("application/json")
+				.post(ClientResponse.class, json.toString());
+
+		String responseString = response.getEntity(String.class);
+
+		return parse(new JSONObject(responseString));
+	}
+
+	private String createAuthToken(String username, String password) {
+		return new String(Base64.encode(username + ":" + password));
+	}
+
+	private ExportResult parse(JSONObject json) throws JSONException {
+		ExportStatus status = ExportStatus.valueOf(json.getString(JIRA_RESPONSE_STATUS_FIELD));
+		String msg = json.optString(JIRA_RESPONSE_MSG_FIELD);
+		return new ExportResult(status, msg);
 	}
 }

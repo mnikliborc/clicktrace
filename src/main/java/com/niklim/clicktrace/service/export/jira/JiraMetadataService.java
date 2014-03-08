@@ -19,6 +19,9 @@ import com.google.common.collect.Lists;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.props.JiraConfig.JiraUserMetadata;
 
+/**
+ * Loads JIRA user available data.
+ */
 public class JiraMetadataService {
 
 	public JiraUserMetadata loadUserMetadata(JiraConfig jiraConfig) throws URISyntaxException, InterruptedException,

@@ -119,7 +119,7 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 
 		try {
 			String issueKey = createIssue();
-			exportSession(issueKey);
+			exportSession(issueKey, true);
 		} catch (Exception e) {
 			log.error("Issue create error", e);
 			JOptionPane.showMessageDialog(view.dialog(), e.getLocalizedMessage());
@@ -135,7 +135,7 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 
 		String issueKey = view.issueKeyTextField.getText();
 		if (confirmSessionExport(issueKey)) {
-			exportSession(issueKey);
+			exportSession(issueKey, false);
 		}
 	}
 
@@ -187,7 +187,7 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		return res == JOptionPane.OK_OPTION;
 	}
 
-	private void exportSession(String issueKey) {
+	private void exportSession(String issueKey, boolean issueCreated) {
 		try {
 			showWaitingCursor();
 
@@ -200,10 +200,20 @@ public class JiraExportDialog extends AbstractDialog<JiraExportView> {
 		} catch (JiraExportException e) {
 			hideWaitingCursor();
 			JOptionPane.showMessageDialog(view.dialog(), e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+
+			if (issueCreated) {
+				JOptionPane.showMessageDialog(view.dialog(),
+						MessageFormat.format(InfoMsgs.JIRA_ISSUE_CREATED, issueKey));
+			}
 		} catch (Throwable e) {
 			hideWaitingCursor();
 			log.error("unpredicted", e);
 			JOptionPane.showMessageDialog(view.dialog(), e.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
+
+			if (issueCreated) {
+				JOptionPane.showMessageDialog(view.dialog(),
+						MessageFormat.format(InfoMsgs.JIRA_ISSUE_CREATED, issueKey));
+			}
 		}
 	}
 

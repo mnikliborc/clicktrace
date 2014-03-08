@@ -15,18 +15,21 @@ import com.atlassian.httpclient.api.Response;
 import com.google.common.net.UrlEscapers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.niklim.clicktrace.jira.client.ExportParams;
 import com.niklim.clicktrace.jira.client.ExportResult;
 import com.niklim.clicktrace.jira.client.ExportStatus;
 import com.niklim.clicktrace.jira.client.JiraClientFactory;
 import com.niklim.clicktrace.jira.client.JiraRestClicktraceClient;
-import com.niklim.clicktrace.props.AppProperties;
 import com.niklim.clicktrace.props.JiraConfig;
 import com.niklim.clicktrace.service.exception.JiraExportException;
 
+/**
+ * Creates Issue in JIRA and checks if Clicktrace session already is in JIRA.
+ */
 @Singleton
 public class JiraService {
 	@Inject
-	private AppProperties appProps;
+	private JiraRestClicktraceClient client;
 
 	private static final String CREATE_SUCCESS = "Created";
 
@@ -80,15 +83,10 @@ public class JiraService {
 			String jiraInstanceUrl) throws JiraExportException {
 		sessionName = UrlEscapers.urlFragmentEscaper().escape(sessionName);
 
-		try {
-			JiraRestClicktraceClient client = JiraClientFactory.createClicktraceClient(username, password,
-					jiraInstanceUrl, appProps.getJiraRestClicktraceImportPath());
-			ExportResult res = client.checkSession(issueKey, sessionName);
+		ExportResult res = client.checkSession(new ExportParams(username, password, jiraInstanceUrl, issueKey,
+				sessionName));
 
-			return handleCheckSessionExistsResult(res);
-		} catch (URISyntaxException e) {
-			throw new JiraExportException(e.getMessage());
-		}
+		return handleCheckSessionExistsResult(res);
 	}
 
 	private boolean handleCheckSessionExistsResult(ExportResult res) throws JiraExportException {

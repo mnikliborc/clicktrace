@@ -26,6 +26,7 @@ public class App {
 
 		log.info("app started");
 
+		// order of instantiation is important!
 		Injector injector = createInjector();
 		injector.getInstance(AppProperties.class);
 		injector.getInstance(MouseCapture.class);
@@ -38,7 +39,7 @@ public class App {
 
 		ToolTipManager.sharedInstance().setInitialDelay(1000);
 
-		TimeMeter.init();
+		// TimeMeter.init();
 		log.info("app ready to work");
 		controller.init();
 	}
