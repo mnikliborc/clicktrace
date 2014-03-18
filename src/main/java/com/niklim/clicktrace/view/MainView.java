@@ -197,7 +197,11 @@ public class MainView {
 	}
 
 	public void hide() {
-		frame.setState(JFrame.ICONIFIED);
+		try {
+			frame.setState(JFrame.ICONIFIED);
+		} catch (RuntimeException e) {
+			log.error("There is some bug in Java for Mac - cannot minimize Clicktrace.");
+		}
 	}
 
 	public void scrollUp() {
