@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.niklim.clicktrace.Icons;
+import com.niklim.clicktrace.OSUtils;
 import com.niklim.clicktrace.capture.ScreenUtils;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
@@ -197,10 +198,10 @@ public class MainView {
 	}
 
 	public void hide() {
-		try {
+		if (OSUtils.isOnMac() && !OSUtils.isJava6()) {
+			frame.setExtendedState(JFrame.ICONIFIED);
+		} else {
 			frame.setState(JFrame.ICONIFIED);
-		} catch (RuntimeException e) {
-			log.error("There is some bug in Java for Mac - cannot minimize Clicktrace.");
 		}
 	}
 

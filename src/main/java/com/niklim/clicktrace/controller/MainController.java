@@ -19,7 +19,6 @@ import com.niklim.clicktrace.capture.CaptureManager;
 import com.niklim.clicktrace.controller.operation.session.NewSessionOperation;
 import com.niklim.clicktrace.dialog.NewSessionDialog.NewSessionCallback;
 import com.niklim.clicktrace.dialog.settings.SettingsDialog;
-import com.niklim.clicktrace.editor.EditorFrame;
 import com.niklim.clicktrace.model.ScreenShot;
 import com.niklim.clicktrace.model.Session;
 import com.niklim.clicktrace.model.dao.SessionPropertiesWriter;
@@ -60,9 +59,6 @@ public class MainController {
 
 	@Inject
 	private NavigationController navigationController;
-
-	@Inject
-	private EditorFrame editor;
 
 	@Inject
 	public void registerRefreshOnFrameResize() {
