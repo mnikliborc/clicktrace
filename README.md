@@ -17,10 +17,10 @@
 * use best compression format per screenshot (JPG, PNG)
 * no screenshot on mouse movement (mouse movement is not considered a change)
 * markup syntax support
-* *create HTML presentation using*
-* *export to Clicktrace Link for JIRA*
+* **create HTML presentation using**
+* **export to Clicktrace Link for JIRA**
 
-Published under GPL open-source license. Copyright (C) Marcin Nikliborc.
+Published under GPL open-source license. Copyright (C) Marcin Nikliborc. http://www.clicktrace.me
 
 ==================
 
