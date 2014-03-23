@@ -1,4 +1,4 @@
-## An automatic screen capture application.
+## An intelligent screen capture application.
 
 **It's main idea is to take screenshots whenever something changes on the screen.**
 
