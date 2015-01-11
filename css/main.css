@@ -1,0 +1,185 @@
+html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
+}
+
+div.clear {
+	clear: both;
+	width: 100%;
+}
+
+div.wrapper {
+	min-height:100%;
+	position:relative;
+
+	margin-top: 20px;
+	margin-left:auto;
+	margin-right:auto;
+	width:1020px;
+}
+
+div.main {
+	width: 100%;
+	
+	line-height: 130%;
+	font-size: 1.3em;
+	
+	background-color: white;
+
+	padding-bottom:40px;
+}
+
+div.logo {
+	width: 300px;
+	height: 102px;
+	background-image: url('../img/logo.png');
+	margin-top: 0px;
+	float:left;
+}
+
+div.logo:hover {
+	background-image: url('../img/logo-dark.png');
+}
+
+div.hdr-item {
+	margin-top: 50px;
+	float: left;
+	margin-left: 8px;
+}
+
+div.coming-soon {
+	position: relative;
+	top: -3px;
+	color: #FE8805;
+}
+
+div.cs-jira {
+	left: 38px;
+}
+
+div.cs-confluence {
+	left: 65px;
+}
+
+div.header {
+	height: 150px;
+}
+
+div.pres-wrapper {
+	width:1020px;
+	margin-top: 20px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+div.what-is h1 {
+	font-size: 1.6em;
+	margin-bottom: 20px;
+}
+
+div.what-is .small {
+	font-size: 0.9em;
+	margin-top: 20px;
+}
+
+
+div.features {
+	margin-top: 40px;
+}
+
+div.features h2 {
+	font-size: 1.5em;
+	margin-bottom: 20px;
+}
+
+div.features img {
+	margin-left: 10px;
+}
+
+div.features li {
+	margin-top: 10px;
+}
+
+div.features li.highlight {
+	color: rgb(66, 139, 202);
+}
+
+div.features p {
+	font-size: 0.9em;
+	margin-top: 15px;
+}
+
+div.app-shot {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+div.how-to-use {
+	margin-bottom: 50px;
+}
+
+div.how-to-use h2 {
+	font-size: 1.5em;
+	margin-bottom: 20px;
+}
+
+div.how-to-use h2 span {
+	cursor: pointer;
+}
+
+div.how-to-use button {
+	float: right;
+}
+
+.ct-hidden {
+	display: none;
+}
+
+div.footer {
+	font-size: 0.8em;
+
+	width:100%;
+	height:40px;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+
+div.footer-pres {
+	font-size: 0.8em;
+
+	width:100%;
+	height:40px;
+}
+
+div.compatibility {
+	font-size: 0.8em;
+	margin-top:20px;
+	text-align: center;
+	width: 480px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.compatibility table {
+	float: left;
+	margin-left: 30px;
+	
+}
+
+/* FAQ */
+div.faq-item {
+	margin-bottom: 20px;
+}
+
+div.faq-quest {
+	font-weight: bold;
+}
+
+div.faq-answer {
+	padding-left: 30px;
+	font-size: 0.9em;
+}
+

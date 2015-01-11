@@ -1,0 +1,86 @@
+div.clicktrace {
+	margin-left:auto;
+	margin-right:auto;	
+	width: 1020px;
+	line-height: 130%;
+}
+
+p.clicktrace-session-name {
+	font-weight: bold;
+	font-size: 1.4em;
+}
+
+div.clicktrace-session-description {
+	font-size: 0.9em;
+	margin-bottom: 30px;
+}
+
+div.clicktrace-links {
+	margin-bottom: 30px;
+}
+
+div.clicktrace-links a {
+	margin-right: 10px;
+}
+
+div.clicktrace-shot {
+	margin-bottom: 40px;
+}
+
+div.clicktrace-shot-description {
+	margin-top: 10px;
+	font-size: 0.9em;
+}
+
+div.clicktrace-shot img {
+	width: 100%;
+	border: 1px black solid;
+}
+
+div.clicktrace-footer {
+	margin-left:auto;
+	margin-right:auto;
+	padding-bottom: 10px;
+	width: 350px;
+
+	font-weight: bold;
+	font-size: 0.9em;
+	text-align: middle;
+	line-height: 40px;
+	height: 40px;
+}
+
+div.clicktrace-footer img {
+	margin-right: 10px;
+	float: left;
+}
+
+div.clicktrace-footer a {
+	float: left;
+	text-decoration: none;
+	color: black;
+}
+
+
+div#zoom {
+	float: right;
+	top: 5px;
+	margin-right: 35px;
+}
+div#zoom p {
+	cursor: pointer;
+}
+
+div#zoom span.in {
+	font-size:1.2em;
+	font-weight: bold;
+}
+
+div#zoom span.out {
+	font-size:0.8em;
+	font-weight: bold;
+}
+
+div.clicktrace a {
+	font-size: 0.9em;
+}

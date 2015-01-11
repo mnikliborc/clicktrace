@@ -1,0 +1,32 @@
+div.topic {
+	margin-bottom: 10px;
+	clear: both;
+}
+
+div.topic h2 {
+	font-size: 1.5em;
+	margin-bottom: 20px;
+}
+
+div.topic h2 span {
+	cursor: pointer;
+}
+
+div.topic button {
+	margin-top: 15px;
+	margin-right: 5px;
+	float: right;
+}
+
+div.topic h2 a {
+	text-decoration:none;
+}
+
+div.all-features {
+	margin-bottom: 50px;
+}
+
+
+
+
+

@@ -1,0 +1,23 @@
+div.clfj-howto-any {
+	display:none; font-size: 0.8em;
+}
+
+div.clfj-howto {
+	float:left;
+}
+
+.clfj-banner {
+	float:right;
+}
+
+.clfj-banner img {
+	border-width: 1px; border-color: #D1EBF6; border-style:solid;
+}
+
+.clfj-header {
+	float:left;
+}
+
+.clfj-teaser {
+	font-size: 0.8em; float: left;
+}
