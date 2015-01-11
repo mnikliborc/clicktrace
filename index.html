@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Clicktrace - an intelligent screen capture application</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/getstarted.css" />
+	<link rel="stylesheet" type="text/css" href="css/clicktrace.css" />
+	<link rel="stylesheet" type="text/css" href="css/clicktrace-link-for-jira.css" />
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<link rel="icon" type="image/png" href="img/icon.png">
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="js/main.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="Clicktrace is an intelligent screen capture application. It takes screenshots whenever something changes on the screen.">
+	<meta name="keywords" content="Clicktrace,screen capture,screenshot,automatic,record,test case,documentation">
+	<meta name="author" content="Marcin Nikliborc">
+</head>
+<body>
+<div class="wrapper">
+	<div class="main">
+			<div class="header">
+			<a href="/">
+				<div class="logo">
+				</div>
+				<img src="img/logo-dark.png" style="display:none;" />
+			</a>
+			<div class="hdr-item">
+				<a href="getting-started">
+					<button type="button" class="btn btn-primary btn-lg link-contact">Getting started</button>
+				</a>
+			</div>
+			<div class="hdr-item">
+				<a href="https://sourceforge.net/projects/clicktrace/files/clicktrace-1.2/">
+					<button type="button" class="btn btn-primary btn-lg link-download">Download</button>
+				</a>
+			</div>
+			<div class="hdr-item">
+				<a href="clicktrace-link-for-jira">
+					<button type="button" class="btn btn-primary btn-lg link-jira">JIRA Add-on</button>
+				</a>
+			</div>
+			<div class="hdr-item">
+				<a href="#">
+					<button type="button" class="btn btn-primary btn-lg link-confluence" disabled="disabled">Confluence Add-on</button>
+				</a>
+				<div class="coming-soon cs-confluence">Coming soon!</div>
+			</div>
+			<div class="hdr-item">
+				<a href="faq">
+					<button type="button" class="btn btn-primary btn-lg link-faq">FAQ</button>
+				</a>
+			</div>			
+		</div>
+		<div class="clear"></div>
+
+<div class="intro">
+	<div class="what-is">
+		<h1>An intelligent screen capture application.</h1>
+		<p>It's main idea is to take screenshots whenever something changes on the screen.</p> 
+		<p>Focus on the task not being bothered by screenshots recording in the background.</p>
+		<p>Record test cases, documentation, or whatever you want.</p>
+		<p>Provide a lot of information with little effort.</p>
+		<p class="small">Published under <a href="http://opensource.org/licenses/GPL-2.0" target="_blank">GPL</a> open-source license.</p>
+	</div>
+
+	<div class="features">
+		<h2>Features</h2>
+		<ul>
+			<li>easily take, remove, and reorder screenshots <img src="img/media_record.png"/><img src="img/delete_folder.png"/><img src="img/reorder.png"/></li>
+			<li>organize in sessions <img src="img/add_folder.png"/><img src="img/open_folder.png"/></li>
+			<li>annotate with labels and descriptions (markup syntax support) <img src="img/desc_folder.png"/></li>
+			<li>edit with your favorite image editor <img src="img/format-stroke-color.png"/></li>
+			<li>automatically mark mouse clicks <img src="img/mouse_red_left.png"/></li>					
+			<li>find by keywords <img src="img/search.png"/></li>
+			<li>use best compression format per screenshot (JPG, PNG)</li>
+			<li>no screenshot on mouse movement (mouse movement is not considered a change)</li>
+			<li><a href="html-export">create HTML presentation</a></li>
+			<li><a href="jira-export">export to Clicktrace Link for JIRA</a></li>
+		</ul>
+		<p>Clicktrace is written in Java. You can run it on Windows/Linux/Mac, as long as you have Java 6 or higher installed.</p>
+		<!-- <div class="compatibility">
+			<table>
+				<tr>
+					<td></td>
+					<td><img src="img/windows.png" /></td>
+					<td><img src="img/mac.png" /></td>
+					<td><img src="img/linux.png" /></td>
+				</tr>
+				<tr>
+					<td>Java 6</td>
+					<td style="color: green;">&#10004;</td>
+					<td style="color: green;">&#10004;</td>
+					<td style="color: green;">&#10004;</td>
+				</tr>			
+			</table>
+			<table>
+				<tr>
+					<td></td>
+					<td><img src="img/windows.png" /></td>
+					<td><img src="img/mac.png" /></td>
+					<td><img src="img/linux.png" /></td>
+				</tr>
+				<tr>
+					<td>Java 7</td>
+					<td style="color: green;">&#10004;</td>
+					<td>&#10007;</td>
+					<td style="color: green;">&#10004;</td>
+				</tr>		
+			</table>
+		</div>
+		<div class="clear"></div> -->
+	</div>
+	<div class="app-shot">
+		<img src="img/shot.png" />
+	</div>
+</div>
+<? require_once('footer.php'); ?>
