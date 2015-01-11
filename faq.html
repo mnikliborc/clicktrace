@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Clicktrace - an intelligent screen capture application</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/getstarted.css" />
+	<link rel="stylesheet" type="text/css" href="css/clicktrace.css" />
+	<link rel="stylesheet" type="text/css" href="css/clicktrace-link-for-jira.css" />
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+	<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mnikliborc/clicktrace/gh-pages/img/icon.png">
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="js/main.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="description" content="Clicktrace is an intelligent screen capture application. It takes screenshots whenever something changes on the screen.">
+	<meta name="keywords" content="Clicktrace,screen capture,screenshot,automatic,record,test case,documentation">
+	<meta name="author" content="Marcin Nikliborc">
+</head>
+<body>
+<div class="wrapper">
+	<div class="main">
+			<div class="header">
+			<a href="/clicktrace">
+				<div class="logo">
+				</div>
+				<img src="https://raw.githubusercontent.com/mnikliborc/clicktrace/gh-pages/img/logo-dark.png" style="display:none;" />
+			</a>
+			<div class="hdr-item">
+				<a href="getting-started">
+					<button type="button" class="btn btn-primary btn-lg link-contact">Getting started</button>
+				</a>
+			</div>
+			<div class="hdr-item">
+				<a href="https://sourceforge.net/projects/clicktrace/files/clicktrace-1.2/">
+					<button type="button" class="btn btn-primary btn-lg link-download">Download</button>
+				</a>
+			</div>
+			<div class="hdr-item">
+				<a href="clicktrace-link-for-jira">
+					<button type="button" class="btn btn-primary btn-lg link-jira">JIRA Add-on</button>
+				</a>
+			</div>
+			<div class="hdr-item">
+				<a href="#">
+					<button type="button" class="btn btn-primary btn-lg link-confluence" disabled="disabled">Confluence Add-on</button>
+				</a>
+				<div class="coming-soon cs-confluence">Coming soon!</div>
+			</div>
+			<div class="hdr-item">
+				<a href="faq">
+					<button type="button" class="btn btn-primary btn-lg link-faq">FAQ</button>
+				</a>
+			</div>			
+		</div>
+		<div class="clear"></div>
+
+<h1>FAQ</h1>
+<div class="faq">
+	<div class="faq-item">
+		<div class="faq-quest">1. What are the system requirements to run Clicktrace?</div>
+		<div class="faq-answer">
+			You need Java Runtime Environment (JRE) 6 or higher installed and at least 120MB RAM.
+		</div>
+	</div>
+
+	<div class="faq-item">
+		<div class="faq-quest">2. How to import a session?</div>
+		<div class="faq-answer">
+			<p>Simply copy the folder containing screenshots to your sessions folder (you can set in Settings dialog - Tools/Settings).</p>
+			<p>Screenshots will be displayed in Clicktrace ordered by screenshot file names.</p>
+			<p>To reorder them open "Session/Reorder screenshots" menu (<img src="img/reorder.png"/>).</p>
+		</div>
+	</div>
+
+	<div class="faq-item">
+		<div class="faq-quest">3. How to add external images to an existing session?</div>
+		<div class="faq-answer">
+			You may add screenshots/images to an existing Clicktrace session. Simply add those images to the session folder.
+		</div>
+	</div>
+
+	<div class="faq-item">
+		<div class="faq-quest"><a href="faq-capture-area">4. How to take screenshots of a fragment of the screen?</a></div>
+		<div class="faq-answer">
+			
+		</div>
+	</div>
+
+	<div class="faq-item">
+		<div class="faq-quest">5. How to edit a screenshot?</div>
+		<div class="faq-answer">
+			<p>First you should provide a path to executable file of your image editing program. You can do that in "Tools/Settings" menu.
+			Then open a session and navigate to the screenshot you want to edit. Press edit button <img src="img/format-stroke-color.png" />.</p>
+		
+			<p>For instance: if you are using MS Paint on Windows, you should use path similar to "C:\Windows\system32\mspaint.exe".</p>
+			<p>When you press the edit button, then command "C:\Windows\system32\mspaint.exe PATH/TO/SCREENSHOT" will be invoked. In consequence you will be able to edit the screenshot in MS Paint.</p>
+		</div>
+	</div>
+	
+	<div class="faq-item">
+		<div class="faq-quest">6. I get "Java heap space" error message while trying to export to Clicktrace Link for JIRA. How to resolve it?</div>
+		<div class="faq-answer">
+			<p>Most likely your Java by default lets Clicktrace to use at most 256 MB RAM.</p>
+			<p>To increase this limit you should add -Xmx parameter to run.bat (run.sh) script and run Clicktrace using it.</p>
+			<p>I.e. The run script should contain "java -jar -Xmx1000m clicktrace.jar" to increase the memory limit to 1000MB.</p>
+		</div>
+	</div>
+
+</div>
+	</div>
+	<div class="footer">
+		<span>© 2014 NIKLIM Marcin Nikliborc. All rights reserved. <a href="contact">Contact.</a></span>
+	</div>
+</div>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48966357-1', 'clicktrace.me');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
+
