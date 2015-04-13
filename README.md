@@ -20,7 +20,7 @@
 * **create HTML presentation using**
 * **export to Clicktrace Link for JIRA**
 
-Published under GPL open-source license. Copyright (C) Marcin Nikliborc. http://www.clicktrace.me
+Published under GPL open-source license. http://www.clicktrace.me
 
 ==================
 
