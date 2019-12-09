@@ -20,10 +20,6 @@
 * **create HTML presentation using**
 * **export to Clicktrace Link for JIRA**
 
-Published under GPL open-source license. http://mnikliborc.github.io/clicktrace/
-
-==================
-
 Clicktrace depends on JNativeHook, which at the moment is not published on any public Maven repo. So just download the library in version
 1.1.4 from [here](https://code.google.com/p/jnativehook/downloads/detail?name=JNativeHook-1.1.4.zip&can=1&q=).
 
